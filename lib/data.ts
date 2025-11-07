@@ -12,3 +12,22 @@ export const countryListAndFlags = [
         selected: false
     }
 ]
+
+export const navListArray = [
+    {
+        name: "Home",
+        url:"/"
+    }, 
+    {
+        name: "Contact",
+        url:"/contact"
+    }, 
+    {
+        name: "Wishlist",
+        url:"/wishlist"
+    }, 
+    {
+        name: "Sell",
+        url:"/sell"
+    }, 
+]
