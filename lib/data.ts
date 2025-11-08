@@ -1,3 +1,6 @@
+import { div } from "framer-motion/client"
+
+
 export const countryListAndFlags = [
     {
         name: "Nigeria",
@@ -31,3 +34,4 @@ export const navListArray = [
         url:"/sell"
     }, 
 ]
+
