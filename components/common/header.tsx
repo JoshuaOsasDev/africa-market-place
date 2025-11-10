@@ -8,7 +8,17 @@ import SearchFieldComp from "@/components/common/search";
 import TextStyle from "@/components/common/textStyle";
 import LanguageSelect from "@/components/common/selectdropdown";
 
-import { Menu, X, ShoppingCart, House, MapPinCheckInside, Heart, Store, LogInIcon, LogIn  } from "lucide-react";
+import {
+  Menu,
+  X,
+  ShoppingCart,
+  House,
+  MapPinCheckInside,
+  Heart,
+  Store,
+  LogInIcon,
+  LogIn,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
@@ -109,7 +119,6 @@ function Header() {
               transition={{ duration: 0.4, ease: "easeInOut" }}
               className="fixed flex flex-col top-0 right-0 z-40 h-full w-2/6 bg-white  shadow-lg border-l border-gray-200 md:hidden  "
             >
-          
               <div className="flex justify-end p-4">
                 <Button
                   variant="ghost"
@@ -144,7 +153,10 @@ function Header() {
                 >
                   <div className="flex flex-row items-center space-x-2">
                     <MapPinCheckInside className="h-5 w-5 hover:text-green-700" />
-                    <TextStyle textContent="Order Tracking" textStyle="text-14" />
+                    <TextStyle
+                      textContent="Order Tracking"
+                      textStyle="text-14"
+                    />
                   </div>
                 </motion.a>
                 <motion.a
@@ -170,22 +182,18 @@ function Header() {
                 >
                   <div className="flex flex-row items-center space-x-2">
                     <Store className="h-5 w-5 hover:text-green-700" />
-                    <TextStyle textContent="Sell" textStyle="text-14"/>
+                    <TextStyle textContent="Sell" textStyle="text-14" />
                   </div>
                 </motion.a>
-              
               </nav>
               <div className="  flex-1 flex flex-col items-end justify-end p-4">
                 <div className="flex flex-row items-center space-x-2 justify-center">
-                <LogIn />
-          
-        </div>
-        </div>
+                  <LogIn />
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-       
       </div>
 
       <div className="hidden md:flex flex-row py-2 space-x-4 px-4">
@@ -258,18 +266,12 @@ function Header() {
             </div>
             <div className="flex flex-row space-x-3 ml-2 items-center ">
               <div className="relative w-6 h-6 ">
-                <Image
-                  src={"/images/iconoir_heart.jpg"}
-                  alt={"love icon"}
-                  fill
-                  className=""
-                />
-                <div className="flex items-center justify-center rounded-full absolute bottom-3 w-4 h-4 -right-2 bg-[#FF0000] p-1 ">
+                <Heart className="w-6 h-6" />
+                <div className="flex z-10 items-center justify-center rounded-full absolute bottom-3 w-4 h-4 -right-2 bg-[#FF0000] p-1 ">
                   <span className="text-[10px] text-white">5</span>
                 </div>
               </div>
               <div className="relative w-6 h-6 ">
-              
                 <ShoppingCart className="w-6 h-6" />
                 <div className="flex items-center justify-center rounded-full absolute bottom-3 w-4 h-4 -right-2 bg-[#FF0000] p-1 ">
                   <span className="text-[10px] text-white">10</span>

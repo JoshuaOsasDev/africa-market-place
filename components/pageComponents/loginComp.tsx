@@ -92,7 +92,7 @@ const LoginComp = () => {
   };
 
   return (
-    <div className=" flex flex-col   my-4">
+    <div className=" flex flex-col">
       {
         //   loader && <LoadingScreen />
       }
