@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
-import { headers } from "next/headers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+
+
+
+const nunito = Nunito({
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-nunito",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,10 +23,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <html lang="en">
+    <html lang="en" className={`${nunito.variable}`} >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+       className= {nunito.className}
       >
         {children}
       </body>

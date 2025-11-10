@@ -1,15 +1,16 @@
 import Banner from "@/components/common/banner";
 import Header from "../components/common/header";
-import Onboarding from "@/components/common/onboarding";
-
-
+import Footer from "@/components/common/footer";
+import SignUpComp from "@/components/pageComponents/signUpComp";
 
 export default function Home() {
   return (
-    <div className="px-2 bg-[#EAEAEA] min-h-screen flex flex-col">
+    <div className=" min-h-screen  bg-[#EAEAEA] px-2 flex flex-col">
       <Header />
       <Banner />
-       <Onboarding />
+     
+  
+      <Footer />
     </div>
   );
 }

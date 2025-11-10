@@ -269,12 +269,7 @@ function Header() {
                 </div>
               </div>
               <div className="relative w-6 h-6 ">
-                {/*  <Image
-                  src={"/images/solar_cart-outline.jpg"}
-                  alt={"cart icon"}
-                  fill
-                  className=""
-                /> */}
+              
                 <ShoppingCart className="w-6 h-6" />
                 <div className="flex items-center justify-center rounded-full absolute bottom-3 w-4 h-4 -right-2 bg-[#FF0000] p-1 ">
                   <span className="text-[10px] text-white">10</span>
