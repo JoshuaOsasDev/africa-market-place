@@ -6,3 +6,11 @@ export type searchFieldCompType =
         inputState: string,
         setInputState: React.Dispatch<React.SetStateAction<string>>
     }
+
+
+export type sliderCardPropType = {
+    imgUrl: string,
+    link: string, 
+    alt: string,
+    id: number
+}

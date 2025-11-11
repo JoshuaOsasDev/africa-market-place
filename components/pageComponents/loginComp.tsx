@@ -241,7 +241,7 @@ const LoginComp = () => {
           Already you new?
         </p>
         <Link href={"/login"}>
-          <p className="text-[#6b916d] text-sm font-semibold font-['Inter'] leading-[18.90px]">
+          <p className="text-[#2E7D32] text-sm font-semibold font-['Inter'] leading-[18.90px]">
            Create an account
           </p>
         </Link>

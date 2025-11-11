@@ -2,11 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-import { resetPasswordSchema } from "@/lib/utils/yupvalidation";
+import { verifyEmailSchema } from "@/lib/utils/yupvalidation";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
@@ -44,21 +43,15 @@ const page = () => {
 
   /* yup validation and react hook form */
 
-  const formOptions = { resolver: yupResolver(resetPasswordSchema) };
+  const formOptions = { resolver: yupResolver(verifyEmailSchema) };
 
-  const [isChecked, setIsChecked] = useState(false);
 
-  /* check the box */
-  const toggleCheckBox = () => {
-    setIsChecked(!isChecked);
-  };
+
 
   const [form, setForm] = useState<{
-    password: string;
-    confirmPassword: string;
+email: string
   }>({
-    password: "",
-    confirmPassword: "",
+  email:""
   });
 
   const {
@@ -69,10 +62,9 @@ const page = () => {
   } = useForm(formOptions);
 
   const onSubmit = async (data: {
-    password: string;
-    confirmPassword: string;
+   email: string
   }) => {
-    if (!isChecked) return;
+   
     /*  navigation.navigate('bottomTabNavigation') */
     console.log(data);
 
@@ -97,12 +89,12 @@ const page = () => {
         //   loader && <LoadingScreen />
       }
       <TextStyle
-        textContent="Reset Password"
+        textContent="Email Address"
         textStyle="text-[28px] text-[#111827] text-bold"
       />
       <TextStyle
-        textContent="Enter new password to access your account"
-        textStyle="text-[16px] text-[##667185] text-bold"
+        textContent="Enter your E-mail to access your account"
+        textStyle="text-[16px] text-[#667185] text-bold"
       />
 
       <div className="w-full">
@@ -110,87 +102,32 @@ const page = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="mt-4 flex flex-col w-full space-y-2 "
         >
-          <div className="flex flex-col space-y-1 w-full">
+         <div className="flex flex-col space-y-1 w-full">
             <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
               <TextStyle
-                textContent="Password"
+                textContent="Email"
                 textStyle="text-[16px] text-[##667185] text-bold"
               />
             </label>
             <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
               <input
-                type={hidePassword ? "password" : "text"}
-                {...register("password")}
-                placeholder="12345678"
+                {...register("email")}
+                placeholder="user@gmail.com"
                 className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
               py-2.5 h-full  justify-start items-center  focus:outline-none
              flex-1
             "
               />
-              {!hidePassword ? (
-                <Eye
-                  onClick={() => {
-                    setHidePassword(!hidePassword);
-                  }}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
-                />
-              ) : (
-                <EyeOff
-                  onClick={() => {
-                    setHidePassword(!hidePassword);
-                  }}
-                  onChange={() => setHidePassword(!hidePassword)}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
-                />
-              )}
+              <Mail className="w-4 h-4  transition-colors group-focus-within:text-green-600" />
             </div>
             <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              {errors.password?.message}
+              {errors.email?.message}
             </p>
           </div>
-
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              <TextStyle
-                textContent="Confirm Password"
-                textStyle="text-[16px] text-[##667185] text-bold"
-              />
-            </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
-              <input
-                type={hideConfirmPassword ? "password" : "text"}
-                {...register("confirmPassword")}
-                placeholder="12345678"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
-              />
-              {!hideConfirmPassword ? (
-                <Eye
-                  onClick={() => {
-                    setHideConfirmPassword(!hideConfirmPassword);
-                  }}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
-                />
-              ) : (
-                <EyeOff
-                  onClick={() => {
-                    setHideConfirmPassword(!hideConfirmPassword);
-                  }}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
-                />
-              )}
-            </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              {errors.password?.message}
-            </p>
-          </div>
-         
 
           {/* submit button starts */}
           <button
-            disabled={!isChecked || loader}
+            disabled={ loader}
             className={` w-full h-[39px]  p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4 bg-[#2E7D32]`}
           >
             <span className="text-white text-sm font-semibold  leading-[18.90px]">
@@ -198,7 +135,13 @@ const page = () => {
             </span>
           </button>
         </form>
-      </div>
+          </div>
+          
+          <TextStyle
+              textContent="Click reset and check your E-mail for an OTP code"
+              textStyle="text-[#FBC642] my-[50px] text-3"
+          
+          />
 
     
     </div>

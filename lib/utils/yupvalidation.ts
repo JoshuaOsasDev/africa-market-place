@@ -64,6 +64,9 @@ export const loginSchema = yup.object({
   email: yup.string().email('Invalid email address').required('Email is required'),
   password: yup.string().required('Password is required')
 })
+export const verifyEmailSchema = yup.object({
+  email: yup.string().email('Invalid email address').required('Email is required')
+})
 
 
 export const registerStoreSchema = yup.object({
@@ -88,6 +91,7 @@ export const changePasswordSchema = yup.object().shape({
     .oneOf([yup.ref('newPassword'), undefined], 'Passwords must match')
     .required('Confirm password is required')
 });
+
 export const resetPasswordSchema = yup.object().shape({
   password: yup.string()
     .min(8, 'Password must be at least 8 characters long')

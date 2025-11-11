@@ -140,3 +140,66 @@ export const socialData4 = [
     },
 
 ]
+
+export const sliderCardData = [
+    {
+        imgUrl: "/images/sliderCard1.png",
+        link: "",
+        id: 1,
+        alt:"advert 1"
+    },
+    {
+        imgUrl: "/images/sliderCard2.webp",
+        link: "",
+        id: 2,
+        alt:"advert 2"
+    }
+]
+
+
+export const categorySectionList = [
+    {
+    category: "Fruit And Vegetable",
+    subcategory: [
+        {
+            name: "Lemon",
+            id: 1,
+            url:""
+        },
+        {
+            name: "Lemon2",
+            id: 2,
+             url:""
+        },
+        {
+            name: "Lemo3",
+            id: 3,
+             url:""
+        }
+        ],
+    imgUrl:"/images/apple.png",
+    id: 1
+},
+    {
+    category: "Meats And Seafood",
+    subcategory: [
+        {
+            name: "Lemon",
+            id: 1,
+             url:""
+        },
+        {
+            name: "Lemon2",
+            id: 2,
+             url:""
+        },
+        {
+            name: "Lemo3",
+            id: 3,
+             url:""
+        }
+        ],
+    imgUrl:"/images/meat.jpg",
+    id: 2
+}
+]

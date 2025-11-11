@@ -1,9 +1,13 @@
+import AuthProgressbar from '@/components/common/authProgressbar'
 import SignUpComp from '@/components/pageComponents/signUpComp'
 import React from 'react'
 
 function page() {
   return (
-      <div>
+    <div>
+       <AuthProgressbar
+                  level={2}
+                  />
           <SignUpComp />
     </div>
   )
