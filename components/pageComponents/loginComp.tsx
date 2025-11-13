@@ -192,7 +192,7 @@ const LoginComp = () => {
             </span>
           </div>
             <div>
-              <Link href={"/forgotPassword"}
+              <Link href={"/resetPassword"}
               >
               
                 <TextStyle

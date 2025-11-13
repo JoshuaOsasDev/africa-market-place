@@ -62,7 +62,7 @@ function Header() {
 
   return (
     <div>
-      <div className="w-full bg-white shadow-md md:hidden ">
+      <div className="w-full bg-white shadow-md md:hidden px-2 ">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-2 py-3 md:py-4">
           {/* Logo */}
           <div className="relative  w-[100px] h-[50px] sm:w-[182px] sm:h-[60px]  lg:w-[292px] lg:h-[83px] ">
@@ -259,9 +259,16 @@ function Header() {
                   height={15}
                   className=""
                 />
-                <TextStyle textContent="Sign In" textStyle="" />
+                <Link href={"/login"}>
+                
+                  <TextStyle textContent="Sign In" textStyle="" />
+                </Link>
                 <hr className="bg-[#b0adad] w-px h-5" />
-                <TextStyle textContent="Register" textStyle="" />
+                <Link href={"/onboarding"}>
+                
+                  <TextStyle textContent="Register" textStyle="" />
+                </Link>
+              
               </div>
             </div>
             <div className="flex flex-row space-x-3 ml-2 items-center ">

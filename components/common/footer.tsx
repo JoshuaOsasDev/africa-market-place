@@ -7,7 +7,7 @@ import { socialData, socialData2, socialData3, socialData4 } from "@/lib/data";
 
 function Footer() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-4 bg-[#1A1A1A] rounded-[20px] p-4">
+    <div className="grid mx-2 grid-cols-1 md:grid-cols-5 gap-6 mb-4 bg-[#1A1A1A] rounded-[20px] p-4">
       <div className="col-span-2 flex flex-col space-y-4 ">
         {/* logo */}
         <div className="relative  w-[100px] h-[50px] sm:w-[182px] sm:h-[60px]  lg:w-[292px] lg:h-[83px] ">

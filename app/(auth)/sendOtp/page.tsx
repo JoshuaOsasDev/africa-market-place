@@ -64,7 +64,7 @@ email: string
   const onSubmit = async (data: {
    email: string
   }) => {
-   
+   router.push("/verifyOtp")
     /*  navigation.navigate('bottomTabNavigation') */
     console.log(data);
 

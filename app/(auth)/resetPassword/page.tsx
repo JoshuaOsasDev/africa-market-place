@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
@@ -52,7 +51,7 @@ const page = () => {
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
   };
-
+console.log("john")
   const [form, setForm] = useState<{
     password: string;
     confirmPassword: string;
@@ -72,9 +71,11 @@ const page = () => {
     password: string;
     confirmPassword: string;
   }) => {
-    if (!isChecked) return;
-    /*  navigation.navigate('bottomTabNavigation') */
+    console.log("code ran here")
     console.log(data);
+    router.push("/sendOtp")
+    
+    
 
     try {
       setLoader(!loader);
@@ -91,6 +92,8 @@ const page = () => {
     }
   };
 
+
+  console.log("this are the erros", errors)
   return (
     <div className=" flex flex-col   my-4">
       {
@@ -183,14 +186,15 @@ const page = () => {
               )}
             </div>
             <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              {errors.password?.message}
+              {errors.confirmPassword?.message}
             </p>
           </div>
          
 
           {/* submit button starts */}
           <button
-            disabled={!isChecked || loader}
+            //  disabled={ loader}
+ 
             className={` w-full h-[39px]  p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4 bg-[#2E7D32]`}
           >
             <span className="text-white text-sm font-semibold  leading-[18.90px]">
