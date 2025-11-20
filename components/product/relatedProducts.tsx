@@ -1,0 +1,85 @@
+"use client";
+
+import React from "react";
+import { ProductCard } from "@/components/product/productCard";
+import { cn } from "@/lib/utils";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+
+interface RelatedProduct {
+  id: string;
+  name: string;
+  slug: string;
+  image: string;
+  price: number;
+  originalPrice?: number;
+  discount?: number;
+  rating?: number;
+  reviewCount?: number;
+  inStock?: boolean;
+}
+
+interface RelatedProductsProps {
+  products: RelatedProduct[];
+  title?: string;
+  viewAllLink?: string;
+  onAddToCart?: (productId: string) => void;
+  onToggleWishlist?: (productId: string) => void;
+  wishlistedProducts?: string[];
+  className?: string;
+}
+
+export function RelatedProducts({
+  products,
+  title = "Related Products",
+  viewAllLink,
+  onAddToCart,
+  onToggleWishlist,
+  wishlistedProducts = [],
+  className,
+}: RelatedProductsProps) {
+  if (!products || products.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className={cn("w-full", className)}>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-[#111827] text-[24px] lg:text-[32px] font-bold">
+          {title}
+        </h2>
+
+        {viewAllLink && (
+          <Link
+            href={viewAllLink}
+            className="flex items-center gap-2 text-[#2E7D32] font-medium hover:gap-3 transition-all"
+          >
+            <span className="text-sm lg:text-base">View All</span>
+            <ChevronRight size={20} />
+          </Link>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            id={product.id}
+            name={product.name}
+            slug={product.slug}
+            image={product.image}
+            price={product.price}
+            originalPrice={product.originalPrice}
+            discount={product.discount}
+            rating={product.rating}
+            reviewCount={product.reviewCount}
+            inStock={product.inStock}
+            onAddToCart={onAddToCart}
+            onToggleWishlist={onToggleWishlist}
+            isWishlisted={wishlistedProducts.includes(product.id)}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
