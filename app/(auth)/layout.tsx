@@ -1,26 +1,21 @@
-"use client";
-import { useState } from "react";
-import Footer from "@/components/common/footer";
-import Header from "@/components/common/header";
-import Banner from "@/components/common/banner";
-import AuthProgressbar from "@/components/common/authProgressbar";
+import SignUpNav from "@/components/common/signUpNav";
 
 function layout({ children }: { children: React.ReactNode }) {
-  const [level, setLevel] = useState(2);
-
   return (
-    <div className=" min-h-screen  bg-[#EAEAEA] px-2 flex flex-col">
-      <Header />
-      <Banner />
-      <div className="flex flex-col justify-center items-center flex-1 xs:w-5/6 w-4/6 sm:5/10 md:w-5/10 lg:w-1/3 mx-auto  space-y-2 bg-white my-4 rounded-lg p-8">
-              <div className="rounded-md   p-2 lg:p-4 ">
-                 
-          {children}
+    <div className=" min-h-screen  bg-[#EAEAEA]  flex flex-col">
+      <SignUpNav />
+      <div className="flex flex-col w-9/10 xs:w-5/6  my-6 rounded-lg   md:bg-[#EAEAEA]  bg-[#FFFFFF] m-auto justify-center items-center md:flex-1">
+        <div className="rounded-md p-4">
+          <div>{children}</div>
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
 
 export default layout;
+
+//xs:w-5/6 w-4/6
+
+//flex flex-col justify-center items-center flex-1 xs:w-5/6 w-8/9  sm:5/10 md:w-5/10 lg:w-1/3  mx-auto space-y-2 bg-white my-4 rounded-lg p-8

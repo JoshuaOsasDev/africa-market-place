@@ -1,16 +1,11 @@
-import AuthProgressbar from '@/components/common/authProgressbar'
-import SignUpComp from '@/components/pageComponents/signUpComp'
-import React from 'react'
+import SignUpComp from "@/components/pageComponents/signUpComp";
 
 function page() {
   return (
     <div>
-       <AuthProgressbar
-                  level={2}
-                  />
-          <SignUpComp />
+      <SignUpComp />
     </div>
-  )
+  );
 }
 
-export default page
+export default page;

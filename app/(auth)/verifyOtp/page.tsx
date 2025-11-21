@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { verifyEmailSchema } from "@/lib/utils/yupvalidation";
@@ -10,6 +10,8 @@ import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
 import OtpComponent from "@/components/common/otpComponent";
+import DailyLayout from "@/components/common/vendorDailyLayout";
+import BackButton from "@/components/common/backButton";
 
 // Define TypeScript types for form values
 
@@ -79,39 +81,45 @@ const page = () => {
   };
 
   return (
-    <div className=" flex flex-col   my-4">
-      {
-        //   loader && <LoadingScreen />
-      }
-      <div className="relative w-[116px] h-[146px] mx-auto">
-        <Image src={"/images/lock.jpg"} fill alt="otp logo" />
-      </div>
-      <TextStyle
-        textContent="We just emailed you"
-        textStyle="text-[28px] text-[#111827] text-bold text-center"
-      />
-      <TextStyle
-        textContent="Please enter the code we emailed you."
-        textStyle="text-[16px] text-[#667185] text-bold text-center"
-      />
+    <div>
+      <ToastContainer />
+      <BackButton />
+      <div className="flex flex-col md:space-x-15 md:flex-row ">
+        <DailyLayout textStyle="mt-0" />
+        <div className=" flex flex-col bg-white p-8 my-auto rounded-lg">
+          {
+            //   loader && <LoadingScreen />
+          }
+          <div className="relative w-[116px] h-[146px] mx-auto">
+            <Image src={"/images/lock.jpg"} fill alt="otp logo" />
+          </div>
+          <TextStyle
+            textContent="We just emailed you"
+            textStyle="text-[28px] text-[#111827] text-bold text-center"
+          />
+          <TextStyle
+            textContent="Please enter the code we emailed you."
+            textStyle="text-[16px] text-[#667185] text-bold text-center"
+          />
 
-      <div className="w-full mx-auto flex justify-center items-center my-6">
-        <OtpComponent />
-      </div>
+          <div className="w-full mx-auto flex justify-center items-center my-6">
+            <OtpComponent />
+          </div>
 
-          <div className="flex flex-row space-x-2">
+          <div className="flex flex-row space-x-2 items-center  ">
+            <TextStyle
+              textContent="Didn’t get a code? Resend Code"
+              textStyle="md:text-[16px] text-[10px] text-[#667185] text-bold text-center"
+            />
+
+            <button>
               <TextStyle
-                  textContent="Didn’t get a code? Resend Code"
-                  textStyle="text-[16px] text-[#667185] text-bold text-center"
+                textContent="Resend Code"
+                textStyle="text-[#FBC642]  text-3 cursor-pointer"
               />
-    
-              <button>
-                  <TextStyle
-                      textContent="Resend Code"
-                      textStyle="text-[#FBC642]  text-3 cursor-pointer"
-                  />
-             
-        </button>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

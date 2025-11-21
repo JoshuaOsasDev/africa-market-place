@@ -1,250 +1,192 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { AxiosError } from "axios";
-import { loginSchema } from "@/lib/utils/yupvalidation";
-import TextStyle from "../common/textStyle";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 
-// Define TypeScript types for form values
+import { loginSchema } from "@/lib/utils/yupvalidation";
+import TextStyle from "../common/textStyle";
+import { Eye, EyeOff, Mail } from "lucide-react";
+import BackButton from "../common/backButton";
+import DailyLayout from "../common/vendorDailyLayout";
+import { toast, ToastContainer } from "react-toastify";
 
 const LoginComp = () => {
-  /* naviagtion */
   const router = useRouter();
-  /* use dispatch */
-  // const dispatch = useAppDispatch()
 
-  //  const appState = useAppSelector(state => state)
-
-  /* set login credentials  */
-  const [loginCredential, setLoginCredential] = useState({
-    email: "",
-    password: "",
-  });
-
-  /*  control user login after registration */
-  const [startApiLogin, setStartApiLogin] = useState(false);
-
-  /* set the display of the loader */
   const [loader, setLoader] = useState(false);
-
-  /* start api call for user registration*/
-
-  const [startApiCall, setStartApiCall] = useState(false);
-
-  /* useEffect for responding to diffrent response from the user signup */
-
+  const [isChecked, setIsChecked] = useState(false);
   const [hidePassword, setHidePassword] = useState(false);
-
-  /* yup validation and react hook form */
 
   const formOptions = { resolver: yupResolver(loginSchema) };
 
-  const [form, setForm] = useState<{
-    email: string;
-    password: string;
-  }>({
-    email: "",
-    password: "",
-  });
-
-
-  const [isChecked, setIsChecked] = useState(false);
-
-  /* check the box */
-  const toggleCheckBox = () => {
-    setIsChecked(!isChecked);
-  };
-
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm(formOptions);
 
   const onSubmit = async (data: { email: string; password: string }) => {
-    /*  navigation.navigate('bottomTabNavigation') */
     console.log(data);
 
     try {
-      setLoader(!loader);
-
-      /* make api call fro user signIn */
-      setStartApiCall(!startApiCall);
-      setLoginCredential({
-        email: data.email,
-        password: data.password,
+      setLoader(true);
+      // API calls here...
+      toast.success("Success Notification", {
+        position: "top-right",
       });
-
-      /* dispatch(userLoggedInAndLoggedOutAction(true))
-      navigation.navigate('bottomTabNavigation') */
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (error) {
+      console.log(error);
     } finally {
       setLoader(false);
     }
   };
 
   return (
-    <div className=" flex flex-col">
-      {
-        //   loader && <LoadingScreen />
-      }
-      <TextStyle
-        textContent="Hello Welcome back!"
-        textStyle="text-[28px] text-[#111827] text-bold"
-      />
-      <TextStyle
-        textContent="Enter your credentials to access your account"
-        textStyle="text-[16px] text-[##667185] text-bold"
-      />
-
-      <div className=" w-full">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mt-4 flex flex-col w-full space-y-2 "
-        >
-        
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              <TextStyle
-                textContent="Email"
-                textStyle="text-[16px] text-[##667185] text-bold"
+    <div>
+      <ToastContainer />
+      <BackButton />
+      <div className="flex flex-col md:space-x-15 md:flex-row ">
+        <DailyLayout textStyle="mt-0" />
+        <div className="flex flex-col md:bg-white md:p-10 md:rounded-lg md:pt-3 md:w-[500px] md:mt-5">
+          {/* Logo – desktop only */}
+          <div className="hidden md:block relative w-[100px] h-[50px]">
+            <Link href="/">
+              <Image
+                src="/images/logo.png"
+                alt="africa market place logo"
+                fill
+                className="object-contain object-center"
               />
-            </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
-              <input
-                {...register("email")}
-                placeholder="user@gmail.com"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
-              />
-              <Mail className="w-4 h-4  transition-colors group-focus-within:text-green-600" />
-            </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              {errors.email?.message}
-            </p>
-          </div>
-        
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              <TextStyle
-                textContent="Password"
-                textStyle="text-[16px] text-[##667185] text-bold"
-              />
-            </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
-              <input
-                type={hidePassword ? "password" : "text"}
-                {...register("password")}
-                placeholder="12345678"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
-              />
-              {!hidePassword ? (
-                <Eye
-                  onClick={() => {
-                    setHidePassword(!hidePassword);
-                  }}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
-                />
-              ) : (
-                <EyeOff
-                  onClick={() => {
-                    setHidePassword(!hidePassword);
-                  }}
-                  onChange={() => setHidePassword(!hidePassword)}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
-                />
-              )}
-            </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              {errors.password?.message}
-            </p>
+            </Link>
           </div>
 
-        
-        
-          {/* remember password */}
-          <div className=" flex flex-row  items-start justify-between ">
-            <div>
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={toggleCheckBox}
-              className="w-3 h-3 text-[#2E7D32]
-               bg-gray-100 border-gray-300 rounded-full  focus:ring-[#2E7D32] checked:bg-[#2E7D32]  dark:bg-[#2E7D32]  overflow-hidden
-              accent-[#2E7D32]
-               "
-            />
-            <span className="text-zinc-600 text-[13px] ml-1 font-medium font-['Aeonik-Regular'] ">
-            Remember me for 30 days
-            </span>
-          </div>
-            <div>
-              <Link href={"/resetPassword"}
-              >
-              
-                <TextStyle
-                  textContent="Forgot Password"
-                  textStyle="text-[#6b916d] text-[16px]"
-                />
-              </Link>
-          </div>
-          </div>
-
-        
-
-          {/* submit button starts */}
-          <button
-            disabled={ loader}
-            className={` w-full h-[39px]  bg-[#2E7D32] p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4`}
-          >
-            <span className="text-white text-sm font-semibold  leading-[18.90px]">
-              {loader ? "Please wait.." : "Login To Your Account"}
-            </span>
-          </button>
-        </form>
-
-        <div className="flex flex-row items-center space-x-2 my-6">
-          <hr className="flex-1 h-[0.5px] border-px border-[#F0F2F5] " />
-          <TextStyle textContent="Or" textStyle="text-[#757575]" />
-          <hr className="flex-1 h-[0.5px]  border-[#F0F2F5]" />
-        </div>
-
-        <div className="rounded-[28px] flex items-center justify-center  space-x-2 bg-[#FAFAFA] cursor-pointer h-[55px]">
-          <Image
-            src={"/images/google.jpg"}
-            alt="google logo"
-            width={20}
-            height={20}
+          {/* Titles */}
+          <TextStyle
+            textContent="Hello Welcome back!"
+            textStyle="text-[28px] text-[#111827] text-bold mt-4"
           />
           <TextStyle
-            textContent="Continue with Google"
-            textStyle="text-[#525252]  text-[16px] text-bold "
+            textContent="Enter your credentials to access your account"
+            textStyle="text-[16px] text-[#667185]/80 text-bold"
           />
-        </div>
-      </div>
 
-      <div className="flex flex-row items-center mt-3 w-full justify-center space-x-1">
-        <p className="text-slate-700/opacity-60 text-sm font-medium font-['Inter'] leading-[18px]">
-          Already you new?
-        </p>
-        <Link href={"/login"}>
-          <p className="text-[#2E7D32] text-sm font-semibold font-['Inter'] leading-[18.90px]">
-           Create an account
-          </p>
-        </Link>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mt-4 flex flex-col w-full space-y-2"
+          >
+            {/* EMAIL */}
+            <div className="flex flex-col space-y-2 w-full">
+              <label className="text-slate-700 text-sm font-medium">
+                <TextStyle textContent="Email" textStyle="text-[16px]" />
+              </label>
+
+              <div className="flex items-center rounded-sm shadow border border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                <input
+                  {...register("email")}
+                  placeholder="user@gmail.com"
+                  className="flex-1 text-slate-700 text-sm font-medium focus:outline-none"
+                />
+                <Mail className="w-4 h-4 transition-colors group-focus-within:text-green-600" />
+              </div>
+
+              <p className="text-red-700 text-sm">{errors.email?.message}</p>
+            </div>
+
+            {/* PASSWORD */}
+            <div className="flex flex-col space-y-2 w-full">
+              <label className="text-slate-700 text-sm font-medium">
+                <TextStyle textContent="Password" textStyle="text-[16px]" />
+              </label>
+
+              <div className="flex items-center rounded-sm shadow border border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                <input
+                  type={hidePassword ? "text" : "password"}
+                  {...register("password")}
+                  placeholder="12345678"
+                  className="flex-1 text-slate-700 text-sm font-medium focus:outline-none"
+                />
+                {!hidePassword ? (
+                  <Eye
+                    onClick={() => setHidePassword(true)}
+                    className="w-4 h-4 cursor-pointer transition-colors group-focus-within:text-green-600"
+                  />
+                ) : (
+                  <EyeOff
+                    onClick={() => setHidePassword(false)}
+                    className="w-4 h-4 cursor-pointer transition-colors group-focus-within:text-green-600"
+                  />
+                )}
+              </div>
+
+              <p className="text-red-700 text-sm">{errors.password?.message}</p>
+            </div>
+
+            {/* REMEMBER + FORGOT */}
+            <div className="flex flex-row justify-between items-center mt-1">
+              <div>
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={() => setIsChecked(!isChecked)}
+                  className="w-3 h-3 text-[#2E7D32] rounded-full accent-[#2E7D32]"
+                />
+                <span className="text-zinc-600 text-[13px] ml-1">
+                  Remember me for 30 days
+                </span>
+              </div>
+
+              <Link href="/resetPassword">
+                <TextStyle
+                  textContent="Forgot Password"
+                  textStyle="text-[#6b916d] text-[14px]"
+                />
+              </Link>
+            </div>
+
+            {/* SUBMIT BUTTON */}
+            <button
+              disabled={loader}
+              className="w-full h-[39px] bg-[#2E7D32] rounded-[27px] p-2.5 mt-4 hover:opacity-80 text-white text-sm font-semibold"
+            >
+              {loader ? "Please wait..." : "Login To Your Account"}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex flex-row items-center space-x-2 my-6">
+            <hr className="flex-1 border-[#F0F2F5]" />
+            <TextStyle textContent="Or" textStyle="text-[#757575]" />
+            <hr className="flex-1 border-[#F0F2F5]" />
+          </div>
+
+          {/* Google Button */}
+          <div className="rounded-[28px] flex items-center justify-center space-x-2 bg-[#FAFAFA] hover:opacity-80 cursor-pointer h-[55px]">
+            <Image
+              src="/images/google.jpg"
+              alt="google logo"
+              width={20}
+              height={20}
+            />
+            <TextStyle
+              textContent="Continue with Google"
+              textStyle="text-[#525252] text-[16px]"
+            />
+          </div>
+
+          {/* FOOTER */}
+          <div className="flex flex-row items-center mt-3 w-full justify-center space-x-1">
+            <p className="text-slate-700/opacity-60 text-sm">New here?</p>
+            <Link href="/register/vendor">
+              <p className="text-[#2E7D32] text-sm font-semibold hover:opacity-80">
+                Create an account
+              </p>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
