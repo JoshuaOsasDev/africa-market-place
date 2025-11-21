@@ -1,6 +1,6 @@
 
 
-import Navbar from "./components/Navbar";
+import NavBar from "./components/Navbar";
 import SideBar from "./components/SideBar";
 
  
@@ -12,8 +12,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
       <div className="flex flex-col w-full">
         <div className="h-20 bg-[#FFFFFF]">
-        <Navbar />
-      </div>
+        <NavBar />
+        </div>
       
       <div className="grow  md:overflow-y-auto ">{children}</div>
       </div>
