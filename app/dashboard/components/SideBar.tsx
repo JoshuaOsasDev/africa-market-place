@@ -3,14 +3,14 @@ import React from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
 import NavLinks from './NavLinks';
-import logo from '../../../public/dashboard-images/logo.svg'
+
 import supportPageIcon from '../../../public/dashboard-images/support-page-icon.svg'
 import settingPageIcon from '../../../public/dashboard-images/setting-page-icon.svg'
 
 const SideBar = () => {
   return (
     <div className='flex flex-col h-full bg-[#FFFFFF] py-3 px-4.5'>
-        <Link href='/'><Image src={logo} alt='logo' className='mb-10' /></Link>
+        
 
         <div className="flex grow flex-row justify-between md:flex-col md:space-x-0 md:space-y-1">
         <NavLinks />
