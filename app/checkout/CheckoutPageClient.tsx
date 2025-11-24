@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { ContactInformationForm } from "@/components/checkout/ContactInformationForm";
 import { ShippingAddressForm } from "@/components/checkout/ShippingAddressForm";
 import { PaymentMethodForm } from "@/components/checkout/PaymentMethodForm";
 import { CheckoutOrderSummary } from "@/components/checkout/CheckoutOrderSummary";
 import {
+  CheckoutFormData,
   CheckoutSummary,
   ContactInformation,
   ShippingAddress,
@@ -20,6 +22,7 @@ interface CheckoutPageClientProps {
 }
 
 export function CheckoutPageClient({ initialSummary }: CheckoutPageClientProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState<CheckoutSummary>(initialSummary);
 
@@ -89,19 +92,25 @@ export function CheckoutPageClient({ initialSummary }: CheckoutPageClientProps) 
   const handlePlaceOrder = async () => {
     setLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log("Order placed:", {
-      contact,
-      shipping,
-      useDifferentBilling,
-      paymentMethod,
-      cardDetails: paymentMethod === "card" ? cardDetails : null,
-      summary,
-    });
+      console.log("Order placed:", {
+        contact,
+        shipping,
+        useDifferentBilling,
+        paymentMethod,
+        cardDetails: paymentMethod === "card" ? cardDetails : null,
+        summary,
+      });
 
-    alert("Order placed successfully!");
-    setLoading(false);
+      router.push("/order/success");
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("There was an error placing your order. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (summary.items.length === 0) {
