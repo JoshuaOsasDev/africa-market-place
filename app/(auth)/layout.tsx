@@ -13,7 +13,7 @@ function layout({ children }: { children: React.ReactNode }) {
       <Header />
       <Banner />
       <div className="flex flex-col justify-center items-center flex-1  mx-auto  space-y-2 bg-white my-4 rounded-lg 
-      w-9/10 sm:w-7/10 md:w-5/10 lg:w-4/10 
+      w-full  md:w-5/10 lg:w-4/10 
       ">
         <div className="rounded-md">
           {children}

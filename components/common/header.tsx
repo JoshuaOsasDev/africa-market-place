@@ -68,7 +68,7 @@ function Header() {
           <div className="relative  w-[100px] h-[50px] sm:w-[182px] sm:h-[60px]  lg:w-[292px] lg:h-[83px] ">
             <Link href={"/"}>
               <Image
-                src={"/logo.png"}
+                src={"/images/logo.png"}
                 alt="africa market place logo"
                 fill
                 className="object-contain"
