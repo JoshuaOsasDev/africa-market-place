@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-import { verifyEmailSchema } from "@/lib/utils/yupvalidation";
+import { verifyEmailSchema } from "@/lib/utility/yupvalidation";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
@@ -88,7 +88,7 @@ const page = () => {
       </div>
       <TextStyle
         textContent="We just emailed you"
-        textStyle="text-[28px] text-[#111827] text-bold text-center"
+        textStyle="text-2xl sm:text-3xl text-[#111827] text-bold text-center"
       />
       <TextStyle
         textContent="Please enter the code we emailed you."
@@ -99,18 +99,17 @@ const page = () => {
         <OtpComponent />
       </div>
 
-          <div className="flex flex-row space-x-2">
-              <TextStyle
-                  textContent="Didn’t get a code? Resend Code"
-                  textStyle="text-[16px] text-[#667185] text-bold text-center"
-              />
-    
-              <button>
-                  <TextStyle
-                      textContent="Resend Code"
-                      textStyle="text-[#FBC642]  text-3 cursor-pointer"
-                  />
-             
+      <div className="flex flex-row space-x-2">
+        <TextStyle
+          textContent="Didn’t get a code? Resend Code"
+          textStyle="text-[16px] text-[#667185] text-bold text-center"
+        />
+
+        <button>
+          <TextStyle
+            textContent="Resend Code"
+            textStyle="text-[#FBC642]  text-3 cursor-pointer"
+          />
         </button>
       </div>
     </div>

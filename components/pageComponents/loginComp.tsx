@@ -6,7 +6,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-import { loginSchema } from "@/lib/utils/yupvalidation";
+import { loginSchema } from "@/lib/utility/yupvalidation";
 import TextStyle from "../common/textStyle";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
@@ -53,7 +53,6 @@ const LoginComp = () => {
     password: "",
   });
 
-
   const [isChecked, setIsChecked] = useState(false);
 
   /* check the box */
@@ -98,11 +97,11 @@ const LoginComp = () => {
       }
       <TextStyle
         textContent="Hello Welcome back!"
-        textStyle="text-[28px] text-[#111827] text-bold"
+        textStyle="text-2xl sm:text-3xl text-[#111827] text-bold"
       />
       <TextStyle
         textContent="Enter your credentials to access your account"
-        textStyle="text-[16px] text-[##667185] text-bold"
+        textStyle="text-[16px] text-[#667185] text-bold"
       />
 
       <div className=" w-full">
@@ -110,7 +109,6 @@ const LoginComp = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="mt-4 flex flex-col w-full space-y-2 "
         >
-        
           <div className="flex flex-col space-y-1 w-full">
             <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
               <TextStyle
@@ -133,7 +131,7 @@ const LoginComp = () => {
               {errors.email?.message}
             </p>
           </div>
-        
+
           <div className="flex flex-col space-y-1 w-full">
             <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
               <TextStyle
@@ -173,41 +171,35 @@ const LoginComp = () => {
             </p>
           </div>
 
-        
-        
           {/* remember password */}
           <div className=" flex flex-row  items-start justify-between ">
             <div>
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={toggleCheckBox}
-              className="w-3 h-3 text-[#2E7D32]
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={toggleCheckBox}
+                className="w-3 h-3 text-[#2E7D32]
                bg-gray-100 border-gray-300 rounded-full  focus:ring-[#2E7D32] checked:bg-[#2E7D32]  dark:bg-[#2E7D32]  overflow-hidden
               accent-[#2E7D32]
                "
-            />
-            <span className="text-zinc-600 text-[13px] ml-1 font-medium font-['Aeonik-Regular'] ">
-            Remember me for 30 days
-            </span>
-          </div>
+              />
+              <span className="text-zinc-600 text-[13px] ml-1 font-medium font-['Aeonik-Regular'] ">
+                Remember me for 30 days
+              </span>
+            </div>
             <div>
-              <Link href={"/resetPassword"}
-              >
-              
+              <Link href={"/resetPassword"}>
                 <TextStyle
                   textContent="Forgot Password"
                   textStyle="text-[#6b916d] text-[16px]"
                 />
               </Link>
+            </div>
           </div>
-          </div>
-
-        
 
           {/* submit button starts */}
           <button
-            disabled={ loader}
+            disabled={loader}
             className={` w-full h-[39px]  bg-[#2E7D32] p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4`}
           >
             <span className="text-white text-sm font-semibold  leading-[18.90px]">
@@ -242,7 +234,7 @@ const LoginComp = () => {
         </p>
         <Link href={"/login"}>
           <p className="text-[#2E7D32] text-sm font-semibold font-['Inter'] leading-[18.90px]">
-           Create an account
+            Create an account
           </p>
         </Link>
       </div>

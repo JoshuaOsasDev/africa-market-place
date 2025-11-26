@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
+import ReduxProvider from "@/utils/ReduxProvider/ReduxProvider";
 
 
 
@@ -25,12 +26,14 @@ export default function RootLayout({
 }>) {
 
   return (
+    <ReduxProvider>
     <html lang="en" className={`${nunito.variable}`} >
       <body
        className= {nunito.className}
       >
         {children}
       </body>
-    </html>
+      </html>
+      </ReduxProvider>
   );
 }

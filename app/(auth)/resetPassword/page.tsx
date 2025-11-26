@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-import { resetPasswordSchema } from "@/lib/utils/yupvalidation";
+import { resetPasswordSchema } from "@/lib/utility/yupvalidation";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
@@ -51,7 +51,7 @@ const page = () => {
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
   };
-console.log("john")
+  console.log("john");
   const [form, setForm] = useState<{
     password: string;
     confirmPassword: string;
@@ -71,11 +71,9 @@ console.log("john")
     password: string;
     confirmPassword: string;
   }) => {
-    console.log("code ran here")
+    console.log("code ran here");
     console.log(data);
-    router.push("/sendOtp")
-    
-    
+    router.push("/sendOtp");
 
     try {
       setLoader(!loader);
@@ -92,8 +90,7 @@ console.log("john")
     }
   };
 
-
-  console.log("this are the erros", errors)
+  console.log("this are the erros", errors);
   return (
     <div className=" flex flex-col   my-4">
       {
@@ -189,12 +186,11 @@ console.log("john")
               {errors.confirmPassword?.message}
             </p>
           </div>
-         
 
           {/* submit button starts */}
           <button
             //  disabled={ loader}
- 
+
             className={` w-full h-[39px]  p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4 bg-[#2E7D32]`}
           >
             <span className="text-white text-sm font-semibold  leading-[18.90px]">
@@ -203,8 +199,6 @@ console.log("john")
           </button>
         </form>
       </div>
-
-    
     </div>
   );
 };

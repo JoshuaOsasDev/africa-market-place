@@ -6,7 +6,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-import { signUpSchema } from "@/lib/utils/yupvalidation";
+import { signUpSchema } from "@/lib/utility/yupvalidation";
 import TextStyle from "../common/textStyle";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
@@ -108,7 +108,7 @@ const SignUpComp = () => {
       }
       <TextStyle
         textContent="SignUp"
-        textStyle="text-[28px] text-[#111827] text-bold"
+        textStyle="text-2xl sm:text-3xl text-[#111827] text-bold"
       />
       <TextStyle
         textContent="Enter your credentials to access your account"
@@ -282,9 +282,7 @@ const SignUpComp = () => {
                 Term of Service{" "}
               </span>
             </span>
-            <span className="text-zinc-600 text-[13px] font-medium ">
-              and{" "}
-            </span>
+            <span className="text-zinc-600 text-[13px] font-medium ">and </span>
             <span>
               <span className="text-[#2E7D32] text-[13px] font-medium">
                 Privacy Policy{" "}
@@ -306,33 +304,27 @@ const SignUpComp = () => {
             <span className="text-white text-sm font-semibold  leading-[18.90px]">
               {loader ? "Please wait.." : "Create Account"}
             </span>
-                  </button>
-                  
+          </button>
+        </form>
 
-              </form>
-              
-              <div className="flex flex-row items-center space-x-2 my-6">
-                  <hr className="flex-1 h-[0.5px] border-px border-[#F0F2F5] " />
-                  <TextStyle
-                      textContent="Or"
-                      textStyle="text-[#757575]"
-                  />
-                   <hr className="flex-1 h-[0.5px]  border-[#F0F2F5]" />
-                  
-              </div>
+        <div className="flex flex-row items-center space-x-2 my-6">
+          <hr className="flex-1 h-[0.5px] border-px border-[#F0F2F5] " />
+          <TextStyle textContent="Or" textStyle="text-[#757575]" />
+          <hr className="flex-1 h-[0.5px]  border-[#F0F2F5]" />
+        </div>
 
-              <div className="rounded-[28px] flex items-center justify-center  space-x-2 bg-[#FAFAFA] cursor-pointer h-[55px]">
+        <div className="rounded-[28px] flex items-center justify-center  space-x-2 bg-[#FAFAFA] cursor-pointer h-[55px]">
           <Image
             src={"/images/google.jpg"}
             alt="google logo"
-            width={ 20 }
-            height={ 20 }
+            width={20}
+            height={20}
           />
-                  <TextStyle
-                      textContent="Continue with Google"
-                      textStyle="text-[#525252]  text-[16px] text-bold "
-                  />
-              </div>
+          <TextStyle
+            textContent="Continue with Google"
+            textStyle="text-[#525252]  text-[16px] text-bold "
+          />
+        </div>
       </div>
 
       <div className="flex flex-row items-center mt-3 w-full justify-center space-x-1">

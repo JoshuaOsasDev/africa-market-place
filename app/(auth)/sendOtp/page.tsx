@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-import { verifyEmailSchema } from "@/lib/utils/yupvalidation";
+import { verifyEmailSchema } from "@/lib/utility/yupvalidation";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
@@ -45,13 +45,10 @@ const page = () => {
 
   const formOptions = { resolver: yupResolver(verifyEmailSchema) };
 
-
-
-
   const [form, setForm] = useState<{
-email: string
+    email: string;
   }>({
-  email:""
+    email: "",
   });
 
   const {
@@ -61,10 +58,8 @@ email: string
     formState: { errors },
   } = useForm(formOptions);
 
-  const onSubmit = async (data: {
-   email: string
-  }) => {
-   router.push("/verifyOtp")
+  const onSubmit = async (data: { email: string }) => {
+    router.push("/verifyOtp");
     /*  navigation.navigate('bottomTabNavigation') */
     console.log(data);
 
@@ -84,13 +79,13 @@ email: string
   };
 
   return (
-    <div className=" flex flex-col   my-4">
+    <div className=" flex flex-col   my-4 px-2">
       {
         //   loader && <LoadingScreen />
       }
       <TextStyle
         textContent="Email Address"
-        textStyle="text-[28px] text-[#111827] text-bold"
+        textStyle="text-[28px] text-[#111827] text-2xl sm:text-3xl"
       />
       <TextStyle
         textContent="Enter your E-mail to access your account"
@@ -102,7 +97,7 @@ email: string
           onSubmit={handleSubmit(onSubmit)}
           className="mt-4 flex flex-col w-full space-y-2 "
         >
-         <div className="flex flex-col space-y-1 w-full">
+          <div className="flex flex-col space-y-1 w-full">
             <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
               <TextStyle
                 textContent="Email"
@@ -127,7 +122,7 @@ email: string
 
           {/* submit button starts */}
           <button
-            disabled={ loader}
+            disabled={loader}
             className={` w-full h-[39px]  p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4 bg-[#2E7D32]`}
           >
             <span className="text-white text-sm font-semibold  leading-[18.90px]">
@@ -135,15 +130,12 @@ email: string
             </span>
           </button>
         </form>
-          </div>
-          
-          <TextStyle
-              textContent="Click reset and check your E-mail for an OTP code"
-              textStyle="text-[#FBC642] my-[50px] text-3"
-          
-          />
+      </div>
 
-    
+      <TextStyle
+        textContent="Click reset and check your E-mail for an OTP code"
+        textStyle="text-[#FBC642] my-[50px] text-3"
+      />
     </div>
   );
 };

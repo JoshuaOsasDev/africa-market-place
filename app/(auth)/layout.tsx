@@ -12,9 +12,10 @@ function layout({ children }: { children: React.ReactNode }) {
     <div className=" min-h-screen  bg-[#EAEAEA] px-2 flex flex-col">
       <Header />
       <Banner />
-      <div className="flex flex-col justify-center items-center flex-1 xs:w-5/6 w-4/6 sm:5/10 md:w-5/10 lg:w-1/3 mx-auto  space-y-2 bg-white my-4 rounded-lg p-8">
-              <div className="rounded-md   p-2 lg:p-4 ">
-                 
+      <div className="flex flex-col justify-center items-center flex-1  mx-auto  space-y-2 bg-white my-4 rounded-lg 
+      w-9/10 sm:w-7/10 md:w-5/10 lg:w-4/10 
+      ">
+        <div className="rounded-md">
           {children}
         </div>
       </div>
