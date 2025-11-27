@@ -5,9 +5,7 @@ import Link from "next/link";
 import TextStyle from "@/components/common/textStyle";
 import AuthProgressbar from "@/components/common/authProgressbar";
 
-
 function page() {
- 
   const [level, setLevel] = useState(1);
 
   const cardData = [
@@ -35,32 +33,36 @@ function page() {
   }) => {
     return (
       <Link
-        href={cardId === 1 ? "/register/customer" : "/register/vendor"}
+        href={
+          cardId === 1
+            ? "auth-user/register/customer"
+            : "auth-vendor/register/vendor"
+        }
         key={cardId}
       >
-        <div 
+        <div
           onClick={() => setSelectedCardId(cardId)}
-          className={`flex items-center  p-4 space-x-2 cursor-pointer ${
+          className={`flex cursor-pointer items-center space-x-2 p-4 ${
             selectedCardId === cardId
-              ? "border-[#C0D8C1] border-2 rounded-lg"
-              : "bg-[#FAFAFA] rounded-[12px]"
+              ? "rounded-lg border-2 border-[#C0D8C1]"
+              : "rounded-[12px] bg-[#FAFAFA]"
           }`}
           key={cardId}
         >
           <div
-            className={`rounded-full  ${
+            className={`rounded-full ${
               cardId === 1 ? "bg-[#EAF2EA]" : "bg-[#FFF9EA]"
-            }   w-[60px] h-[60px] flex  justify-center items-center`}
+            } flex h-[60px] w-[60px] items-center justify-center`}
           >
             <div
-              className={`rounded-full  ${
+              className={`rounded-full ${
                 cardId === 1 ? "bg-[#D5E5D6]" : "bg-[#FEF2D5]"
-              }  w-[50px] h-[50px] flex justify-center items-center`}
+              } flex h-[50px] w-[50px] items-center justify-center`}
             >
               {cardId === 1 ? <Mail /> : <Store />}
             </div>
           </div>
-          <div className="flex-1 flex flex-col space-y-2">
+          <div className="flex flex-1 flex-col space-y-2">
             <TextStyle
               textContent={heading}
               textStyle='text-[#000000] text-[20px]  font-["Nunito Sans"]'
@@ -73,12 +75,10 @@ function page() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center flex-1 w-5/6 md:w-2/3 lg:w-1/3 mx-auto  space-y-2 bg-white my-4 rounded-lg p-8">
-      <div className="rounded-md   p-2 lg:p-4 ">
+    <div className="mx-auto my-4 flex w-5/6 flex-1 flex-col items-center justify-center space-y-2 rounded-lg bg-white p-8 md:w-2/3 lg:w-1/3">
+      <div className="rounded-md p-2 lg:p-4">
         {/* stages start */}
-        <AuthProgressbar 
-       level={level}
-        />
+        <AuthProgressbar level={level} />
         {/* stages ends */}
         {/* heading */}
         <div className="flex flex-col justify-center">

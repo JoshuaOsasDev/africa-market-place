@@ -1,4 +1,4 @@
-import SignUpComp from "@/components/pageComponents/signUpComp";
+import SignUpComp from "@/components/pageComponents/Auth/signUpComp";
 
 function page() {
   return (

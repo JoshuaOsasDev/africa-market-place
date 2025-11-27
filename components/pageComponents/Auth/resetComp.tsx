@@ -10,9 +10,10 @@ import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
 import { div } from "framer-motion/client";
-import BackButton from "../common/backButton";
-import DailyLayout from "../common/vendorDailyLayout";
+
 import Link from "next/link";
+import BackButton from "@/components/common/backButton";
+import DailyLayout from "@/components/common/vendorDailyLayout";
 
 // Define TypeScript types for form values
 export const ResetComp = () => {
@@ -95,14 +96,14 @@ export const ResetComp = () => {
 
   console.log("this are the erros", errors);
   return (
-    <div>
+    <div className="">
       <ToastContainer />
       <BackButton />
-      <div className="flex flex-col md:space-x-15 md:flex-row ">
+      <div className="flex flex-col md:flex-row md:space-x-15">
         <DailyLayout textStyle="mt-0" />
-        <div className="flex flex-col md:bg-white md:p-10 md:rounded-lg md:pt-3 md:w-[500px]  md:h-fit md:my-auto">
+        <div className="flex flex-col md:my-auto md:h-fit md:w-[500px] md:rounded-lg md:bg-white md:p-10 md:pt-3">
           {/* Logo – desktop only */}
-          <div className="hidden md:block relative w-[100px] h-[50px]">
+          <div className="relative hidden h-[50px] w-[100px] md:block">
             <Link href="/">
               <Image
                 src="/images/logo.png"
@@ -116,7 +117,7 @@ export const ResetComp = () => {
             //   loader && <LoadingScreen />
           }
 
-          <div className="md:pl-10 md:pt-5 ">
+          <div className="md:pt-5 md:pl-10">
             <TextStyle
               textContent="Reset Password"
               textStyle="text-[#111827] text-bold font-medium text-[28px] leading-[120%] tracking-[-0.02em] align-middle"
@@ -129,59 +130,58 @@ export const ResetComp = () => {
             <div className="w-full">
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="mt-4 flex flex-col xs:w-[350px] space-y-2"
+                className="xs:w-[350px] mt-4 flex flex-col space-y-2"
               >
                 {/* Password */}
-                <div className="flex flex-col space-y-2 mb-2 w-full">
-                  <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                <div className="mb-2 flex w-full flex-col space-y-2">
+                  <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                     <TextStyle
                       textContent="Password"
                       textStyle="text-[16px] text-[#667185] text-bold"
                     />
                   </label>
 
-                  <div className="flex items-center flex-row rounded-sm shadow border border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                  <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
                     <input
                       type={hidePassword ? "password" : "text"}
                       {...register("password")}
                       placeholder="Enter new password"
-                      className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]  py-2.5 h-full flex-1 focus:outline-none"
+                      className="h-full flex-1 py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:outline-none"
                     />
 
                     {!hidePassword ? (
                       <Eye
                         onClick={() => setHidePassword(!hidePassword)}
-                        className="w-4 h-4 transition-colors group-focus-within:text-green-600 cursor-pointer"
+                        className="h-4 w-4 cursor-pointer transition-colors group-focus-within:text-green-600"
                       />
                     ) : (
                       <EyeOff
                         onClick={() => setHidePassword(!hidePassword)}
-                        className="w-4 h-4 transition-colors group-focus-within:text-green-600 cursor-pointer"
+                        className="h-4 w-4 cursor-pointer transition-colors group-focus-within:text-green-600"
                       />
                     )}
                   </div>
 
-                  <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                  <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
                     {errors.password?.message}
                   </p>
                 </div>
 
                 {/* Confirm Password */}
-                <div className="flex flex-col space-y-2 mb-3 w-full">
-                  <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                <div className="mb-3 flex w-full flex-col space-y-2">
+                  <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                     <TextStyle
                       textContent="Confirm Password"
                       textStyle="text-[16px] text-[#667185] text-bold"
                     />
                   </label>
 
-                  <div className="flex items-center flex-row rounded-sm shadow border border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                  <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
                     <input
                       type={hideConfirmPassword ? "password" : "text"}
                       {...register("confirmPassword")}
                       placeholder="Enter new password"
-                      className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] 
-        py-2.5 h-full flex-1 focus:outline-none"
+                      className="h-full flex-1 py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:outline-none"
                     />
 
                     {!hideConfirmPassword ? (
@@ -189,19 +189,19 @@ export const ResetComp = () => {
                         onClick={() =>
                           setHideConfirmPassword(!hideConfirmPassword)
                         }
-                        className="w-4 h-4 transition-colors group-focus-within:text-green-600 cursor-pointer"
+                        className="h-4 w-4 cursor-pointer transition-colors group-focus-within:text-green-600"
                       />
                     ) : (
                       <EyeOff
                         onClick={() =>
                           setHideConfirmPassword(!hideConfirmPassword)
                         }
-                        className="w-4 h-4 transition-colors group-focus-within:text-green-600 cursor-pointer"
+                        className="h-4 w-4 cursor-pointer transition-colors group-focus-within:text-green-600"
                       />
                     )}
                   </div>
 
-                  <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                  <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
                     {errors.confirmPassword?.message}
                   </p>
                 </div>
@@ -211,16 +211,16 @@ export const ResetComp = () => {
                     type="checkbox"
                     checked={isChecked}
                     onChange={() => setIsChecked(!isChecked)}
-                    className="w-3 h-3 text-[#2E7D32] rounded-full accent-[#2E7D32]"
+                    className="h-3 w-3 rounded-full text-[#2E7D32] accent-[#2E7D32]"
                   />
-                  <span className="text-zinc-600 text-[13px] ml-1">
+                  <span className="ml-1 text-[13px] text-zinc-600">
                     Remember me for 30 days
                   </span>
                 </div>
 
                 {/* Submit Button */}
-                <button className="w-full h-[39px] p-2.5 justify-center items-center cursor-pointer rounded-[27px] inline-flex mt-4 bg-[#2E7D32] hover:opacity-80">
-                  <span className="text-white text-sm font-semibold leading-[18.90px]">
+                <button className="mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] bg-[#2E7D32] p-2.5 hover:opacity-80">
+                  <span className="text-sm leading-[18.90px] font-semibold text-white">
                     {loader ? "Please wait.." : "Reset"}
                   </span>
                 </button>

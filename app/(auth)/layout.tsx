@@ -2,9 +2,9 @@ import SignUpNav from "@/components/common/signUpNav";
 
 function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className=" min-h-screen  bg-[#EAEAEA]  flex flex-col">
+    <div className="flex min-h-screen flex-col bg-[#EAEAEA]">
       <SignUpNav />
-      <div className="flex flex-col w-9/10 xs:w-5/6  my-6 rounded-lg   md:bg-[#EAEAEA]  bg-[#FFFFFF] m-auto justify-center items-center md:flex-1">
+      <div className="xs:w-5/6 m-auto my-10 flex w-9/10 flex-col items-center justify-center rounded-lg bg-[#FFFFFF] md:flex-1 md:bg-[#EAEAEA]">
         <div className="rounded-md p-4">
           <div>{children}</div>
         </div>

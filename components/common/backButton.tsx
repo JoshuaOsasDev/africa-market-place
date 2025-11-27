@@ -8,7 +8,7 @@ export default function BackButton() {
   return (
     <button
       onClick={() => router.push("/onboarding")}
-      className="hidden border rounded-sm p-2  mb:p-4 md:bg-white  space-x-2 mb-6 mt-3 md:mt-0 hover:bg-[#2E7D32]/90 md:flex"
+      className="mb:p-4 mt-3 mb-6 hidden space-x-2 rounded-sm border p-2 hover:bg-[#2E7D32]/90 md:mt-0 md:flex md:bg-white"
     >
       <span>
         <Reply />

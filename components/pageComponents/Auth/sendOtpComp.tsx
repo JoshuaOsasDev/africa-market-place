@@ -9,8 +9,8 @@ import { verifyEmailSchema } from "@/lib/utils/yupvalidation";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
-import BackButton from "../common/backButton";
-import DailyLayout from "../common/vendorDailyLayout";
+import BackButton from "../../common/backButton";
+import DailyLayout from "../../common/vendorDailyLayout";
 import Link from "next/link";
 
 // Define TypeScript types for form values
@@ -62,7 +62,7 @@ const SendOtpcomp = () => {
   } = useForm(formOptions);
 
   const onSubmit = async (data: { email: string }) => {
-    router.push("/verifyOtp");
+    router.push("/auth-vendor/sendOtp");
     /*  navigation.navigate('bottomTabNavigation') */
     console.log(data);
 
@@ -85,10 +85,10 @@ const SendOtpcomp = () => {
     <div className="">
       <ToastContainer />
       <BackButton />
-      <div className="flex flex-col md:space-x-15 md:flex-row ">
+      <div className="flex flex-col md:flex-row md:space-x-15">
         <DailyLayout textStyle="mt-0" />
-        <div className="flex flex-col md:bg-white md:p-10 md:rounded-lg md:pt-3 md:w-[500px]  md:h-fit md:my-auto">
-          <div className="hidden md:block relative w-[100px] h-[50px]">
+        <div className="flex flex-col md:my-auto md:h-fit md:w-[500px] md:rounded-lg md:bg-white md:p-10 md:pt-3">
+          <div className="relative hidden h-[50px] w-[100px] md:block">
             <Link href="/">
               <Image
                 src="/images/logo.png"
@@ -113,27 +113,24 @@ const SendOtpcomp = () => {
           <div className="w-full md:w-[400px]">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mt-4 flex flex-col xs:w-[350px] space-y-2"
+              className="xs:w-[350px] mt-4 flex flex-col space-y-2"
             >
-              <div className="flex flex-col space-y-1 w-full">
-                <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+              <div className="flex w-full flex-col space-y-1">
+                <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Email"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("email")}
                     placeholder="user@gmail.com"
-                    className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
                   />
-                  <Mail className="w-4 h-4  transition-colors group-focus-within:text-green-600" />
+                  <Mail className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
                 </div>
-                <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
                   {errors.email?.message}
                 </p>
               </div>
@@ -141,9 +138,9 @@ const SendOtpcomp = () => {
               {/* submit button starts */}
               <button
                 disabled={loader}
-                className={` w-full h-[39px]  p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4 bg-[#2E7D32]`}
+                className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] bg-[#2E7D32] p-2.5`}
               >
-                <span className="text-white text-sm font-semibold  leading-[18.90px]">
+                <span className="text-sm leading-[18.90px] font-semibold text-white">
                   {loader ? "Please wait.." : "Reset"}
                 </span>
               </button>

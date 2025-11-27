@@ -1,21 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { toast, ToastContainer } from "react-toastify";
-import { useRouter } from "next/navigation";
-import { AxiosError } from "axios";
-import { verifyEmailSchema } from "@/lib/utils/yupvalidation";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
-import Image from "next/image";
-import TextStyle from "@/components/common/textStyle";
-import OtpComponent from "@/components/common/otpComponent";
-import DailyLayout from "@/components/common/vendorDailyLayout";
 import BackButton from "@/components/common/backButton";
+import OtpComponent from "@/components/common/otpComponent";
+import TextStyle from "@/components/common/textStyle";
+import DailyLayout from "@/components/common/vendorDailyLayout";
+import { verifyEmailSchema } from "@/lib/utils/yupvalidation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-// Define TypeScript types for form values
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { ToastContainer } from "react-toastify";
 
-const page = () => {
+export default function VerifyComp() {
   /* naviagtion */
   const router = useRouter();
   /* use dispatch */
@@ -84,13 +81,13 @@ const page = () => {
     <div>
       <ToastContainer />
       <BackButton />
-      <div className="flex flex-col md:space-x-15 md:flex-row ">
+      <div className="flex flex-col md:flex-row md:space-x-15">
         <DailyLayout textStyle="mt-0" />
-        <div className=" flex flex-col bg-white p-8 my-auto rounded-lg">
+        <div className="my-auto flex flex-col rounded-lg bg-white p-8">
           {
             //   loader && <LoadingScreen />
           }
-          <div className="relative w-[116px] h-[146px] mx-auto">
+          <div className="relative mx-auto h-[146px] w-[116px]">
             <Image src={"/images/lock.jpg"} fill alt="otp logo" />
           </div>
           <TextStyle
@@ -102,11 +99,11 @@ const page = () => {
             textStyle="text-[16px] text-[#667185] text-bold text-center"
           />
 
-          <div className="w-full mx-auto flex justify-center items-center my-6">
+          <div className="mx-auto my-6 flex w-full items-center justify-center">
             <OtpComponent />
           </div>
 
-          <div className="flex flex-row space-x-2 items-center  ">
+          <div className="flex flex-row items-center space-x-2">
             <TextStyle
               textContent="Didn’t get a code? Resend Code"
               textStyle="md:text-[16px] text-[10px] text-[#667185] text-bold text-center"
@@ -123,6 +120,4 @@ const page = () => {
       </div>
     </div>
   );
-};
-
-export default page;
+}

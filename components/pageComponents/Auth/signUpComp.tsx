@@ -6,13 +6,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { signUpSchema } from "@/lib/utils/yupvalidation";
-import TextStyle from "../common/textStyle";
+import BackButton from "@/components/common/backButton";
+import DailyLayout from "@/components/common/vendorDailyLayout";
+import TextStyle from "@/components/common/textStyle";
 import { Eye, EyeOff, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
-
-import BackButton from "../common/backButton";
-
-import DailyLayout from "../common/vendorDailyLayout";
 
 // Define TypeScript types for form values
 
@@ -111,14 +109,14 @@ const SignUpComp = () => {
   return (
     <div>
       <BackButton />
-      <div className="flex flex-col md:space-x-15 md:flex-row  ">
+      <div className="flex flex-col md:flex-row md:space-x-15">
         <DailyLayout textStyle="mt-15" />
-        <div className="flex flex-col md:bg-white md:p-7 md:rounded-lg md:pt-3 md:w-[450px]">
+        <div className="flex flex-col md:w-[450px] md:rounded-lg md:bg-white md:p-7 md:pt-3">
           {
             //   loader && <LoadingScreen />
           }
 
-          <div className="hidden md:block relative w-[100px] h-[50px]">
+          <div className="relative hidden h-[50px] w-[100px] md:block">
             <Link href="/">
               <Image
                 src="/images/logo.png"
@@ -137,100 +135,88 @@ const SignUpComp = () => {
             textStyle="text-[16px] text-[#667185]/80 text-bold"
           />
 
-          <div className=" w-full">
+          <div className="w-full">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mt-4 flex flex-col w-fit space-y-2 "
+              className="mt-4 flex w-fit flex-col space-y-2"
             >
-              <div className="flex flex-col space-y-2 mb-2 w-full ">
-                <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+              <div className="mb-2 flex w-full flex-col space-y-2">
+                <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Full Name"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="flex items-center flex-row rounded-sm shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("fullname")}
                     placeholder="User"
-                    className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
                   />
-                  <User className="w-4 h-4 transition-colors group-focus-within:text-green-600" />
+                  <User className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
                 </div>
-                <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
                   {errors.fullname?.message}
                 </p>
               </div>
-              <div className="flex flex-col space-y-2 mb-2 w-full">
-                <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+              <div className="mb-2 flex w-full flex-col space-y-2">
+                <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Email"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="flex items-center flex-row rounded-sm shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("email")}
                     placeholder="user@gmail.com"
-                    className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
                   />
-                  <Mail className="w-4 h-4  transition-colors group-focus-within:text-green-600" />
+                  <Mail className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
                 </div>
-                <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
                   {errors.email?.message}
                 </p>
               </div>
-              <div className="flex flex-col space-y-2 mb-2 w-full">
-                <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+              <div className="mb-2 flex w-full flex-col space-y-2">
+                <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Phone"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="flex items-center flex-row rounded-sm shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("phone")}
                     placeholder="07000000000"
-                    className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
                   />
-                  <Phone className="w-4 h-4 transition-colors group-focus-within:text-green-600" />
+                  <Phone className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
                 </div>
-                <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
                   {errors.phone?.message}
                 </p>
               </div>
-              <div className="flex flex-col space-y-2 mb-2 w-full">
-                <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+              <div className="mb-2 flex w-full flex-col space-y-2">
+                <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Password"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="flex items-center flex-row rounded-sm shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     type={hidePassword ? "password" : "text"}
                     {...register("password")}
                     placeholder="12345678"
-                    className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
                   />
                   {!hidePassword ? (
                     <Eye
                       onClick={() => {
                         setHidePassword(!hidePassword);
                       }}
-                      className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                      className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                     />
                   ) : (
                     <EyeOff
@@ -238,82 +224,76 @@ const SignUpComp = () => {
                         setHidePassword(!hidePassword);
                       }}
                       onChange={() => setHidePassword(!hidePassword)}
-                      className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                      className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                     />
                   )}
                 </div>
-                <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
                   {errors.password?.message}
                 </p>
               </div>
 
-              <div className="flex flex-col space-y-2 mb-3 w-full">
-                <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+              <div className="mb-3 flex w-full flex-col space-y-2">
+                <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Confirm Password"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="flex items-center flex-row rounded-sm shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     type={hideConfirmPassword ? "password" : "text"}
                     {...register("confirmPassword")}
                     placeholder="12345678"
-                    className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
                   />
                   {!hideConfirmPassword ? (
                     <Eye
                       onClick={() => {
                         setHideConfirmPassword(!hideConfirmPassword);
                       }}
-                      className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                      className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                     />
                   ) : (
                     <EyeOff
                       onClick={() => {
                         setHideConfirmPassword(!hideConfirmPassword);
                       }}
-                      className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                      className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                     />
                   )}
                 </div>
-                <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+                <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
                   {errors.password?.message}
                 </p>
               </div>
               {/* Terms and condition section */}
 
-              <div className="flex-row  flex-wrap flex-1 items-start  w-[328px]">
+              <div className="w-[328px] flex-1 flex-row flex-wrap items-start">
                 <input
                   type="checkbox"
                   checked={isChecked}
                   onChange={toggleCheckBox}
-                  className="w-3 h-3 text-[#2E7D32]
-               bg-gray-100 border-gray-300 rounded-full  focus:ring-[#2E7D32] checked:bg-[#2E7D32]  dark:bg-[#2E7D32]  overflow-hidden
-              accent-[#2E7D32]
-               "
+                  className="h-3 w-3 overflow-hidden rounded-full border-gray-300 bg-gray-100 text-[#2E7D32] accent-[#2E7D32] checked:bg-[#2E7D32] focus:ring-[#2E7D32] dark:bg-[#2E7D32]"
                 />
-                <span className="text-zinc-600 text-[13px] ml-1 font-medium font-['Aeonik-Regular'] ">
+                <span className="ml-1 font-['Aeonik-Regular'] text-[13px] font-medium text-zinc-600">
                   By continuing you agree to the{" "}
                 </span>
                 <span onClick={() => console.log(`now`)}>
-                  <span className="text-[#2E7D32] text-[13px] font-medium font-['Aeonik-Medium'] leading-5">
+                  <span className="font-['Aeonik-Medium'] text-[13px] leading-5 font-medium text-[#2E7D32]">
                     Term of Service{" "}
                   </span>
                 </span>
-                <span className="text-zinc-600 text-[13px] font-medium ">
+                <span className="text-[13px] font-medium text-zinc-600">
                   and{" "}
                 </span>
                 <span>
-                  <span className="text-[#2E7D32] text-[13px] font-medium">
+                  <span className="text-[13px] font-medium text-[#2E7D32]">
                     Privacy Policy{" "}
                   </span>
                 </span>
 
-                <span className="text-zinc-600 text-[13px] font-medium leading-5">
+                <span className="text-[13px] leading-5 font-medium text-zinc-600">
                   of Africa market place.
                 </span>
               </div>
@@ -321,23 +301,23 @@ const SignUpComp = () => {
               {/* submit button starts */}
               <button
                 disabled={!isChecked || loader}
-                className={` w-full h-[39px]  p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4 hover:opacity-80 ${
-                  !isChecked ? "bg-[#6b916d] bg-opacity-70 " : "bg-[#2E7D32]"
+                className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] p-2.5 hover:opacity-80 ${
+                  !isChecked ? "bg-opacity-70 bg-[#6b916d]" : "bg-[#2E7D32]"
                 }`}
               >
-                <span className="text-white text-sm font-semibold  leading-[18.90px]">
+                <span className="text-sm leading-[18.90px] font-semibold text-white">
                   {loader ? "Please wait.." : "Create Account"}
                 </span>
               </button>
             </form>
 
-            <div className="flex flex-row items-center space-x-2 my-6">
-              <hr className="flex-1 h-[0.5px] border-px border-[#F0F2F5] " />
+            <div className="my-6 flex flex-row items-center space-x-2">
+              <hr className="border-px h-[0.5px] flex-1 border-[#F0F2F5]" />
               <TextStyle textContent="Or" textStyle="text-[#757575]" />
-              <hr className="flex-1 h-[0.5px]  border-[#F0F2F5]" />
+              <hr className="h-[0.5px] flex-1 border-[#F0F2F5]" />
             </div>
 
-            <div className="rounded-[28px] flex items-center justify-center  space-x-2 bg-[#FAFAFA] hover:opacity-80 cursor-pointer h-[55px]">
+            <div className="flex h-[55px] cursor-pointer items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA] hover:opacity-80">
               <Image
                 src={"/images/google.jpg"}
                 alt="google logo"
@@ -351,12 +331,12 @@ const SignUpComp = () => {
             </div>
           </div>
 
-          <div className="flex flex-row items-center mt-3 w-full justify-center space-x-1">
-            <p className="text-slate-700/opacity-60 text-sm font-medium font-['Inter'] leading-[18px]">
+          <div className="mt-3 flex w-full flex-row items-center justify-center space-x-1">
+            <p className="text-slate-700/opacity-60 font-['Inter'] text-sm leading-[18px] font-medium">
               Already have an account?
             </p>
-            <Link href={"/login"}>
-              <p className="text-[#6b916d] hover:opacity-80 text-sm font-semibold font-['Inter'] leading-[18.90px]">
+            <Link href={"/auth-vendor/login"}>
+              <p className="font-['Inter'] text-sm leading-[18.90px] font-semibold text-[#6b916d] hover:opacity-80">
                 Login
               </p>
             </Link>

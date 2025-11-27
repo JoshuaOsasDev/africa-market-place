@@ -1,4 +1,4 @@
-import { ResetComp } from "@/components/pageComponents/resetComp";
+import { ResetComp } from "@/components/pageComponents/Auth/resetComp";
 
 export default function page() {
   return (
