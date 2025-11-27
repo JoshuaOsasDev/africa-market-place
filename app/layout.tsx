@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
+import ReduxProvider from "@/redux/utils/ReduxProvider/ReduxProvider";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -19,8 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${nunito.variable}`}>
-      <body className={nunito.className}>{children}</body>
-    </html>
+    <ReduxProvider>
+      {" "}
+      <html lang="en" className={`${nunito.variable}`}>
+        <body className={nunito.className}>{children}</body>
+      </html>
+    </ReduxProvider>
   );
 }
