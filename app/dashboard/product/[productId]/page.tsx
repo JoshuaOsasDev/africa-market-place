@@ -3,7 +3,12 @@ import ProductDetailsButton from "@/components/pageComponents/Product/productDet
 import ProductLinkNav from "@/components/pageComponents/Product/productLinkNav";
 import { ArrowLeft } from "lucide-react";
 
-export default function ProductDetailsPage() {
+export default async function ProductDetailsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  console.log(params, "params");
   return (
     <div className="">
       <div className="hidden items-end justify-between md:flex">

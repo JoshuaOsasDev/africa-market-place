@@ -12,11 +12,13 @@ function Table({
 }) {
   return (
     <TableContext.Provider value={{ columns }}>
-      <div
-        role="table"
-        className="mt-2 overflow-hidden rounded-lg border-b border-[#F0F1F3] bg-white shadow-sm"
-      >
-        {children}
+      <div className="mt-2 w-full overflow-x-auto">
+        <div
+          role="table"
+          className="min-w-[1200px] overflow-hidden rounded-lg border-b border-[#F0F1F3] bg-white shadow-sm"
+        >
+          {children}
+        </div>
       </div>
     </TableContext.Provider>
   );
@@ -43,18 +45,19 @@ const BaseRow = (props: {
 
   return (
     <Component
-      className={`grid items-center transition-none ${className || ""} `}
+      className={`grid items-center transition-none ${className || ""}`}
       style={{
-        ...rest.style, // Safely merge existing style props
-        columnGap: "1.5rem", // Re-introducing column-gap from original styled-component logic
+        ...rest.style,
+        columnGap: "1.5rem",
         gridTemplateColumns: columns,
       }}
-      {...rest} // Pass down props like 'role'
+      {...rest}
     >
       {children}
     </Component>
   );
 };
+
 function Header({ children }: { children: React.ReactNode }) {
   const { columns } = useContext(TableContext);
   return (
@@ -62,7 +65,7 @@ function Header({ children }: { children: React.ReactNode }) {
       columns={columns}
       as="header"
       role="row"
-      className="border-b border-[#F0F1F3] bg-[#F9F9FC] py-4.5 font-semibold tracking-wider"
+      className="border-b border-[#F0F1F3] bg-[#F9F9FC] px-5.5 py-4.5 font-semibold tracking-wider"
     >
       {children}
     </BaseRow>
@@ -91,7 +94,7 @@ function Body({ data, render }) {
       </p>
     );
 
-  return <section className="my-1 overflow-y-auto">{data.map(render)}</section>;
+  return <section className="my-1">{data.map(render)}</section>;
 }
 
 function Footer({ children }: { children: ReactNode }) {

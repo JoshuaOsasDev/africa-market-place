@@ -7,9 +7,11 @@ import { Product } from "@/types/appTypes";
 import Pagination from "@/components/common/Pagination";
 import { useState } from "react";
 
-const ITEMS_PER_PAGE = 5;
-
-export default function ProductTable() {
+export default function ProductTable({
+  ITEMS_PER_PAGE = 5,
+}: {
+  ITEMS_PER_PAGE: number;
+}) {
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -19,7 +21,7 @@ export default function ProductTable() {
     <>
       <Table columns="2px 2.5fr 0.85fr 1fr 1.1fr 1.1fr 1.3fr 1.3fr 1.1fr">
         <Table.Header>
-          <div className="ml-6">
+          <div className="">
             <input
               className="h-5 w-5 rounded-[6px] border-2 border-[#858D9D]"
               type="checkbox"

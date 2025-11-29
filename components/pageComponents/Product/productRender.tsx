@@ -32,13 +32,16 @@ export default function ProductRender({ product }: ProductRenderProps) {
 
   return (
     <Table.Row>
-      {/* Product */}
+      {/* Checkbox */}
+
       <input
         className="h-5 w-5 rounded-md border-2 border-[#858D9D]"
         type="checkbox"
       />
-      <div className="ml-5 flex items-center justify-start gap-2">
-        <div className="rounded-lg bg-[#F6F6F6]">
+
+      {/* Product */}
+      <div className="flex items-center gap-3">
+        <div className="flex-shrink-0 rounded-lg bg-[#F6F6F6]">
           <Image
             src={product.image}
             alt={product.name}
@@ -47,51 +50,67 @@ export default function ProductRender({ product }: ProductRenderProps) {
             className="rounded-lg"
           />
         </div>
-        {/* <div className="h-10 w-10 flex-shrink-0 rounded-lg bg-gray-200" /> */}
-
-        <div className="flex flex-col items-center justify-center gap-1 text-sm text-[#333843]">
-          <span className="text-sm font-medium">{product.name}</span>
+        <div className="flex min-w-0 flex-col gap-1">
+          <span className="truncate text-sm font-medium text-[#333843]">
+            {product.name}
+          </span>
           <span className="text-[12px] text-[#667085]">+ 3 other product</span>
         </div>
       </div>
 
       {/* SKU */}
-      <span className="text-sm font-semibold text-[#2E7D32]">
-        {product.sku}
-      </span>
+      <div className="flex items-center">
+        <span className="text-sm font-semibold text-[#2E7D32]">
+          {product.sku}
+        </span>
+      </div>
 
       {/* Category */}
-      <span className="text-sm text-[#667085]">{product.category}</span>
+      <div className="flex items-center">
+        <span className="truncate text-sm text-[#667085]">
+          {product.category}
+        </span>
+      </div>
 
       {/* Stock */}
-      <span className="pl-2 text-sm text-[#333843]">{product.stock}</span>
+      <div className="flex items-center">
+        <span className="text-sm text-[#333843]">{product.stock}</span>
+      </div>
 
       {/* Price */}
-      <span className="text-sm font-medium text-[#333843]">
-        ${product.price.toFixed(2)}
-      </span>
+      <div className="flex items-center">
+        <span className="text-sm font-medium text-[#333843]">
+          ${product.price.toFixed(2)}
+        </span>
+      </div>
 
       {/* Status */}
-      <div>
+      <div className="flex items-center">
         <span
-          className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium ${statusStyles[product.status]}`}
+          className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap ${statusStyles[product.status]}`}
         >
           {product.status}
         </span>
       </div>
 
       {/* Added */}
-      <span className="text-sm text-[#667085]">{formattedDate}</span>
+      <div className="flex items-center">
+        <span className="text-sm whitespace-nowrap text-[#667085]">
+          {formattedDate}
+        </span>
+      </div>
 
       {/* Action */}
-      <button className="flex items-center justify-center gap-1 rounded p-1">
+      <div className="flex items-center gap-1">
         <Link href={"/dashboard/product/details"}>
           <Eye className="h-5 w-5 text-[#667085] hover:text-gray-900" />
         </Link>
 
         <Modal>
           <Modal.Open opens="edit-product">
-            <Pen className="h-5 w-5 text-[#667085] hover:text-gray-900" />
+            <button type="button" className="flex items-center">
+              <Pen className="h-5 w-5 text-[#667085] hover:text-gray-900" />
+            </button>
           </Modal.Open>
 
           <Modal.Window
@@ -104,9 +123,9 @@ export default function ProductRender({ product }: ProductRenderProps) {
 
         <Modal>
           <Modal.Open opens="delete-product">
-            <span className="flex items-center gap-1 p-1">
+            <button type="button" className="flex items-center">
               <Trash className="h-5 w-5 text-[#667085] hover:text-red-700" />
-            </span>
+            </button>
           </Modal.Open>
 
           <Modal.Window name="delete-product" className="max-w-md">
@@ -116,8 +135,7 @@ export default function ProductRender({ product }: ProductRenderProps) {
             />
           </Modal.Window>
         </Modal>
-        {/* <Trash className="h-5 w-5 text-[#667085] hover:text-gray-900" /> */}
-      </button>
+      </div>
     </Table.Row>
   );
 }

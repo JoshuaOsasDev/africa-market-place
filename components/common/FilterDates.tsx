@@ -12,10 +12,12 @@ export default function FilterDates({
   selectedDate,
   setSelectedDate,
   handleFilterChange,
+  className = "",
 }: {
   selectedDate: Date | null;
   setSelectedDate: (date: Date | null) => void;
   handleFilterChange?: (date: Date | null) => void;
+  className: string;
 }) {
   const isWeekday: TFilterDate = (date) => {
     const day = DateFNS.getDay(date);
@@ -23,7 +25,9 @@ export default function FilterDates({
   };
 
   return (
-    <div className="relative flex w-fit items-center gap-2 rounded-xl border border-[#E0E2E7] bg-white px-2.5 py-3.5 shadow-sm">
+    <div
+      className={`relative flex w-fit items-center gap-2 rounded-xl border border-[#E0E2E7] bg-white shadow-sm ${className}`}
+    >
       {/* Calendar icon */}
       <Calendar className="h-5 w-5 text-[#667085]" />
 

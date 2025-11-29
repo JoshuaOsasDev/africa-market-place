@@ -52,6 +52,7 @@ export default function SearchAndFilterProduct() {
           <FilterDates
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
+            className="px-2.5 py-3.5"
             handleFilterChange={handleDateChange} // important fix
           />
 

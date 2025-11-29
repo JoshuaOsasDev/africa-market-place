@@ -449,3 +449,48 @@ export const products: Product[] = [
     addedDate: "2024-04-05",
   },
 ];
+
+export const salesData = [
+  {
+    country: "United Kingdom",
+    flag: "/images/united-kingdom-flag-background_23-2147820390.avif",
+    sales: 340,
+    revenue: 17678,
+    change: 10,
+  },
+  {
+    country: "Finland",
+    flag: "/images/finland-flag.jpg",
+    sales: 520,
+    revenue: 24350,
+    change: 15,
+  },
+  {
+    country: "France",
+    flag: "/images/france-flag.jpg",
+    sales: 280,
+    revenue: 13420,
+    change: -5,
+  },
+  {
+    country: "Germany",
+    flag: "/images/germany-flag.jpg",
+    sales: 410,
+    revenue: 19890,
+    change: 8,
+  },
+  {
+    country: "Turkey",
+    flag: "/images/turkey-flag.jpg",
+    sales: 195,
+    revenue: 8760,
+    change: -12,
+  },
+  {
+    country: "Nigeria",
+    flag: "/images/nigeria-flag.png",
+    sales: 560,
+    revenue: 6350,
+    change: 15,
+  },
+];

@@ -27,7 +27,7 @@ export default function SetShowForm() {
         <>
           <ProductHeading />
           <SearchAndFilterProduct />
-          <ProductTable />
+          <ProductTable ITEMS_PER_PAGE={5} />
         </>
       )}
     </>
