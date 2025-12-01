@@ -8,7 +8,7 @@ const OrdersPage = () => {
       {/* <Image
         src={emptyDashboardImage}
         alt="empty-state-image"
-        className="w-[136.53px] h-[132.43px]"
+        className="h-[132.43px] w-[136.53px]"
       /> */}
       <h1 className="text-[32px] font-medium">No Orders yet</h1>
       <p className="w-[352px] text-center text-[16px] font-normal text-[#475467]">

@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <SideBar />
       </aside>
 
-      <main className="bg-white px-4 pb-1 md:bg-[#F0F1F3] md:pt-5">
+      <main className="mt-12 bg-white px-4 pb-1 md:mt-0 md:bg-[#F0F1F3] md:pt-5">
         {children}
       </main>
     </div>

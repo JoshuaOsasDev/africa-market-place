@@ -1,17 +1,11 @@
-import DashboardCharts from "@/components/pageComponents/vendor/dashboard/DashboardCharts";
-import DashboardFilter from "@/components/pageComponents/vendor/dashboard/dashboardFilter";
-import DashboardSalesAndProduct from "@/components/pageComponents/vendor/dashboard/dashboardSalesAndProduct";
-import DashboardSummary from "@/components/pageComponents/vendor/dashboard/dashboardSumarry";
+import ShowDashBoardProductForm from "@/components/pageComponents/vendor/dashboard/showDashBoardProductForm";
 
-const dashboardPage = () => {
+const DashboardPage = () => {
   return (
     <div>
-      <DashboardFilter />
-      <DashboardSummary />
-      <DashboardCharts />
-      <DashboardSalesAndProduct />
+      <ShowDashBoardProductForm />
     </div>
   );
 };
 
-export default dashboardPage;
+export default DashboardPage;

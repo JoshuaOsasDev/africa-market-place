@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { setShowForm } from "@/redux/slice/showFormSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/store/store";
 const filters = [
   { id: "all-time", label: "All Time" },
   { id: "12-months", label: "12 Months" },
@@ -40,8 +42,13 @@ export default function DashboardFilter() {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
+  //SHOW APP PRoduct FORM
+  const dispatch = useAppDispatch();
+  const openForm = () => {
+    dispatch(setShowForm({ showform: true }));
+  };
   return (
-    <div className="flex h-10 items-center justify-between">
+    <div className="hidden h-10 items-center justify-between md:flex">
       <div className="flex items-center rounded-[6px] border border-[#E0E2E7] bg-white p-1">
         {filters.map((filter) => (
           <Button
@@ -69,7 +76,10 @@ export default function DashboardFilter() {
           setSelectedDate={setSelectedDate}
           className="px-2 py-2.5"
         />
-        <Button className="bg-[#2E7D32] px-3.5 py-5 text-white hover:bg-[#2E7D32]/80">
+        <Button
+          className="bg-[#2E7D32] px-3.5 py-5 text-white hover:bg-[#2E7D32]/80"
+          onClick={openForm}
+        >
           <Plus />
           Add Product
         </Button>
