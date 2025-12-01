@@ -15,7 +15,7 @@ function Table({
       <div className="mt-2 w-full overflow-x-auto">
         <div
           role="table"
-          className="min-w-[1200px] overflow-hidden rounded-lg border-b border-[#F0F1F3] bg-white shadow-sm"
+          className="min-w-[1200px] overflow-hidden rounded-lg border-b border-[#F0F1F3] bg-white shadow-sm md:min-w-full"
         >
           {children}
         </div>
@@ -86,7 +86,7 @@ function Row({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Body({ data, render }) {
+function Body({ data, render, TableBodyClassName = "" }) {
   if (!data || !data.length)
     return (
       <p className="m-6 text-center text-base font-medium">
@@ -94,7 +94,11 @@ function Body({ data, render }) {
       </p>
     );
 
-  return <section className="my-1">{data.map(render)}</section>;
+  return (
+    <section className={"my-1 " + (TableBodyClassName || "")}>
+      {data.map(render)}
+    </section>
+  );
 }
 
 function Footer({ children }: { children: ReactNode }) {

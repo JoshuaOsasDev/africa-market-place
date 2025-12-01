@@ -1,4 +1,4 @@
-import SendOtpcomp from "@/components/pageComponents/Auth/sendOtpComp";
+import SendOtpcomp from "@/components/pageComponents/Auth/authVendor/sendOtpComp";
 
 export default function page() {
   return (

@@ -13,7 +13,7 @@ import OtpComponent from "@/components/common/otpComponent";
 import DailyLayout from "@/components/common/vendorDailyLayout";
 import BackButton from "@/components/common/backButton";
 import { div } from "framer-motion/client";
-import VerifyComp from "@/components/pageComponents/Auth/verifyComp";
+import VerifyComp from "@/components/pageComponents/Auth/authVendor/verifyComp";
 
 // Define TypeScript types for form values
 

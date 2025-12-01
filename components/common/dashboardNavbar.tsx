@@ -142,13 +142,13 @@ const DashboardNavbar = () => {
             {/* Menu Links */}
             <div className="flex flex-col space-y-2 border-t border-gray-100 pt-4">
               <Link
-                href="dashboard"
+                href="vendor/dashboard"
                 className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 Dashboard
               </Link>
               <a
-                href="dashboard/product"
+                href="vendor/dashboard/product"
                 className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 Products

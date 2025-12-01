@@ -9,8 +9,10 @@ import { useState } from "react";
 
 export default function ProductTable({
   ITEMS_PER_PAGE = 5,
+  TableBodyClassName,
 }: {
   ITEMS_PER_PAGE: number;
+  TableBodyClassName?: string;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -74,6 +76,7 @@ export default function ProductTable({
         </Table.Header>
 
         <Table.Body
+          TableBodyClassName={TableBodyClassName}
           data={paginatedProducts}
           render={(product: { product: Product }) => (
             <ProductRender key={product.id} product={product} />

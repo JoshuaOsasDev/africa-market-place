@@ -9,8 +9,8 @@ import { verifyEmailSchema } from "@/lib/utils/yupvalidation";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
-import BackButton from "../../common/backButton";
-import DailyLayout from "../../common/vendorDailyLayout";
+import BackButton from "../../../common/backButton";
+import DailyLayout from "../../../common/vendorDailyLayout";
 import Link from "next/link";
 
 // Define TypeScript types for form values

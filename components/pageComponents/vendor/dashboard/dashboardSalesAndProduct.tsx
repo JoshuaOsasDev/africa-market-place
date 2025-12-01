@@ -71,7 +71,10 @@ export default function DashboardSalesAndProduct() {
           <FilterButton />
         </div>
         <div className="">
-          <ProductTable ITEMS_PER_PAGE={2} />
+          <ProductTable
+            ITEMS_PER_PAGE={2}
+            TableBodyClassName="min-w-[720px] overflow-x-auto "
+          />
         </div>
       </div>
     </div>
