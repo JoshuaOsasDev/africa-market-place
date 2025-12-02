@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
-import React from "react";
-import emptyDashboardImage from "../../../public/dashboard-images/empty-dashboard-image.svg";
+import React, { useState } from "react";
+import emptyDashboardImage from "../../../../public/dashboard-images/empty-dashboard-image.svg";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,22 +11,27 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+
+
 import Link from "next/link";
-import exportIcon from "../../../public/dashboard-images/export-icon.svg";
-import calendarIcon from "../../../public/dashboard-images/calendar-icon.svg";
-import filterIcon from "../../../public/dashboard-images/filter-icon.svg";
+import exportIcon from "../../../../public/dashboard-images/export-icon.svg";
+import calendarIcon from "../../../../public/dashboard-images/calendar-icon.svg";
+import filterIcon from "../../../../public/dashboard-images/filter-icon.svg";
 import OrdersTable from "../components/ordersPageComponent/OrdersTable";
 
 const ordersPage = () => {
+
+  // State to track the active tab, defaulting to 'All Time'
+  const [activeTab, setActiveTab] = useState('All Time');
+
+  // Function to define tab styles based on active state
+  const getTabClass = (tabName: string) => {
+    return activeTab === tabName
+      ? "bg-[#EAF2EA] rounded-[6px] px-3 py-1.5 text-[#2E7D32] text-[14px] font-semibold leading-5"
+      : "px-3 py-1.5 text-[14px] font-medium text-[#667085] hover:bg-[#EAF2EA] rounded-[6px]";
+  };
+  
+
   return (
     <>
       {/* Empty dashboard state */}
@@ -46,7 +53,7 @@ const ordersPage = () => {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink
-                    href="/dashboard"
+                    href="/vendor/dashboard"
                     className="text-[#2E7D32] font-medium text-[14px] leading-[20px]"
                   >
                     Dashboard
@@ -73,20 +80,20 @@ const ordersPage = () => {
         </div>
 
         <div className="flex justify-between mb-4">
-          <div className="hidden md:flex justify-around w-[412px] h-[40px] bg-[#FFFFFF] rounded-[8px] border border-[#E0E2E7] p-1">
-            <button className="w-20 h-8 bg-[#EAF2EA] rounded-[6px] px-3 py-1.5 text-[#2E7D32] text-[14px] font-semibold leading-5">
+          <div className="hidden md:flex justify-around h-[40px] bg-[#FFFFFF] rounded-[8px] border border-[#E0E2E7] p-1">
+            <button className={getTabClass('All Time')} onClick={() => setActiveTab('All Time')}>
               All Time
             </button>
-            <button className="px-3 py-1.5 text-[14px] font-medium text-[#667085] hover:bg-[#EAF2EA] rounded-[6px]">
+            <button className={getTabClass('12 Months')} onClick={() => setActiveTab('12 Months')}>
               12 Months
             </button>
-            <button className="px-3 py-1.5 text-[14px] font-medium text-[#667085] hover:bg-[#EAF2EA] rounded-[6px]">
+            <button className={getTabClass('30 Days')} onClick={() => setActiveTab('30 Days')}>
               30 Days
             </button>
-            <button className="px-3 py-1.5 text-[14px] font-medium text-[#667085] hover:bg-[#EAF2EA] rounded-[6px]">
+            <button className={getTabClass('7 Days')} onClick={() => setActiveTab('7 Days')}>
               7 Days
             </button>
-            <button className="px-3 py-1.5 text-[14px] font-medium text-[#667085] hover:bg-[#EAF2EA] rounded-[6px]">
+            <button className={getTabClass('24 Hour')} onClick={() => setActiveTab('24 Hour')}>
               24 Hour
             </button>
           </div>
@@ -101,37 +108,13 @@ const ordersPage = () => {
           </div>
         </div>
 
-        <div className="w-full lg:w-[1116px] mx-auto h-[758px] border border-[#E0E2E7] rounded-[8px]">
+        <div className="w-full lg:w-[1116px] mx-auto  border border-[#E0E2E7] rounded-[8px]">
           {/* Orders table */}
           <div className="grow overflow-x-auto">
             <OrdersTable />
           </div>
 
-          {/* Pagination section */}
-          <div className="flex justify-between items-center h-[62px] px-[24px] pt-3.5 pb-4">
-            <span className="text-[14px] font-medium text-[#667085] leading-5">
-              Showing 1-10 from 100
-            </span>
-
-            <div>
-              {/* <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious href="#" />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#">1</PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext href="#" />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination> */}
-            </div>
-          </div>
+          
         </div>
       </div>
     </>

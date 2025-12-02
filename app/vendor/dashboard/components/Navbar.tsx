@@ -1,13 +1,13 @@
 import Image from 'next/image'
 import React from 'react'
-import logo from '../../../public/dashboard-images/logo.svg'
-import searchIcon from '../../../public/dashboard-images/search-icon.svg'
-import notificationIcon from '../../../public/dashboard-images/notification-icon.svg'
-import mailIcon from '../../../public/dashboard-images/mail-icon.svg'
-import profilePicture from '../../../public/dashboard-images/profile-picture.svg'
-import hamburgerMenu from '../../../public/dashboard-images/hamburger-menu.svg'
-import notificationIconFilled from '../../../public/dashboard-images/notification-icon-filled.svg'
-import mobileViewUserIcon from '../../../public/dashboard-images/mobile-view-user-icon.svg'
+import logo from '../../../../public/dashboard-images/logo.svg'
+import searchIcon from '../../../../public/dashboard-images/search-icon.svg'
+import notificationIcon from '../../../../public/dashboard-images/notification-icon.svg'
+import mailIcon from '../../../../public/dashboard-images/mail-icon.svg'
+import profilePicture from '../../../../public/dashboard-images/profile-picture.svg'
+import hamburgerMenu from '../../../../public/dashboard-images/hamburger-menu.svg'
+import notificationIconFilled from '../../../../public/dashboard-images/notification-icon-filled.svg'
+import mobileViewUserIcon from '../../../../public/dashboard-images/mobile-view-user-icon.svg'
 import Link from 'next/link'
 
 const Navbar = () => {
@@ -46,7 +46,7 @@ const Navbar = () => {
                 <Image src={profilePicture} alt='user-profile-picture' className='w-10 h-10' />
                 <div className='flex flex-col'>
                     <span className='text-[#000000] font-medium text-[16px]'>Johnmarvel</span>
-                    <span>Vendor</span>
+                    <span className='text-[14px] text-[#979797]'>Vendor</span>
                 </div>
             </div>
         </div>

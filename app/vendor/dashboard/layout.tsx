@@ -1,4 +1,4 @@
-import { inter } from "../font";
+import { inter } from "../../font";
 import NavBar from "./components/Navbar";
 import SideBar from "./components/SideBar";
 
