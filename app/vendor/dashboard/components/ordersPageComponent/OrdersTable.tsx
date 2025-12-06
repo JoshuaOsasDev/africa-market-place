@@ -290,19 +290,25 @@ export default function OrdersTable() {
  ];
 
  return (
-  <div className='overflow-x-auto'>
+  <>
+  <div className='overflow-x-scroll'>
     {/* The CompactTable from @table-library */}
     <CompactTable
+
      columns={COLUMNS}
      data={data}
      theme={theme}
      sort={sort} 
      select={select} 
-     onRowClick={(item: { id: Identifier; }) => select.fns.onToggleById(item.id)} 
+     onRowClick={(item: { id: Identifier; }) => select.fns.onToggleById(item.id)}
+     layout={{ custom: true, horizontalScroll: true }} 
     />
     
-    {/* The Pagination Component */}
-    <div className="mt-4 sticky bottom-0">
+    
+  </div>
+
+  {/* The Pagination Component */}
+    <div className="mt-4  bottom-0">
      <Pagination
       currentPage={currentPage}
       totalItems={totalOrders}
@@ -310,6 +316,6 @@ export default function OrdersTable() {
       onPageChange={setCurrentPage}
      />
     </div>
-  </div>
+  </>
  );
 }

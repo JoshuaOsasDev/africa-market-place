@@ -43,7 +43,8 @@ const ordersPage = () => {
     </div> */}
 
       <div className="py-[15px]">
-        <div className="flex justify-between mb-6">
+        <div className="w-full overflow-hidden">
+          <div className="flex justify-between mb-6">
           <div className="hidden md:block">
             <h1 className="text-[#333843] text-2xl font-medium leading-8">
               Order
@@ -79,7 +80,7 @@ const ordersPage = () => {
           </div>
         </div>
 
-        <div className="flex justify-between mb-4">
+        <div className="flex flex-col lg:flex-row gap-2 justify-between mb-4">
           <div className="hidden md:flex justify-around h-[40px] bg-[#FFFFFF] rounded-[8px] border border-[#E0E2E7] p-1">
             <button className={getTabClass('All Time')} onClick={() => setActiveTab('All Time')}>
               All Time
@@ -107,10 +108,11 @@ const ordersPage = () => {
             </button>
           </div>
         </div>
+        </div>
 
-        <div className="w-full lg:w-[1116px] mx-auto  border border-[#E0E2E7] rounded-[8px]">
+        <div className="w-full overflow-hidden border border-[#E0E2E7]  rounded-[8px]">
           {/* Orders table */}
-          <div className="grow overflow-x-auto">
+          <div className="w-full">
             <OrdersTable />
           </div>
 

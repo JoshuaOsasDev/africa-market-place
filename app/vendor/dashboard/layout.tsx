@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <SideBar />
         </div>
   
-        <div className="grow md:overflow-y-auto px-4 md:px-[30px] py-4 h-full overflow-y-auto">
+        <div className="flex-1 overflow-x-hidden md:overflow-y-auto px-4 md:px-[30px] py-4 h-full overflow-y-auto">
           {children}
         </div>
       </div>
