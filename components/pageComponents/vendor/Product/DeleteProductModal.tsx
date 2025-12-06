@@ -6,12 +6,14 @@ interface DeleteModalProps {
   productName: string;
   onConfirm: () => void;
   onCloseModal?: () => void;
+  text: string;
 }
 
 export default function DeleteProductModal({
   productName,
   onConfirm,
   onCloseModal,
+  text,
 }: DeleteModalProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -23,8 +25,7 @@ export default function DeleteProductModal({
       </h2>
 
       <p className="text-center text-lg text-[#757575]">
-        This action cannot be undone. Are you sure you want to delete this
-        product?
+        {`This action cannot be undone. Are you sure you want to delete this ${text}?`}
       </p>
 
       <div className="flex justify-end gap-3">

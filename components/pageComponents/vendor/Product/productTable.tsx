@@ -304,6 +304,7 @@ export default function ProductTableReactTable({
             >
               <DeleteProductModal
                 productName={item.name}
+                text="product"
                 onConfirm={() => console.log("DELETE:", item.id)}
               />
             </Modal.Window>
@@ -324,14 +325,6 @@ export default function ProductTableReactTable({
           select={select}
         />
       </Suspense>
-
-      {/* Pagination */}
-      <Pagination
-        currentPage={currentPage}
-        totalItems={products.length}
-        itemsPerPage={ITEMS_PER_PAGE}
-        onPageChange={setCurrentPage}
-      />
     </div>
   );
 }

@@ -18,6 +18,9 @@ import {
   Store,
   LogInIcon,
   LogIn,
+  UserRound,
+  Bell,
+  User,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -62,29 +65,30 @@ function Header() {
 
   return (
     <div>
-      <div className="w-full bg-white px-2 shadow-md md:hidden">
+      <div className="fixed z-50 w-full bg-white px-2 shadow-md md:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-2 py-3 md:py-4">
-          {/* Logo */}
-          <div className="relative h-[50px] w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
-            <Link href={"/"}>
-              <Image
-                src={"/logo.png"}
-                alt="africa market place logo"
-                fill
-                className="object-contain"
-              />
-            </Link>
-          </div>
-
           {/* Hamburger Menu Button (Mobile only) */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-lg text-gray-700 hover:bg-gray-100 md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+          <div className="flex w-full items-center justify-between">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-lg text-gray-700 hover:bg-gray-100 md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? (
+                <X className="h-6 w-6 text-gray-700" />
+              ) : (
+                <Menu className="h-6 w-6 text-gray-700" />
+              )}
+            </Button>
+
+            <div className="flex items-center space-x-2.5 md:hidden">
+              <Bell />
+              <div className="rounded-4xl bg-[#EAF2EA] p-[4.38px]">
+                <User className="text-[#2E7D32]" />
+              </div>
+            </div>
+          </div>
 
           {/* Navbar Links - Hidden on Mobile */}
           <nav className="z-23 hidden space-x-8 bg-white font-medium text-gray-700 md:flex">
@@ -196,8 +200,9 @@ function Header() {
         </AnimatePresence>
       </div>
 
-      <div className="hidden flex-row space-x-4 px-4 py-2 md:flex">
+      <div className="fixed z-50 mb-20 hidden w-full flex-row space-x-10 border-b border-[#EAEAEA] bg-white px-4 py-2 md:flex">
         {/* logo section starts */}
+
         <div className="relative h-[50px] w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
           <Link href={"/"}>
             <Image
@@ -208,14 +213,14 @@ function Header() {
             />
           </Link>
         </div>
-        {/* logo section ends */}
+
         {/* other section starts */}
-        <div className="w-full flex-1 space-y-6">
+        <div className="w-full flex-1 space-y-2">
           {/* top left section starts */}
-          <div className="flex flex-1 flex-row space-x-5">
-            <div className="flex-1">
+          <div className="flex w-full items-center justify-between pr-5">
+            <div className="">
               <SearchFieldComp
-                inputDivStyle="block w-full"
+                inputDivStyle="block py-2.5 px-3 w-[440px]"
                 inputPlaceholder="Search for food items here..."
                 setInputState={setuserTextInput}
                 inputState={userTextInput}
@@ -225,13 +230,13 @@ function Header() {
             <div className="flex flex-row items-center space-x-2">
               <div className="hidden flex-row space-x-2 lg:flex">
                 {selectedCountryListData && (
-                  <div className="flex flex-row items-center justify-center space-x-1">
+                  <div className="flex flex-row items-center justify-center space-x-1 rounded-xl border border-[#F6F6F6] px-3 py-2.5">
                     <div className="relative h-5 w-5">
                       <Image
                         src={selectedCountryListData.flagImage}
                         alt={selectedCountryListData.alt}
                         fill
-                        className="rounded-full object-cover"
+                        className="rounded-[12px] object-cover"
                       />
                     </div>
 
@@ -251,32 +256,29 @@ function Header() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-row items-center space-x-2">
-                <Image
-                  src={"/images/user.jpg"}
-                  alt={"user pic"}
-                  width={16.2}
-                  height={15}
-                  className=""
-                />
+              <div className="flex flex-row items-center justify-evenly space-x-3">
+                <UserRound className="text-[#6F6F6F]" />
                 <Link href={"/login"}>
-                  <TextStyle textContent="Sign In" textStyle="" />
+                  <TextStyle textContent="Sign In" textStyle="text-[#6F6F6F]" />
                 </Link>
                 <hr className="h-5 w-px bg-[#b0adad]" />
                 <Link href={"/onboarding"}>
-                  <TextStyle textContent="Register" textStyle="" />
+                  <TextStyle
+                    textContent="Register"
+                    textStyle="text-[#6F6F6F] "
+                  />
                 </Link>
               </div>
             </div>
             <div className="ml-2 flex flex-row items-center space-x-3">
               <div className="relative h-6 w-6">
-                <Heart className="h-6 w-6" />
+                <Heart className="h-6 w-6 text-[#6F6F6F]" />
                 <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
                   <span className="text-[10px] text-white">5</span>
                 </div>
               </div>
               <div className="relative h-6 w-6">
-                <ShoppingCart className="h-6 w-6" />
+                <ShoppingCart className="h-6 w-6 text-[#6F6F6F]" />
                 <div className="absolute -right-2 bottom-3 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
                   <span className="text-[10px] text-white">10</span>
                 </div>
@@ -298,7 +300,7 @@ function Header() {
                       >
                         <TextStyle
                           textContent={item.name}
-                          textStyle="hover:text-[#4F912F]"
+                          textStyle="hover:text-[#4F912F] text-[#6F6F6F]"
                         />
                       </Link>
                       <div className="h-0.5 w-0 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full"></div>
@@ -319,7 +321,7 @@ function Header() {
                 <div className="h-0.5 w-0 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full lg:hidden"></div>
               </div>
             </div>
-            <div className="flex items-center justify-center space-x-4 lg:flex-1">
+            <div className="flex items-center justify-center space-x-4 lg:ml-30 lg:flex-1">
               <LanguageSelect showFlag={false} />
               <LanguageSelect showFlag={true} />
 
@@ -330,7 +332,7 @@ function Header() {
                 >
                   <TextStyle
                     textContent={"Order Tracking"}
-                    textStyle="hover:text-[#4F912F]"
+                    textStyle="hover:text-[#4F912F] text-[#6F6F6F]"
                   />
                 </Link>
                 <div className="h-0.5 w-0 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full"></div>

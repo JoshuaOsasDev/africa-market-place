@@ -7,13 +7,13 @@ import { socialData, socialData2, socialData3, socialData4 } from "@/lib/data";
 
 function Footer() {
   return (
-    <div className="grid mx-2 grid-cols-1 md:grid-cols-5 gap-6 mb-4 bg-[#1A1A1A] rounded-[20px] p-4">
-      <div className="col-span-2 flex flex-col space-y-4 ">
+    <div className="mx-2 mb-4 grid grid-cols-1 gap-6 rounded-[20px] bg-[#1A1A1A] p-4 md:grid-cols-5">
+      <div className="col-span-2 flex flex-col space-y-4">
         {/* logo */}
-        <div className="relative  w-[100px] h-[50px] sm:w-[182px] sm:h-[60px]  lg:w-[292px] lg:h-[83px] ">
+        <div className="relative h-[50px] w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
           <Link href={"/"}>
             <Image
-              src={"/logo.png"}
+              src={"/images/logo.png"}
               alt="africa market place logo"
               fill
               className="object-contain"
@@ -29,15 +29,15 @@ function Footer() {
         <div className="flex flex-row items-center space-x-4">
           {socialData.map((icon) => (
             <Link href={icon.url} key={icon.id}>
-              <div className="rounded-full flex items-center justify-center w-9 h-9 transition-all hover:bg-[#a0b7a1] bg-[#636363] duration-500 ease-in-out ">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#636363] transition-all duration-500 ease-in-out hover:bg-[#a0b7a1]">
                 {icon.id === 1 ? (
-                  <Facebook className="w-5 h-5 text-white" />
+                  <Facebook className="h-5 w-5 text-white" />
                 ) : icon.id === 2 ? (
-                  <Instagram className="w-5 h-5 text-white" />
+                  <Instagram className="h-5 w-5 text-white" />
                 ) : icon.id === 3 ? (
-                  <Twitter className="w-5 h-5 text-white" />
+                  <Twitter className="h-5 w-5 text-white" />
                 ) : (
-                  <Mail className="w-5 h-5 text-white" />
+                  <Mail className="h-5 w-5 text-white" />
                 )}
               </div>
             </Link>
@@ -45,7 +45,7 @@ function Footer() {
         </div>
         {/* social icon start */}
       </div>
-      <div className="col-span-3 grid  grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+      <div className="col-span-3 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
         <div className="flex flex-col space-y-2">
           {socialData2.map((data) => (
             <Link href={data.url} key={data.id}>
@@ -66,7 +66,7 @@ function Footer() {
             </Link>
           ))}
         </div>
-        <div className="flex flex-col space-y-2 ">
+        <div className="flex flex-col space-y-2">
           {socialData4.map((data) => (
             <Link href={data.url} key={data.id}>
               <TextStyle

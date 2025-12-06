@@ -1,4 +1,4 @@
-import { Product } from "@/types/appTypes";
+import { Product, WishlistItem } from "@/types/appTypes";
 
 export const countryListAndFlags = [
   {
@@ -19,6 +19,10 @@ export const navListArray = [
   {
     name: "Home",
     url: "/",
+  },
+  {
+    name: "Shop",
+    url: "/user/shop",
   },
   {
     name: "Contact",
@@ -334,6 +338,26 @@ const statuses: Product["status"][] = [
   "Out of Stock",
 ];
 
+export const ordersData = Array.from({ length: 50 }, (_, index) => {
+  const i = index % 4;
+  {
+    return {
+      id: (1000 + index).toString(),
+      orderId: `ORD-${1000 + index}`,
+      image: images[i],
+      product: productNames[index % productNames.length],
+      date: `2024-${String((index % 12) + 1).padStart(2, "0")}-${String((index % 28) + 1).padStart(2, "0")}`,
+      total: parseFloat((Math.random() * 500 + 50).toFixed(2)),
+      payment: index % 2 === 0 ? "Master card" : "Visa",
+      status:
+        index % 3 === 0
+          ? "Shipped"
+          : index % 3 === 1
+            ? "Processing"
+            : "Cancelled",
+    };
+  }
+});
 export const products: Product[] = Array.from({ length: 100 }, (_, index) => {
   const i = index % 4;
   return {
@@ -391,5 +415,203 @@ export const salesData = [
     sales: 560,
     revenue: 6350,
     change: 15,
+  },
+];
+
+export const reviewData = [
+  {
+    id: 1,
+    rating: 4.5,
+    reviewCount: 120,
+    reviewText: "This is amazing product I have.",
+    date: "July 2, 2020 03:29 PM",
+    userName: "Darrell Steward",
+    userImage: "/dashboard-images/profile-picture.svg",
+    likes: 128,
+  },
+  {
+    id: 2,
+    rating: 5,
+    reviewCount: 210,
+    reviewText: "Quality is top-notch. Highly recommended!",
+    date: "May 11, 2021 10:14 AM",
+    userName: "Courtney Henry",
+    userImage: "/dashboard-images/profile-picture.svg",
+    likes: 98,
+  },
+  {
+    id: 3,
+    rating: 3.5,
+    reviewCount: 60,
+    reviewText: "Good but delivery took too long.",
+    date: "Jan 15, 2022 07:55 PM",
+    userName: "Jenny Wilson",
+    userImage: "/dashboard-images/profile-picture.svg",
+    likes: 45,
+  },
+];
+
+export const orders = {};
+
+export const wishlistData: WishlistItem[] = [
+  {
+    id: 1,
+    name: "Green Pepper",
+    price: 30.5,
+    oldPrice: 55.1,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 2,
+    name: "Fresh Tomatoes",
+    price: 18,
+    oldPrice: 25,
+    status: "in stock",
+    image: "/images/tomatoes.png",
+  },
+  {
+    id: 3,
+    name: "Organic Onions",
+    price: 10,
+    oldPrice: 15,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 4,
+    name: "Bell Pepper Mix",
+    price: 22.9,
+    oldPrice: 32.5,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 5,
+    name: "Cherry Tomatoes",
+    price: 12.5,
+    oldPrice: 19.4,
+    status: "in stock",
+    image: "/images/tomatoes.png",
+  },
+  {
+    id: 6,
+    name: "Red Onions Pack",
+    price: 14.7,
+    oldPrice: 21.0,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 7,
+    name: "Yellow Pepper",
+    price: 28.4,
+    oldPrice: 45.0,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 8,
+    name: "Mixed Tomatoes",
+    price: 17.2,
+    oldPrice: 24.9,
+    status: "in stock",
+    image: "/images/tomatoes.png",
+  },
+  {
+    id: 9,
+    name: "White Onions Pack",
+    price: 11.9,
+    oldPrice: 17.5,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 10,
+    name: "Sweet Pepper",
+    price: 26.3,
+    oldPrice: 39.9,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 11,
+    name: "Roma Tomatoes",
+    price: 15.0,
+    oldPrice: 22.0,
+    status: "in stock",
+    image: "/images/tomatoes.png",
+  },
+  {
+    id: 12,
+    name: "Brown Onions",
+    price: 13.4,
+    oldPrice: 20.0,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 13,
+    name: "Spicy Pepper Mix",
+    price: 24.9,
+    oldPrice: 35.0,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 14,
+    name: "Tomato Basket",
+    price: 20.5,
+    oldPrice: 29.0,
+    status: "in stock",
+    image: "/images/tomatoes.png",
+  },
+  {
+    id: 15,
+    name: "Sliced Onions",
+    price: 9.5,
+    oldPrice: 14.0,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 16,
+    name: "Crunchy Pepper",
+    price: 27.8,
+    oldPrice: 41.2,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 17,
+    name: "Local Tomatoes",
+    price: 16.7,
+    oldPrice: 23.5,
+    status: "in stock",
+    image: "/images/tomatoes.png",
+  },
+  {
+    id: 18,
+    name: "Premium Onions",
+    price: 12.9,
+    oldPrice: 18.7,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 19,
+    name: "Red Pepper",
+    price: 29.4,
+    oldPrice: 44.8,
+    status: "in stock",
+    image: "/images/pepper.png",
+  },
+  {
+    id: 20,
+    name: "Juicy Tomatoes",
+    price: 19.3,
+    oldPrice: 28.0,
+    status: "in stock",
+    image: "/images/tomatoes.png",
   },
 ];
