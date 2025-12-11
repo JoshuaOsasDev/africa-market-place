@@ -55,7 +55,7 @@ const Navbar = () => {
   return (
     <div className="h-[60px] ">
       {/* Mobile view */}
-      <div className="flex sm:hidden items-center justify-between px-6 h-[50px] bg-[#FAFAFF]">
+      <div className="flex md:hidden items-center justify-between px-6 h-[50px] bg-[#FAFAFF]">
         <div className="">
           <Image
             src={hamburgerMenu}
@@ -76,13 +76,13 @@ const Navbar = () => {
 
       {/* Desktop view */}
       <div className="flex items-center h-full">
-        <div className="hidden sm:flex items-center justify-between w-[296px]">
+        <div className="hidden md:flex items-center justify-between w-[296px]">
             <Link href='/' className="px-[30px] ">
             <Image src={mainLogo} alt="main-logo" className="" />
             </Link>
         </div>
 
-      <div className="hidden sm:flex items-center px-[21px]">
+      <div className="hidden md:flex items-center px-[21px]">
         <h1 className="text-[#45464E] text-[20px] font-medium">{headerText}</h1>
 
         <div className="absolute right-[21px] flex gap-5">
