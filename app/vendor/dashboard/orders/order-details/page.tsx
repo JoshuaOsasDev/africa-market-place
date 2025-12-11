@@ -9,23 +9,23 @@ import {
 } from "@/components/ui/breadcrumb";
 import Image from "next/image";
 
-import exportIcon from "../../../../../public/dashboard-images/export-icon.svg";
-import dropDownIcon from "../../../../../public/dashboard-images/drop-down-icon.svg";
-import invoiceIconWhite from "../../../../../public/dashboard-images/order-details-icons/invoice-icon.svg";
-import markedCalendarIcon from "../../../../../public/dashboard-images/order-details-icons/marked-calendar-icon.svg";
-import cardIcon from "../../../../../public/dashboard-images/order-details-icons/credit-card-icon.svg";
-import shippingIcon from "../../../../../public/dashboard-images/order-details-icons/truck-icon.svg";
-import userIcon from "../../../../../public/dashboard-images/order-details-icons/user-icon.svg";
-import emailIcon from "../../../../../public/dashboard-images/order-details-icons/envelope-icon.svg";
-import phoneIcon from "../../../../../public/dashboard-images/order-details-icons/mobile-icon.svg";
-import invoiceFilledIcon from "../../../../../public/dashboard-images/order-details-icons/invoice-icon-filled.svg";
-import checkIcon from "../../../../../public/dashboard-images/order-details-icons/check-icon.svg";
-import locationIcon from "../../../../../public/dashboard-images/order-details-icons/location-icon.svg";
-import cartIcon from "../../../../../public/dashboard-images/order-details-icons/cart-icon.svg";
-import processIcon from "../../../../../public/dashboard-images/order-details-icons/processing-icon.svg";
-import packageIcon from "../../../../../public/dashboard-images/order-details-icons/package-icon.svg";
-import deliveredIcon from "../../../../../public/dashboard-images/order-details-icons/delivered-icon.svg";
-import tomatoesImage from "../../../../../public/dashboard-images/orders-page-images/tomatoes-image.png";
+import exportIcon from "../../../../../public/vendor/dashboard-images/export-icon.svg";
+import dropDownIcon from "../../../../../public/vendor/dashboard-images/drop-down-icon.svg";
+import invoiceIconWhite from "../../../../../public/vendor/dashboard-images/order-details-icons/invoice-icon.svg";
+import markedCalendarIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/marked-calendar-icon.svg";
+import cardIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/credit-card-icon.svg";
+import shippingIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/truck-icon.svg";
+import userIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/user-icon.svg";
+import emailIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/envelope-icon.svg";
+import phoneIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/mobile-icon.svg";
+import invoiceFilledIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/invoice-icon-filled.svg";
+import checkIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/check-icon.svg";
+import locationIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/location-icon.svg";
+import cartIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/cart-icon.svg";
+import processIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/processing-icon.svg";
+import packageIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/package-icon.svg";
+import deliveredIcon from "../../../../../public/vendor/dashboard-images/order-details-icons/delivered-icon.svg";
+import tomatoesImage from "../../../../../public/vendor/dashboard-images/orders-page-images/tomatoes-image.png";
 
 const page = () => {
   return (

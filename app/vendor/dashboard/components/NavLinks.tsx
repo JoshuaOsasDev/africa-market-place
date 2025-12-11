@@ -4,12 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import Image from "next/image";
-import dashboardPageIcon from "../../../../public/dashboard-images/dashboard-page-icon.svg";
-import productPageIcon from "../../../../public/dashboard-images/product-page-icon.svg";
-import ordersPageIcon from "../../../../public/dashboard-images/orders-page-icon.svg";
-import customersPageIcon from "../../../../public/dashboard-images/customers-page-icon.svg";
-import sellerPageIcon from "../../../../public/dashboard-images/seller-page-icon.svg";
-import analyticsPageIcon from "../../../../public/dashboard-images/analytics-page-icon.svg";
+import dashboardPageIcon from "../../../../public/vendor/dashboard-images/dashboard-page-icon.svg";
+import productPageIcon from "../../../../public/vendor/dashboard-images/product-page-icon.svg";
+import ordersPageIcon from "../../../../public/vendor/dashboard-images/orders-page-icon.svg";
+import customersPageIcon from "../../../../public/vendor/dashboard-images/customers-page-icon.svg";
+import sellerPageIcon from "../../../../public/vendor/dashboard-images/seller-page-icon.svg";
+import analyticsPageIcon from "../../../../public/vendor/dashboard-images/analytics-page-icon.svg";
 
 const links = [
   { name: "Dashboard", href: "/vendor/dashboard", icon: dashboardPageIcon },

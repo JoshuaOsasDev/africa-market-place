@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import NavLinks from './NavLinks';
 
-import supportPageIcon from '../../../../public/dashboard-images/support-page-icon.svg'
-import settingPageIcon from '../../../../public/dashboard-images/setting-page-icon.svg'
+import supportPageIcon from '../../../../public/vendor/dashboard-images/support-page-icon.svg'
+import settingPageIcon from '../../../../public/vendor/dashboard-images/setting-page-icon.svg'
 
 const SideBar = () => {
   return (

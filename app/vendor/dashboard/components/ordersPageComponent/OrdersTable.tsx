@@ -18,11 +18,11 @@ import Pagination from "../../../../../components/common/Pagination";
 // ---------------------------------------------------
 
 // --- ICON & IMAGE IMPORTS (Ensure these paths are correct) ---
-import viewIcon from '../../../../../public/dashboard-images/view-icon.svg';
-import editIcon from '../../../../../public/dashboard-images/edit-icon.svg';
-import tomatoesImage from '../../../../../public/dashboard-images/orders-page-images/tomatoes-image.png';
-import greenPepperImage from '../../../../../public/dashboard-images/orders-page-images/green-pepper-image.png';
-import potatoesImage from '../../../../../public/dashboard-images/orders-page-images/potatoes-image.png';
+import viewIcon from '../../../../../public/vendor/dashboard-images/view-icon.svg';
+import editIcon from '../../../../../public/vendor/dashboard-images/edit-icon.svg';
+import tomatoesImage from '../../../../../public/vendor/dashboard-images/orders-page-images/tomatoes-image.png';
+import greenPepperImage from '../../../../../public/vendor/dashboard-images/orders-page-images/green-pepper-image.png';
+import potatoesImage from '../../../../../public/vendor/dashboard-images/orders-page-images/potatoes-image.png';
 // -------------------------------------------------------------------------------
 
 // --- 1. TYPES, DATA, AND HELPERS ---

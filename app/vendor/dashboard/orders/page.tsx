@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
-import emptyDashboardImage from "../../../../public/dashboard-images/empty-dashboard-image.svg";
+import emptyDashboardImage from "../../../../public/vendor/dashboard-images/empty-dashboard-image.svg";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,9 +14,9 @@ import {
 
 
 import Link from "next/link";
-import exportIcon from "../../../../public/dashboard-images/export-icon.svg";
-import calendarIcon from "../../../../public/dashboard-images/calendar-icon.svg";
-import filterIcon from "../../../../public/dashboard-images/filter-icon.svg";
+import exportIcon from "../../../../public/vendor/dashboard-images/export-icon.svg";
+import calendarIcon from "../../../../public/vendor/dashboard-images/calendar-icon.svg";
+import filterIcon from "../../../../public/vendor/dashboard-images/filter-icon.svg";
 import OrdersTable from "../components/ordersPageComponent/OrdersTable";
 
 const ordersPage = () => {
