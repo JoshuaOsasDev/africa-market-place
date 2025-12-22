@@ -57,3 +57,12 @@ export type WishlistItem = {
   status: string;
   image: string;
 };
+
+export type ShippingDataType = {
+  id: string;
+  trackingNo: string;
+  customer: string;
+  destination: string;
+  deliveryDate: string;
+  status: string;
+};

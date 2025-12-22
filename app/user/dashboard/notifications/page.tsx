@@ -1,3 +1,9 @@
+import NotificationComp from "@/components/pageComponents/user/notification/notificationComp";
+
 export default function NotificationPage() {
-  return <div className="min-h-screen">Notification</div>;
+  return (
+    <>
+      <NotificationComp />
+    </>
+  );
 }

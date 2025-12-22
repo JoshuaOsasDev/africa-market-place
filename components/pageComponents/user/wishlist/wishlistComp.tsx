@@ -1,11 +1,13 @@
 "use client";
 
+import Modal from "@/components/common/Modal";
 import Pagination from "@/components/common/Pagination";
 import { Button } from "@/components/ui/button";
 import { wishlistData } from "@/lib/data";
 import { ShoppingBag, Trash } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import DeleteProductModal from "../../vendor/Product/DeleteProductModal";
 
 export default function WishListComp() {
   const itemsPerPage = 12; // 4 columns × 3 rows
@@ -17,7 +19,7 @@ export default function WishListComp() {
   const visibleItems = wishlistData.slice(startIndex, endIndex);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="mt-10 flex flex-col gap-5 md:mt-0">
       <h2 className="text-3xl font-semibold">Wishlist</h2>
 
       {/* GRID */}
@@ -25,7 +27,7 @@ export default function WishListComp() {
         {visibleItems.map((item) => (
           <div
             key={item.id}
-            className="flex w-[260px] flex-col justify-center gap-2.5 rounded-[12px] bg-white p-3"
+            className="flex w-full flex-col justify-center gap-5 rounded-[12px] bg-white px-4 py-6 md:w-[260px] md:gap-2.5 md:p-3"
           >
             <div className="flex items-center">
               <div className="relative h-15 w-15 rounded-xl bg-[#F6F6F6]">
@@ -50,11 +52,25 @@ export default function WishListComp() {
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <Button className="rounded-[27px] bg-transparent px-3 py-2 font-medium text-[#FF7566]">
-                <Trash />
-                <span>Remove</span>
-              </Button>
+            <div className="flex justify-between gap-2 pr-3">
+              <Modal>
+                <Modal.Open opens={`delete-wishlist-${item.id}`}>
+                  <Button className="rounded-[27px] bg-transparent px-3 py-2 font-medium text-[#FF7566]">
+                    <Trash />
+                    <span>Remove</span>
+                  </Button>
+                </Modal.Open>
+                <Modal.Window
+                  name={`delete-wishlist-${item.id}`}
+                  className="max-w-md"
+                >
+                  <DeleteProductModal
+                    onConfirm={() => console.log("DELETE:", item.id)}
+                    text="order"
+                    productName={item.name}
+                  />
+                </Modal.Window>
+              </Modal>
 
               <Button className="w-fit items-center rounded-[27px] bg-transparent px-3 py-2 font-medium text-[#2E7D32]">
                 <ShoppingBag />

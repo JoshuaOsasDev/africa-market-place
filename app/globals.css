@@ -175,6 +175,16 @@ body {
   transition: width 0.3s ease-in-out;
 }
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
 /* progress {
   -webkit-appearance: none;
   width: 100%;
