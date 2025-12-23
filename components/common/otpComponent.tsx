@@ -11,19 +11,23 @@ export default function OtpComponent() {
       numInputs={5}
       inputType="tel"
       
-      inputStyle={{
+      
+      containerStyle={{
+        display: "flex",
+        gap: "8px"
+      }}
+      
+    /*   inputStyle={{
         width: "52px",       // 👈 Increase width
         height: "61px",      // 👈 Increase height
         fontSize: "1.5rem",
         borderRadius: "8px",
         border: "1px solid #ccc",
         textAlign: "center",
-      }}
-      containerStyle={{
-        display: "flex",
-        gap: "8px"
-      }}
-      renderInput={(props) => <input {...props} />}
+      }} */
+      renderInput={(props) => <input className=' h-[52px] w-[52px] lg:h-[61px] rounded-[8px]  border text-center' 
+
+      />}
       shouldAutoFocus={ true }
     />
   );

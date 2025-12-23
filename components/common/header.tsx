@@ -42,28 +42,28 @@ function Header() {
     alt: string;
   } | null>(null);
 
-  useEffect(() => {
-    setCountryListData(countryListAndFlags);
-    const isSelected = countryListAndFlags.filter((data) => {
-      if (data.selected) return data;
-    });
-    isSelected.length > 0
-      ? setselectedCountryListData({
-          alt: isSelected[0].alt,
-          flagImage: isSelected[0].flagImage,
-          name: isSelected[0].name,
-        })
-      : setselectedCountryListData({
-          alt: countryListAndFlags[0].alt,
-          flagImage: countryListAndFlags[0].flagImage,
-          name: countryListAndFlags[0].name,
-        });
-  }, []);
+  // useEffect(() => {
+  //   setCountryListData(countryListAndFlags);
+  //   const isSelected = countryListAndFlags.filter((data) => {
+  //     if (data.selected) return data;
+  //   });
+  //   isSelected.length > 0
+  //     ? setselectedCountryListData({
+  //         alt: isSelected[0].alt,
+  //         flagImage: isSelected[0].flagImage,
+  //         name: isSelected[0].name,
+  //       })
+  //     : setselectedCountryListData({
+  //         alt: countryListAndFlags[0].alt,
+  //         flagImage: countryListAndFlags[0].flagImage,
+  //         name: countryListAndFlags[0].name,
+  //       });
+  // }, []);
 
   return (
     <div>
       <div className="w-full bg-white shadow-md md:hidden px-2 ">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-2 py-3 md:py-4">
+        <div className="mx-auto flex items-center justify-between  px-2 py-3 md:py-4">
           {/* Logo */}
           <div className="relative  w-[100px] h-[50px] sm:w-[182px] sm:h-[60px]  lg:w-[292px] lg:h-[83px] ">
             <Link href={"/"}>
@@ -71,7 +71,7 @@ function Header() {
                 src={"/images/logo.png"}
                 alt="africa market place logo"
                 fill
-                className="object-contain"
+                className="object-contain object-center"
               />
             </Link>
           </div>
@@ -259,16 +259,13 @@ function Header() {
                   height={15}
                   className=""
                 />
-                <Link href={"/login"}>
-                
+                <Link href={"/auth-user/login"}>
                   <TextStyle textContent="Sign In" textStyle="" />
                 </Link>
                 <hr className="bg-[#b0adad] w-px h-5" />
-                <Link href={"/onboarding"}>
-                
+                <Link href={"/auth-user/register/vendor"}>
                   <TextStyle textContent="Register" textStyle="" />
                 </Link>
-              
               </div>
             </div>
             <div className="flex flex-row space-x-3 ml-2 items-center ">
