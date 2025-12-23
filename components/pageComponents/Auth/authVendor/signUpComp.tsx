@@ -147,7 +147,7 @@ const SignUpComp = () => {
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("fullname")}
                     placeholder="User"

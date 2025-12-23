@@ -1,8 +1,13 @@
 "use client";
+import Menus from "@/components/common/Menus";
+import Modal from "@/components/common/Modal";
 import ReusableTable from "@/components/common/reusableTable";
 import { shippingData } from "@/lib/data";
-import { MoreVertical } from "lucide-react";
+import { EyeIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
+import DeleteProductModal from "../vendor/Product/DeleteProductModal";
+import { useRouter } from "next/navigation";
+import { div } from "framer-motion/client";
 
 export default function ShippingTable({
   shipping,
@@ -10,6 +15,7 @@ export default function ShippingTable({
   shipping: string | string[] | undefined;
 }) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const router = useRouter();
 
   // Status badge styles
   const getStatusStyles = (status: string) => {
@@ -26,8 +32,6 @@ export default function ShippingTable({
         return "bg-gray-100 text-gray-800";
     }
   };
-
-  // Table columns configuration
 
   return (
     <div className="">
@@ -76,9 +80,50 @@ export default function ShippingTable({
           {
             label: "Action",
             renderCell: (item) => (
-              <button className="text-gray-400 transition-colors hover:text-gray-600">
-                <MoreVertical size={20} />
-              </button>
+              <div className="flex items-center justify-start">
+                <Modal>
+                  <Menus>
+                    <Menus.Menu>
+                      <Menus.Toggle id={item.id} />
+                      <Menus.List id={item.id}>
+                        <Menus.Button
+                          icon={
+                            <div className="rounded-full bg-[#EAF2EA] p-2">
+                              <EyeIcon className="text-[#2E7D32]" size={18} />
+                            </div>
+                          }
+                          onClick={() => router.push(`/shipping/${item.id}`)}
+                        >
+                          View
+                        </Menus.Button>
+
+                        <Modal.Open opens="delete">
+                          <Menus.Button
+                            icon={
+                              <div className="rounded-full bg-[#FFE8E5] p-2">
+                                <TrashIcon
+                                  className="text-[#FF4733]"
+                                  size={18}
+                                />
+                              </div>
+                            }
+                          >
+                            Delete
+                          </Menus.Button>
+                        </Modal.Open>
+                      </Menus.List>
+                    </Menus.Menu>
+                  </Menus>
+
+                  <Modal.Window name="delete" className="max-w-md">
+                    <DeleteProductModal
+                      text={`Shipping ${item.trackingNo}`}
+                      productName="Shipping"
+                      onConfirm={() => console.log("Delete shipping:", item.id)}
+                    />
+                  </Modal.Window>
+                </Modal>
+              </div>
             ),
           },
         ]}

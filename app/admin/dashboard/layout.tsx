@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Sidebar />
         </div>
 
-        <div className="mt-6 h-full flex-1 px-4 py-4 md:px-[30px]">
+        <div className="mt-8 h-full flex-1 px-4 py-4 md:px-[30px]">
           {children}
         </div>
       </div>
