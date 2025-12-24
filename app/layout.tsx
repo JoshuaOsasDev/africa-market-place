@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
-import ReduxProvider from "@/redux/utils/ReduxProvider/ReduxProvider";
+import ReduxProvider from "@/lib/utility/ReduxProvider/ReduxProvider";
 
-const nunito = Nunito({
+export const nunito = Nunito({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
   variable: "--font-nunito",
@@ -27,7 +27,6 @@ export default function RootLayout({
 }>) {
   return (
     <ReduxProvider>
-      {" "}
       <html lang="en" className={`${nunito.variable}`}>
         <body className={nunito.className}>{children}</body>
       </html>

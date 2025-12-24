@@ -1,6 +1,6 @@
 import Image from "next/image";
-import React from "react";
-import emptyDashboardImage from "../../../public/dashboard-images/empty-dashboard-image.svg";
+
+//import emptyDashboardImage from "../../../public/dashboard-images/empty-dashboard-image.svg";
 
 const OrdersPage = () => {
   return (

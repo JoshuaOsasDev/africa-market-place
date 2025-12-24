@@ -27,8 +27,8 @@ const productSchema = yup.object().shape({
 
 export default function EditProduct({ existingData = null }) {
   const [isDragging, setIsDragging] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
-  const fileInputRef = useRef(null);
+  const [imagePreview, setImagePreview] = useState<any>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // EXAMPLE EXISTING PRODUCT DATA (can be passed as prop)
   const defaultData = existingData || {
@@ -76,7 +76,7 @@ export default function EditProduct({ existingData = null }) {
   }, []);
 
   // Handle image upload
-  const handleImageChange = (file) => {
+  const handleImageChange = (file:File) => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -87,25 +87,27 @@ export default function EditProduct({ existingData = null }) {
     }
   };
 
+
+  
   // Handle drag events
-  const handleDragEnter = (e) => {
+  const handleDragEnter = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
   };
 
-  const handleDragLeave = (e) => {
+  const handleDragLeave = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e:React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -117,7 +119,7 @@ export default function EditProduct({ existingData = null }) {
   };
 
   // Handle file input change
-  const handleFileInputChange = (e) => {
+  const handleFileInputChange = (e: any) => {
     const file = e.target.files[0];
     if (file) {
       handleImageChange(file);
@@ -138,7 +140,7 @@ export default function EditProduct({ existingData = null }) {
     fileInputRef.current?.click();
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log("Updated Product Data:", data);
     alert("Product updated successfully! Check console for data.");
   };

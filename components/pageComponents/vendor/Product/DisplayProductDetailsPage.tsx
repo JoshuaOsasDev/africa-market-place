@@ -25,6 +25,7 @@ export default function DisplayProductDetailsPage() {
     discountType: "percentage",
     imagePreview: ["/images/tomatoes.png", "/images/tomatoes.png"],
     weight: "1kg",
+    checked: true
   };
 
   return (

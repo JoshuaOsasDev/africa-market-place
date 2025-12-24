@@ -1,11 +1,20 @@
-import ShowDashBoardProductForm from "@/components/pageComponents/vendor/dashboard/showDashBoardProductForm";
+import DashboardCharts from "@/components/pageComponents/vendorComp/dashboard/DashboardCharts";
+import DashboardFilter from "@/components/pageComponents/vendorComp/dashboard/dashboardFilter";
+import DashboardSalesAndProduct from "@/components/pageComponents/vendorComp/dashboard/dashboardSalesAndProduct";
+import DashboardSummary from "@/components/pageComponents/vendorComp/dashboard/dashboardSumarry";
+import { Suspense } from "react";
 
-const DashboardPage = () => {
+const dashboardPage = () => {
   return (
     <div>
-      <ShowDashBoardProductForm />
+      <Suspense fallback={<div>Loading dashboard...</div>}>
+        <DashboardFilter />
+        <DashboardSummary />
+        <DashboardCharts />
+        <DashboardSalesAndProduct />
+      </Suspense>
     </div>
   );
 };
 
-export default DashboardPage;
+export default dashboardPage;

@@ -5,7 +5,7 @@ export default function DailyLayout(props: { textStyle?: string }) {
   return (
     <div
       className={`
-      hidden md:block 
+      hidden lg:block 
       w-[635px] 
       h-fit
       rounded-[25px] 

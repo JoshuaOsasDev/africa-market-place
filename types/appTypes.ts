@@ -24,7 +24,6 @@ export type Product = {
   stock: number;
   price: number;
   status: "Published" | "Draft" | "Low Stock" | "Out of Stock";
-
   addedDate: string;
 };
 

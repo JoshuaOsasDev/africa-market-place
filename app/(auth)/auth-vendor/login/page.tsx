@@ -1,4 +1,4 @@
-import LoginComp from "@/components/pageComponents/Auth/loginComp";
+import LoginComp from "@/components/pageComponents/auth/auth-vendor/loginComp";
 
 function page() {
   return (

@@ -259,11 +259,11 @@ function Header() {
                   height={15}
                   className=""
                 />
-                <Link href={"/login"}>
+                <Link href={"/auth-user/login"}>
                   <TextStyle textContent="Sign In" textStyle="" />
                 </Link>
                 <hr className="h-5 w-px bg-[#b0adad]" />
-                <Link href={"/onboarding"}>
+                <Link href={"/auth-user/register/vendor"}>
                   <TextStyle textContent="Register" textStyle="" />
                 </Link>
               </div>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { ChevronDown, ImageOff, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -28,8 +28,8 @@ const productSchema = yup.object().shape({
 
 export default function ProductGeneralInfo() {
   const [isDragging, setIsDragging] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
-  const fileInputRef = useRef(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<null | HTMLInputElement>(null);
 
   const {
     register,
@@ -66,11 +66,11 @@ export default function ProductGeneralInfo() {
   const percentage = watch("percentage");
 
   // Handle image upload
-  const handleImageChange = (file) => {
+  const handleImageChange = (file:File) => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
+        setImagePreview(reader.result as string);
         setValue("imagePreview", reader.result); // Register with RHF
       };
       reader.readAsDataURL(file);
@@ -78,24 +78,24 @@ export default function ProductGeneralInfo() {
   };
 
   // Handle drag events
-  const handleDragEnter = (e) => {
+  const handleDragEnter = (e:any) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
   };
 
-  const handleDragLeave = (e) => {
+  const handleDragLeave = (e:any) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e:any) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e:any) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -107,7 +107,7 @@ export default function ProductGeneralInfo() {
   };
 
   // Handle file input change
-  const handleFileInputChange = (e) => {
+  const handleFileInputChange = (e:any) => {
     const file = e.target.files[0];
     if (file) {
       handleImageChange(file);
@@ -119,7 +119,7 @@ export default function ProductGeneralInfo() {
     setImagePreview(null);
     setValue("imagePreview", null); // Update RHF
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value  = "";
     }
   };
 
@@ -128,7 +128,7 @@ export default function ProductGeneralInfo() {
     fileInputRef.current?.click();
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log("Form Data:", data);
     alert("Product saved successfully! Check console for data.");
   };
