@@ -46,7 +46,7 @@ const LoginComp = () => {
   };
 
   return (
-    <div>
+    <div className="px-3 md:px-0 pt-2 mx-auto lg:mx-0">
       <ToastContainer />
       <BackButton />
       <div className="flex flex-col md:flex-row md:space-x-15">
