@@ -107,11 +107,11 @@ const SignUpComp = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <BackButton />
       <div className="flex flex-col md:flex-row md:space-x-15">
-        <DailyLayout textStyle="mt-15" />
-        <div className="flex flex-col md:w-[450px] md:rounded-lg md:bg-white md:p-7 md:pt-3">
+        <DailyLayout textStyle="mt-10" />
+        <div className="flex max-w-[300px] flex-col px-2.5 md:w-[530px] md:max-w-lg md:rounded-lg md:bg-white md:p-7 md:pt-3">
           {
             //   loader && <LoadingScreen />
           }
@@ -135,19 +135,19 @@ const SignUpComp = () => {
             textStyle="text-[16px] text-[#667185]/80 text-bold"
           />
 
-          <div className="w-full">
+          <div className="md:w-full">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mt-4 flex w-fit flex-col space-y-2"
+              className="mt-4 flex w-fit flex-col space-y-2 md:w-full"
             >
-              <div className="mb-2 flex w-full flex-col space-y-2">
+              <div className="mb-2 flex w-[300px] flex-col space-y-2 md:m-0 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Full Name"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                <div className="group mr-3 flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("fullname")}
                     placeholder="User"
@@ -159,14 +159,14 @@ const SignUpComp = () => {
                   {errors.fullname?.message}
                 </p>
               </div>
-              <div className="mb-2 flex w-full flex-col space-y-2">
+              <div className="mb-2 flex w-[290px] flex-col space-y-2 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Email"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("email")}
                     placeholder="user@gmail.com"
@@ -178,14 +178,14 @@ const SignUpComp = () => {
                   {errors.email?.message}
                 </p>
               </div>
-              <div className="mb-2 flex w-full flex-col space-y-2">
+              <div className="mb-2 flex w-[290px] flex-col space-y-2 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Phone"
-                    textStyle="text-[16px] text-[##667185] text-bold"
+                    textStyle="text-[16px] text-[#667185] text-bold"
                   />
                 </label>
-                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("phone")}
                     placeholder="07000000000"
@@ -197,14 +197,14 @@ const SignUpComp = () => {
                   {errors.phone?.message}
                 </p>
               </div>
-              <div className="mb-2 flex w-full flex-col space-y-2">
+              <div className="mb-2 flex w-[290px] flex-col space-y-2 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Password"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     type={hidePassword ? "password" : "text"}
                     {...register("password")}
@@ -233,14 +233,14 @@ const SignUpComp = () => {
                 </p>
               </div>
 
-              <div className="mb-3 flex w-full flex-col space-y-2">
+              <div className="mb-3 flex w-[290px] flex-col space-y-2 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Confirm Password"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     type={hideConfirmPassword ? "password" : "text"}
                     {...register("confirmPassword")}
@@ -301,7 +301,7 @@ const SignUpComp = () => {
               {/* submit button starts */}
               <button
                 disabled={!isChecked || loader}
-                className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] p-2.5 hover:opacity-80 ${
+                className={`mt-4 inline-flex h-[39px] w-[290px] cursor-pointer items-center justify-center rounded-[27px] p-2.5 hover:opacity-80 md:w-full ${
                   !isChecked ? "bg-opacity-70 bg-[#6b916d]" : "bg-[#2E7D32]"
                 }`}
               >

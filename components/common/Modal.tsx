@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, cloneElement } from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
-import { useOutsideClick } from "./useOutsideClick";
+import { useOutsideClick } from "../../lib/hooks/useOutsideClick";
 import {
   ModalContextType,
   ModalProps,
@@ -11,7 +11,7 @@ import {
   WindowProps,
 } from "@/types/appTypes";
 
-const ModalContext = createContext<ModalContextType | null>(null);
+export const ModalContext = createContext<ModalContextType | null>(null);
 
 export default function Modal({ children }: ModalProps) {
   const [openName, setOpenName] = useState("");
@@ -48,7 +48,7 @@ function Window({ name, children, className }: WindowProps) {
     <div className="fixed inset-0 z-1000 flex items-center justify-center bg-[#00000059] px-4 backdrop-blur-sm">
       <div
         ref={ref}
-        className={`animate-fadeIn relative max-h-[90vh] w-full rounded-[12px] bg-white p-6 shadow-xl transition-all ${className}`}
+        className={`animate-fadeIn relative max-h-[90vh] w-full rounded-[12px] bg-white p-6 shadow-xl transition-all ${className} no-scrollbar`}
       >
         {/* Close button */}
         <button

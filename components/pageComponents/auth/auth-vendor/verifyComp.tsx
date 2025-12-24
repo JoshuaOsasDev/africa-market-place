@@ -71,8 +71,12 @@ export default function VerifyComp() {
 
       /* dispatch(userLoggedInAndLoggedOutAction(true))
       navigation.navigate('bottomTabNavigation') */
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("Something went wrong");
+      }
     } finally {
       setLoader(false);
     }
@@ -84,7 +88,7 @@ export default function VerifyComp() {
       <BackButton />
       <div className="flex flex-col md:flex-row md:space-x-15">
         <DailyLayout textStyle="mt-0" />
-        <div className="my-auto flex flex-col rounded-lg bg-white p-8">
+        <div className="my-auto flex w-[300px] flex-col rounded-lg bg-white p-8 md:w-full">
           {
             //   loader && <LoadingScreen />
           }
@@ -106,7 +110,7 @@ export default function VerifyComp() {
 
           <div className="flex flex-row items-center space-x-2">
             <TextStyle
-              textContent="Didn’t get a code? Resend Code"
+              textContent="Didn`t get a code? Resend Code"
               textStyle="md:text-[16px] text-[10px] text-[#667185] text-bold text-center"
             />
 

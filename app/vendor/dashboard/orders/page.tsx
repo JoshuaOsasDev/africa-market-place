@@ -1,16 +1,15 @@
 import Image from "next/image";
-import emptyDashboardImage from "@/public/dashboard-images/empty-dashboard-image.svg";
 
-//../../../../public/dashboard-images/empty-dashboard-image.svg
+//import emptyDashboardImage from "../../../public/dashboard-images/empty-dashboard-image.svg";
 
 const OrdersPage = () => {
   return (
     <div className="flex flex-col items-center gap-4 pt-20">
-      <Image
+      {/* <Image
         src={emptyDashboardImage}
         alt="empty-state-image"
         className="h-[132.43px] w-[136.53px]"
-      />
+      /> */}
       <h1 className="text-[32px] font-medium">No Orders yet</h1>
       <p className="w-[352px] text-center text-[16px] font-normal text-[#475467]">
         You will have analytics when customers purchase your goods

@@ -1,7 +1,6 @@
 "use client";
 import { createContext, ReactNode, useContext } from "react";
 
-
 type TableContextType = {
   columns: string;
 };
@@ -9,7 +8,6 @@ type TableContextType = {
 const TableContext = createContext<TableContextType>({
   columns: "",
 });
-
 
 function Table({
   columns,
@@ -23,7 +21,7 @@ function Table({
       <div className="mt-2 w-full overflow-x-auto">
         <div
           role="table"
-          className="min-w-[1200px] overflow-hidden rounded-lg border-b border-[#F0F1F3] bg-white shadow-sm"
+          className="min-w-[1200px] overflow-hidden rounded-lg border-b border-[#F0F1F3] bg-white shadow-sm md:min-w-full"
         >
           {children}
         </div>
@@ -31,8 +29,6 @@ function Table({
     </TableContext.Provider>
   );
 }
-
-
 
 type BaseRowProps = {
   columns: string;
@@ -63,8 +59,6 @@ const BaseRow = ({
   );
 };
 
-
-
 function Header({ children }: { children: ReactNode }) {
   const { columns } = useContext(TableContext);
 
@@ -80,7 +74,6 @@ function Header({ children }: { children: ReactNode }) {
   );
 }
 
-
 function Row({ children }: { children: ReactNode }) {
   const { columns } = useContext(TableContext);
 
@@ -94,8 +87,6 @@ function Row({ children }: { children: ReactNode }) {
     </BaseRow>
   );
 }
-
-
 
 type BodyProps<T> = {
   data: T[];
@@ -118,12 +109,10 @@ function Body<T>({ data, render }: BodyProps<T>) {
   );
 }
 
-
 function Footer({ children }: { children?: ReactNode }) {
   if (!children) return null;
   return <footer>{children}</footer>;
 }
-
 
 Table.Header = Header;
 Table.Body = Body;

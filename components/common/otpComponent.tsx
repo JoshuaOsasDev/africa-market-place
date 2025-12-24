@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import OtpInput from 'react-otp-input';
+import React, { useState } from "react";
+import OtpInput from "react-otp-input";
 
 export default function OtpComponent() {
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState("");
 
   return (
     <OtpInput
@@ -10,14 +10,11 @@ export default function OtpComponent() {
       onChange={setOtp}
       numInputs={5}
       inputType="tel"
-      
-      
       containerStyle={{
         display: "flex",
-        gap: "8px"
+        gap: "8px",
       }}
-      
-    /*   inputStyle={{
+      /*   inputStyle={{
         width: "52px",       // 👈 Increase width
         height: "61px",      // 👈 Increase height
         fontSize: "1.5rem",
@@ -25,10 +22,10 @@ export default function OtpComponent() {
         border: "1px solid #ccc",
         textAlign: "center",
       }} */
-      renderInput={(props) => <input className=' h-[52px] w-[52px] lg:h-[61px] rounded-[8px]  border text-center' 
-
-      />}
-      shouldAutoFocus={ true }
+      renderInput={(props) => (
+        <input className="h-[52px] w-[52px] rounded-[8px] border text-center lg:h-[61px]" />
+      )}
+      shouldAutoFocus={true}
     />
   );
 }

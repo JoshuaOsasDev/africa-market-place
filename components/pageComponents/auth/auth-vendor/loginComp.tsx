@@ -84,7 +84,7 @@ const LoginComp = () => {
                 <TextStyle textContent="Email" textStyle="text-[16px]" />
               </label>
 
-              <div className="group flex h-[39px] items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+              <div className="group flex h-[39px] items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                 <input
                   {...register("email")}
                   placeholder="user@gmail.com"
@@ -102,7 +102,7 @@ const LoginComp = () => {
                 <TextStyle textContent="Password" textStyle="text-[16px]" />
               </label>
 
-              <div className="group flex h-[39px] items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+              <div className="group flex h-[39px] items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                 <input
                   type={hidePassword ? "text" : "password"}
                   {...register("password")}

@@ -47,3 +47,21 @@ export type WindowProps = {
   className: string;
   children: ReactElement<{ onCloseModal: () => void }>;
 };
+
+export type WishlistItem = {
+  id: number;
+  name: string;
+  price: number;
+  oldPrice: number;
+  status: string;
+  image: string;
+};
+
+export type ShippingDataType = {
+  id: string;
+  trackingNo: string;
+  customer: string;
+  destination: string;
+  deliveryDate: string;
+  status: string;
+};

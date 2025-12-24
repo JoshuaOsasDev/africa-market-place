@@ -1,23 +1,15 @@
 "use client";
-import ProductHeading from "./productHeading";
-import ProductTable from "./productTable";
-import SearchAndFilterProduct from "./searchAndFilterProduct";
-import ProductGeneralInfo from "./ProductGeneralInfo";
+
 import { useAppSelector } from "@/redux/store/store";
+import ProductTableReactTable from "./productTableReactTable";
+import ProductHeading from "./productHeading";
+import ProductGeneralInfo from "./ProductGeneralInfo";
+import SearchAndFilterProduct from "./searchAndFilterProduct";
 
 export default function SetShowForm() {
   const showForm = useAppSelector((state) => state.showFormReducer.showForm);
   return (
     <>
-      {/* {!showForm && (
-        <>
-          <ProductHeading />
-          <SearchAndFilterProduct />
-        </>
-      )}
-
-      {showForm && <ProductTable />} */}
-
       {showForm ? (
         <>
           <ProductHeading />
@@ -27,7 +19,7 @@ export default function SetShowForm() {
         <>
           <ProductHeading />
           <SearchAndFilterProduct />
-          <ProductTable ITEMS_PER_PAGE={5} />
+          <ProductTableReactTable ITEMS_PER_PAGE={5} />
         </>
       )}
     </>

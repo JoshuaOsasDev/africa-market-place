@@ -1,6 +1,6 @@
-import ProductDetails from "@/components/pageComponents/Product/ProductDetails";
-import ProductDetailsButton from "@/components/pageComponents/Product/productDetailsButton";
-import ProductLinkNav from "@/components/pageComponents/Product/productLinkNav";
+import ProductDetails from "@/components/pageComponents/vendor/product/ProductDetails";
+import ProductDetailsButton from "@/components/pageComponents/vendor/product/productDetailsButton";
+import ProductLinkNav from "@/components/pageComponents/vendor/product/productLinkNav";
 import { ArrowLeft } from "lucide-react";
 
 export default async function ProductDetailsPage({

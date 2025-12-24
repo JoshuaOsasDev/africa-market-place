@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 
 export function useOutsideClick(handler: () => void | undefined) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<any>(null);
+
 
   //for outside click of the modal
   useEffect(() => {

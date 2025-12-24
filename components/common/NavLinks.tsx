@@ -13,17 +13,25 @@ import analyticsPageIcon from "../../public/dashboard-images/analytics-page-icon
 import { ChevronDown } from "lucide-react";
 
 const links = [
-  { name: "Dashboard", href: "/dashboard", icon: dashboardPageIcon },
+  { name: "Dashboard", href: "/vendor/dashboard", icon: dashboardPageIcon },
   {
     name: "Product",
-    href: "/dashboard/product",
+    href: "/vendor/dashboard/product",
     icon: productPageIcon,
     iconChevron: <ChevronDown />,
   },
-  { name: "Orders", href: "/dashboard/orders", icon: ordersPageIcon },
-  { name: "Customers", href: "/dashboard/customers", icon: customersPageIcon },
-  { name: "Seller", href: "/dashboard/seller", icon: sellerPageIcon },
-  { name: "Analytics", href: "/dashboard/analytics", icon: analyticsPageIcon },
+  { name: "Orders", href: "/vendor/dashboard/orders", icon: ordersPageIcon },
+  {
+    name: "Customers",
+    href: "/vendor/dashboard/customers",
+    icon: customersPageIcon,
+  },
+  { name: "Seller", href: "/vendor/dashboard/seller", icon: sellerPageIcon },
+  {
+    name: "Analytics",
+    href: "/vendor/dashboard/analytics",
+    icon: analyticsPageIcon,
+  },
 ];
 
 export default function NavLinks() {
@@ -38,13 +46,13 @@ export default function NavLinks() {
             key={link.name}
             href={link.href}
             className={clsx(
-              "hidden md:flex px-3 py-2 grow place-items-start justify-center gap-2 rounded-xl p-3 text-[14px] font-bold hover:bg-[#EAF2EA] text-[#667085] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3",
+              "hidden grow place-items-start justify-center gap-2 rounded-xl p-3 px-3 py-2 text-[14px] font-bold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex md:flex-none md:justify-start md:p-2 md:px-3",
               {
                 "bg-[#EAF2EA] text-[#2E7D32]": pathname === link.href,
-              }
+              },
             )}
           >
-            <div className="flex mr-20 justify-between items-center gap-2">
+            <div className="mr-20 flex items-center justify-between gap-2">
               <Image
                 src={link.icon}
                 alt="nav-icons"
@@ -58,7 +66,7 @@ export default function NavLinks() {
               <p className="hidden md:block">{link.name}</p>
             </div>
             {link.iconChevron && (
-              <span className="hidden md:block h-[7.52px] width-[12.83px]">
+              <span className="width-[12.83px] hidden h-[7.52px] md:block">
                 {link.iconChevron}
               </span>
             )}

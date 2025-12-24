@@ -75,8 +75,12 @@ const SendOtpcomp = () => {
 
       /* dispatch(userLoggedInAndLoggedOutAction(true))
       navigation.navigate('bottomTabNavigation') */
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("Something went wrong");
+      }
     } finally {
       setLoader(false);
     }
@@ -123,7 +127,7 @@ const SendOtpcomp = () => {
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
-                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] bg-[#FFFFFF] px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
                     {...register("email")}
                     placeholder="user@gmail.com"

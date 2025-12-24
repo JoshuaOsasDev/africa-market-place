@@ -17,7 +17,7 @@ const DashboardNavbar = () => {
   };
   return (
     <>
-      <nav className="relative items-center justify-between border-b border-[#F0F1F3] px-6 md:flex md:h-20">
+      <nav className="fixed z-50 w-full items-center justify-between border-b border-[#F0F1F3] bg-white px-6 md:flex md:h-20">
         <div className="relative hidden h-[50px] w-[100px] md:block">
           <Link href="/">
             <Image
@@ -30,7 +30,7 @@ const DashboardNavbar = () => {
         </div>
 
         {/* Hamburger Menu Button - Mobile */}
-        <div className="my-4 flex items-center justify-between">
+        <div className="my-4 mb-2 flex items-center justify-between">
           <button
             onClick={toggleMenu}
             className="my-auto rounded-lg p-2 hover:bg-gray-100 md:hidden"
@@ -142,13 +142,13 @@ const DashboardNavbar = () => {
             {/* Menu Links */}
             <div className="flex flex-col space-y-2 border-t border-gray-100 pt-4">
               <Link
-                href="dashboard"
+                href="vendor/dashboard"
                 className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 Dashboard
               </Link>
               <a
-                href="dashboard/product"
+                href="vendor/dashboard/product"
                 className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 Products
