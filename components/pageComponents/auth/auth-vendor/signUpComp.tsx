@@ -12,44 +12,24 @@ import { Eye, EyeOff, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import { signUpSchema } from "@/lib/utility/yupvalidation";
 
-// Define TypeScript types for form values
-
 const SignUpComp = () => {
-  /* naviagtion */
-  // const router = useRouter();
-  /* use dispatch */
-  // const dispatch = useAppDispatch()
+  const router = useRouter();
 
-  //  const appState = useAppSelector(state => state)
-
-  /* set login credentials  */
   const [loginCredential, setLoginCredential] = useState({
     email: "",
     password: "",
   });
 
-  /*  control user login after registration */
   const [startApiLogin, setStartApiLogin] = useState(false);
-
-  /* set the display of the loader */
   const [loader, setLoader] = useState(false);
-
-  /* start api call for user registration*/
-
   const [startApiCall, setStartApiCall] = useState(false);
-
-  /* useEffect for responding to diffrent response from the user signup */
-
   const [hidePassword, setHidePassword] = useState(false);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
-
-  /* yup validation and react hook form */
 
   const formOptions = { resolver: yupResolver(signUpSchema) };
 
   const [isChecked, setIsChecked] = useState(false);
 
-  /* check the box */
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
   };
@@ -80,21 +60,15 @@ const SignUpComp = () => {
     fullname: string;
   }) => {
     if (!isChecked) return;
-    /*  navigation.navigate('bottomTabNavigation') */
     console.log(data, "data");
 
     try {
       setLoader(!loader);
-
-      /* make api call fro user signIn */
       setStartApiCall(!startApiCall);
       setLoginCredential({
         email: data.email,
         password: data.password,
       });
-
-      /* dispatch(userLoggedInAndLoggedOutAction(true))
-      navigation.navigate('bottomTabNavigation') */
     } catch (error) {
       if (error instanceof Error) {
         console.log("Error message:", error.message);
@@ -109,13 +83,11 @@ const SignUpComp = () => {
   return (
     <div className="">
       <BackButton />
-      <div className="flex flex-col md:flex-row md:space-x-15">
-        <DailyLayout textStyle="mt-15" />
-        <div className="flex max-w-[300px] flex-col px-2.5 md:w-[530px] md:max-w-lg md:rounded-lg md:bg-white md:p-7 md:pt-3">
-          {
-            //   loader && <LoadingScreen />
-          }
 
+      <div className="flex flex-col md:flex-row md:space-x-10">
+        <DailyLayout textStyle="mt-5 " />
+
+        <div className="flex w-full flex-col md:mt-5 md:rounded-lg md:bg-white md:p-10 md:pt-3">
           <div className="relative hidden h-[50px] w-[100px] md:block">
             <Link href="/">
               <Image
@@ -126,6 +98,7 @@ const SignUpComp = () => {
               />
             </Link>
           </div>
+
           <TextStyle
             textContent="Sign Up"
             textStyle="text-[28px] text-[#111827] text-bold mt-4"
@@ -135,12 +108,12 @@ const SignUpComp = () => {
             textStyle="text-[16px] text-[#667185]/80 text-bold"
           />
 
-          <div className="md:w-full">
+          <div className="w-full">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mt-4 flex w-fit flex-col space-y-2 md:w-full"
+              className="mt-4 flex w-full flex-col space-y-2"
             >
-              <div className="mb-2 flex w-[300px] flex-col space-y-2 md:m-0 md:w-full">
+              <div className="flex w-full flex-col space-y-2">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Full Name"
@@ -159,7 +132,9 @@ const SignUpComp = () => {
                   {errors.fullname?.message}
                 </p>
               </div>
-              <div className="mb-2 flex w-[290px] flex-col space-y-2 md:w-full">
+
+              {/* Email Field */}
+              <div className="mb-2 flex w-full flex-col space-y-2 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Email"
@@ -178,7 +153,9 @@ const SignUpComp = () => {
                   {errors.email?.message}
                 </p>
               </div>
-              <div className="mb-2 flex w-[290px] flex-col space-y-2 md:w-full">
+
+              {/* Phone Field */}
+              <div className="mb-2 flex w-full flex-col space-y-2 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Phone"
@@ -197,7 +174,9 @@ const SignUpComp = () => {
                   {errors.phone?.message}
                 </p>
               </div>
-              <div className="mb-2 flex w-[290px] flex-col space-y-2 md:w-full">
+
+              {/* Password Field */}
+              <div className="mb-2 flex w-full flex-col space-y-2 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Password"
@@ -213,17 +192,12 @@ const SignUpComp = () => {
                   />
                   {!hidePassword ? (
                     <Eye
-                      onClick={() => {
-                        setHidePassword(!hidePassword);
-                      }}
+                      onClick={() => setHidePassword(!hidePassword)}
                       className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                     />
                   ) : (
                     <EyeOff
-                      onClick={() => {
-                        setHidePassword(!hidePassword);
-                      }}
-                      onChange={() => setHidePassword(!hidePassword)}
+                      onClick={() => setHidePassword(!hidePassword)}
                       className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                     />
                   )}
@@ -233,7 +207,8 @@ const SignUpComp = () => {
                 </p>
               </div>
 
-              <div className="mb-3 flex w-[290px] flex-col space-y-2 md:w-full">
+              {/* Confirm Password Field */}
+              <div className="mb-3 flex w-full flex-col space-y-2 md:w-full">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
                     textContent="Confirm Password"
@@ -249,16 +224,16 @@ const SignUpComp = () => {
                   />
                   {!hideConfirmPassword ? (
                     <Eye
-                      onClick={() => {
-                        setHideConfirmPassword(!hideConfirmPassword);
-                      }}
+                      onClick={() =>
+                        setHideConfirmPassword(!hideConfirmPassword)
+                      }
                       className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                     />
                   ) : (
                     <EyeOff
-                      onClick={() => {
-                        setHideConfirmPassword(!hideConfirmPassword);
-                      }}
+                      onClick={() =>
+                        setHideConfirmPassword(!hideConfirmPassword)
+                      }
                       className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                     />
                   )}
@@ -267,9 +242,9 @@ const SignUpComp = () => {
                   {errors.password?.message}
                 </p>
               </div>
-              {/* Terms and condition section */}
 
-              <div className="w-[328px] flex-1 flex-row flex-wrap items-start">
+              {/* Terms and Condition Section */}
+              <div className="w-full flex-1 flex-row flex-wrap items-start">
                 <input
                   type="checkbox"
                   checked={isChecked}
@@ -298,10 +273,10 @@ const SignUpComp = () => {
                 </span>
               </div>
 
-              {/* submit button starts */}
+              {/* Submit Button */}
               <button
                 disabled={!isChecked || loader}
-                className={`mt-4 inline-flex h-[39px] w-[290px] cursor-pointer items-center justify-center rounded-[27px] p-2.5 hover:opacity-80 md:w-full ${
+                className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] p-2.5 hover:opacity-80 ${
                   !isChecked ? "bg-opacity-70 bg-[#6b916d]" : "bg-[#2E7D32]"
                 }`}
               >
@@ -311,31 +286,34 @@ const SignUpComp = () => {
               </button>
             </form>
 
+            {/* Divider */}
             <div className="my-6 flex flex-row items-center space-x-2">
               <hr className="border-px h-[0.5px] flex-1 border-[#F0F2F5]" />
               <TextStyle textContent="Or" textStyle="text-[#757575]" />
               <hr className="h-[0.5px] flex-1 border-[#F0F2F5]" />
             </div>
 
+            {/* Google Sign Up */}
             <div className="flex h-[55px] cursor-pointer items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA] hover:opacity-80">
               <Image
-                src={"/images/google.jpg"}
+                src="/images/google.jpg"
                 alt="google logo"
                 width={20}
                 height={20}
               />
               <TextStyle
                 textContent="Continue with Google"
-                textStyle="text-[#525252]   text-[16px] text-bold "
+                textStyle="text-[#525252] text-[16px] text-bold"
               />
             </div>
           </div>
 
+          {/* Login Link */}
           <div className="mt-3 flex w-full flex-row items-center justify-center space-x-1">
             <p className="text-slate-700/opacity-60 font-['Inter'] text-sm leading-[18px] font-medium">
               Already have an account?
             </p>
-            <Link href={"/auth-vendor/login"}>
+            <Link href="/auth-vendor/login">
               <p className="font-['Inter'] text-sm leading-[18.90px] font-semibold text-[#6b916d] hover:opacity-80">
                 Login
               </p>

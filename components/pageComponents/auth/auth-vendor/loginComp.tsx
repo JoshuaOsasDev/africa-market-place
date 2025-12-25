@@ -50,8 +50,8 @@ const LoginComp = () => {
       <ToastContainer />
       <BackButton />
       <div className="flex flex-col md:flex-row md:space-x-15">
-        <DailyLayout textStyle="mt-0" />
-        <div className="flex flex-col md:mt-5 md:w-[500px] md:rounded-lg md:bg-white md:p-10 md:pt-3">
+        <DailyLayout textStyle="mt-5" />
+        <div className="flex flex-col md:mt-5 md:w-full md:rounded-lg md:bg-white md:p-10 md:pt-3">
           {/* Logo – desktop only */}
           <div className="relative hidden h-[50px] w-[100px] md:block">
             <Link href="/">

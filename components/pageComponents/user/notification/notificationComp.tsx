@@ -3,7 +3,7 @@ import { Search, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Modal from "@/components/common/Modal";
-import DeleteProductModal from "../../vendor/Product/DeleteProductModal";
+import DeleteProductModal from "../../vendor/product/DeleteProductModal";
 
 export default function InboxUI() {
   const messages = [

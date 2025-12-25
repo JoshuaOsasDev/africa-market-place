@@ -100,9 +100,9 @@ export const ResetComp = () => {
     <div className="">
       <ToastContainer />
       <BackButton />
-      <div className="flex flex-col md:flex-row md:space-x-15">
+      <div className="flex flex-col md:flex-row md:space-x-10">
         <DailyLayout textStyle="mt-0" />
-        <div className="flex flex-col md:my-auto md:h-fit md:w-[500px] md:rounded-lg md:bg-white md:p-10 md:pt-3">
+        <div className="flex w-full flex-col md:mt-5 md:rounded-lg md:bg-white md:p-8 md:pt-3">
           {/* Logo – desktop only */}
           <div className="relative hidden h-[50px] w-[100px] md:block">
             <Link href="/">
@@ -142,7 +142,7 @@ export const ResetComp = () => {
                     />
                   </label>
 
-                  <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                  <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                     <input
                       type={hidePassword ? "password" : "text"}
                       {...register("password")}
@@ -177,7 +177,7 @@ export const ResetComp = () => {
                     />
                   </label>
 
-                  <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+                  <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                     <input
                       type={hideConfirmPassword ? "password" : "text"}
                       {...register("confirmPassword")}

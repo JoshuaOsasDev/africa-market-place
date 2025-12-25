@@ -7,7 +7,7 @@ import { wishlistData } from "@/lib/data";
 import { ShoppingBag, Trash } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import DeleteProductModal from "../../vendor/Product/DeleteProductModal";
+import DeleteProductModal from "../../vendor/product/DeleteProductModal";
 
 export default function WishListComp() {
   const itemsPerPage = 12; // 4 columns × 3 rows

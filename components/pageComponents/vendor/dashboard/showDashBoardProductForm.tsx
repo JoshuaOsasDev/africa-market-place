@@ -3,7 +3,7 @@ import DashboardCharts from "@/components/pageComponents/vendor/dashboard/Dashbo
 import DashboardFilter from "@/components/pageComponents/vendor/dashboard/dashboardFilter";
 import DashboardSalesAndProduct from "@/components/pageComponents/vendor/dashboard/dashboardSalesAndProduct";
 import DashboardSummary from "@/components/pageComponents/vendor/dashboard/dashboardSumarry";
-import ProductGeneralInfo from "@/components/pageComponents/vendor/Product/ProductGeneralInfo";
+import ProductGeneralInfo from "@/components/pageComponents/vendor/product/ProductGeneralInfo";
 import { useAppSelector } from "@/redux/store/store";
 
 export default function ShowDashBoardProductForm() {

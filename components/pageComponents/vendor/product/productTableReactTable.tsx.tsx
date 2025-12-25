@@ -9,11 +9,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { products } from "@/lib/data";
 import { Product } from "@/types/appTypes";
-import Pagination from "@/components/common/Pagination";
+
 import Modal from "@/components/common/Modal";
+
+import SkeletonTable from "@/components/common/skeletonTable";
 import DeleteProductModal from "./DeleteProductModal";
 import EditProduct from "./EditProduct";
-import SkeletonTable from "@/components/common/skeletonTable";
 
 const statusStyles: Record<Product["status"], string> = {
   Published: "bg-green-100 text-green-700",

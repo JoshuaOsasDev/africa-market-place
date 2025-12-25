@@ -5,8 +5,8 @@ import { ordersData } from "@/lib/data";
 import { Eye, Pen, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import EditProduct from "../../vendor/Product/EditProduct";
-import DeleteProductModal from "../../vendor/Product/DeleteProductModal";
+import EditProduct from "../../vendor/product/EditProduct";
+import DeleteProductModal from "../../vendor/product/DeleteProductModal";
 
 export default function OrderTable({
   order,
