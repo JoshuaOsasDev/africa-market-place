@@ -2,7 +2,8 @@ import { salesData } from "@/lib/data";
 import { MoreVertical } from "lucide-react";
 import Image from "next/image";
 import FilterButton from "@/components/common/filterButton";
-import ProductTableReactTable from "@/components/pageComponents/vendor/product/productTableReactTable";
+import ProductTableReactTable from "../../vendor/Product/ProductTable";
+
 
 export default function DashboardSalesAndProduct() {
   return (
@@ -64,7 +65,7 @@ export default function DashboardSalesAndProduct() {
         </div>
       </div>
       <div className="w-full rounded-xl border border-[#E0E2E7] bg-white md:h-[432px] lg:col-span-2">
-        <div className="flex items-center justify-between px-6 py-4.5">
+        <div className="py-4.5 flex items-center justify-between px-6">
           <h4 className="text-xl font-medium text-[#333843]">
             Top Selling Product
           </h4>

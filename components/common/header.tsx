@@ -196,9 +196,9 @@ function Header() {
         </AnimatePresence>
       </div>
 
-      <div className="hidden flex-row space-x-4 px-4 py-2 md:flex">
+      <div className="hidden flex-row space-x-4 px-4 pb-1 md:flex">
         {/* logo section starts */}
-        <div className="relative h-[50px] w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
+        <div className="relative h-[30px] w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
           <Link href={"/"}>
             <Image
               src={"/images/logo.png"}
@@ -210,7 +210,7 @@ function Header() {
         </div>
         {/* logo section ends */}
         {/* other section starts */}
-        <div className="w-full flex-1 space-y-6">
+        <div className="w-full flex-1 space-y-1">
           {/* top left section starts */}
           <div className="flex flex-1 flex-row space-x-5">
             <div className="flex-1">

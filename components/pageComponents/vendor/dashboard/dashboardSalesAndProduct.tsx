@@ -2,7 +2,8 @@ import { salesData } from "@/lib/data";
 import { MoreVertical } from "lucide-react";
 import Image from "next/image";
 import FilterButton from "@/components/common/filterButton";
-import ProductTable from "../../Product/productTable";
+import ProductTableReactTable from "../Product/ProductTable";
+
 
 export default function DashboardSalesAndProduct() {
   return (
@@ -71,7 +72,7 @@ export default function DashboardSalesAndProduct() {
           <FilterButton />
         </div>
         <div className="">
-          <ProductTable ITEMS_PER_PAGE={2}  />
+          <ProductTableReactTable ITEMS_PER_PAGE={2}  />
         </div>
       </div>
     </div>

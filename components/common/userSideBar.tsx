@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import supportPageIcon from "../../public/dashboard-images/support-page-icon.svg";
-import settingPageIcon from "../../public/dashboard-images/setting-page-icon.svg";
+import supportPageIcon from "../../public/admin/dashboard_images_and_icons/settings-page-icon.svg";
+import settingPageIcon from "../../public/admin/dashboard_images_and_icons/settings-page-icon.svg";
 
 import UserNavLinks from "./userNavLinks";
 

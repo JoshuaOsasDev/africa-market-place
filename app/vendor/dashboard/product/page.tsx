@@ -1,4 +1,4 @@
-import SetShowForm from "@/components/pageComponents/vendor/product/setShowForm";
+import SetShowForm from "@/components/pageComponents/vendor/Product/setShowForm";
 import { Suspense } from "react";
 
 const ProductPage = () => {

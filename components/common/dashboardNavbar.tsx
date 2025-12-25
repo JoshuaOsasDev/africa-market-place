@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import searchIcon from "../../public/dashboard-images/search-icon.svg";
-import notificationIcon from "../../public/dashboard-images/notification-icon.svg";
-import mailIcon from "../../public/dashboard-images/mail-icon.svg";
-import profilePicture from "../../public/dashboard-images/profile-picture.svg";
+import searchIcon from "../../public/vendor/dashboard-images/search-icon.svg";
+import notificationIcon from "../../public/common/notification-icon-filled.svg";
+
+import profilePicture from "../../public/vendor/dashboard-images/profile-picture.svg";
 
 import Link from "next/link";
-import { Bell, Mail, Menu, Search, User, X } from "lucide-react";
+import { Bell, Mail, MailIcon, Menu, Search, User, X } from "lucide-react";
 
 const DashboardNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,11 +65,7 @@ const DashboardNavbar = () => {
             alt="notification-icon"
             className="h-10 w-10 rounded-[20px] bg-[#F6F6F6] p-2"
           />
-          <Image
-            src={mailIcon}
-            alt="mail-icon"
-            className="h-10 w-10 rounded-[20px] bg-[#F6F6F6] p-2"
-          />
+         <MailIcon />
 
           <div className="flex items-center gap-4">
             <Image

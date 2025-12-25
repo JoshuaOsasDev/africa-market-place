@@ -7,7 +7,7 @@ import { wishlistData } from "@/lib/data";
 import { ShoppingBag, Trash } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import DeleteProductModal from "../../vendor/product/DeleteProductModal";
+import DeleteProductModal from "../../vendor/Product/DeleteProductModal";
 
 export default function WishListComp() {
   const itemsPerPage = 12; // 4 columns × 3 rows
@@ -30,7 +30,7 @@ export default function WishListComp() {
             className="flex w-full flex-col justify-center gap-5 rounded-[12px] bg-white px-4 py-6 md:w-[260px] md:gap-2.5 md:p-3"
           >
             <div className="flex items-center">
-              <div className="relative h-15 w-15 rounded-xl bg-[#F6F6F6]">
+              <div className="h-15 w-15 relative rounded-xl bg-[#F6F6F6]">
                 <Image src={item.image} fill alt={item.name} />
               </div>
 
