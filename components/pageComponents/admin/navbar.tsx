@@ -1,14 +1,6 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-// import hamburgerMenu from "../../../../public/common/hamburger-menu.svg";
-// import notificationIconFilled from "../../../../public/common/notification-icon-filled.svg";
-// import mobileViewUserIcon from "../../../../public/common/mobile-view-user-icon.svg";
-// import mainLogo from "../../../../public/common/logo.svg";
-// import dropdownIcon from "../../../../public/common/drop-down-icon.svg";
-// import notificationFilledIcon from "../../../../public/common/notification-icon-filled.svg";
-// import profilePictureIcon from "../../../../public/common/profile-picture.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, ChevronDown } from "lucide-react";
@@ -16,43 +8,48 @@ import { Bell, ChevronDown } from "lucide-react";
 const Navbar = () => {
   const pathname = usePathname();
 
+  const routes: { prefix: string; title: string }[] = [
+    { prefix: "/admin/dashboard/users", title: "Users" },
+    { prefix: "/admin/dashboard/sellers", title: "Sellers" },
+    { prefix: "/admin/dashboard/productReview", title: "Product Review" },
+    { prefix: "/admin/dashboard/shipping", title: "Shipping" },
+    { prefix: "/admin/dashboard/roles", title: "Roles" },
+    { prefix: "/admin/dashboard/payout", title: "Payout" },
+    { prefix: "/admin/dashboard/pageSetups", title: "Page Setups" },
+    { prefix: "/admin/dashboard/reports", title: "Reports" },
+    { prefix: "/admin/dashboard/settings", title: "Settings" },
+    { prefix: "/admin/dashboard", title: "Overview" },
+  ];
+
   const getPageTitle = (path: string) => {
-    if (path === "/admin/dashboard") {
-      return "Overview";
+    const match = routes.find(
+      (route) => path === route.prefix || path.startsWith(`${route.prefix}/`),
+    );
+    return match?.title ?? "";
+  };
+
+  // Extract slug from pathname
+  const getSlugDetails = (path: string) => {
+    const match = routes.find(
+      (route) => path === route.prefix || path.startsWith(`${route.prefix}/`),
+    );
+
+    if (match && path.startsWith(`${match.prefix}/`)) {
+      // Extract everything after the route prefix
+      const slug = path.slice(`${match.prefix}/`.length);
+      return slug;
     }
-    if (path === "/admin/dashboard/users") {
-      return "Users";
-    }
-    if (path === "/admin/dashboard/sellers") {
-      return "Sellers";
-    }
-    if (path === "/admin/dashboard/productReview") {
-      return "Product Review";
-    }
-    if (path === "/admin/dashboard/shipping") {
-      return "Shipping";
-    }
-    if (path === "/admin/dashboard/roles") {
-      return "Roles";
-    }
-    if (path === "/admin/dashboard/payout") {
-      return "Payout";
-    }
-    if (path === "/admin/dashboard/pageSetups") {
-      return "Page Setups";
-    }
-    if (path === "/admin/dashboard/reports") {
-      return "Reports";
-    }
-    if (path === "/admin/dashboard/settings") {
-      return "Settings";
-    }
+    return null;
   };
 
   const headerText = getPageTitle(pathname);
+  const slugDetails = getSlugDetails(pathname);
+
+  console.log(headerText, "path");
+  console.log(slugDetails, "slug");
 
   return (
-    <div className="fixed z-100 h-[60px] w-full bg-white">
+    <nav className="fixed z-100 h-[60px] w-full bg-white">
       {/* Mobile view */}
       {/* <div className="flex h-[50px] items-center justify-between bg-[#FAFAFF] px-6 md:hidden">
         <div className="">
@@ -90,6 +87,11 @@ const Navbar = () => {
         <div className="hidden items-center px-[21px] md:flex">
           <h1 className="text-[20px] font-medium text-[#45464E]">
             Dashboard/{headerText}
+            {slugDetails && (
+              <span className="text-[#667085]">
+                /Shipping-information ({slugDetails})
+              </span>
+            )}
           </h1>
 
           <div className="absolute right-[21px] flex items-center gap-5">
@@ -115,7 +117,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
