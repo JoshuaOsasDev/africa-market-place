@@ -1,15 +1,14 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import Image from "next/image";
-import dashboardPageIcon from "../../public/dashboard-images/dashboard-page-icon.svg";
-import productPageIcon from "../../public/dashboard-images/product-page-icon.svg";
-import ordersPageIcon from "../../public/dashboard-images/orders-page-icon.svg";
-import customersPageIcon from "../../public/dashboard-images/customers-page-icon.svg";
-import sellerPageIcon from "../../public/dashboard-images/seller-page-icon.svg";
-import analyticsPageIcon from "../../public/dashboard-images/analytics-page-icon.svg";
+import dashboardPageIcon from "../../public/admin/dashboard_images_and_icons/dashboard-page-icon.svg";
+import productPageIcon from "../../public/vendor/dashboard-images/product-page-icon.svg";
+import ordersPageIcon from "../../public/vendor/dashboard-images/orders-page-icon.svg";
+
+import sellerPageIcon from "../../public/admin/dashboard_images_and_icons/sellers-page-icon.svg";
+
 import { ChevronDown } from "lucide-react";
 
 const links = [
@@ -24,13 +23,13 @@ const links = [
   {
     name: "Customers",
     href: "/vendor/dashboard/customers",
-    icon: customersPageIcon,
+    icon: sellerPageIcon,
   },
   { name: "Seller", href: "/vendor/dashboard/seller", icon: sellerPageIcon },
   {
     name: "Analytics",
     href: "/vendor/dashboard/analytics",
-    icon: analyticsPageIcon,
+    icon: sellerPageIcon,
   },
 ];
 

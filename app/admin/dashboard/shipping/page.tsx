@@ -9,9 +9,9 @@ import {
 export default function ShippingPage() {
   return (
     <div>
-      <div className="mt-3 grid grid-cols-2 gap-8 md:grid-cols-3">
+      <div className="mt-5 grid grid-cols-2 gap-8 md:grid-cols-3">
         {/* TOTAL SHIPMENT */}
-        <div className="flex flex-col justify-between rounded-[12px] bg-[#FFFFFF] px-3.5 py-2.5 md:h-[145px] md:w-[315px]">
+        <div className="flex flex-col justify-between rounded-[12px] bg-[#FFFFFF] px-3.5 py-2.5 md:h-[130px] md:w-[315px]">
           <div className="w-fit rounded-xl bg-[#EAF2EA] px-2 py-2">
             <Truck className="text-[#2E7D32]" />
           </div>
@@ -21,7 +21,7 @@ export default function ShippingPage() {
           </div>
         </div>
         {/* SHIPPING TODAY */}
-        <div className="flex flex-col justify-between rounded-[12px] bg-[#FFFFFF] px-3.5 py-2.5 md:h-[145px] md:w-[315px]">
+        <div className="flex flex-col justify-between rounded-[12px] bg-[#FFFFFF] px-3.5 py-2.5 md:h-[130px] md:w-[315px]">
           <div className="w-fit rounded-xl bg-[#8A38F51A] px-2 py-2">
             <Truck className="text-[#8A38F5]" />
           </div>
@@ -31,7 +31,7 @@ export default function ShippingPage() {
           </div>
         </div>
         {/* PENDING TODAY */}
-        <div className="flex flex-col justify-between rounded-[12px] bg-[#FFFFFF] px-3.5 py-2.5 md:h-[145px] md:w-[315px]">
+        <div className="flex flex-col justify-between  rounded-[12px] bg-[#FFFFFF] px-3.5 py-2.5 md:h-[130px] md:w-[315px]">
           <div className="w-fit rounded-xl bg-[#FFF9EA] px-2 py-2">
             <TruckElectric className="text-[#FFAE00]" />
           </div>

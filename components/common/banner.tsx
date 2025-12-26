@@ -3,7 +3,7 @@ import React from 'react'
 
 function Banner() {
   return (
-      <div className='relative w-full h-20'>
+      <div className='relative w-full h-18'>
           <Image
               fill
               src={"/images/banner.jpg"}

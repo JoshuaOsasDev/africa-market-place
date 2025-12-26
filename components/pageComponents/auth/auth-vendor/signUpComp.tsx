@@ -85,7 +85,7 @@ const SignUpComp = () => {
       <BackButton />
 
       <div className="flex flex-col md:flex-row md:space-x-10">
-        <DailyLayout textStyle="mt-5 " />
+        <DailyLayout textStyle="mt-10 " />
 
         <div className="flex w-full flex-col md:mt-5 md:rounded-lg md:bg-white md:p-10 md:pt-3">
           <div className="relative hidden h-[50px] w-[100px] md:block">

@@ -1,10 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-
-import supportPageIcon from "../../public/dashboard-images/support-page-icon.svg";
-import settingPageIcon from "../../public/dashboard-images/setting-page-icon.svg";
-import logo from "../../public/images/logo.png";
 import NavLinks from "./NavLinks";
+import { Headphones, Settings } from "lucide-react";
 
 const SideBar = () => {
   return (
@@ -28,7 +25,7 @@ const SideBar = () => {
             href={""}
             className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3"
           >
-            <Image src={supportPageIcon} width={24} alt="help-icon" />
+            <Headphones />
             <div className="hidden md:block">Support</div>
           </Link>
 
@@ -36,7 +33,7 @@ const SideBar = () => {
             href={""}
             className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3"
           >
-            <Image src={settingPageIcon} width={24} alt="settings-icon" />
+            <Settings />
             <div className="hidden md:block">Setting</div>
           </Link>
         </div>

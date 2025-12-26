@@ -86,9 +86,9 @@ export default function VerifyComp() {
     <div>
       <ToastContainer />
       <BackButton />
-      <div className="flex flex-col md:flex-row md:space-x-15">
+      <div className="flex flex-col md:flex-row md:space-x-10">
         <DailyLayout textStyle="mt-0" />
-        <div className="my-auto flex w-[300px] flex-col rounded-lg bg-white p-8 md:w-full">
+        <div className="flex flex-col rounded-xl bg-white p-2 md:my-auto md:h-fit md:w-full md:rounded-lg md:p-10 md:pt-3">
           {
             //   loader && <LoadingScreen />
           }

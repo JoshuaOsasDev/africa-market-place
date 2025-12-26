@@ -90,9 +90,9 @@ const SendOtpcomp = () => {
     <div className="">
       <ToastContainer />
       <BackButton />
-      <div className="flex flex-col md:flex-row md:space-x-15">
+      <div className="flex flex-col md:flex-row md:space-x-10">
         <DailyLayout textStyle="mt-0" />
-        <div className="flex flex-col md:my-auto md:h-fit md:w-[500px] md:rounded-lg md:bg-white md:p-10 md:pt-3">
+        <div className="flex flex-col md:my-auto md:h-fit md:w-full md:rounded-lg md:bg-white md:p-10 md:pt-3">
           <div className="relative hidden h-[50px] w-[100px] md:block">
             <Link href="/">
               <Image
@@ -115,10 +115,10 @@ const SendOtpcomp = () => {
             textStyle="text-[16px] text-[#667185] text-bold"
           />
 
-          <div className="w-full md:w-[400px]">
+          <div className="w-full">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="xs:w-[350px] mt-4 flex flex-col space-y-2"
+              className="mt-4 flex w-full flex-col space-y-2"
             >
               <div className="flex w-full flex-col space-y-1">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">

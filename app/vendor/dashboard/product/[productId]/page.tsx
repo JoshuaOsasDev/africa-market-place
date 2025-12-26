@@ -13,7 +13,7 @@ export default async function ProductDetailsPage({
     <div className="">
       <div className="hidden items-end justify-between md:flex">
         <div className="flex flex-col gap-2">
-          <h1 className="hidden text-2xl leading-8 font-medium tracking-[0.5%] text-[#333843] md:block">
+          <h1 className="hidden text-2xl font-medium leading-8 tracking-[0.5%] text-[#333843] md:block">
             Products Details
           </h1>
           <ProductLinkNav />
