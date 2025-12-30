@@ -1,31 +1,30 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { AxiosError } from "axios";
 import { loginSchema } from "@/lib/utility/yupvalidation";
 import TextStyle from "../../../common/textStyle";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
+import { Eye, EyeOff, Mail } from "lucide-react";
 import Image from "next/image";
-
-// Define TypeScript types for form values
+import { useGoogleLogin } from "@react-oauth/google";
+import { googleAuth, signIn } from "@/services/apiServices/authApi";
+import { AxiosError } from "axios";
 
 const LoginComp = () => {
   /* naviagtion */
   const router = useRouter();
+
   /* use dispatch */
   // const dispatch = useAppDispatch()
 
   //  const appState = useAppSelector(state => state)
 
-  /* set login credentials  */
-  const [loginCredential, setLoginCredential] = useState({
-    email: "",
-    password: "",
-  });
+
+
 
   /*  control user login after registration */
   const [startApiLogin, setStartApiLogin] = useState(false);
@@ -55,6 +54,41 @@ const LoginComp = () => {
 
   const [isChecked, setIsChecked] = useState(false);
 
+  const { mutate } = useMutation({
+    mutationFn: signIn,
+    onSuccess: async (data) => {
+      /*   dispatch(signIn(data.user));
+      dispatch(setWishlist(data.user.wishlist)); */
+
+      toast.success("Logged in successfully!");
+
+      const isAdmin = data.user?.role?.includes("admin");
+      const isVendor = data.user?.role?.includes("vendor");
+
+      /* router.push(
+        redirect
+          ? redirect
+          : isAdmin
+            ? "/admin/dashboard"
+            : isVendor
+              ? "/vendor/dashboard"
+              : "/",
+      ); */
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        toast.error(
+          err?.response?.data?.message || "Sign in failed, please try again.",
+        );
+      } else {
+        toast.error("Unknown error");
+      }
+    },
+    onSettled: () => {
+      setLoader(false);
+    },
+  });
+
   /* check the box */
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
@@ -67,34 +101,59 @@ const LoginComp = () => {
     formState: { errors },
   } = useForm(formOptions);
 
+  const loginWithGoogleFunc = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // tokenResponse.access_token
+        setLoader(true);
+        const user = await googleAuth(tokenResponse);
+
+        setLoader(false);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          toast.error(
+            err?.response?.data?.message || "Sign in failed, please try again.",
+          );
+        } else {
+          toast.error("Unknown error");
+        }
+      } finally {
+        setLoader(false);
+      }
+    },
+
+    onError: () => {
+      console.log("Google login failed");
+    },
+  });
   const onSubmit = async (data: { email: string; password: string }) => {
-    /*  navigation.navigate('bottomTabNavigation') */
     console.log(data);
 
     try {
       setLoader(!loader);
 
       /* make api call fro user signIn */
-      setStartApiCall(!startApiCall);
-      setLoginCredential({
-        email: data.email,
-        password: data.password,
-      });
-
+      await mutate(data);
+    
       /* dispatch(userLoggedInAndLoggedOutAction(true))
       navigation.navigate('bottomTabNavigation') */
-    } catch (error: any) {
-      console.log(error.message);
+    } catch (err: any) {
+      if (err instanceof AxiosError) {
+        toast.error(
+          err?.response?.data?.message || "Sign in failed, please try again.",
+        );
+      } else {
+        toast.error("Unknown error");
+      }
     } finally {
       setLoader(false);
     }
   };
 
   return (
-    <div className=" flex flex-col mt-4">
-      {
-        //   loader && <LoadingScreen />
-      }
+    <div className="mt-4 flex flex-col">
+      {loader && <TextStyle textContent="Loading...." textStyle="text-3xl" />}
+
       <TextStyle
         textContent="Hello Welcome back!"
         textStyle="text-2xl sm:text-3xl text-[#111827] text-bold"
@@ -104,57 +163,51 @@ const LoginComp = () => {
         textStyle="text-[16px] text-[#667185] text-bold"
       />
 
-      <div className=" w-full">
+      <div className="w-full">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="mt-4 flex flex-col w-full space-y-2 "
+          className="mt-4 flex w-full flex-col space-y-2"
         >
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
               <TextStyle
                 textContent="Email"
                 textStyle="text-[16px] text-[##667185] text-bold"
               />
             </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("email")}
                 placeholder="user@gmail.com"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
-              <Mail className="w-4 h-4  transition-colors group-focus-within:text-green-600" />
+              <Mail className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
             </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
               {errors.email?.message}
             </p>
           </div>
 
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
               <TextStyle
                 textContent="Password"
                 textStyle="text-[16px] text-[##667185] text-bold"
               />
             </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 type={hidePassword ? "password" : "text"}
                 {...register("password")}
                 placeholder="12345678"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
               {!hidePassword ? (
                 <Eye
                   onClick={() => {
                     setHidePassword(!hidePassword);
                   }}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                  className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                 />
               ) : (
                 <EyeOff
@@ -162,28 +215,25 @@ const LoginComp = () => {
                     setHidePassword(!hidePassword);
                   }}
                   onChange={() => setHidePassword(!hidePassword)}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                  className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                 />
               )}
             </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
               {errors.password?.message}
             </p>
           </div>
 
           {/* remember password */}
-          <div className=" flex flex-row  items-start justify-between ">
+          <div className="flex flex-row items-start justify-between">
             <div>
               <input
                 type="checkbox"
                 checked={isChecked}
                 onChange={toggleCheckBox}
-                className="w-3 h-3 text-[#2E7D32]
-               bg-gray-100 border-gray-300 rounded-full  focus:ring-[#2E7D32] checked:bg-[#2E7D32]  dark:bg-[#2E7D32]  overflow-hidden
-              accent-[#2E7D32]
-               "
+                className="h-3 w-3 overflow-hidden rounded-full border-gray-300 bg-gray-100 text-[#2E7D32] accent-[#2E7D32] checked:bg-[#2E7D32] focus:ring-[#2E7D32] dark:bg-[#2E7D32]"
               />
-              <span className="text-zinc-600 text-[13px] ml-1 font-medium font-['Aeonik-Regular'] ">
+              <span className="ml-1 font-['Aeonik-Regular'] text-[13px] font-medium text-zinc-600">
                 Remember me for 30 days
               </span>
             </div>
@@ -200,21 +250,24 @@ const LoginComp = () => {
           {/* submit button starts */}
           <button
             disabled={loader}
-            className={` w-full h-[39px]  bg-[#2E7D32] p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4`}
+            className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] bg-[#2E7D32] p-2.5`}
           >
-            <span className="text-white text-sm font-semibold  leading-[18.90px]">
+            <span className="text-sm leading-[18.90px] font-semibold text-white">
               {loader ? "Please wait.." : "Login To Your Account"}
             </span>
           </button>
         </form>
 
-        <div className="flex flex-row items-center space-x-2 my-6">
-          <hr className="flex-1 h-[0.5px] border-px border-[#F0F2F5] " />
+        <div className="my-6 flex flex-row items-center space-x-2">
+          <hr className="border-px h-[0.5px] flex-1 border-[#F0F2F5]" />
           <TextStyle textContent="Or" textStyle="text-[#757575]" />
-          <hr className="flex-1 h-[0.5px]  border-[#F0F2F5]" />
+          <hr className="h-[0.5px] flex-1 border-[#F0F2F5]" />
         </div>
 
-        <div className="rounded-[28px] flex items-center justify-center  space-x-2 bg-[#FAFAFA] cursor-pointer h-[55px]">
+        <div
+          className="flex h-[55px] cursor-pointer items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA]"
+          onClick={() => loginWithGoogleFunc()}
+        >
           <Image
             src={"/images/google.jpg"}
             alt="google logo"
@@ -228,12 +281,12 @@ const LoginComp = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-center mt-3 w-full justify-center space-x-1">
-        <p className="text-slate-700/opacity-60 text-sm font-medium font-['Inter'] leading-[18px]">
+      <div className="mt-3 flex w-full flex-row items-center justify-center space-x-1">
+        <p className="text-slate-700/opacity-60 font-['Inter'] text-sm leading-[18px] font-medium">
           Already you new?
         </p>
         <Link href={"/auth-user/register/vendor"}>
-          <p className="text-[#2E7D32] text-sm font-semibold font-['Inter'] leading-[18.90px]">
+          <p className="font-['Inter'] text-sm leading-[18.90px] font-semibold text-[#2E7D32]">
             Create an account
           </p>
         </Link>

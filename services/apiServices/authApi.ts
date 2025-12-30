@@ -1,0 +1,42 @@
+import { userForgetPasswordType, userLoginType, userResendOtpType, userSignupType, userVerifyOtpType } from "@/types/authTypes";
+import http from "./http";
+
+
+export const signUp = async (payload:userSignupType) => {
+  const { data } = await http.post(`/auth/sign-up`, payload);
+  return data;
+};
+
+export const verifyOTP = async(payload:userVerifyOtpType) => {
+  const { data } = await http.post(`/auth/verify-otp`, payload);
+  return data;
+};
+
+export const resendOTP = async (payload: userResendOtpType) => {
+  const { data } = await http.post(`/auth/resend-otp`, payload);
+  return data;
+};
+
+export const signIn = async (payload: userLoginType) => {
+  const { data } = await http.post(`/auth/sign-in`, payload);
+  return data;
+};
+
+export const forgetPassword = async (payload: userForgetPasswordType) => {
+  const { data } = await http.post('/auth/forget-password', payload);
+  return data;
+};
+
+export const resetPassword = async (payload: userForgetPasswordType) => {
+  const { data } = await http.post('/auth/reset-password', payload);
+  return data;
+};
+export const 
+googleAuth = async (payload:
+  {
+    access_token: string
+  }
+) => {
+  const data = await http.post("http://localhost:9000/api/auth/google", { accessToken: payload.access_token, });
+  return data;
+};
