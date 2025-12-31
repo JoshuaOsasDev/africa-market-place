@@ -92,7 +92,9 @@ export default function ShippingTable({
                               <EyeIcon className="text-[#2E7D32]" size={18} />
                             </div>
                           }
-                          onClick={() => router.push(`/shipping/${item.id}`)}
+                          onClick={() =>
+                            router.push(`/admin/dashboard/shipping/${item.id}`)
+                          }
                         >
                           View
                         </Menus.Button>
@@ -127,7 +129,7 @@ export default function ShippingTable({
             ),
           },
         ]}
-        columnsStyle="80px 155.14px 150px 120px 170px 170px 120px"
+        columnsStyle="80px 155.14px 0.6fr 120px 0.7fr 0.7fr 120px"
         itemsPerPage={10}
         onSelectChange={(selectedIds) =>
           setSelectedIds(selectedIds as string[])

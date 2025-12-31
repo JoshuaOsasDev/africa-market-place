@@ -1,4 +1,7 @@
-import { MapPin, UserRound } from "lucide-react";
+import FilterButton from "@/components/common/filterButton";
+import ShippingOrderDetailsPage from "@/components/pageComponents/admin/shippingOrderDetailsPage";
+import { Button } from "@/components/ui/button";
+import { MapPin, ShareIcon, UserRound } from "lucide-react";
 
 export default function ShippingDetailsPage() {
   return (
@@ -13,6 +16,10 @@ export default function ShippingDetailsPage() {
           <span>12 Sept 2022 - 12:55 pm</span>
         </p>
       </div>
+
+      <Button className="cursor-poinater mt-2 mb-4 rounded-[10px] bg-[#2E7D32] px-4 py-4.5 md:hidden">
+        Create Shipping
+      </Button>
 
       <div className="mt-3 grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* CUSTOMER CARD */}
@@ -77,6 +84,16 @@ export default function ShippingDetailsPage() {
           </div>
         </div>
       </div>
+
+      <div className="my-6 flex justify-between md:hidden">
+        <FilterButton />
+        <Button className="border border-[#E9E9E9] bg-white p-4 py-6 text-[14px] text-[#2E7D32]">
+          <ShareIcon />
+          <span>Export Data</span>
+        </Button>
+      </div>
+
+      <ShippingOrderDetailsPage />
     </div>
   );
 }
