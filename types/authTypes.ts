@@ -1,6 +1,7 @@
 export type userLoginType = {
     email: string,
-    password: string
+    password: string,
+    rememberMe?: boolean
 }
 export type userSignupType = {
     email: string,

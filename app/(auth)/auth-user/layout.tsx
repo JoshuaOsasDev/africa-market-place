@@ -9,8 +9,8 @@ function layout({ children }: { children: React.ReactNode }) {
     <div className=" min-h-screen  bg-[#EAEAEA] px-2 flex flex-col">
       <Header />
       <Banner />
-      <div className="flex flex-col justify-center items-center flex-1  mx-auto  space-y-2 bg-white my-4 rounded-lg 
-      w-full  md:w-5/10 lg:w-4/10 
+      <div className="flex flex-col justify-center items-center flex-1  mx-auto  space-y-2 bg-white my-4 rounded-lg px-4
+      md:px-6 lg:px-8
       ">
         <div className="rounded-md">
           {children}
