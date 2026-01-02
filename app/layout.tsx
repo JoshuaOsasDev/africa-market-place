@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
-import ReduxProvider from "@/lib/utility/ReduxProvider/ReduxProvider";
+import ReduxProvider from "@/provider/ReduxProvider";
+import ReactQueryProvider from "@/provider/reactQueryProvider";
 
 export const nunito = Nunito({
   subsets: ["latin"],
@@ -27,9 +29,15 @@ export default function RootLayout({
 }>) {
   return (
     <ReduxProvider>
-      <html lang="en" className={`${nunito.variable}`}>
-        <body className={nunito.className}>{children}</body>
-      </html>
+      <ReactQueryProvider>
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+        >
+          <html lang="en" className={`${nunito.variable}`}>
+            <body className={nunito.className}>{children}</body>
+          </html>
+        </GoogleOAuthProvider>
+      </ReactQueryProvider>
     </ReduxProvider>
   );
 }

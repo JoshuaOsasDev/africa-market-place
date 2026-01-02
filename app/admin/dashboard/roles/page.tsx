@@ -1,3 +1,6 @@
+"use client";
+import Modal from "@/components/common/Modal";
+import CreateRoles from "@/components/pageComponents/admin/roles/createRoles";
 import {
   ChevronDown,
   Share,
@@ -218,10 +221,21 @@ export default function RolesPage() {
 
             {/* Action Buttons */}
             <div className="mt-4 flex gap-3">
-              <button className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#2E7D32] px-4 py-2 text-[14px] font-medium text-[#2E7D32] hover:bg-[#F0F9F0] md:py-2.5">
-                <Edit size={16} />
-                <span>Edit</span>
-              </button>
+              <Modal>
+                <Modal.Open opens="create-role">
+                  <button className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#2E7D32] px-4 py-2 text-[14px] font-medium text-[#2E7D32] hover:bg-[#F0F9F0] md:py-2.5">
+                    <Edit size={16} />
+                    <span>Edit</span>
+                  </button>
+                </Modal.Open>
+                <Modal.Window
+                  name="create-role"
+                  className="max-w-3xl overflow-y-scroll"
+                >
+                  <CreateRoles />
+                </Modal.Window>
+              </Modal>
+
               <button className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-[14px] font-medium text-red-600 hover:bg-red-50 md:py-2.5">
                 <Trash2 size={16} />
                 <span>Delete</span>

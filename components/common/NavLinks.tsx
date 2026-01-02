@@ -3,11 +3,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import Image from "next/image";
-import dashboardPageIcon from "../../public/admin/dashboard_images_and_icons/dashboard-page-icon.svg";
-import productPageIcon from "../../public/vendor/dashboard-images/product-page-icon.svg";
-import ordersPageIcon from "../../public/vendor/dashboard-images/orders-page-icon.svg";
+import dashboardPageIcon from "../../lib/public/vendor/dashboard-images/dashboard-page-icon.svg";
+import productPageIcon from "../../lib/public/vendor/dashboard-images/product-page-icon.svg";
+import ordersPageIcon from "../../lib/public/vendor/dashboard-images/orders-page-icon.svg";
 
-import sellerPageIcon from "../../public/admin/dashboard_images_and_icons/sellers-page-icon.svg";
+import sellerPageIcon from "../../lib/public/admin/dashboard_images_and_icons/sellers-page-icon.svg";
 
 import { ChevronDown } from "lucide-react";
 
