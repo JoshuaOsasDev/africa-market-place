@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppSelector } from "@/redux/store/store";
+import { useAppSelector } from "@/redux2/store/store";
 import ProductHeading from "./productHeading";
 import ProductGeneralInfo from "./ProductGeneralInfo";
 import SearchAndFilterProduct from "./searchAndFilterProduct";
