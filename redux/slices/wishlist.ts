@@ -8,10 +8,10 @@ const slice = createSlice({
   name: "notification",
   initialState,
   reducers: {
-    setWishlist(state, action) {
+    setWishlistAction(state, action) {
       state.wishlist = action.payload;
     },
-    resetWishlist(state) {
+    resetWishlistAction(state) {
       state.wishlist = [];
     },
   },
@@ -21,6 +21,6 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { setWishlist, resetWishlist } = slice.actions;
+export const { setWishlistAction, resetWishlistAction } = slice.actions;
 
 

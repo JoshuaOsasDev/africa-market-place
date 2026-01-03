@@ -14,8 +14,9 @@ import Image from "next/image";
 import { useGoogleLogin } from "@react-oauth/google";
 import { googleAuth, signIn } from "@/services/apiServices/authApi";
 import { AxiosError } from "axios";
-import { useAppDispatch } from "@/redux/store";
-import { setLoaderAction } from "@/redux/slices/user";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { setLoaderAction, signInAction } from "@/redux/slices/user";
+import { setWishlistAction } from "@/redux/slices/wishlist";
 
 const LoginComp = () => {
   /* naviagtion */
@@ -29,6 +30,9 @@ const LoginComp = () => {
   /* set the display of the loader */
   const [loader, setLoader] = useState(false);
   const [googleLoader, setGoogleLoader] = useState(false);
+
+  /* get the app state */
+  const state = useAppSelector((state) => state.user.loading);
 
   /* useEffect for responding to diffrent response from the user signup */
 
@@ -51,17 +55,18 @@ const LoginComp = () => {
   const { mutate, error } = useMutation({
     mutationFn: signIn,
     onSuccess: async (data) => {
-      console.log("data sent", data)
+      setLoader(false);
       dispatch(setLoaderAction(false));
-      console.log("login data:", data);
-      /*   dispatch(signIn(data.user));
-      dispatch(setWishlist(data.user.wishlist)); */
+
+      console.log("user data", data)
+    dispatch(signInAction(data.user)); 
+        dispatch(setWishlistAction(data.user.wishlist));
 
       toast.success("Logged in successfully!");
 
       const isAdmin = data.user?.role?.includes("admin");
       const isVendor = data.user?.role?.includes("vendor");
-
+    /* 
       /* router.push(
         redirect
           ? redirect
@@ -73,18 +78,17 @@ const LoginComp = () => {
       ); */
     },
     onError: (err) => {
-      console.log("error occured")
-      dispatch(setLoaderAction(false));
+   //   setLoader(false);
+   // dispatch(setLoaderAction(false));
       if (err instanceof AxiosError) {
         toast.error(
-          err?.response?.data?.message || "Sign in failed, please try again.",
+          err?.response?.data?.message ||
+            err?.message ||
+            "Sign in failed, please try again.",
         );
       } else {
         toast.error("Unknown error");
       }
-    },
-    onSettled: () => {
-      
     },
   });
 
@@ -130,32 +134,32 @@ const LoginComp = () => {
       console.log("Google login failed");
     },
   });
-  const onSubmit = async (data: { email: string; password: string }) => {
-    console.log("login input", data);
 
+  const onSubmit = async (data: { email: string; password: string }) => {
     try {
-      dispatch(setLoaderAction(true));
+      setLoader(true);
+      dispatch(setLoaderAction(true))
       /* make api call fro user signIn */
-       mutate({
+      mutate({
         ...data,
         rememberMe: isChecked,
       });
-      
-      /* dispatch(userLoggedInAndLoggedOutAction(true))
-      navigation.navigate('bottomTabNavigation') */
+     
     } catch (err: any) {
-      dispatch(setLoaderAction(false));
-      console.log("login error", err);
+      setLoader(false);
+     dispatch(setLoaderAction(false));
       if (err instanceof AxiosError) {
         toast.error(
-          err?.response?.data?.message || "Sign in failed, please try again.",
+          err?.response?.data?.message ||
+            err?.message ||
+            "Sign in failed, please try again.",
         );
       } else {
         toast.error("Unknown error");
       }
     } finally {
       setLoader(false);
-     // dispatch(setLoaderAction(false));
+     dispatch(setLoaderAction(false));
     }
   };
 

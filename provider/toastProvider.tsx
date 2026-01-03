@@ -6,6 +6,8 @@ import { Toaster } from "react-hot-toast";
 
 function ToastProvider({ children }: { children: React.ReactNode }) {
     const { loading } = useAppSelector(state => state.user)
+ 
+ console.log("loading now", loading)
   return (
     <>
           <Toaster position={"top-center"} />

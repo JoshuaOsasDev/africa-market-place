@@ -1,18 +1,19 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+import { userAuthType } from "@/types/authTypes";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // initial state
-const initialState : any = {
+
+const initialState: userAuthType = {
   isAuthenticated: false,
   user: null,
   count: 0,
   isInitialized: false,
-  loading: false
+  loading: false,
 };
 
 // slice
 const slice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
 
   reducers: {
@@ -32,27 +33,37 @@ const slice = createSlice({
       state.isInitialized = true;
     },
     updateStatusAction(state, action) {
-      state.user.status = action.payload;
+      if (state.user) {
+        state.user.status = action.payload;
+      }
     },
     verifyUserAction(state) {
-      state.user.isVerified = true;
+      if (state.user) {
+        state.user.isVerified = true;
+      }
     },
     updateUserRoleAction(state) {
-      state.user.role = 'vendor';
+      if (state.user) {
+        state.user.role = "vendor";
+      }
     },
-    setLoaderAction: (state, action: PayloadAction<boolean>) => { 
-      console.log("payload:", action.payload)
-      state.loading = action.payload
-
-    }
-  }
+    setLoaderAction: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+  },
 });
 
 // Reducer
 export default slice.reducer;
 
 // Actions
-export const { signInAction, setLogoutAction, setCountAction, setInitializeAction, updateStatusAction, verifyUserAction, updateUserRoleAction,
-  setLoaderAction
- } = slice.actions;
-
+export const {
+  signInAction,
+  setLogoutAction,
+  setCountAction,
+  setInitializeAction,
+  updateStatusAction,
+  verifyUserAction,
+  updateUserRoleAction,
+  setLoaderAction,
+} = slice.actions;
