@@ -71,7 +71,7 @@ const LoginComp = () => {
         // tokenResponse.access_token
         dispatch(setLoaderAction(true));
         const result = await googleAuth(tokenResponse);
-        console.log("result google", result);
+
         dispatch(signInAction(result.data.user));
         dispatch(setWishlistAction(result.data.user.wishlist));
         toast.success("Login successfull");
@@ -102,10 +102,9 @@ const LoginComp = () => {
     },
 
     onError: () => {
-      console.log("Google login failed");
+      toast.error("Google login failed");
     },
   });
-  console.log("state:", appLoader);
 
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
@@ -115,12 +114,12 @@ const LoginComp = () => {
         ...data,
         rememberMe: isChecked,
       });
-      console.log("result", result);
-      if (!result.user.isVerified) { 
+
+      if (!result.user.isVerified) {
         toast.error("Email not verified");
-        
-        router.push("/auth-user/sendOtp")
-        return
+
+        router.push("/auth-user/sendOtp");
+        return;
       }
       dispatch(signInAction(result.user));
       dispatch(setWishlistAction(result.user.wishlist));
