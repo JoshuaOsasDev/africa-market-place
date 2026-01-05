@@ -28,8 +28,6 @@ const LoginComp = () => {
   /* get the app state */
   const appLoader = useAppSelector((state) => state.user.loading);
 
-  /* useEffect for responding to diffrent response from the user signup */
-
   const [hidePassword, setHidePassword] = useState(false);
 
   /* yup validation and react hook form */
@@ -103,6 +101,7 @@ const LoginComp = () => {
 
     onError: () => {
       toast.error("Google login failed");
+      dispatch(setLoaderAction(false));
     },
   });
 
