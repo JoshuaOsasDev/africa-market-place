@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { loginSchema } from "@/lib/utility/yupvalidation";
 import TextStyle from "../../../common/textStyle";
 import { Eye, EyeOff, Mail } from "lucide-react";
@@ -25,14 +25,8 @@ const LoginComp = () => {
   /* use dispatch */
   const dispatch = useAppDispatch();
 
-  //  const appState = useAppSelector(state => state)
-
-  /* set the display of the loader */
-  const [loader, setLoader] = useState(false);
-  const [googleLoader, setGoogleLoader] = useState(false);
-
   /* get the app state */
-  const state = useAppSelector((state) => state.user.loading);
+  const appLoader = useAppSelector((state) => state.user.loading);
 
   /* useEffect for responding to diffrent response from the user signup */
 
@@ -50,49 +44,15 @@ const LoginComp = () => {
     password: "",
   });
 
+  const searchParam = useSearchParams();
+  const redirect = searchParam.get("redirect");
+
   const [isChecked, setIsChecked] = useState(false);
 
-  const { mutate, error } = useMutation({
+  const { mutateAsync, error } = useMutation({
     mutationFn: signIn,
-    onSuccess: async (data) => {
-      setLoader(false);
-      dispatch(setLoaderAction(false));
-
-      console.log("user data", data)
-    dispatch(signInAction(data.user)); 
-        dispatch(setWishlistAction(data.user.wishlist));
-
-      toast.success("Logged in successfully!");
-
-      const isAdmin = data.user?.role?.includes("admin");
-      const isVendor = data.user?.role?.includes("vendor");
-    /* 
-      /* router.push(
-        redirect
-          ? redirect
-          : isAdmin
-            ? "/admin/dashboard"
-            : isVendor
-              ? "/vendor/dashboard"
-              : "/",
-      ); */
-    },
-    onError: (err) => {
-   //   setLoader(false);
-   // dispatch(setLoaderAction(false));
-      if (err instanceof AxiosError) {
-        toast.error(
-          err?.response?.data?.message ||
-            err?.message ||
-            "Sign in failed, please try again.",
-        );
-      } else {
-        toast.error("Unknown error");
-      }
-    },
   });
 
-  console.log("mutation error", error);
   /* check the box */
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
@@ -109,14 +69,25 @@ const LoginComp = () => {
     onSuccess: async (tokenResponse) => {
       try {
         // tokenResponse.access_token
-        console.log("googleToken", tokenResponse);
-        setGoogleLoader(true);
-        const user = await googleAuth(tokenResponse);
-
+        dispatch(setLoaderAction(true));
+        const result = await googleAuth(tokenResponse);
+        console.log("result google", result);
+        dispatch(signInAction(result.data.user));
+        dispatch(setWishlistAction(result.data.user.wishlist));
         toast.success("Login successfull");
-        console.log("google user", user);
 
-        setGoogleLoader(false);
+        dispatch(setLoaderAction(false));
+        const isAdmin = result.data.user?.role?.includes("admin");
+        const isVendor = result.data.user?.role?.includes("vendor");
+        const goto = redirect
+          ? redirect
+          : isAdmin
+            ? "/admin/dashboard"
+            : isVendor
+              ? "/vendor/dashboard"
+              : "/";
+
+        router.push(goto);
       } catch (err) {
         if (err instanceof AxiosError) {
           toast.error(
@@ -126,7 +97,7 @@ const LoginComp = () => {
           toast.error("Unknown error");
         }
       } finally {
-        setLoader(false);
+        dispatch(setLoaderAction(false));
       }
     },
 
@@ -134,32 +105,50 @@ const LoginComp = () => {
       console.log("Google login failed");
     },
   });
+  console.log("state:", appLoader);
 
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
-      setLoader(true);
-      dispatch(setLoaderAction(true))
-      /* make api call fro user signIn */
-      mutate({
+      dispatch(setLoaderAction(true));
+
+      const result = await mutateAsync({
         ...data,
         rememberMe: isChecked,
       });
-     
-    } catch (err: any) {
-      setLoader(false);
-     dispatch(setLoaderAction(false));
+      console.log("result", result);
+      if (!result.user.isVerified) { 
+        toast.error("Email not verified");
+        
+        router.push("/auth-user/sendOtp")
+        return
+      }
+      dispatch(signInAction(result.user));
+      dispatch(setWishlistAction(result.user.wishlist));
+      ("redirect");
+      const isAdmin = result.user?.role?.includes("admin");
+      const isVendor = result.user?.role?.includes("vendor");
+
+      const goto = redirect
+        ? redirect
+        : isAdmin
+          ? "/admin/dashboard"
+          : isVendor
+            ? "/vendor/dashboard"
+            : "/";
+
+      router.push(goto);
+
+      toast.success("Logged in successfully!");
+    } catch (err) {
       if (err instanceof AxiosError) {
         toast.error(
-          err?.response?.data?.message ||
-            err?.message ||
-            "Sign in failed, please try again.",
+          err.response?.data?.message || "Sign in failed, please try again.",
         );
       } else {
         toast.error("Unknown error");
       }
     } finally {
-      setLoader(false);
-     dispatch(setLoaderAction(false));
+      dispatch(setLoaderAction(false));
     }
   };
 
@@ -260,11 +249,11 @@ const LoginComp = () => {
 
           {/* submit button starts */}
           <button
-            disabled={loader}
+            disabled={appLoader}
             className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] bg-[#2E7D32] p-2.5`}
           >
             <span className="text-sm leading-[18.90px] font-semibold text-white">
-              {loader ? "Please wait.." : "Login To Your Account"}
+              {appLoader ? "Please wait.." : "Login To Your Account"}
             </span>
           </button>
         </form>
@@ -276,10 +265,10 @@ const LoginComp = () => {
         </div>
 
         <div
-          className={`flex h-13.75 ${googleLoader ? "cursor-not-allowed" : "cursor-pointer"} items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA]`}
+          className={`flex h-13.75 ${appLoader ? "cursor-not-allowed" : "cursor-pointer"} items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA]`}
           onClick={() => loginWithGoogleFunc()}
         >
-          {!googleLoader ? (
+          {!appLoader ? (
             <>
               <Image
                 src={"/images/google.jpg"}
