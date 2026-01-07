@@ -1,4 +1,4 @@
-import { userForgetPasswordType, userLoginType, userResendOtpType, userSignupType, userVerifyOtpType } from "@/types/authTypes";
+import { userForgetPasswordType, userLoginType, userResendOtpType, userSendVerificationOtpType, userSignupType, userVerifyOtpType } from "@/types/authTypes";
 import http from "./http";
 
 
@@ -12,7 +12,8 @@ export const verifyOTP = async(payload:userVerifyOtpType) => {
   return data;
 };
 
-export const resendOTP = async (payload: userResendOtpType) => {
+
+export const sendVerificationOtp = async (payload: userSendVerificationOtpType) => {
   const { data } = await http.post(`/auth/resend-otp`, payload);
   return data;
 };

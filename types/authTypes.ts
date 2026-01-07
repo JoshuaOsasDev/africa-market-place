@@ -14,12 +14,17 @@ export type userSendOtpType = {
 };
 export type userVerifyOtpType = {
   otp: string;
+  email: string
 };
 export type userResendOtpType = {
   otp: string;
 };
+export type userSendVerificationOtpType = {
+  email:string
+};
 export type userForgetPasswordType = {
-  email: string;
+  password: string;
+  confirmPassword: string
 };
 
 export type userType = {

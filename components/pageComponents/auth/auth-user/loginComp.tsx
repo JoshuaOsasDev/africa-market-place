@@ -113,6 +113,8 @@ const LoginComp = () => {
         ...data,
         rememberMe: isChecked,
       });
+      dispatch(signInAction(result.user));
+      dispatch(setWishlistAction(result.user.wishlist));
 
       if (!result.user.isVerified) {
         toast.error("Email not verified");
@@ -120,9 +122,6 @@ const LoginComp = () => {
         router.push("/auth-user/sendOtp");
         return;
       }
-      dispatch(signInAction(result.user));
-      dispatch(setWishlistAction(result.user.wishlist));
-      ("redirect");
       const isAdmin = result.user?.role?.includes("admin");
       const isVendor = result.user?.role?.includes("vendor");
 

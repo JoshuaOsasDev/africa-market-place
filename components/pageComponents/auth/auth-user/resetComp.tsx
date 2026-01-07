@@ -1,46 +1,29 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
-import Image from "next/image";
-import TextStyle from "@/components/common/textStyle";
-import { div } from "framer-motion/client";
+import { Eye, EyeOff } from "lucide-react";
 
-import Link from "next/link";
-import BackButton from "@/components/common/backButton";
+import TextStyle from "@/components/common/textStyle";
 import DailyLayout from "@/components/common/vendorDailyLayout";
 import { resetPasswordSchema } from "@/lib/utility/yupvalidation";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { setLoaderAction } from "@/redux/slices/user";
+import { useMutation } from "@tanstack/react-query";
+import { resetPassword } from "@/services/apiServices/authApi";
 
 // Define TypeScript types for form values
 export const ResetComp = () => {
   /* naviagtion */
   const router = useRouter();
+
   /* use dispatch */
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  //  const appState = useAppSelector(state => state)
-
-  /* set login credentials  */
-  const [loginCredential, setLoginCredential] = useState({
-    email: "",
-    password: "",
-  });
-
-  /*  control user login after registration */
-  const [startApiLogin, setStartApiLogin] = useState(false);
-
-  /* set the display of the loader */
-  const [loader, setLoader] = useState(false);
-
-  /* start api call for user registration*/
-
-  const [startApiCall, setStartApiCall] = useState(false);
-
-  /* useEffect for responding to diffrent response from the user signup */
+  const appState = useAppSelector((state) => state);
 
   const [hidePassword, setHidePassword] = useState(false);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
@@ -51,11 +34,6 @@ export const ResetComp = () => {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  /* check the box */
-  const toggleCheckBox = () => {
-    setIsChecked(!isChecked);
-  };
-  console.log("john");
   const [form, setForm] = useState<{
     password: string;
     confirmPassword: string;
@@ -71,41 +49,43 @@ export const ResetComp = () => {
     formState: { errors },
   } = useForm(formOptions);
 
+  const { mutateAsync } = useMutation({
+    mutationFn: resetPassword
+  });
+
   const onSubmit = async (data: {
     password: string;
     confirmPassword: string;
   }) => {
-    console.log("code ran here");
-    console.log(data);
-    router.push("/auth-user/sendOtp");
-
     try {
-      setLoader(!loader);
+      dispatch(setLoaderAction(true));
 
-      /* make api call fro user signIn */
-      setStartApiCall(!startApiCall);
-
-      /* dispatch(userLoggedInAndLoggedOutAction(true))
-      navigation.navigate('bottomTabNavigation') */
-    } catch (error: any) {
-      console.log(error.message);
+      const result = await mutateAsync({
+        ...data,
+      });
+      toast.success(result.message);
+      router.push("/auth-user/login");
+      dispatch(setLoaderAction(false));
+    } catch (err) {
+      dispatch(setLoaderAction(false));
+      console.log("error", err)
+      if (err instanceof AxiosError) {
+        toast.error(
+          err.response?.data?.message ||
+            "Failed to change password, please try again.",
+        );
+      } else {
+        toast.error("Unknown error");
+      }
     } finally {
-      setLoader(false);
+      dispatch(setLoaderAction(false));
     }
   };
 
-  console.log("this are the erros", errors);
   return (
     <div className="">
-   
-   <div className="flex flex-col md:flex-row md:space-x-15">
-   <div className="flex flex-col md:my-auto md:h-fit md:w-[500px] md:rounded-lg md:bg-white md:p-10 md:pt-3">
-          {/* Logo – desktop only */}
-         
-          {
-            //   loader && <LoadingScreen />
-          }
-
+      <div className="flex flex-col md:flex-row md:space-x-15">
+        <div className="flex flex-col md:my-auto md:h-fit md:w-[500px] md:rounded-lg md:bg-white md:p-10 md:pt-3">
           <div className="p-4 md:pt-5 md:pl-10">
             <TextStyle
               textContent="Reset Password"
@@ -195,29 +175,16 @@ export const ResetComp = () => {
                   </p>
                 </div>
 
-                <div>
-                  <input
-                    type="checkbox"
-                    checked={isChecked}
-                    onChange={() => setIsChecked(!isChecked)}
-                    className="h-3 w-3 rounded-full text-[#2E7D32] accent-[#2E7D32]"
-                  />
-                  <span className="ml-1 text-[13px] text-zinc-600">
-                    Remember me for 30 days
-                  </span>
-                </div>
-
                 {/* Submit Button */}
                 <button className="mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] bg-[#2E7D32] p-2.5 hover:opacity-80">
                   <span className="text-sm leading-[18.90px] font-semibold text-white">
-                    {loader ? "Please wait.." : "Reset"}
+                    Reset
                   </span>
                 </button>
               </form>
             </div>
           </div>
         </div>
-     
       </div>
     </div>
   );

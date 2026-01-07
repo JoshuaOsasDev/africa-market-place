@@ -80,6 +80,12 @@ export const verifyEmailSchema = yup.object({
     .required("Email is required"),
 });
 
+export const verifyOtpSchemaType = yup.object({
+  otp: yup
+    .string().required("Otp is required")
+});
+
+
 export const registerStoreSchema = yup.object({
   storeName: yup.string().required("Store name is required"),
   storeOwner: yup.string().required("Store owner name is required"),
@@ -143,5 +149,3 @@ export const productSchema = yup.object().shape({
   discountType: yup.string().nullable(), // optional text
   imagePreview: yup.mixed().nullable(), // optional (file or URL)
 });
-
-
