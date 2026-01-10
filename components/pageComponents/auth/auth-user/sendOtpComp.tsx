@@ -10,29 +10,29 @@ import { verifyEmailSchema } from "@/lib/utility/yupvalidation";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setLoaderAction } from "@/redux/slices/user";
 import { useMutation } from "@tanstack/react-query";
-import { forgetPasswordApi, sendVerificationOtp } from "@/services/apiServices/authApi";
+import {
+  forgetPasswordApi,
+  sendVerificationOtp,
+} from "@/services/apiServices/authApi";
 import toast from "react-hot-toast";
 
-const SendOtpcomp = ({ url }: {
-  url: string
-}) => {
+const SendOtpcomp = ({ url }: { url: string }) => {
   /* naviagtion */
   const router = useRouter();
   /* use dispatch */
   const dispatch = useAppDispatch();
 
-
-  const [newUrl, setNewUrl] = useState('')
-  console.log("url passed", url)
+  const [newUrl, setNewUrl] = useState("");
+  console.log("url passed", url);
 
   const appState = useAppSelector((state) => state.user);
 
-  useEffect(() => { 
-    if (url !== "forgetPassword" && url !== "verifyEmail") { 
-      router.push("/")
+  useEffect(() => {
+    if (url !== "forgetPassword" && url !== "verifyEmail") {
+      router.push("/");
     }
-    setNewUrl(url)
-  },[])
+    setNewUrl(url);
+  }, []);
 
   /* yup validation and react hook form */
 
@@ -52,7 +52,8 @@ const SendOtpcomp = ({ url }: {
   } = useForm(formOptions);
 
   const { mutateAsync } = useMutation({
-    mutationFn: newUrl === "verifyEmail" ? sendVerificationOtp : forgetPasswordApi
+    mutationFn:
+      newUrl === "verifyEmail" ? sendVerificationOtp : forgetPasswordApi,
   });
 
   const onSubmit = async (data: { email: string }) => {
@@ -65,7 +66,7 @@ const SendOtpcomp = ({ url }: {
 
       toast.success("Password verification link sent to your mail");
       dispatch(setLoaderAction(false));
-      newUrl === "verifyEmail" && router.push("/auth-user/verifyOtp") 
+      newUrl === "verifyEmail" && router.push("/auth-user/verifyOtp");
     } catch (err) {
       console.log("error", err);
       if (err instanceof AxiosError) {
@@ -84,7 +85,7 @@ const SendOtpcomp = ({ url }: {
     <div className="">
       <div className="flex flex-col md:space-x-15">
         <TextStyle
-          textContent="Email Verification"
+          textContent={ ` ${newUrl === "verifyEmail" ? "Email Verification" : "Forget Password"}`}
           textStyle="font-medium text-[20px] leading-[120%] tracking-[-0.02em] align-middle pt-5 pb-1"
         />
 
@@ -101,12 +102,21 @@ const SendOtpcomp = ({ url }: {
                 />
               </label>
               <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
-                <input
-                  {...register("email")}
-                  value={appState.user?.email || ""}
-                  placeholder="user@gmail.com"
-                  className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
-                />
+               
+                {newUrl === "verifyEmail" ? (
+                  <input
+                    {...register("email")}
+                    value={appState.user?.email || ""}
+                    placeholder="user@gmail.com"
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
+                  />
+                ) : (
+                  <input
+                    {...register("email")}
+                    placeholder="user@gmail.com"
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
+                  />
+                )}
                 <Mail className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
               </div>
               <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
