@@ -75,7 +75,7 @@ const [restartTimer, setRestartTimer] = useState(false)
         )}
       </p>
 
-      <div className="flex flex-row space-x-1">
+      <div className="flex flex-col lg:flex-row space-x-1">
         <TextStyle
           textContent="Didn’t get a code?"
           textStyle="text-[16px] text-[#667185] text-bold text-center"

@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { Mail } from "lucide-react";
 import TextStyle from "@/components/common/textStyle";
@@ -10,16 +10,29 @@ import { verifyEmailSchema } from "@/lib/utility/yupvalidation";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setLoaderAction } from "@/redux/slices/user";
 import { useMutation } from "@tanstack/react-query";
-import { sendVerificationOtp } from "@/services/apiServices/authApi";
+import { forgetPasswordApi, sendVerificationOtp } from "@/services/apiServices/authApi";
 import toast from "react-hot-toast";
 
-const SendOtpcomp = () => {
+const SendOtpcomp = ({ url }: {
+  url: string
+}) => {
   /* naviagtion */
   const router = useRouter();
   /* use dispatch */
   const dispatch = useAppDispatch();
 
+
+  const [newUrl, setNewUrl] = useState('')
+  console.log("url passed", url)
+
   const appState = useAppSelector((state) => state.user);
+
+  useEffect(() => { 
+    if (url !== "forgetPassword" && url !== "verifyEmail") { 
+      router.push("/")
+    }
+    setNewUrl(url)
+  },[])
 
   /* yup validation and react hook form */
 
@@ -39,7 +52,7 @@ const SendOtpcomp = () => {
   } = useForm(formOptions);
 
   const { mutateAsync } = useMutation({
-    mutationFn: sendVerificationOtp,
+    mutationFn: newUrl === "verifyEmail" ? sendVerificationOtp : forgetPasswordApi
   });
 
   const onSubmit = async (data: { email: string }) => {
@@ -50,9 +63,9 @@ const SendOtpcomp = () => {
         ...data,
       });
 
-      toast.success(result.message);
+      toast.success("Password verification link sent to your mail");
       dispatch(setLoaderAction(false));
-      router.push("/auth-user/verifyOtp");
+      newUrl === "verifyEmail" && router.push("/auth-user/verifyOtp") 
     } catch (err) {
       console.log("error", err);
       if (err instanceof AxiosError) {
@@ -69,17 +82,13 @@ const SendOtpcomp = () => {
 
   return (
     <div className="">
-      <div className="flex flex-col md:flex-row md:space-x-15">
+      <div className="flex flex-col md:space-x-15">
         <TextStyle
-          textContent="Email Address now"
+          textContent="Email Verification"
           textStyle="font-medium text-[20px] leading-[120%] tracking-[-0.02em] align-middle pt-5 pb-1"
         />
-        <TextStyle
-          textContent="Enter your E-mail to access your account"
-          textStyle="text-[16px] text-[#667185] text-bold"
-        />
 
-        <div className="w-full md:w-[400px]">
+        <div className="w-full">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="xs:w-[350px] mt-4 flex flex-col space-y-2"

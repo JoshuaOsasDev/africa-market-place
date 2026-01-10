@@ -1,15 +1,21 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AxiosError } from "axios";
 import { signUpSchema } from "@/lib/utility/yupvalidation";
 import TextStyle from "../../../common/textStyle";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
+import { Eye, EyeOff, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { useMutation } from "@tanstack/react-query";
+import { googleAuth, signUp } from "@/services/apiServices/authApi";
+import { setLoaderAction, signInAction } from "@/redux/slices/user";
+import { setWishlistAction } from "@/redux/slices/wishlist";
+import toast from "react-hot-toast";
+import { useGoogleLogin } from "@react-oauth/google";
 
 // Define TypeScript types for form values
 
@@ -19,25 +25,12 @@ const SignUpComp = () => {
   /* use dispatch */
   // const dispatch = useAppDispatch()
 
-  //  const appState = useAppSelector(state => state)
 
-  /* set login credentials  */
-  const [loginCredential, setLoginCredential] = useState({
-    email: "",
-    password: "",
-  });
 
-  /*  control user login after registration */
-  const [startApiLogin, setStartApiLogin] = useState(false);
+ 
 
-  /* set the display of the loader */
-  const [loader, setLoader] = useState(false);
-
-  /* start api call for user registration*/
-
-  const [startApiCall, setStartApiCall] = useState(false);
-
-  /* useEffect for responding to diffrent response from the user signup */
+const searchParam = useSearchParams();
+  const redirect = searchParam.get("redirect");
 
   const [hidePassword, setHidePassword] = useState(false);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
@@ -53,13 +46,18 @@ const SignUpComp = () => {
     setIsChecked(!isChecked);
   };
 
+
+  const appLoader = useAppSelector(state => state.user.loading)
+
   const [form, setForm] = useState<{
-    fullname: string;
+    firstName: string;
+    lastName: string;
     email: string;
     phone: string;
     password: string;
   }>({
-    fullname: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     password: "",
@@ -71,144 +69,203 @@ const SignUpComp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm(formOptions);
+  
+
+  const dispatch = useAppDispatch();
+
+  const { mutateAsync } = useMutation({
+    mutationFn: signUp,
+  });
 
   const onSubmit = async (data: {
     email: string;
     password: string;
     phone: string;
-    fullname: string;
+    firstName: string;
+    lastName: string;
   }) => {
-    if (!isChecked) return;
-    /*  navigation.navigate('bottomTabNavigation') */
-    console.log(data);
-
     try {
-      setLoader(!loader);
+      dispatch(setLoaderAction(true));
 
-      /* make api call fro user signIn */
-      setStartApiCall(!startApiCall);
-      setLoginCredential({
-        email: data.email,
-        password: data.password,
+      const result = await mutateAsync({
+        ...data,
       });
+      dispatch(signInAction(result.user));
+      dispatch(setWishlistAction(result.user.wishlist));
 
-      /* dispatch(userLoggedInAndLoggedOutAction(true))
-      navigation.navigate('bottomTabNavigation') */
-    } catch (error: any) {
-      console.log(error.message);
+      if (!result.user.isVerified) {
+        toast.error(`Verification email has been sent to ${result.user.email}`);
+        router.push("/auth-user/verifyOtp");
+        return;
+      }
+      toast.success("user created successfully");
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        toast.error(
+          err.response?.data?.message || "Sign in failed, please try again.",
+        );
+      } else {
+        toast.error("Unknown error");
+      }
     } finally {
-      setLoader(false);
+      dispatch(setLoaderAction(false));
     }
   };
 
-  return (
-    <div className=" flex flex-col   my-4">
-      {
-        //   loader && <LoadingScreen />
+  const loginWithGoogleFunc = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // tokenResponse.access_token
+        dispatch(setLoaderAction(true));
+        const result = await googleAuth(tokenResponse);
+
+        dispatch(signInAction(result.data.user));
+        dispatch(setWishlistAction(result.data.user.wishlist));
+        toast.success("Login successfull");
+
+        dispatch(setLoaderAction(false));
+        const isAdmin = result.data.user?.role?.includes("admin");
+        const isVendor = result.data.user?.role?.includes("vendor");
+        const goto = redirect
+          ? redirect
+          : isAdmin
+            ? "/admin/dashboard"
+            : isVendor
+              ? "/vendor/dashboard"
+              : "/";
+
+        router.push(goto);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          toast.error(
+            err?.response?.data?.message || "Sign in failed, please try again.",
+          );
+        } else {
+          toast.error("Unknown error");
+        }
+      } finally {
+        dispatch(setLoaderAction(false));
       }
+    },
+
+    onError: () => {
+      toast.error("Google login failed");
+      dispatch(setLoaderAction(false));
+    },
+  });
+
+  return (
+    <div className="my-4 flex flex-col">
       <TextStyle
         textContent="SignUp"
         textStyle="text-2xl sm:text-3xl text-[#111827] text-bold"
       />
       <TextStyle
-        textContent="Enter your credentials to access your account"
+        textContent="Enter your credentials to create an account"
         textStyle="text-[16px] text-[##667185] text-bold"
       />
 
-      <div className=" w-full">
+      <div className="w-full">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="mt-4 flex flex-col w-full space-y-2 "
+          className="mt-4 flex w-full flex-col space-y-2"
         >
-          <div className="flex flex-col space-y-1 w-full ">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
               <TextStyle
-                textContent="Full Name"
+                textContent="First Name"
                 textStyle="text-[16px] text-[##667185] text-bold"
               />
             </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
-                {...register("fullname")}
+                {...register("firstName")}
                 placeholder="User"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
-              <User className="w-4 h-4 transition-colors group-focus-within:text-green-600" />
+              <User className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
             </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
-              {errors.fullname?.message}
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
+              {errors.firstName?.message}
             </p>
           </div>
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
+              <TextStyle
+                textContent="Last Name"
+                textStyle="text-[16px] text-[##667185] text-bold"
+              />
+            </label>
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+              <input
+                {...register("lastName")}
+                placeholder="User"
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
+              />
+              <User className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
+            </div>
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
+              {errors.lastName?.message}
+            </p>
+          </div>
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
               <TextStyle
                 textContent="Email"
                 textStyle="text-[16px] text-[##667185] text-bold"
               />
             </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("email")}
                 placeholder="user@gmail.com"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
-              <Mail className="w-4 h-4  transition-colors group-focus-within:text-green-600" />
+              <Mail className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
             </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
               {errors.email?.message}
             </p>
           </div>
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
               <TextStyle
                 textContent="Phone"
                 textStyle="text-[16px] text-[##667185] text-bold"
               />
             </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("phone")}
                 placeholder="07000000000"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
-              <Phone className="w-4 h-4 transition-colors group-focus-within:text-green-600" />
+              <Phone className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
             </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
               {errors.phone?.message}
             </p>
           </div>
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
               <TextStyle
                 textContent="Password"
                 textStyle="text-[16px] text-[##667185] text-bold"
               />
             </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 type={hidePassword ? "password" : "text"}
                 {...register("password")}
                 placeholder="12345678"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
               {!hidePassword ? (
                 <Eye
                   onClick={() => {
                     setHidePassword(!hidePassword);
                   }}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                  className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                 />
               ) : (
                 <EyeOff
@@ -216,123 +273,126 @@ const SignUpComp = () => {
                     setHidePassword(!hidePassword);
                   }}
                   onChange={() => setHidePassword(!hidePassword)}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                  className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                 />
               )}
             </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
               {errors.password?.message}
             </p>
           </div>
 
-          <div className="flex flex-col space-y-1 w-full">
-            <label className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px]">
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
               <TextStyle
                 textContent="Confirm Password"
                 textStyle="text-[16px] text-[##667185] text-bold"
               />
             </label>
-            <div className="flex items-center flex-row rounded-lg shadow  border  border-[#F4F4F4F4] h-[39px] overflow-hidden px-2.5 group transition-colors focus-within:border-green-600">
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 type={hideConfirmPassword ? "password" : "text"}
                 {...register("confirmPassword")}
                 placeholder="12345678"
-                className="text-slate-700 text-sm font-medium font-['Inter'] leading-[18px] focus:border-transparent 
-              py-2.5 h-full  justify-start items-center  focus:outline-none
-             flex-1
-            "
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
               {!hideConfirmPassword ? (
                 <Eye
                   onClick={() => {
                     setHideConfirmPassword(!hideConfirmPassword);
                   }}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                  className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                 />
               ) : (
                 <EyeOff
                   onClick={() => {
                     setHideConfirmPassword(!hideConfirmPassword);
                   }}
-                  className="w-4 h-4  transition-colors group-focus-within:text-green-600"
+                  className="h-4 w-4 transition-colors group-focus-within:text-green-600"
                 />
               )}
             </div>
-            <p className="text-red-700 text-sm font-medium font-['Inter'] leading-[18px]">
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
               {errors.password?.message}
             </p>
           </div>
           {/* Terms and condition section */}
 
-          <div className="flex-row  flex-wrap flex-1 items-start  w-[328px]">
+          <div className="w-[328px] flex-1 flex-row flex-wrap items-start">
             <input
               type="checkbox"
               checked={isChecked}
               onChange={toggleCheckBox}
-              className="w-3 h-3 text-[#2E7D32]
-               bg-gray-100 border-gray-300 rounded-full  focus:ring-[#2E7D32] checked:bg-[#2E7D32]  dark:bg-[#2E7D32]  overflow-hidden
-              accent-[#2E7D32]
-               "
+              className="h-3 w-3 overflow-hidden rounded-full border-gray-300 bg-gray-100 text-[#2E7D32] accent-[#2E7D32] checked:bg-[#2E7D32] focus:ring-[#2E7D32] dark:bg-[#2E7D32]"
             />
-            <span className="text-zinc-600 text-[13px] ml-1 font-medium font-['Aeonik-Regular'] ">
+            <span className="ml-1 font-['Aeonik-Regular'] text-[13px] font-medium text-zinc-600">
               By continuing you agree to the{" "}
             </span>
             <span onClick={() => console.log(`now`)}>
-              <span className="text-[#2E7D32] text-[13px] font-medium font-['Aeonik-Medium'] leading-5">
+              <span className="font-['Aeonik-Medium'] text-[13px] leading-5 font-medium text-[#2E7D32]">
                 Term of Service{" "}
               </span>
             </span>
-            <span className="text-zinc-600 text-[13px] font-medium ">and </span>
+            <span className="text-[13px] font-medium text-zinc-600">and </span>
             <span>
-              <span className="text-[#2E7D32] text-[13px] font-medium">
+              <span className="text-[13px] font-medium text-[#2E7D32]">
                 Privacy Policy{" "}
               </span>
             </span>
 
-            <span className="text-zinc-600 text-[13px] font-medium leading-5">
+            <span className="text-[13px] leading-5 font-medium text-zinc-600">
               of Africa market place.
             </span>
           </div>
 
           {/* submit button starts */}
           <button
-            disabled={!isChecked || loader}
-            className={` w-full h-[39px]  p-2.5  justify-center items-center cursor-pointer rounded-[27px]  inline-flex mt-4 ${
-              !isChecked ? "bg-[#6b916d] bg-opacity-70 " : "bg-[#2E7D32]"
+            disabled={!isChecked || appLoader }
+            className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] p-2.5 ${
+              !isChecked ? "bg-opacity-70 bg-[#61ae64]" : "bg-[#2E7D32]"
             }`}
           >
-            <span className="text-white text-sm font-semibold  leading-[18.90px]">
-              {loader ? "Please wait.." : "Create Account"}
+            <span className="text-sm leading-[18.90px] font-semibold text-white">
+              {appLoader ? "Please wait.." : "Create Account"}
             </span>
           </button>
         </form>
 
-        <div className="flex flex-row items-center space-x-2 my-6">
-          <hr className="flex-1 h-[0.5px] border-px border-[#F0F2F5] " />
+        <div className="my-6 flex flex-row items-center space-x-2">
+          <hr className="border-px h-[0.5px] flex-1 border-[#F0F2F5]" />
           <TextStyle textContent="Or" textStyle="text-[#757575]" />
-          <hr className="flex-1 h-[0.5px]  border-[#F0F2F5]" />
+          <hr className="h-[0.5px] flex-1 border-[#F0F2F5]" />
         </div>
 
-        <div className="rounded-[28px] flex items-center justify-center  space-x-2 bg-[#FAFAFA] cursor-pointer h-[55px]">
-          <Image
-            src={"/images/google.jpg"}
-            alt="google logo"
-            width={20}
-            height={20}
-          />
-          <TextStyle
-            textContent="Continue with Google"
-            textStyle="text-[#525252]  text-[16px] text-bold "
-          />
+        <div
+          className={`flex h-13.75 ${appLoader ? "cursor-not-allowed" : "cursor-pointer"} items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA]`}
+          onClick={() => loginWithGoogleFunc()}
+        >
+          {!appLoader ? (
+            <>
+              <Image
+                src={"/images/google.jpg"}
+                alt="google logo"
+                width={20}
+                height={20}
+              />
+              <TextStyle
+                textContent="Continue with Google"
+                textStyle="text-[#525252]  text-[16px] text-bold "
+              />
+            </>
+          ) : (
+            "Please wait..."
+          )}
         </div>
       </div>
 
-      <div className="flex flex-row items-center mt-3 w-full justify-center space-x-1">
-        <p className="text-slate-700/opacity-60 text-sm font-medium font-['Inter'] leading-[18px]">
+      <div className="mt-3 flex w-full flex-row items-center justify-center space-x-1">
+        <p className="text-slate-700/opacity-60 font-['Inter'] text-sm leading-[18px] font-medium">
           Already have an account?
         </p>
         <Link href={"/auth-user/login"}>
-          <p className="text-[#6b916d] text-sm font-semibold font-['Inter'] leading-[18.90px]">
+          <p className="font-['Inter'] text-sm leading-[18.90px] font-semibold text-[#6b916d]">
             Login
           </p>
         </Link>

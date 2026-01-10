@@ -6,7 +6,8 @@ export type userLoginType = {
 export type userSignupType = {
   email: string;
   password: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   phone: string;
 };
 export type userSendOtpType = {
@@ -23,8 +24,11 @@ export type userSendVerificationOtpType = {
   email:string
 };
 export type userForgetPasswordType = {
-  password: string;
-  confirmPassword: string
+  email: string;
+};
+export type userResetPasswordType = {
+  newPassword: string;
+  token: string
 };
 
 export type userType = {

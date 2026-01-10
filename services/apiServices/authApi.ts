@@ -1,4 +1,4 @@
-import { userForgetPasswordType, userLoginType, userResendOtpType, userSendVerificationOtpType, userSignupType, userVerifyOtpType } from "@/types/authTypes";
+import { userForgetPasswordType, userLoginType, userResetPasswordType, userSendVerificationOtpType, userSignupType, userVerifyOtpType } from "@/types/authTypes";
 import http from "./http";
 
 
@@ -23,12 +23,12 @@ export const signIn = async (payload: userLoginType) => {
   return data;
 };
 
-export const forgetPassword = async (payload: userForgetPasswordType) => {
+export const forgetPasswordApi = async (payload: userForgetPasswordType) => {
   const { data } = await http.post('/auth/forget-password', payload);
   return data;
 };
 
-export const resetPassword = async (payload: userForgetPasswordType) => {
+export const resetPassword = async (payload: userResetPasswordType) => {
   const { data } = await http.post('/auth/reset-password', payload);
   return data;
 };

@@ -29,7 +29,7 @@ export default function OtpComponent({
         textAlign: "center",
       }} */
       renderInput={(props) => (
-        <input {...props}  className="h-[52px] !w-[52px] rounded-[8px] border text-center lg:h-[61px]" />
+        <input {...props}  className="h-[51px] !w-[52px] rounded-[8px] border text-center lg:h-[55px]" />
       )}
       shouldAutoFocus={true}
       

@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { verifyOtpSchemaType } from "@/lib/utility/yupvalidation";
+
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
 import OtpComponent from "@/components/common/otpComponent";
@@ -13,7 +12,6 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setLoaderAction } from "@/redux/slices/user";
 import toast from "react-hot-toast";
 import { verifyOTP } from "@/services/apiServices/authApi";
-import MyStopwatch from "./timer";
 import OtpTimer from "./timer";
 
 // Define TypeScript types for form values
@@ -27,7 +25,6 @@ const VerifyOtpComp = () => {
   const appState = useAppSelector((state) => state.user.user);
 
   const [otp, setOtp] = useState("");
-  const [otpError, setOtError] = useState(false);
 
   /* yup validation and react hook form */
 
@@ -94,7 +91,7 @@ const VerifyOtpComp = () => {
       </div>
       <TextStyle
         textContent={`We just emailed ${appState?.email}`}
-        textStyle="text-2xl sm:text-3xl text-[#111827] text-bold text-center"
+        textStyle="text-2xl sm:text-xl text-[#111827] text-bold text-center"
       />
       <TextStyle
         textContent="Please enter the code we emailed you."

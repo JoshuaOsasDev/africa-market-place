@@ -1,14 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { Eye, EyeOff } from "lucide-react";
 
 import TextStyle from "@/components/common/textStyle";
-import DailyLayout from "@/components/common/vendorDailyLayout";
 import { resetPasswordSchema } from "@/lib/utility/yupvalidation";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setLoaderAction } from "@/redux/slices/user";
@@ -16,14 +15,12 @@ import { useMutation } from "@tanstack/react-query";
 import { resetPassword } from "@/services/apiServices/authApi";
 
 // Define TypeScript types for form values
-export const ResetComp = () => {
+export const ResetComp = ({ token }: { token: string }) => {
   /* naviagtion */
   const router = useRouter();
 
   /* use dispatch */
   const dispatch = useAppDispatch();
-
-  const appState = useAppSelector((state) => state);
 
   const [hidePassword, setHidePassword] = useState(false);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
@@ -31,8 +28,6 @@ export const ResetComp = () => {
   /* yup validation and react hook form */
 
   const formOptions = { resolver: yupResolver(resetPasswordSchema) };
-
-  const [isChecked, setIsChecked] = useState(false);
 
   const [form, setForm] = useState<{
     password: string;
@@ -50,7 +45,7 @@ export const ResetComp = () => {
   } = useForm(formOptions);
 
   const { mutateAsync } = useMutation({
-    mutationFn: resetPassword
+    mutationFn: resetPassword,
   });
 
   const onSubmit = async (data: {
@@ -58,21 +53,24 @@ export const ResetComp = () => {
     confirmPassword: string;
   }) => {
     try {
+      if (!token) {
+        router.push("/user/login");
+      }
       dispatch(setLoaderAction(true));
 
       const result = await mutateAsync({
-        ...data,
+        token,
+        newPassword: data.password,
       });
+
+     // toast.success("Password updated successfully");
       toast.success(result.message);
       router.push("/auth-user/login");
-      dispatch(setLoaderAction(false));
     } catch (err) {
-      dispatch(setLoaderAction(false));
-      console.log("error", err)
       if (err instanceof AxiosError) {
         toast.error(
           err.response?.data?.message ||
-            "Failed to change password, please try again.",
+            "Password update failed, please try again.",
         );
       } else {
         toast.error("Unknown error");

@@ -37,7 +37,8 @@ export const addProductFormSchema2 = yup.object({
 // Define the schema using Yup
 // used
 export const signUpSchema = yup.object({
-  fullname: yup.string().required("Full name is required"),
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required"),
   phone: yup.string().required("Phone number is required"),
   email: yup
     .string()

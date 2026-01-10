@@ -47,7 +47,7 @@ const LoginComp = () => {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  const { mutateAsync, error } = useMutation({
+  const { mutateAsync} = useMutation({
     mutationFn: signIn,
   });
 
@@ -119,7 +119,7 @@ const LoginComp = () => {
       if (!result.user.isVerified) {
         toast.error("Email not verified");
 
-        router.push("/auth-user/sendOtp");
+        router.push("/auth-user/sendOtp/login");
         return;
       }
       const isAdmin = result.user?.role?.includes("admin");
@@ -235,7 +235,7 @@ const LoginComp = () => {
               </span>
             </div>
             <div>
-              <Link href={"/auth-user/resetPassword"}>
+              <Link href={"/auth-user/sendOtp/forgetPassword"}>
                 <TextStyle
                   textContent="Forgot Password"
                   textStyle="text-[#6b916d] text-[16px]"
@@ -288,7 +288,7 @@ const LoginComp = () => {
         <p className="text-slate-700/opacity-60 font-['Inter'] text-sm leading-[18px] font-medium">
           Already you new?
         </p>
-        <Link href={"/auth-user/register/vendor"}>
+        <Link href={"/auth-user/register"}>
           <p className="font-['Inter'] text-sm leading-[18.90px] font-semibold text-[#2E7D32]">
             Create an account
           </p>
