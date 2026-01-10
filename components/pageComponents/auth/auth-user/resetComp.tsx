@@ -54,7 +54,7 @@ export const ResetComp = ({ token }: { token: string }) => {
   }) => {
     try {
       if (!token) {
-        router.push("/user/login");
+        router.push("/auth-user/login");
       }
       dispatch(setLoaderAction(true));
 
