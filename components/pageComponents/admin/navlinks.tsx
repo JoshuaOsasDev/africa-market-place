@@ -81,7 +81,7 @@ const Navlinks = () => {
             key={link.name}
             href={link.href}
             className={clsx(
-              "mx-auto hidden w-[233px] grow items-center justify-center gap-2 rounded-[12px] px-5 py-4 text-[14px] font-normal md:flex md:flex-none md:justify-start",
+              "mx-auto hidden w-58.25 grow items-center justify-center gap-2 rounded-[12px] px-5 py-4 text-[14px] font-normal md:flex md:flex-none md:justify-start",
               {
                 // This applies hover ONLY when not active
                 "hover:bg-[#EAF2EA]": !isActive,

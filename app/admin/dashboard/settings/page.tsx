@@ -1,15 +1,26 @@
-import React from "react";
-import Image from "next/image";
+"use client";
 import { Switch } from "@/components/ui/switch";
+import {
+  useAdminCurrency,
+  useAdminSettings,
+} from "@/lib/hooks/adminDashboardApi/useAdmin";
 // import facebookLogo from '../../../../public/admin/dashboard_images_and_icons/facebook-logo.svg'
 // import twitterLogo from '../../../../public/admin/dashboard_images_and_icons/twitter-logo.svg'
 // import linkedinLogo from '../../../../public/admin/dashboard_images_and_icons/linkedin-logo.svg'
 // import instagramLogo from '../../../../public/admin/dashboard_images_and_icons/instagram-logo.svg'
 
-const page = () => {
+const SettingsPage = () => {
+  const { adminSettings } = useAdminSettings();
+  const { adminCurrency } = useAdminCurrency();
+  //   export const getAdminSettings = async () => {
+  //   const { data } = await http.get(`/admin/settings/settings`);
+  //   return data;
+  // };
+  console.log(adminSettings, "settings data");
+  console.log(adminCurrency, "currency data");
   return (
     <div className="">
-      <div className="bg-[#FFFFFF] p-5 sm:p-[30px]">
+      <div className="bg-[#FFFFFF] p-5 sm:p-7.5">
         {/* Platform Details Container */}
         <div className="col-1 mb-5 w-full rounded-[10px] border border-[#E6E6E6] p-4">
           <h1 className="mb-2 text-2xl font-bold text-[#424242]">
@@ -332,4 +343,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SettingsPage;

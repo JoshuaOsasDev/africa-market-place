@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { loginSchema } from "@/lib/utility/yupvalidation";
 import TextStyle from "../../../common/textStyle";
@@ -13,28 +13,21 @@ import Image from "next/image";
 import { useGoogleLogin } from "@react-oauth/google";
 import { googleAuth, signIn } from "@/services/apiServices/authApi";
 import { AxiosError } from "axios";
+import { useAppDispatch } from "@/redux/store";
+import { setLoaderAction } from "@/redux/slices/user";
 
 const LoginComp = () => {
   /* naviagtion */
   const router = useRouter();
 
   /* use dispatch */
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   //  const appState = useAppSelector(state => state)
 
-
-
-
-  /*  control user login after registration */
-  const [startApiLogin, setStartApiLogin] = useState(false);
-
   /* set the display of the loader */
   const [loader, setLoader] = useState(false);
-
-  /* start api call for user registration*/
-
-  const [startApiCall, setStartApiCall] = useState(false);
+  const [googleLoader, setGoogleLoader] = useState(false);
 
   /* useEffect for responding to diffrent response from the user signup */
 
@@ -54,9 +47,12 @@ const LoginComp = () => {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  const { mutate } = useMutation({
+  const { mutate, error } = useMutation({
     mutationFn: signIn,
     onSuccess: async (data) => {
+      console.log("data sent", data);
+      dispatch(setLoaderAction(false));
+      console.log("login data:", data);
       /*   dispatch(signIn(data.user));
       dispatch(setWishlist(data.user.wishlist)); */
 
@@ -76,6 +72,8 @@ const LoginComp = () => {
       ); */
     },
     onError: (err) => {
+      console.log("error occured");
+      dispatch(setLoaderAction(false));
       if (err instanceof AxiosError) {
         toast.error(
           err?.response?.data?.message || "Sign in failed, please try again.",
@@ -84,11 +82,10 @@ const LoginComp = () => {
         toast.error("Unknown error");
       }
     },
-    onSettled: () => {
-      setLoader(false);
-    },
+    onSettled: () => {},
   });
 
+  console.log("mutation error", error);
   /* check the box */
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
@@ -105,10 +102,14 @@ const LoginComp = () => {
     onSuccess: async (tokenResponse) => {
       try {
         // tokenResponse.access_token
-        setLoader(true);
+        console.log("googleToken", tokenResponse);
+        setGoogleLoader(true);
         const user = await googleAuth(tokenResponse);
 
-        setLoader(false);
+        toast.success("Login successfull");
+        console.log("google user", user);
+
+        setGoogleLoader(false);
       } catch (err) {
         if (err instanceof AxiosError) {
           toast.error(
@@ -127,17 +128,21 @@ const LoginComp = () => {
     },
   });
   const onSubmit = async (data: { email: string; password: string }) => {
-    console.log(data);
+    console.log("login input", data);
 
     try {
-      setLoader(!loader);
-
+      dispatch(setLoaderAction(true));
       /* make api call fro user signIn */
-      await mutate(data);
-    
+      mutate({
+        ...data,
+        rememberMe: isChecked,
+      });
+
       /* dispatch(userLoggedInAndLoggedOutAction(true))
       navigation.navigate('bottomTabNavigation') */
-    } catch (err: any) {
+    } catch (err) {
+      dispatch(setLoaderAction(false));
+      console.log("login error", err);
       if (err instanceof AxiosError) {
         toast.error(
           err?.response?.data?.message || "Sign in failed, please try again.",
@@ -147,13 +152,12 @@ const LoginComp = () => {
       }
     } finally {
       setLoader(false);
+      // dispatch(setLoaderAction(false));
     }
   };
 
   return (
     <div className="mt-4 flex flex-col">
-      {loader && <TextStyle textContent="Loading...." textStyle="text-3xl" />}
-
       <TextStyle
         textContent="Hello Welcome back!"
         textStyle="text-2xl sm:text-3xl text-[#111827] text-bold"
@@ -265,19 +269,25 @@ const LoginComp = () => {
         </div>
 
         <div
-          className="flex h-[55px] cursor-pointer items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA]"
+          className={`flex h-13.75 ${googleLoader ? "cursor-not-allowed" : "cursor-pointer"} items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA]`}
           onClick={() => loginWithGoogleFunc()}
         >
-          <Image
-            src={"/images/google.jpg"}
-            alt="google logo"
-            width={20}
-            height={20}
-          />
-          <TextStyle
-            textContent="Continue with Google"
-            textStyle="text-[#525252]  text-[16px] text-bold "
-          />
+          {!googleLoader ? (
+            <>
+              <Image
+                src={"/images/google.jpg"}
+                alt="google logo"
+                width={20}
+                height={20}
+              />
+              <TextStyle
+                textContent="Continue with Google"
+                textStyle="text-[#525252]  text-[16px] text-bold "
+              />
+            </>
+          ) : (
+            "Please wait..."
+          )}
         </div>
       </div>
 

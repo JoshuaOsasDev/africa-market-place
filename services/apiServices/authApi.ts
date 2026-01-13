@@ -37,6 +37,6 @@ googleAuth = async (payload:
     access_token: string
   }
 ) => {
-  const data = await http.post("http://localhost:9000/api/auth/google", { accessToken: payload.access_token, });
+  const data = await http.post("/auth/google", { accessToken: payload.access_token, });
   return data;
 };

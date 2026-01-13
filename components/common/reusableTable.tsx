@@ -61,8 +61,15 @@ export default function ReusableTable({
   itemsPerPage = 5,
   onSelectChange,
 }: ReusableTableProps) {
-  const tableData = useMemo(() => ({ nodes: data }), [data]);
-
+  const tableData = useMemo(
+    () => ({
+      nodes: data.map((item) => ({
+        ...item,
+        id: item.id || item._id,
+      })),
+    }),
+    [data],
+  );
   console.log(order, "reuseable");
   // Theme customization
   const theme = {

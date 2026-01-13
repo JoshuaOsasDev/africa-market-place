@@ -80,12 +80,19 @@ const page = () => {
   };
 
   return (
-    <div className=" flex flex-col   my-4">
+    <div className="my-4 flex flex-col">
       {
         //   loader && <LoadingScreen />
       }
-      <div className="relative w-[116px] h-[146px] mx-auto">
-        <Image src={"/images/lock.jpg"} fill alt="otp logo" />
+      <div className="relative mx-auto h-[146px] w-[116px]">
+        <Image
+          src="/images/lock.jpg"
+          alt="otp logo"
+          fill
+          sizes="116px"
+          className="object-contain"
+          priority
+        />
       </div>
       <TextStyle
         textContent="We just emailed you"
@@ -96,9 +103,9 @@ const page = () => {
         textStyle="text-[16px] text-[#667185] text-bold text-center"
       />
 
-          <div className="w-full mx-auto flex justify-center items-center my-6">
-            <OtpComponent />
-          </div>
+      <div className="mx-auto my-6 flex w-full items-center justify-center">
+        <OtpComponent />
+      </div>
 
       <div className="flex flex-row space-x-2">
         <TextStyle

@@ -2,13 +2,7 @@ import FilterButton from "@/components/common/filterButton";
 import ShippingFilter from "@/components/pageComponents/admin/shippingFilter";
 import ShippingTable from "@/components/pageComponents/admin/shippingTables";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronDown,
-  Share,
-  Truck,
-  TruckElectric,
-  TruckElectricIcon,
-} from "lucide-react";
+import { Share, Truck, TruckElectric } from "lucide-react";
 
 export default function ShippingPage() {
   return (

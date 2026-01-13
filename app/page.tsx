@@ -10,6 +10,7 @@ import Topcategories from "@/components/pageComponents/user/Home/topcategories";
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
+    
       <Header />
       <Banner />
       <SlidderComp />
