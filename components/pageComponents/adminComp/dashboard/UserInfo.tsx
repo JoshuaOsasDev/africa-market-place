@@ -69,12 +69,12 @@ const UserInfoComp = () => {
   };
 
   return (
-    <div className="mx-auto my-4 flex w-4/5 flex-col rounded-md bg-white p-4 lg:w-3/5">
+    <div className="mx-auto my-4 flex w-full  flex-col rounded-md bg-white p-2 md:p-4 md:w-4/5 lg:w-3/5">
       <div className="flex flex-col gap-4">
         {preview ? (
           <div className="flex flex-col gap-2">
-            <div className="relative mx-auto flex h-37.5 w-37.5 items-center justify-center rounded-full">
-              <div className="relative mx-auto flex h-37.5 w-37.5 items-center justify-center rounded-full overflow-hidden">
+            <div className="relative mx-auto flex lg:h-37.5 h-27.5 lg:w-37.5 w-27.5 items-center justify-center rounded-full">
+              <div className="relative mx-auto flex lg:h-37.5 h-27.5 lg:w-37.5 w-27.5 items-center justify-center rounded-full overflow-hidden">
                 <Image
                   src={preview}
                   alt="Preview"
@@ -96,12 +96,11 @@ const UserInfoComp = () => {
             </div>
           </div>
         ) : (
-          <div className="relative mx-auto flex h-37.5 w-37.5 items-center justify-center rounded-full bg-[#F3F3F3]">
+          <div className="relative mx-auto flex lg:h-37.5 h-27.5 lg:w-37.5 w-27.5 items-center justify-center rounded-full bg-[#F3F3F3]">
             <Image
               alt="user"
               src={"/common/userLogo.png"}
-              width={54}
-              height={54}
+             fill
             />
             <div className="absolute -right-1 bottom-2 rounded-full bg-white p-1">
               <div className="relative flex h-9.5 w-9.5 items-center justify-center rounded-full bg-[#2E7D32]">
@@ -259,7 +258,7 @@ const UserInfoComp = () => {
           {/* submit button starts */}
           <button
             disabled={appLoader}
-            className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] bg-[#2E7D32] p-2.5`}
+            className={`mt-4 cursor-pointer flex ml-auto mr-auto lg:mr-0  px-8 lg:px-10 py-2.5 lg:py-3  border-0 items-center justify-center rounded-md bg-[#2E7D32] `}
           >
             <span className="text-sm leading-[18.90px] font-semibold text-white">
               {appLoader ? "Please wait.." : "Save Changes"}

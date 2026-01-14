@@ -1,11 +1,14 @@
 import Image from "next/image";
+import { CiSettings } from "react-icons/ci";
 import Link from "next/link";
+import { BiSupport } from "react-icons/bi";
 
 import supportPageIcon from "../../public/admin/dashboard_images_and_icons/settings-page-icon.svg";
 import settingPageIcon from "../../public/admin/dashboard_images_and_icons/settings-page-icon.svg";
 
 import UserNavLinks from "./userNavLinks";
 import UserSettingComp from "../pageComponents/user/dashboard/userSettingComp";
+import clsx from "clsx";
 
 const SideBar = () => {
   return (
@@ -21,26 +24,22 @@ const SideBar = () => {
         </Link>
       </div> */}
 
-      <div className="flex grow flex-row justify-between md:flex-col md:space-y-1 md:space-x-0 ">
+      <div className="flex grow flex-row justify-between md:flex-col md:space-y-1 md:space-x-0">
         <UserNavLinks />
         <div className="hidden h-auto w-full grow rounded-md md:block"></div>
         <div className="hidden md:block">
           <Link
             href={""}
-            className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3"
+            /* className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3" */
+            className={clsx(
+              "hidden grow place-items-start justify-center gap-2 rounded-xl p-3 px-3 py-2 text-[14px] font-bold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex md:flex-none md:justify-start md:p-2 md:px-3",
+            )}
           >
-            <Image src={supportPageIcon} width={24} alt="help-icon" />
+            <BiSupport size={20} color="grey" />
             <div className="hidden md:block">Support</div>
           </Link>
-             <UserSettingComp />
-          <Link
-            href={""}
-            className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3"
-          >
-            <Image src={settingPageIcon} width={24} alt="settings-icon" />
-
-            <div className="hidden md:block">Setting</div>
-          </Link>
+          <UserSettingComp />
+         
         </div>
       </div>
     </div>

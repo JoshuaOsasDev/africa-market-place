@@ -1,8 +1,9 @@
+import { PasswordSettingComp } from '@/components/pageComponents/user/dashboard/passwordSetting'
 import React from 'react'
 
 function page() {
   return (
-    <div>page</div>
+    <PasswordSettingComp />
   )
 }
 

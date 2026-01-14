@@ -123,10 +123,10 @@ export const registerStoreSchema = yup.object({
 });
 
 export const changePasswordSchema = yup.object().shape({
-  currentPassword: yup.string().required("Password is required"),
+  currentPassword: yup.string().required("Current password is required"),
   newPassword: yup
     .string()
-    .min(8, "Password must be at least 8 characters long")
+    .min(8, "New Password must be at least 8 characters long")
     .required("Password is required"),
   confirmPassword: yup
     .string()

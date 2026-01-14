@@ -9,8 +9,10 @@ import { userSettingList } from "@/lib/data";
 import Link from "next/link";
 import TextStyle from "@/components/common/textStyle";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsOutline, IoSettingsSharp } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
+import { CiSettings } from "react-icons/ci";
+import clsx from "clsx";
 
 function UserSettingComp() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -22,7 +24,7 @@ function UserSettingComp() {
     settings: [],
   };
   return (
-    <div className="flex h-full flex-col justify-between px-3">
+    <div className="flex h-full flex-col justify-between">
       <div className="flex flex-col space-y-2">
         {userSettingList.map((item, index) => (
           <div
@@ -32,21 +34,22 @@ function UserSettingComp() {
             }`}
           >
             <motion.div onClick={() => toggleAccordion(index)} initial={false}>
-              <div className="group flex w-full flex-row items-center justify-between">
+              <div className="group flex w-full flex-row items-center justify-between rounded-lg hover:bg-[#EAF2EA]">
                 <motion.div
-                  //     whileHover={{ color: " #F27C22" }}
-                  className={`font-['General Sans'] flex flex-1 flex-row py-2 text-base font-medium text-[#6F6F6F]`}
+                  //    whileHover={{ color: "#EAF2EA" }}
+                  className={`font-['General Sans'] flex flex-1 flex-row rounded-lg text-base font-medium text-[#6F6F6F]`}
                 >
                   <div className="flex flex-row items-center space-x-2">
-                    {/* <Image
-                      src={item.imgUrl}
-                      width={20}
-                      height={20}
-                      alt={item.category}
-                    /> */}
-                    <IoSettingsOutline width={40} height={40} size={""} />
+                    <Link
+                      href={""}
+                      className={clsx(
+                        "hidden grow place-items-start justify-center gap-2 rounded-xl p-3 px-3 py-2 text-[14px] font-bold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex md:flex-none md:justify-start md:p-2 md:px-3",
+                      )}
+                    >
+                      <IoSettingsSharp size={20} color="grey" />
 
-                    <TextStyle textContent={item.category} textStyle="text-sm" />
+                      <div className="hidden md:block">Setting</div>
+                    </Link>
                   </div>
                 </motion.div>
                 {openIndex === index ? (
@@ -73,22 +76,20 @@ function UserSettingComp() {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                 >
                   <div className="mt-4 flex flex-row text-sm text-[#6F6F6F]">
-                    <div className="flex flex-col space-y-3">
+                    <div className="flex w-full flex-col space-y-3">
                       {item.subcategory.map((i) => (
-                       <Link
-                       key={i.id}
-                       href={i.url}
-                       className="flex flex-row items-center space-x-2"
-                     >
-                       {i.id == 1 ? (
-                         <FaRegUser />
-                       ) : i.id == 2 ? (
-                         <TbLockPassword />
-                       ) : (
-                         <IoIosNotificationsOutline />
-                       )}
-                       <TextStyle textContent={i.name} />
-                     </Link>
+                        <Link key={i.id} href={i.url}>
+                          <div className="flex flex-row items-center space-x-2 rounded-xl p-2 px-3 hover:bg-[#EAF2EA] hover:text-[#2E7D32]">
+                            {i.id == 1 ? (
+                              <FaRegUser />
+                            ) : i.id == 2 ? (
+                              <TbLockPassword />
+                            ) : (
+                              <IoIosNotificationsOutline />
+                            )}
+                            <TextStyle textContent={i.name} />
+                          </div>
+                        </Link>
                       ))}
                     </div>
                   </div>
