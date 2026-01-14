@@ -23,7 +23,7 @@ export type Product = {
   category: string;
   stock: number;
   price: number;
-  status: "Published" | "Draft" | "Low Stock" | "Out of Stock";
+  state: "Published" | "Draft" | "Low Stock" | "Out of Stock";
   addedDate: string;
 };
 
@@ -65,3 +65,14 @@ export type ShippingDataType = {
   deliveryDate: string;
   status: string;
 };
+export type userInfoType = {
+  firstName: string,
+  lastName: string,
+  email: string,
+  phoneNumber: string,
+  DOB: string,
+  city: string,
+  state: string,
+  address: string,
+  image: string
+}

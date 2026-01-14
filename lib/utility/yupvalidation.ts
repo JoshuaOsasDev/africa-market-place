@@ -55,6 +55,21 @@ export const signUpSchema = yup.object({
     .required("Confirm password is required"),
 });
 
+export const userProfileSchema = yup.object({
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required"),
+  phone: yup.string().required("Phone number is required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  address: yup.string().required("Address is required"),
+  city: yup.string().required("City is required"),
+  postCode: yup.string().required("Post code is required")
+
+
+});
+
 export const editProfileSchema = yup.object({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
@@ -65,6 +80,20 @@ export const editProfileSchema = yup.object({
     .required("Email is required"),
   role: yup.string().required("User role is required"),
   image: yup.string().required("User image is required"),
+});
+export const profileSchema = yup.object({
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required"),
+  phone: yup.string().required("Phone number is required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  image: yup.string().required("User image is required"),
+  DOB: yup.string().required("User image is required"),
+  state: yup.string().required("State is required"),
+  city: yup.string().required("City is required"),
+  address: yup.string().required("Address is required"),
 });
 
 export const loginSchema = yup.object({
@@ -82,10 +111,8 @@ export const verifyEmailSchema = yup.object({
 });
 
 export const verifyOtpSchemaType = yup.object({
-  otp: yup
-    .string().required("Otp is required")
+  otp: yup.string().required("Otp is required"),
 });
-
 
 export const registerStoreSchema = yup.object({
   storeName: yup.string().required("Store name is required"),
