@@ -27,7 +27,7 @@ export default function UsersPage() {
           </div>
           <div className="flex flex-col">
             <h3 className="text-[#8B8D97]">Total Users</h3>
-            <p className="text-xl font-medium">{useradminData.data.length}</p>
+            <p className="text-xl font-medium">{useradminData?.data?.length}</p>
           </div>
         </div>
         {/* USERS TODAY */}
@@ -38,7 +38,7 @@ export default function UsersPage() {
           <div className="flex flex-col">
             <h3 className="text-[#8B8D97]">Active Users</h3>
             <p className="text-xl font-medium">
-              {countActiveUsersLast2Months(useradminData.data)}
+              {countActiveUsersLast2Months(useradminData?.data)}
             </p>
           </div>
         </div>
@@ -130,7 +130,7 @@ export default function UsersPage() {
           </div>
         </div>
 
-        <UserTable data={useradminData.data} user="user" columns={[]} />
+        <UserTable data={useradminData?.data} user="user" />
       </div>
     </div>
   );

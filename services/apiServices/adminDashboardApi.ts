@@ -37,6 +37,12 @@ export const getAdminUser = async () => {
 
 export const getAdminDashboardAnalytics = async () => {
   const { data } = await http.get(`/admin/dashboard-analytics`);
-  console.log(data, "admin data");
+  // console.log(data, "admin data");
+  return data;
+};
+
+//get all categories
+export const getAllCategories = async () => {
+  const { data } = await http.get(`/all/category-subcategory-childcategory`);
   return data;
 };

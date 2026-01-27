@@ -5,17 +5,41 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 
 import { Plus, X } from "lucide-react";
 
-export default function ExportProduct() {
+export default function ExportProduct({
+  name,
+  showId,
+  typeId,
+}: {
+  name: string;
+  showId: boolean;
+  typeId: string;
+}) {
   const dispatch = useAppDispatch();
-  const showForm = useAppSelector((state) => state.showFormReducer.showForm);
+  const show = useAppSelector((state) => state.showFormReducer.show);
+  const type = useAppSelector((state) => state.showFormReducer.type);
 
+  console.log(show, type, "redux");
   // console.log(showForm, "show");
   const openForm = () => {
-    dispatch(setShowForm({ showform: true }));
+    dispatch(
+      setShowForm({
+        showform: {
+          show: showId,
+          type: typeId,
+        },
+      }),
+    );
   };
 
   const closeForm = () => {
-    dispatch(setShowForm({ showform: false }));
+    dispatch(
+      setShowForm({
+        showform: {
+          show: false,
+          type: "",
+        },
+      }),
+    );
   };
 
   return (
@@ -26,9 +50,9 @@ export default function ExportProduct() {
       </div>
 
       <div className="flex items-center space-x-2.5">
-        {!showForm ? (
+        {!show && type === "" ? (
           <Button
-            className={`flex cursor-pointer items-center justify-center gap-2 bg-[#EAF2EA] px-3.5 py-6 text-sm font-semibold text-[#2E7D32] hover:bg-[#EAF2EA]/80 md:px-4 md:py-3 ${showForm ? "border bg-[#FAFAFA] text-[#858D9D]" : ""}`}
+            className={`flex cursor-pointer items-center justify-center gap-2 bg-[#EAF2EA] px-3.5 py-6 text-sm font-semibold text-[#2E7D32] hover:bg-[#EAF2EA]/80 md:px-4 md:py-3 ${show ? "border bg-[#FAFAFA] text-[#858D9D]" : ""}`}
           >
             <span className="text-[#2E7D32]">
               <svg
@@ -50,7 +74,7 @@ export default function ExportProduct() {
         ) : (
           <Button
             onClick={() => closeForm()}
-            className={`flex cursor-pointer items-center justify-center gap-2 bg-[#EAF2EA] px-3.5 py-6 text-sm font-semibold text-[#2E7D32] hover:bg-[#EAF2EA]/80 md:px-4 md:py-3 ${showForm ? "border bg-[#FAFAFA] text-[#858D9D]" : ""}`}
+            className={`flex cursor-pointer items-center justify-center gap-2 bg-[#EAF2EA] px-3.5 py-6 text-sm font-semibold text-[#2E7D32] hover:bg-[#EAF2EA]/80 md:px-4 md:py-3 ${show ? "border bg-[#FAFAFA] text-[#858D9D]" : ""}`}
           >
             <span className="">
               <X />
@@ -66,7 +90,7 @@ export default function ExportProduct() {
           <span>
             <Plus />
           </span>
-          <span className="">Add Product</span>
+          <span className="">Add {name} </span>
         </Button>
       </div>
     </div>

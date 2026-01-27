@@ -1,20 +1,21 @@
 "use client";
-import Loader from "@/components/common/loader";
 import SetShowForm from "@/components/pageComponents/vendor/product/setShowForm";
-import { useVendorProducts } from "@/lib/hooks/vendorDashboard/useVendor";
+import { useAllCategories } from "@/lib/hooks/adminDashboardApi/useAdmin";
+import { setCategories } from "@/redux/slices/categories";
+import { useAppDispatch } from "@/redux/store";
+import { useEffect } from "react";
 
 const ProductPage = () => {
-  const { isLoading, vendorProducts, vendorProductsError } =
-    useVendorProducts();
+  // const dispatch = useAppDispatch();
+  // const { allCategories } = useAllCategories();
+  // console.log(allCategories, "all cat");
 
-  console.log(vendorProducts);
-  if (isLoading) {
-    return <Loader />;
-  }
+  // useEffect(() => {
+  //   if (allCategories) {
+  //     dispatch(setCategories(allCategories));
+  //   }
+  // }, [allCategories, dispatch]);
 
-  if (vendorProductsError) {
-    return <div className="m-auto text-red-400">Error loading products</div>;
-  }
   return (
     <div>
       <SetShowForm />

@@ -7,14 +7,17 @@ interface DeleteModalProps {
   onConfirm: () => void;
   onCloseModal?: () => void;
   text?: string;
+  disabled?: boolean;
 }
 
 export default function DeleteProductModal({
   productName,
   onConfirm,
   onCloseModal,
+  disabled,
   text,
 }: DeleteModalProps) {
+  console.log(disabled, "disabled");
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <div className="rounded-full bg-[#FFE8E5] px-6 py-5">
@@ -39,6 +42,7 @@ export default function DeleteProductModal({
         </button>
 
         <button
+          disabled={disabled}
           onClick={() => {
             onConfirm();
             onCloseModal?.();

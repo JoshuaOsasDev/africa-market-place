@@ -1,28 +1,46 @@
-import ProductDetails from "@/components/pageComponents/vendor/product/ProductDetails";
-import ProductDetailsButton from "@/components/pageComponents/vendor/product/productDetailsButton";
-import ProductLinkNav from "@/components/pageComponents/vendor/product/productLinkNav";
-import { ArrowLeft } from "lucide-react";
+import ProductIdPage from "@/components/pageComponents/vendor/product/productIdPage";
+//import { useVendorProductById } from "@/lib/hooks/vendorDashboard/useVendor";
+
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { productId: string };
+// }) {
+//   const { productId } = await params;
+
+//   const res = await fetch(
+//     `${process.env.NEXT_PUBLIC_API_URL}/api/vendor/products/${productId}`,
+//     {
+//       cache: "no-store",
+//       // credentials: "include",
+//     },
+//   );
+
+//   if (!res.ok) return null;
+//   const product = await res.json();
+
+//   if (!product?.data) {
+//     return { title: "Product not found" };
+//   }
+//   console.log(product, "meta product");
+//   console.log(res, "meta res");
+//   return {
+//     title: product.data.name,
+//     description: product.data.metaDescription,
+//   };
+// }
+
+// export const metadata = {
+//   title: "wide",
+//   discription: "home",
+// };
 
 export default async function ProductDetailsPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ productId: string }>;
 }) {
-  console.log(params, "params");
-  return (
-    <div className="">
-      <div className="hidden items-end justify-between md:flex">
-        <div className="flex flex-col gap-2">
-          <h1 className="hidden text-2xl font-medium leading-8 tracking-[0.5%] text-[#333843] md:block">
-            Products Details
-          </h1>
-          <ProductLinkNav />
-        </div>
-        <ProductDetailsButton />
-      </div>
+  const { productId } = await params;
 
-      <ArrowLeft className="ml-2 md:hidden" />
-      <ProductDetails />
-    </div>
-  );
+  return <ProductIdPage productId={productId} />;
 }

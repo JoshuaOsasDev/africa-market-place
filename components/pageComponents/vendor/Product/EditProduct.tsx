@@ -1,94 +1,218 @@
 import React, { useRef, useState, useEffect } from "react";
 import { ChevronDown, ImageOff, X } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+import { useRouter } from "next/navigation";
+import {
+  useVendorProductById,
+  useVendorUpdateProduct,
+} from "@/lib/hooks/vendorDashboard/useVendor";
+import { CategoryType, Product } from "@/types/product";
+import Image from "next/image";
+import EditProductSkeleton from "@/components/common/editProductSkeleton";
+import { useAppSelector } from "@/redux/store";
+
 // Product validation schema
 const productSchema = yup.object().shape({
-  productName: yup.string().required("Product name is required"),
+  name: yup.string().required("Product name is required"),
   sku: yup.string().required("SKU is required"),
   price: yup
     .number()
     .typeError("Price must be a number")
     .required("Price is required"),
-  productDescription: yup.string().required("Product description is required"),
-  category: yup.string().required("Category is required"),
-  tags: yup.string().nullable(),
+  salePrice: yup.number().nullable(),
+  description: yup.string().required("Product description is required"),
+  category: yup.object({
+    id: yup.string().required("Category is required"),
+    name: yup.string().required(),
+  }),
+  subCategory: yup.object({
+    id: yup.string().nullable(),
+    name: yup.string().nullable(),
+  }),
+  childCategory: yup.object({
+    id: yup.string().nullable(),
+    name: yup.string().nullable(),
+  }),
+  tags: yup.array().nullable(),
   status: yup.string().required("Status is required"),
-  quantity: yup.string().required("Quantity is required"),
-  barcode: yup.string().required("Barcode is required"),
-  percentage: yup.number().nullable(),
-  checked: yup.boolean().default(true),
-  discountType: yup.string().nullable(),
-  imagePreview: yup.mixed().nullable(),
-  weight: yup.string().nullable(),
+  stockQuantity: yup
+    .number()
+    .typeError("Quantity must be a number")
+    .required("Quantity is required"),
+  isFeatured: yup.boolean().default(false),
+  images: yup.mixed().nullable(),
+  deliveryType: yup.string().default("physical"),
 });
 
-export default function EditProduct({ existingData = null }) {
+type EditProductProps = {
+  existingData?: Product | string; // Can be full product data or just slug
+};
+
+export default function EditProduct({ existingData }: EditProductProps) {
+  const router = useRouter();
   const [isDragging, setIsDragging] = useState(false);
-  const [imagePreview, setImagePreview] = useState<any>(null);
+  const [images, setImages] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // EXAMPLE EXISTING PRODUCT DATA (can be passed as prop)
-  const defaultData = existingData || {
-    productName: "Fresh Organic Carrots",
-    sku: "VEG-CR-102",
-    price: 4.99,
-    productDescription:
-      "Crisp, sweet, organic carrots sourced directly from local farms.",
-    category: "food",
-    tags: "bestseller",
-    status: "Published",
-    quantity: "250",
-    barcode: "784562901234",
-    percentage: 10,
-    discountType: "percentage",
-    imagePreview: "/images/tomatoes.png",
-    weight: "1kg",
-    checked: true,
-  };
+  //Redux category state
+  const categories = useAppSelector((state) => state.categories);
+
+  // Determine if existingData is a slug (string) or product object
+  const isSlug = typeof existingData === "string";
+  //console.log(isSlug, "slug");
+  const slug = isSlug ? existingData : existingData?.slug;
+  const productData = !isSlug ? existingData : null;
+
+  const { vendorProductById, isLoading: isFetching } = useVendorProductById(
+    isSlug ? slug : "",
+  );
+
+  console.log(vendorProductById, "slug id");
+
+  // Use fetched data or provided data
+  const data = productData || vendorProductById?.data;
+
+  // const matchedCategory = categories.categories.category?.find(
+  //   (cat) => cat.slug === productData?.category.slug,
+  // );
+
+  //console.log(categories.categories?.category, "all cat");
+
+  const categoryOptions = categories.categories?.category || [];
+  const subCategoryOptions = categories.categories?.subCategory || [];
+  const childCategoryOptions = categories.categories?.childCategory || [];
+
+  //console.log(childCategoryOptions, "child options");
+  // Get the update mutation hook
+  const {
+    mutate: updateProduct,
+    isPending,
+    error,
+    isSuccess,
+  } = useVendorUpdateProduct(slug || "");
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
     watch,
+    reset,
+
     formState: { errors },
   } = useForm({
     resolver: yupResolver(productSchema),
-    defaultValues: defaultData,
+    defaultValues: {
+      name: "",
+      sku: "",
+      price: 0,
+      salePrice: 0,
+      description: "",
+      category: {
+        id: "",
+        name: "",
+      },
+      subCategory: {
+        id: "",
+        name: "",
+      },
+      childCategory: {
+        id: "",
+        name: "",
+      },
+      tags: [],
+      status: "draft",
+      stockQuantity: 0,
+      isFeatured: false,
+      deliveryType: "physical",
+      images: [],
+    },
   });
 
-  // Watch form values
-  const category = watch("category");
-  const tags = watch("tags");
   const status = watch("status");
-  const checked = watch("checked");
-  const discountType = watch("discountType");
-  const percentage = watch("percentage");
+  const selectedCategory = watch("category");
+  const selectedSubCategory = watch("subCategory");
+
+  console.log(selectedCategory.id, "selected");
+  // Filter subcategories based on selected category
+  // const filteredSubCategories = selectedCategory?.id
+  //   ? subCategoryOptions.filter((sub) => sub._id === selectedCategory.id)
+  //   : [];
+
+  const filteredSubCategories = selectedCategory?.id
+    ? subCategoryOptions.filter(
+        (sub: any) => sub.parentCategory === selectedCategory.id,
+      )
+    : [];
+
+  // Filter child categories based on selected subcategory
+  // const filteredChildCategories = selectedSubCategory?.id
+  //   ? childCategoryOptions.filter((child) => {
+  //       return child._id === selectedSubCategory.id;
+  //     })
+  //   : [];
+
+  const filteredChildCategories = selectedSubCategory?.id
+    ? childCategoryOptions.filter(
+        (child: any) => child.subCategory === selectedSubCategory.id,
+      )
+    : [];
+
+  console.log(subCategoryOptions[0], "sub");
+  // Update form when data is loaded
+  useEffect(() => {
+    if (data) {
+      reset({
+        name: data.name || "",
+        sku: data.sku || "",
+        price: data.price || 0,
+        salePrice: data.salePrice || 0,
+        description: data.description || "",
+        category: {
+          id: data.category._id,
+          name: data.category.name,
+        },
+        subCategory: data.subCategory || "",
+        childCategory: data.childCategory || "",
+        tags: data.tags || [],
+        status: data.status || "draft",
+        stockQuantity: data.stockQuantity || 0,
+        isFeatured: data.isFeatured || false,
+        deliveryType: data.deliveryType || "physical",
+        images: data.images || [],
+      });
+
+      // Set image preview
+      if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+        const firstImage = data.images[0]?.url;
+        if (firstImage) {
+          setImages(firstImage);
+        }
+      }
+    }
+  }, [data, reset]);
 
   // Set initial image preview from existing data
   useEffect(() => {
-    if (defaultData.imagePreview) {
-      setImagePreview(defaultData.imagePreview);
+    if (productData?.images?.length) {
+      setImages(productData.images[0].url);
     }
-  }, []);
-
+  }, [productData]);
   // Handle image upload
-  const handleImageChange = (file:File) => {
+  const handleImageChange = (file: File) => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setValue("imagePreview", reader.result);
+        setImages(reader.result as string);
+        setValue("images", reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-
-  
   // Handle drag events
   const handleDragEnter = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
@@ -107,7 +231,7 @@ export default function EditProduct({ existingData = null }) {
     e.stopPropagation();
   };
 
-  const handleDrop = (e:React.DragEvent<HTMLElement>) => {
+  const handleDrop = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -128,8 +252,8 @@ export default function EditProduct({ existingData = null }) {
 
   // Remove image
   const handleRemoveImage = () => {
-    setImagePreview(null);
-    setValue("imagePreview", null);
+    setImages(null);
+    setValue("images", null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -140,15 +264,68 @@ export default function EditProduct({ existingData = null }) {
     fileInputRef.current?.click();
   };
 
-  const onSubmit = (data: any) => {
-    console.log("Updated Product Data:", data);
-    alert("Product updated successfully! Check console for data.");
+  const onSubmit = async function (data: any, e?: React.BaseSyntheticEvent) {
+    // Map form data to UpdateProductPayload
+    e?.preventDefault(); // 👈 optional safety
+    const submitData: any = {
+      slug: productData?.slug,
+      name: data.name,
+      sku: data.sku,
+      price: Number(data.price),
+      salePrice: Number(data.salePrice),
+      description: data.description,
+      category: data.category.id,
+      subCategory: data.subCategory.id,
+      childCategory: data.childCategory.id,
+      tags: Array.isArray(data.tags) ? data.tags : [],
+      status: data.status,
+      stockQuantity: Number(data.stockQuantity),
+      isFeatured: data.isFeatured,
+      deliveryType: data.deliveryType,
+      images: images ? [{ _id: "img_123", url: images }] : [],
+    };
+
+    console.log(productData?.slug || "", submitData, "submit");
+    // Call the mutation
+    updateProduct(submitData);
   };
 
+  const onError = (errors: any) => {
+    console.log("Form validation errors:", errors);
+  };
+
+  // Redirect on success
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        router.push(`/vendor/dashboard/product/${productData?.slug || slug}`);
+      }, 1500);
+    }
+  }, [isSuccess, router, productData, slug]);
+
+  if (isFetching) return <EditProductSkeleton />;
   return (
     <div className="min-h-screen py-6">
+      {/* Error Message */}
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+          <p className="font-medium">Error updating product</p>
+          <p className="text-sm">
+            {error instanceof Error ? error.name : "Failed to update product"}
+          </p>
+        </div>
+      )}
+
+      {/* Success Message */}
+      {isSuccess && (
+        <div className="mb-4 rounded-lg border border-green-200 bg-green-50 p-4 text-green-700">
+          <p className="font-medium">✓ Product updated successfully!</p>
+          <p className="text-sm">Redirecting to products list...</p>
+        </div>
+      )}
+
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit, onError)}
         className="grid max-w-7xl grid-cols-1 gap-6 px-2 lg:grid-cols-3"
       >
         {/* Left Column */}
@@ -167,13 +344,13 @@ export default function EditProduct({ existingData = null }) {
                 </label>
                 <input
                   type="text"
-                  {...register("productName")}
+                  {...register("name")}
                   placeholder="Type product name here..."
                   className="w-full rounded-lg border border-[#E0E2E7] bg-[#F9F9FC] px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-300"
                 />
-                {errors.productName && (
+                {errors.name && (
                   <p className="mt-1 text-sm text-red-600">
-                    {errors.productName.message}
+                    {errors.name.message}
                   </p>
                 )}
               </div>
@@ -184,14 +361,14 @@ export default function EditProduct({ existingData = null }) {
                   Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
-                  {...register("productDescription")}
+                  {...register("description")}
                   placeholder="Type product description here..."
                   rows={4}
                   className="w-full resize-none rounded-lg border border-[#E0E2E7] bg-[#F9F9FC] px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-300"
                 />
-                {errors.productDescription && (
+                {errors.description && (
                   <p className="mt-1 text-sm text-red-600">
-                    {errors.productDescription.message}
+                    {errors.description.message}
                   </p>
                 )}
               </div>
@@ -220,20 +397,24 @@ export default function EditProduct({ existingData = null }) {
                     : "border-[#E0E2E7] bg-[#F9F9FC]"
                 }`}
               >
-                {imagePreview ? (
-                  <div className="relative w-full">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="mx-auto h-48 w-auto rounded-lg object-contain"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleRemoveImage}
-                      className="absolute top-2 right-2 rounded-full bg-red-500 p-1.5 text-white transition hover:bg-red-600"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
+                {images ? (
+                  <div className="w-full">
+                    <div className="relative h-48 w-auto p-5">
+                      <Image
+                        src={images}
+                        className="mx-auto rounded-lg object-contain"
+                        alt="Product"
+                        fill
+                      />
+
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="right- absolute top-0 right-0 rounded-full bg-red-500 p-1.5 text-white transition hover:bg-red-600"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <>
@@ -250,6 +431,7 @@ export default function EditProduct({ existingData = null }) {
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleFileInputChange}
                   className="hidden"
                 />
@@ -259,7 +441,7 @@ export default function EditProduct({ existingData = null }) {
                   onClick={handleAddImageClick}
                   className="rounded-lg bg-[#EAF2EA] px-6 py-2 text-sm font-medium text-[#2E7D32] transition hover:bg-green-700 hover:text-white focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
                 >
-                  {imagePreview ? "Change Image" : "Add Image"}
+                  {images ? "Change Image" : "Add Image"}
                 </button>
               </div>
             </div>
@@ -293,30 +475,13 @@ export default function EditProduct({ existingData = null }) {
               <div className="flex gap-4">
                 <div className="flex-1">
                   <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Discount Type
-                  </label>
-                  <div className="relative">
-                    <select
-                      {...register("discountType")}
-                      className="w-full cursor-pointer appearance-none rounded-lg border border-[#E0E2E7] bg-[#F9F9FC] px-4 py-2.5 text-gray-700 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-300"
-                    >
-                      <option value="">Select a discount type</option>
-                      <option value="percentage">Percentage</option>
-                      <option value="fixed">Fixed Amount</option>
-                      <option value="bogo">Buy One Get One</option>
-                    </select>
-                    <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                  </div>
-                </div>
-
-                <div className="flex-1">
-                  <label className="mb-2 block text-sm font-medium text-[#4D5464]">
-                    Discount percentage (%)
+                    Sale Price
                   </label>
                   <input
                     type="number"
-                    {...register("percentage")}
-                    placeholder="Type discount percentage..."
+                    step="0.01"
+                    {...register("salePrice")}
+                    placeholder="$ Type sale price here..."
                     className="w-full rounded-lg border border-[#E0E2E7] bg-[#F9F9FC] px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-300"
                   />
                 </div>
@@ -331,7 +496,7 @@ export default function EditProduct({ existingData = null }) {
                 Inventory
               </h2>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4D5464]">
                     SKU <span className="text-red-500">*</span>
@@ -351,34 +516,17 @@ export default function EditProduct({ existingData = null }) {
 
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4D5464]">
-                    Barcode <span className="text-red-500">*</span>
+                    Stock Quantity <span className="text-red-500">*</span>
                   </label>
                   <input
-                    type="text"
-                    {...register("barcode")}
-                    placeholder="Product barcode..."
-                    className="w-full rounded-lg border border-[#E0E2E7] bg-[#F9F9FC] px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-300"
-                  />
-                  {errors.barcode && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.barcode.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-[#4D5464]">
-                    Quantity <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    {...register("quantity")}
+                    type="number"
+                    {...register("stockQuantity")}
                     placeholder="Product quantity..."
                     className="w-full rounded-lg border border-[#E0E2E7] bg-[#F9F9FC] px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-300"
                   />
-                  {errors.quantity && (
+                  {errors.stockQuantity && (
                     <p className="mt-1 text-sm text-red-600">
-                      {errors.quantity.message}
+                      {errors.stockQuantity.message}
                     </p>
                   )}
                 </div>
@@ -393,31 +541,16 @@ export default function EditProduct({ existingData = null }) {
                 Shipping
               </h2>
 
-              <div className="mb-5 flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
-                  {...register("checked")}
+                  {...register("deliveryType")}
+                  value="physical"
                   className="h-5 w-5 cursor-pointer rounded-md border border-gray-400 accent-[#2E7D32] transition-all"
                 />
-                <label
-                  className={`cursor-pointer text-sm font-semibold ${
-                    checked ? "text-[#2E7D32]" : "text-[#4D5464]"
-                  }`}
-                >
+                <label className="cursor-pointer text-sm font-semibold text-[#4D5464]">
                   This is a physical product
                 </label>
-              </div>
-
-              <div className="max-w-xs">
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Weight
-                </label>
-                <input
-                  type="text"
-                  {...register("weight")}
-                  placeholder="Product weight..."
-                  className="w-full rounded-lg border border-[#E0E2E7] bg-[#F9F9FC] px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-300"
-                />
               </div>
             </div>
           </div>
@@ -432,22 +565,49 @@ export default function EditProduct({ existingData = null }) {
                 Category
               </h2>
 
+              {/* Product Category */}
               <div className="mb-6">
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Product Category <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <select
-                    {...register("category")}
-                    className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-500"
-                  >
-                    <option value="">Select a category</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="clothing">Clothing</option>
-                    <option value="food">Food & Beverages</option>
-                    <option value="books">Books</option>
-                    <option value="toys">Toys</option>
-                  </select>
+                  <Controller
+                    name="category"
+                    control={control}
+                    render={({ field }) => (
+                      <select
+                        {...field}
+                        className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-500"
+                        onChange={(e) => {
+                          const selectedId = e.target.value;
+                          const selectedCategory = categoryOptions.find(
+                            (cat: CategoryType) => cat._id === selectedId,
+                          );
+                          if (selectedCategory) {
+                            field.onChange({
+                              id: selectedCategory._id,
+                              name: selectedCategory.name,
+                            });
+                            // Reset subcategory and child category when category changes
+                            setValue("subCategory", { id: "", name: "" });
+                            setValue("childCategory", { id: "", name: "" });
+                          } else {
+                            field.onChange({ id: "", name: "" });
+                            setValue("subCategory", { id: "", name: "" });
+                            setValue("childCategory", { id: "", name: "" });
+                          }
+                        }}
+                        value={field.value?.id || ""}
+                      >
+                        <option value="">Select a category</option>
+                        {categoryOptions.map((cat: any) => (
+                          <option key={cat._id} value={cat._id}>
+                            {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  />
                   <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 </div>
                 {errors.category && (
@@ -457,23 +617,122 @@ export default function EditProduct({ existingData = null }) {
                 )}
               </div>
 
-              <div>
+              {/* Sub Category */}
+              <div className="mb-6">
                 <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Product Tags
+                  Sub Category
                 </label>
                 <div className="relative">
-                  <select
-                    {...register("tags")}
-                    className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-500"
-                  >
-                    <option value="">Select tags</option>
-                    <option value="new">New Arrival</option>
-                    <option value="sale">On Sale</option>
-                    <option value="featured">Featured</option>
-                    <option value="bestseller">Best Seller</option>
-                  </select>
+                  <Controller
+                    name="subCategory"
+                    control={control}
+                    render={({ field }) => (
+                      <select
+                        {...field}
+                        disabled={
+                          !selectedCategory?.id ||
+                          filteredSubCategories.length === 0
+                        }
+                        className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-500 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
+                        onChange={(e) => {
+                          const selectedId = e.target.value;
+                          console.log(selectedId, "selectedId");
+                          const selectedSubCat = filteredSubCategories.find(
+                            (sub: any) => sub._id === selectedId,
+                          );
+                          if (selectedSubCat) {
+                            field.onChange({
+                              id: selectedSubCat._id,
+                              name: selectedSubCat.name,
+                            });
+                            // Reset child category when subcategory changes
+                            setValue("childCategory", { id: "", name: "" });
+                          } else {
+                            field.onChange({ id: "", name: "" });
+                            setValue("childCategory", { id: "", name: "" });
+                          }
+                        }}
+                        value={field.value?.id || ""}
+                      >
+                        <option value="">
+                          {!selectedCategory?.id
+                            ? "Select a category first"
+                            : filteredSubCategories.length === 0
+                              ? "No subcategories available"
+                              : "Select a subcategory"}
+                        </option>
+                        {filteredSubCategories.map((sub: any) => (
+                          <option key={sub._id} value={sub._id}>
+                            {sub.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  />
                   <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 </div>
+                {errors.subCategory && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.subCategory.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Child Category */}
+              <div className="mb-6">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Child Category
+                </label>
+                <div className="relative">
+                  <Controller
+                    name="childCategory"
+                    control={control}
+                    render={({ field }) => (
+                      <select
+                        {...field}
+                        disabled={
+                          !selectedSubCategory?.id ||
+                          filteredChildCategories.length === 0
+                        }
+                        className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-500 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
+                        onChange={(e) => {
+                          const selectedId = e.target.value;
+                          const selectedChild = filteredChildCategories.find(
+                            (child: any) => child._id === selectedId,
+                          );
+                          if (selectedChild) {
+                            field.onChange({
+                              id: selectedChild._id,
+                              name: selectedChild.name,
+                            });
+                          } else {
+                            field.onChange({ id: "", name: "" });
+                          }
+                        }}
+                        value={field.value?.id || ""}
+                      >
+                        <option value="">
+                          {!selectedSubCategory?.id
+                            ? "Select a subcategory first"
+                            : filteredChildCategories.length === 0
+                              ? "No child categories available"
+                              : "Select a child category"}
+                        </option>
+                        {filteredChildCategories.map((child: any) => (
+                          <option key={child._id} value={child._id}>
+                            {child.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  />
+                  <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                </div>
+                {errors.childCategory && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.childCategory.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -483,12 +742,12 @@ export default function EditProduct({ existingData = null }) {
             <div className="p-6">
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900">Status</h2>
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 capitalize">
                   {status}
                 </span>
               </div>
 
-              <div>
+              <div className="mb-6">
                 <label className="mb-2 block text-sm font-medium text-gray-700">
                   Product Status <span className="text-red-500">*</span>
                 </label>
@@ -497,12 +756,23 @@ export default function EditProduct({ existingData = null }) {
                     {...register("status")}
                     className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-500"
                   >
-                    <option value="Draft">Draft</option>
-                    <option value="Published">Published</option>
-                    <option value="Archived">Archived</option>
+                    <option value="draft">Draft</option>
+                    <option value="pending">Pending</option>
+                    <option value="published">Published</option>
                   </select>
                   <ChevronDown className="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-gray-400" />
                 </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  {...register("isFeatured")}
+                  className="h-5 w-5 cursor-pointer rounded-md border border-gray-400 accent-[#2E7D32]"
+                />
+                <label className="cursor-pointer text-sm font-medium text-gray-700">
+                  Featured Product
+                </label>
               </div>
             </div>
           </div>
@@ -511,24 +781,32 @@ export default function EditProduct({ existingData = null }) {
         {/* Footer Submit Button */}
         <div className="bg-white lg:col-span-3">
           <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-4 md:justify-center">
-            {/* <div className="hidden text-sm text-gray-600 md:block">
-              <span className="font-medium">Product Status:</span>{" "}
-              <span className="rounded-full bg-green-100 px-3 py-1 text-green-700">
-                Editing
-              </span>
-            </div> */}
             <div className="flex items-center justify-center gap-5 md:gap-3">
               <button
                 type="button"
-                className="rounded-lg bg-[#D5E5D6] px-20 py-2.5 font-medium text-gray-700 transition focus:ring-1 focus:ring-gray-500 focus:ring-offset-1 focus:outline-none"
+                onClick={() => router.back()}
+                className="rounded-lg bg-[#D5E5D6] px-20 py-2.5 font-medium text-gray-700 transition hover:bg-gray-200"
               >
                 Go back
               </button>
               <button
                 type="submit"
-                className="rounded-lg bg-[#2E7D32] px-10 py-2.5 font-medium text-white transition hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
+                disabled={isPending || isSuccess}
+                className="flex items-center gap-2 rounded-lg bg-[#2E7D32] px-10 py-2.5 font-medium text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Update Product
+                {isPending ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Updating...
+                  </span>
+                ) : isSuccess ? (
+                  <span className="flex items-center gap-2">
+                    <span>✓</span>
+                    Updated
+                  </span>
+                ) : (
+                  "Update Product"
+                )}
               </button>
             </div>
           </div>

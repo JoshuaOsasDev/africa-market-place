@@ -331,12 +331,7 @@ const images = [
   "/images/tomatoes.png",
   "/images/pepper.png",
 ];
-const statuses: Product["status"][] = [
-  "Published",
-  "Low Stock",
-  "Draft",
-  "Out of Stock",
-];
+const statuses: Product["status"][] = ["published", "draft", "Out of Stock"];
 
 export const ordersData = Array.from({ length: 50 }, (_, index) => {
   const i = index % 4;
@@ -358,7 +353,7 @@ export const ordersData = Array.from({ length: 50 }, (_, index) => {
     };
   }
 });
-export const products: Product[] = Array.from({ length: 100 }, (_, index) => {
+export const products = Array.from({ length: 100 }, (_, index) => {
   const i = index % 4;
   return {
     id: (index + 1).toString(),

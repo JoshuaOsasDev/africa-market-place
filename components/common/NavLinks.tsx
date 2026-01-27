@@ -27,8 +27,8 @@ const links = [
   },
   { name: "Seller", href: "/vendor/dashboard/seller", icon: sellerPageIcon },
   {
-    name: "Analytics",
-    href: "/vendor/dashboard/analytics",
+    name: "Wallets",
+    href: "/vendor/dashboard/wallet",
     icon: sellerPageIcon,
   },
 ];

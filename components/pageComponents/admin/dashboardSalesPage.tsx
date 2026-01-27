@@ -12,20 +12,20 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const CustomTooltip = ({ active, payload }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-lg border border-[#2E7D32]/20 bg-[#F0F9F0] p-3 shadow-lg">
-        <p className="text-[14px] font-semibold text-[#333843]">
-          {payload[0].name}: {payload[0].value}
-        </p>
-      </div>
-    );
-  }
-  return (
-    <div className="h-10 w-20 rounded-lg border border-[#2E7D32]/20 bg-[#F0F9F0] p-3"></div>
-  );
-};
+// const CustomTooltip = ({ active, payload }) => {
+//   if (active && payload && payload.length) {
+//     return (
+//       <div className="rounded-lg border border-[#2E7D32]/20 bg-[#F0F9F0] p-3 shadow-lg">
+//         <p className="text-[14px] font-semibold text-[#333843]">
+//           {payload[0].name}: {payload[0].value}
+//         </p>
+//       </div>
+//     );
+//   }
+//   return (
+//     <div className="h-10 w-20 rounded-lg border border-[#2E7D32]/20 bg-[#F0F9F0] p-3"></div>
+//   );
+// };
 
 export default function DashboardSalesPage() {
   // Sales Dynamics Data
@@ -103,7 +103,7 @@ export default function DashboardSalesPage() {
                 width={20}
                 background={{
                   fill: "#EAF2EA", // 👈 background color
-                  radius: [8, 8, 0, 0],
+                  radius: `${[8, 8, 0, 0]}`,
                 }}
               />
             </BarChart>

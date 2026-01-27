@@ -4,14 +4,17 @@ import DashboardCharts from "@/components/pageComponents/vendorComp/dashboard/Da
 import DashboardFilter from "@/components/pageComponents/vendorComp/dashboard/dashboardFilter";
 import DashboardSalesAndProduct from "@/components/pageComponents/vendorComp/dashboard/dashboardSalesAndProduct";
 import DashboardSummary from "@/components/pageComponents/vendorComp/dashboard/dashboardSumarry";
-import { useVendorDashboardAnalytics } from "@/lib/hooks/vendorDashboard/useVendor";
-import { Suspense } from "react";
+import {
+  useVendorDashboardAnalytics,
+  useVendorProducts,
+} from "@/lib/hooks/vendorDashboard/useVendor";
 
 const DashboardPage = () => {
+  //Hook to get DashBoard analytics
   const { isLoading, dashboardVendorAnalytics, error } =
     useVendorDashboardAnalytics();
 
-  console.log(dashboardVendorAnalytics, "dashboardAnalytics");
+  const dashboardData = dashboardVendorAnalytics?.data;
   if (isLoading) {
     return <Loader />;
   }
@@ -19,9 +22,17 @@ const DashboardPage = () => {
   return (
     <div>
       <DashboardFilter />
-      <DashboardSummary />
-      <DashboardCharts />
-      <DashboardSalesAndProduct />
+      <DashboardSummary dashboardData={dashboardData} />
+      <DashboardCharts
+        incomeReport={dashboardData?.incomeReport}
+        monthlyEarningsByVendor={dashboardData?.monthlyEarningsByVendor}
+        dailyEarning={dashboardData?.dailyEarning}
+        salesReport={dashboardData?.salesReport}
+      />
+      <DashboardSalesAndProduct
+        loadingVendorProduct={isLoading}
+        vendorProduct={dashboardData?.bestSellingProducts}
+      />
     </div>
   );
 };

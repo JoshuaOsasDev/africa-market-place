@@ -7,10 +7,9 @@ import BestSellingProducts from "@/components/pageComponents/user/Home/bestSelli
 import Newletter from "@/components/pageComponents/user/Home/Newletter";
 import Topcategories from "@/components/pageComponents/user/Home/topcategories";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
-    
       <Header />
       <Banner />
       <SlidderComp />

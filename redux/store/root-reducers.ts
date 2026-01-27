@@ -47,13 +47,21 @@ const userPersistConfig = {
   whitelist: ["user", "isAuthenticated"],
 };
 
+const categoriesPersistConfig = {
+  key: "categories",
+  storage,
+  keyPrefix: "redux-",
+  whitelist: ["categories", "newCategories"], // fields inside slice
+};
+
 const reducer = combineReducers({
   product: persistReducer(productPersistConfig, productReducer),
   user: persistReducer(userPersistConfig, UserReducer),
   settings: persistReducer(settingsPersistConfig, SettingsReducer),
   wishlist: persistReducer(wishlistPersistConfig, WishlistReducer),
   compare: persistReducer(comparePersistConfig, CompareReducer),
-  categories: CategoriesReducer,
+  //categories: CategoriesReducer,
+  categories: persistReducer(categoriesPersistConfig, CategoriesReducer),
   brands: BrandsReducer,
   showFormReducer: showFormReducer,
 });

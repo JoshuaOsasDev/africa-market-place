@@ -1,24 +1,64 @@
-import Image from "next/image";
+"use client";
+import { useVendorOrders } from "@/lib/hooks/vendorDashboard/useVendor";
+import Loader from "@/components/common/loader";
+import NoOrder from "@/components/pageComponents/vendor/order/noOrder";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import ProductHeading from "@/components/pageComponents/vendor/product/productHeading";
+import SearchAndFilterProduct from "@/components/pageComponents/vendor/product/searchAndFilterProduct";
+import OrderItemsTable from "@/components/pageComponents/vendor/order/orderItemsTable";
+import CreateShop from "@/components/pageComponents/vendor/order/createShop";
 
-//import emptyDashboardImage from "../../../public/dashboard-images/empty-dashboard-image.svg";
+const OrderPage = () => {
+  const show = useAppSelector((state) => state.showFormReducer.show);
+  const type = useAppSelector((state) => state.showFormReducer.type);
 
-const OrdersPage = () => {
+  const { isLoading, vendorOrders, vendorOrdersError } = useVendorOrders();
+
+  if (isLoading) return <Loader />;
+
+  console.log("Vendor Orders:", vendorOrders);
+
+  //For Order not defined
+  if (!isLoading && vendorOrders?.data?.length === 0)
+    return (
+      <NoOrder
+        type="Order"
+        show={true}
+        showFormNoOrder={show && type === "Order"}
+        productForm={<CreateShop type="Order" />}
+      />
+    );
+
+  //For Shop not defined
+  // if (!isLoading && !vendorOrders?.data?.shop)
+  //   return (
+  //     <NoOrder
+  //       show={true}
+  //       type="Shop"
+  //       showFormNoOrder={show && type === "Shop"}
+  //       productForm={<CreateShop type="Shop" />}
+  //     />
+  //   );
+
   return (
-    <div className="flex flex-col items-center gap-4 pt-20">
-      {/* <Image
-        src={emptyDashboardImage}
-        alt="empty-state-image"
-        className="h-[132.43px] w-[136.53px]"
-      /> */}
-      <h1 className="text-[32px] font-medium">No Orders yet</h1>
-      <p className="w-[352px] text-center text-[16px] font-normal text-[#475467]">
-        You will have analytics when customers purchase your goods
-      </p>
-      <button className="rounded-[27px] bg-[#2E7D32] px-4 py-3 text-[16px] font-medium text-[#EAF2EA]">
-        + Add Order
-      </button>
-    </div>
+    <>
+      {show && type === "Order" ? (
+        <>
+          <ProductHeading type="Order" showid={true} name="Orders" id="" />
+          <CreateShop type="order" />
+        </>
+      ) : (
+        <>
+          <ProductHeading type="Order" showid={true} name="Orders" id="" />
+          <SearchAndFilterProduct />
+          <OrderItemsTable
+            orders={vendorOrders?.data}
+            // ITEMS_PER_PAGE={5}
+          />
+        </>
+      )}
+    </>
   );
 };
 
-export default OrdersPage;
+export default OrderPage;

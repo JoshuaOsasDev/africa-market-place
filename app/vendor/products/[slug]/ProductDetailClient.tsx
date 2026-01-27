@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link"; 
-import { Product, RelatedProduct } from "@/types/product";
+import Link from "next/link";
+import { ProductMock, RelatedProduct } from "@/types/product";
 import { Review } from "@/types/review";
 import { ProductImageGallery } from "@/components/product/productImageGallery";
 import { ProductInfo } from "@/components/product/productInfo";
@@ -10,7 +10,7 @@ import { ProductTabs } from "@/components/product/productTabs";
 import { RelatedProducts } from "@/components/product/relatedProducts";
 
 interface ProductDetailClientProps {
-  product: Product & { reviews: Review[] };
+  product: ProductMock & { reviews: Review[] };
   relatedProducts: RelatedProduct[];
 }
 
@@ -34,7 +34,7 @@ export function ProductDetailClient({
     setWishlistedProducts((prev) =>
       prev.includes(product.id)
         ? prev.filter((id) => id !== product.id)
-        : [...prev, product.id]
+        : [...prev, product.id],
     );
   };
 
@@ -47,31 +47,31 @@ export function ProductDetailClient({
     setWishlistedProducts((prev) =>
       prev.includes(productId)
         ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+        : [...prev, productId],
     );
   };
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-[#6F6F6F] mb-8">
-          <Link href="/" className="hover:text-[#2E7D32] transition-colors">
+        <nav className="mb-8 flex items-center gap-2 text-sm text-[#6F6F6F]">
+          <Link href="/" className="transition-colors hover:text-[#2E7D32]">
             Home
           </Link>
           <span>/</span>
           <Link
             href={`/categories/${product.category.slug}`}
-            className="hover:text-[#2E7D32] transition-colors"
+            className="transition-colors hover:text-[#2E7D32]"
           >
             {product.category.name}
           </Link>
           <span>/</span>
-          <span className="text-[#111827] font-medium">{product.name}</span>
+          <span className="font-medium text-[#111827]">{product.name}</span>
         </nav>
 
         {/* Product Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16">
+        <div className="mb-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
           <div>
             <ProductImageGallery
               images={product.images}
@@ -108,7 +108,7 @@ export function ProductDetailClient({
             reviews={product.reviews}
             additionalInfo={
               product.additionalInfo && (
-                <div className="text-[#6F6F6F] text-base">
+                <div className="text-base text-[#6F6F6F]">
                   <table className="w-full">
                     <tbody>
                       {Object.entries(product.additionalInfo).map(
@@ -121,12 +121,12 @@ export function ProductDetailClient({
                                 : ""
                             }
                           >
-                            <td className="py-3 pr-4 font-medium text-[#111827] w-1/3 capitalize">
+                            <td className="w-1/3 py-3 pr-4 font-medium text-[#111827] capitalize">
                               {key}
                             </td>
                             <td className="py-3 text-[#6F6F6F]">{value}</td>
                           </tr>
-                        )
+                        ),
                       )}
                     </tbody>
                   </table>

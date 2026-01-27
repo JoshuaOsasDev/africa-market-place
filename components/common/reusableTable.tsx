@@ -63,7 +63,7 @@ export default function ReusableTable({
 }: ReusableTableProps) {
   const tableData = useMemo(
     () => ({
-      nodes: data.map((item) => ({
+      nodes: data?.map((item) => ({
         ...item,
         id: item.id || item._id,
       })),

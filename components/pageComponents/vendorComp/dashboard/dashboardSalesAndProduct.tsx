@@ -3,9 +3,15 @@ import { MoreVertical } from "lucide-react";
 import Image from "next/image";
 import FilterButton from "@/components/common/filterButton";
 import ProductTableReactTable from "../../vendor/product/productTableReactTable.tsx";
-// import ProductTable from "../../Product/productTable";
+import { Product } from "@/types/appTypes.js";
 
-export default function DashboardSalesAndProduct() {
+export default function DashboardSalesAndProduct({
+  vendorProduct,
+  loadingVendorProduct,
+}: {
+  vendorProduct: Product[];
+  loadingVendorProduct: boolean;
+}) {
   return (
     <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[23rem_1fr_1fr]">
       <div className="w-full rounded-xl border border-[#E0E2E7] bg-white p-6 md:h-[432px] md:w-[360px]">
@@ -72,7 +78,7 @@ export default function DashboardSalesAndProduct() {
           <FilterButton />
         </div>
         <div className="">
-          <ProductTableReactTable ITEMS_PER_PAGE={3} />
+          <ProductTableReactTable products={vendorProduct} ITEMS_PER_PAGE={3} />
         </div>
       </div>
     </div>

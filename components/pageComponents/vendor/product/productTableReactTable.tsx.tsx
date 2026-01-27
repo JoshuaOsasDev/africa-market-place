@@ -7,7 +7,7 @@ import { useRowSelect } from "@table-library/react-table-library/select";
 import { ChevronDown, Eye, Pen, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/data";
+
 import { Product } from "@/types/appTypes";
 
 import Modal from "@/components/common/Modal";
@@ -15,11 +15,12 @@ import Modal from "@/components/common/Modal";
 import SkeletonTable from "@/components/common/skeletonTable";
 import DeleteProductModal from "./DeleteProductModal";
 import EditProduct from "./EditProduct";
+import Pagination from "@/components/common/Pagination";
 
 const statusStyles: Record<Product["status"], string> = {
-  Published: "bg-green-100 text-green-700",
-  Draft: "bg-gray-100 text-gray-600",
-  "Low Stock": "bg-yellow-100 text-yellow-700",
+  published: "bg-green-100 text-green-700",
+  draft: "bg-yellow-100  text-yellow-700",
+  pending: "bg-gray-100 text-gray-600",
   "Out of Stock": "bg-red-100 text-red-700",
 };
 
@@ -53,18 +54,28 @@ function HeaderCheckbox({
   );
 }
 
+const defaultImageUrl = "lib/public/images/meat.jpg"; // Path to a local image in your public folder
+
 export default function ProductTableReactTable({
   ITEMS_PER_PAGE = 5,
+  products: products,
+  onDelete,
+  isPending,
 }: {
   ITEMS_PER_PAGE?: number;
+  products: Product[];
+  onDelete?: (id: string) => void;
+  isPending?: boolean;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedProducts = products.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE,
-  );
+  const paginatedProducts = products
+    ?.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+    .map((product) => ({
+      ...product,
+      id: product.slug,
+    }));
 
   const data = useMemo(
     () => ({ nodes: paginatedProducts }),
@@ -76,7 +87,7 @@ export default function ProductTableReactTable({
     ...getTheme(),
     Table: `
       --data-table-library_grid-template-columns: 
-        44px 2.5fr 0.85fr 1fr 1.1fr 1.1fr 1.3fr 1.3fr 1.1fr;
+        44px 2.5fr 1fr 1.1fr 1.1fr 1.3fr 1.3fr 1.1fr;
 
       border-bottom: 1px solid #F0F1F3;
       background: white;
@@ -150,15 +161,17 @@ export default function ProductTableReactTable({
       ),
       renderCell: (item: Product) => (
         <div className="flex items-center gap-3">
-          <div className="shrink-0 rounded-lg bg-[#F6F6F6]">
-            <Image
-              src={item.image}
-              alt={item.name}
-              width={40}
-              height={40}
-              className="rounded-lg"
-            />
-          </div>
+          {item?.image?.url && (
+            <div className="shrink-0 rounded-lg bg-[#F6F6F6]">
+              <Image
+                src={item.image?.url}
+                alt={item.name}
+                width={40}
+                height={40}
+                className="rounded-lg"
+              />
+            </div>
+          )}
           <div className="flex min-w-0 flex-col gap-1">
             <span className="truncate text-sm font-medium text-[#333843]">
               {item.name}
@@ -182,16 +195,16 @@ export default function ProductTableReactTable({
       ),
     },
 
-    {
-      label: (
-        <div className="text-lg font-medium text-[#333843]">
-          <h3>Category</h3>
-        </div>
-      ),
-      renderCell: (item: Product) => (
-        <span className="truncate text-sm text-[#667085]">{item.category}</span>
-      ),
-    },
+    // {
+    //   label: (
+    //     <div className="text-lg font-medium text-[#333843]">
+    //       <h3>Category</h3>
+    //     </div>
+    //   ),
+    //   renderCell: (item: Product) => (
+    //     <span className="truncate text-sm text-[#667085]">{item.category}</span>
+    //   ),
+    // },
 
     {
       label: (
@@ -201,7 +214,7 @@ export default function ProductTableReactTable({
         </div>
       ),
       renderCell: (item: Product) => (
-        <span className="text-sm text-[#333843]">{item.stock}</span>
+        <span className="text-sm text-[#333843]">{item?.stockQuantity}</span>
       ),
     },
 
@@ -228,7 +241,7 @@ export default function ProductTableReactTable({
       ),
       renderCell: (item: Product) => (
         <span
-          className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap ${statusStyles[item.status]}`}
+          className={`inline-block rounded-full px-2.5 py-1 text-lg font-medium whitespace-nowrap ${statusStyles[item.status]}`}
         >
           {item.status}
         </span>
@@ -243,7 +256,7 @@ export default function ProductTableReactTable({
         </div>
       ),
       renderCell: (item: Product) => {
-        const formattedDate = new Date(item.addedDate).toLocaleDateString(
+        const formattedDate = new Date(item?.createdAt).toLocaleDateString(
           "en-US",
           {
             day: "numeric",
@@ -267,12 +280,12 @@ export default function ProductTableReactTable({
       ),
       renderCell: (item: Product) => (
         <div className="flex items-center gap-1">
-          <Link href={"/vendor/dashboard/product/details"}>
+          <Link href={`/vendor/dashboard/product/${item?.slug}`}>
             <Eye className="h-5 w-5 text-[#667085] hover:text-gray-900" />
           </Link>
 
           <Modal>
-            <Modal.Open opens={`edit-product-${item.id}`}>
+            <Modal.Open opens={`edit-product-${item.slug}`}>
               <button
                 type="button"
                 className="flex cursor-pointer items-center hover:text-gray-900"
@@ -282,20 +295,21 @@ export default function ProductTableReactTable({
             </Modal.Open>
 
             <Modal.Window
-              name={`edit-product-${item.id}`}
+              name={`edit-product-${item.slug}`}
               className="top-4.5 my-auto max-w-3xl overflow-y-scroll"
             >
-              <EditProduct />
+              <EditProduct existingData={item.slug} />
             </Modal.Window>
           </Modal>
 
           <Modal>
             <Modal.Open opens={`delete-product-${item.id}`}>
               <button
+                disabled={isPending}
                 type="button"
-                className="flex cursor-pointer items-center"
+                className="flex cursor-pointer items-center disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <Trash className="h-5 w-5 cursor-pointer text-[#667085] hover:text-red-700" />
+                <Trash className="h-5 w-5 cursor-pointer text-[#667085]" />
               </button>
             </Modal.Open>
 
@@ -306,7 +320,8 @@ export default function ProductTableReactTable({
               <DeleteProductModal
                 productName={item.name}
                 text="product"
-                onConfirm={() => console.log("DELETE:", item.id)}
+                onConfirm={() => onDelete?.(item.slug)}
+                disabled={isPending}
               />
             </Modal.Window>
           </Modal>
@@ -326,6 +341,14 @@ export default function ProductTableReactTable({
           select={select}
         />
       </Suspense>
+
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalItems={products.length}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

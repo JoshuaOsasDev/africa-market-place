@@ -1,13 +1,23 @@
 import {
   BanknoteArrowUp,
-  TrendingUp,
-  TrendingDown,
   ShoppingCart,
   ScanQrCode,
   Wallet,
 } from "lucide-react";
 
-export default function DashboardSummary() {
+export default function DashboardSummary(dashboardData: any) {
+  //calcuating sales and revenue and balance
+
+  const analytics = dashboardData.dashboardData;
+  const totalSales = analytics.salesReport?.reduce(
+    (sum: any, sale: any) => sum + sale,
+    0,
+  );
+
+  console.log(totalSales, "total sales");
+  const revenue = analytics?.monthlyEarningsByVendor;
+
+  const balance = revenue - totalSales;
   const stats = [
     {
       icon: BanknoteArrowUp,
@@ -15,7 +25,10 @@ export default function DashboardSummary() {
       iconBorder: "#EFEFFD",
       iconColor: "#5C59E8",
       title: "Total Revenue",
-      amount: "31,500",
+      amount: revenue?.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
       percentage: 15,
     },
     {
@@ -24,7 +37,10 @@ export default function DashboardSummary() {
       iconBorder: "#E7F4EE",
       iconColor: "#2E7D32",
       title: "Total Sales",
-      amount: "12,345",
+      amount: totalSales?.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
       percentage: -8,
     },
     {
@@ -33,7 +49,7 @@ export default function DashboardSummary() {
       iconBorder: "#FEEDEC",
       iconColor: "#F04438",
       title: "Product SKU",
-      amount: "8,234",
+      amount: analytics?.totalProducts?.toLocaleString(),
       percentage: 23,
     },
     {
@@ -42,7 +58,10 @@ export default function DashboardSummary() {
       iconBorder: "#FDF1E8",
       iconColor: "#E46A11",
       title: "Balance",
-      amount: "24,500",
+      amount: balance?.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
       percentage: -12,
     },
   ];

@@ -7,11 +7,12 @@ import ProductGeneralInfo from "@/components/pageComponents/vendor/product/Produ
 import { useAppSelector } from "@/redux/store";
 
 export default function ShowDashBoardProductForm() {
-  const showForm = useAppSelector((state) => state.showFormReducer.showForm);
+  const show = useAppSelector((state) => state.showFormReducer.show);
+  const type = useAppSelector((state) => state.showFormReducer.type);
   return (
     <>
-      {showForm ? (
-        <ProductGeneralInfo />
+      {show && type === "dashboardShow" ? (
+        <ProductGeneralInfo type={"dashboardShow"} />
       ) : (
         <>
           <DashboardFilter />

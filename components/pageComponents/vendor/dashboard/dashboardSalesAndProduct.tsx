@@ -70,9 +70,9 @@ export default function DashboardSalesAndProduct() {
           </h4>
           <FilterButton />
         </div>
-        <div className="">
+        {/* <div className="">
           <ProductTableReactTable ITEMS_PER_PAGE={3} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

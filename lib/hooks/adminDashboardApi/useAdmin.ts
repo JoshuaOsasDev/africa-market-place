@@ -5,8 +5,10 @@ import {
   getAdminDashboardAnalytics,
   getAdminSettings,
   getAdminUser,
+  getAllCategories,
 } from "@/services/apiServices/adminDashboardApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { boolean } from "yup";
 
 // Hook to fetch admin settings
 export const useAdminSettings = () => {
@@ -92,4 +94,19 @@ export const useAdminDashboardAnalytics = () => {
     queryFn: getAdminDashboardAnalytics,
   });
   return { isLoading, adminDashboardAnalytics, adminDashboardAnalyticsError };
+};
+
+//Hook for all categories
+
+export const useAllCategories = (enabledFire: boolean) => {
+  const {
+    isLoading,
+    data: allCategories,
+    error,
+  } = useQuery({
+    queryKey: ["get-all-categories"],
+    enabled: enabledFire,
+    queryFn: getAllCategories,
+  });
+  return { isLoading, allCategories, error };
 };

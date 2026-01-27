@@ -46,7 +46,14 @@ export default function DashboardFilter() {
   //SHOW APP PRoduct FORM
   const dispatch = useAppDispatch();
   const openForm = () => {
-    dispatch(setShowForm({ showform: true }));
+    dispatch(
+      setShowForm({
+        showform: {
+          show: true,
+          type: "product",
+        },
+      }),
+    );
   };
   return (
     <div className="hidden h-10 items-center justify-between md:flex">

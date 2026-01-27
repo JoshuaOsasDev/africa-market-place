@@ -1,5 +1,3 @@
-import { TrendingUp } from "lucide-react";
-
 export default function ProductsAndRegionalPerformance() {
   // Top Products Data
   const topProducts = [
@@ -65,9 +63,9 @@ export default function ProductsAndRegionalPerformance() {
               >
                 {/* Product Info */}
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F6F6F6]">
+                  {/* <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F6F6F6]">
                     <span className="text-lg">{product.icon}</span>
-                  </div>
+                  </div> */}
                   <div>
                     <p className="text-[14px] font-medium text-[#333843]">
                       {product.name}

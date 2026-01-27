@@ -4,10 +4,18 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function ProductLinkNav() {
+export default function ProductLinkNav({
+  name,
+  id,
+}: {
+  name: string;
+  id: string;
+}) {
   const pathname = usePathname();
 
-  const isDetailsPage = pathname.includes("/dashboard/product/details");
+  const isDetailsPage = pathname.includes(
+    `/dashboard/${name.toLowerCase()}/${id}`,
+  );
 
   return (
     <nav className="hidden items-center gap-2 md:flex">
@@ -18,15 +26,17 @@ export default function ProductLinkNav() {
         Dashboard
       </Link>
 
-      <span className="px-1 leading-5 font-medium tracking-[0.5%] text-[#667085]">
+      <span
+        className={`px-1 leading-5 font-medium tracking-[0.5%] text-[#667085] ${isDetailsPage ? "text-[#2E7D32]" : "text-[#2E7D32]"}`}
+      >
         <ChevronRight className="h-3.5 w-4" />
       </span>
 
       <Link
-        href="/vendor/dashboard/product"
-        className="text-sm leading-5 font-medium tracking-[0.5%] text-[#667085] hover:opacity-80"
+        href={`/vendor/dashboard/${name.toLowerCase()}`}
+        className={`"text-sm hover:opacity-80" leading-5 font-medium tracking-[0.5%] ${isDetailsPage ? "text-[#2E7D32]" : "text-[#667085]"}`}
       >
-        Product List
+        {name} List
       </Link>
 
       {isDetailsPage && (
@@ -35,10 +45,10 @@ export default function ProductLinkNav() {
             <ChevronRight className="h-3.5 w-4" />
           </span>
           <Link
-            href={"/vendor/dashboard/product/details"}
+            href={``}
             className="text-sm leading-5 font-medium tracking-[0.5%] text-[#667085] hover:opacity-80"
           >
-            Product Details
+            {name} Details
           </Link>
         </>
       )}

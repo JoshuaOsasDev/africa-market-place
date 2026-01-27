@@ -1,8 +1,6 @@
 "use client";
-import React from "react";
+
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -13,34 +11,102 @@ import {
 } from "recharts";
 import { MoreVertical } from "lucide-react";
 
-// Sample data for the chart
-const chartData = [
-  { month: "Jan", revenue: 800, sales: 600 },
-  { month: "Feb", revenue: 950, sales: 910 },
-  { month: "Mar", revenue: 1100, sales: 900 },
-  { month: "Apr", revenue: 1050, sales: 950 },
-  { month: "May", revenue: 900, sales: 1400 },
-  { month: "Jun", revenue: 1200, sales: 1000 },
-  { month: "Jul", revenue: 1150, sales: 950 },
-  { month: "Aug", revenue: 1300, sales: 1100 },
-  { month: "Sep", revenue: 1100, sales: 950 },
-  { month: "Oct", revenue: 1000, sales: 900 },
-  { month: "Nov", revenue: 950, sales: 1050 },
-  { month: "Dec", revenue: 1100, sales: 1000 },
-];
+// Props interface for the component
+type DashboardChartsProps = {
+  incomeReport?: {
+    month?: number[];
+  };
+  monthlyEarningsByVendor?: number;
+  dailyEarning?: number;
+  salesReport?: number[];
+};
 
-export default function DashboardCharts() {
-  const salesProgress = 75.55;
-  const earnedToday = 240;
-  const revenue = 20;
-  const sales = 1.5;
-  const target = 1.1;
+// Sample data for the chart
+// const chartData = [
+//   { month: "Jan", revenue: 800, sales: 600 },
+//   { month: "Feb", revenue: 950, sales: 910 },
+//   { month: "Mar", revenue: 1100, sales: 900 },
+//   { month: "Apr", revenue: 1050, sales: 950 },
+//   { month: "May", revenue: 900, sales: 1400 },
+//   { month: "Jun", revenue: 1200, sales: 1000 },
+//   { month: "Jul", revenue: 1150, sales: 950 },
+//   { month: "Aug", revenue: 1300, sales: 1100 },
+//   { month: "Sep", revenue: 1100, sales: 950 },
+//   { month: "Oct", revenue: 1000, sales: 900 },
+//   { month: "Nov", revenue: 950, sales: 1050 },
+//   { month: "Dec", revenue: 1100, sales: 1000 },
+// ];
+
+export default function DashboardCharts({
+  incomeReport,
+  monthlyEarningsByVendor = 0,
+  dailyEarning = 0,
+  salesReport = [],
+}: DashboardChartsProps) {
+  // Transform monthly income data for the chart
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const chartData = monthNames.map((month, index) => ({
+    month,
+    revenue: incomeReport?.month?.[index] || 0,
+    sales: salesReport[index] || 0,
+  }));
+
+  // Calculate sales progress (example: percentage of monthly target)
+  const monthlyTarget = 50000; // Set your target
+  const salesProgress: any = Math.min(
+    (monthlyEarningsByVendor / monthlyTarget) * 100,
+    100,
+  ).toFixed(2);
+
+  // Calculate growth percentage (comparing to previous month)
+  const currentMonthIndex = new Date().getMonth();
+  const currentMonthEarnings = incomeReport?.month?.[currentMonthIndex] || 0;
+  const previousMonthEarnings =
+    incomeReport?.month?.[currentMonthIndex - 1] || 0;
+  const growthPercentage =
+    previousMonthEarnings > 0
+      ? (
+          ((currentMonthEarnings - previousMonthEarnings) /
+            previousMonthEarnings) *
+          100
+        ).toFixed(1)
+      : 0;
+
+  // Stats for bottom section
+  const target = (monthlyTarget / 1000).toFixed(1);
+  const revenue = (monthlyEarningsByVendor / 1000).toFixed(1);
+  const totalSales = salesReport.reduce((sum, sale) => sum + sale, 0);
+  const sales = (totalSales / 1000).toFixed(1);
 
   // Calculate the circle's stroke properties
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset =
-    circumference - (salesProgress / 100) * circumference;
+
+  // const salesProgress = 75.55;
+  // const earnedToday = 240;
+  // const revenue = 20;
+  // const sales = 1.5;
+  // const target = 1.1;
+
+  // Calculate the circle's stroke properties
+  // const radius = 70;
+  // const circumference = 2 * Math.PI * radius;
+  // const strokeDashoffset =
+  //   circumference - (salesProgress / 100) * circumference;
 
   return (
     <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -180,7 +246,7 @@ export default function DashboardCharts() {
             </div>
 
             <span className="m-auto w-fit rounded-full bg-[#E7F4EE] px-1 py-0.5 text-sm text-[#2E7D32]">
-              +10%
+              +{growthPercentage}%
             </span>
           </div>
         </div>
@@ -189,7 +255,9 @@ export default function DashboardCharts() {
         <div className="space-y-4">
           <p className="text-center text-sm text-[#667085]">
             You succeed earn{" "}
-            <span className="font-semibold text-[#333843]">${earnedToday}</span>{" "}
+            <span className="font-semibold text-[#333843]">
+              ${growthPercentage}
+            </span>{" "}
             today, its higher than yesterday
           </p>
 
@@ -211,7 +279,7 @@ export default function DashboardCharts() {
             <div>
               <p className="text-sm text-[#667085]">Sales</p>
               <p className="flex items-center gap-1 text-lg font-semibold text-[#333843]">
-                ${sales}k<span className="text-sm text-[#2E7D32]">↑</span>
+                ${totalSales}k<span className="text-sm text-[#2E7D32]">↑</span>
               </p>
             </div>
           </div>
