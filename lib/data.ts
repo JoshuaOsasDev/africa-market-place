@@ -222,6 +222,32 @@ export const categorySectionList = [
     id: 3,
   },
 ];
+export const userSettingList = [
+  {
+    category: "Settings",
+    subcategory: [
+      {
+        name: "User Information",
+        id: 1,
+        url: "/user/dashboard/userInfo",
+    
+      },
+      {
+        name: "Password Setting",
+        id: 2,
+        url: "/user/dashboard/passwordSetting",
+      },
+      {
+        name: "Notification Setting",
+        id: 3,
+        url:  "/user/dashboard/notificationSetting",
+      },
+    ],
+    imgUrl: "/images/apple.png",
+    id: 1,
+  },
+ 
+];
 
 export const topCategoriesData = [
   {

@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+
+import { useRouter, useSearchParams } from "next/navigation";
 import { loginSchema } from "@/lib/utility/yupvalidation";
 import TextStyle from "../../../common/textStyle";
 import { Eye, EyeOff, Mail } from "lucide-react";
@@ -13,8 +14,9 @@ import Image from "next/image";
 import { useGoogleLogin } from "@react-oauth/google";
 import { googleAuth, signIn } from "@/services/apiServices/authApi";
 import { AxiosError } from "axios";
-import { useAppDispatch } from "@/redux/store";
-import { setLoaderAction } from "@/redux/slices/user";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { setLoaderAction, signInAction } from "@/redux/slices/user";
+import { setWishlistAction } from "@/redux/slices/wishlist";
 
 const LoginComp = () => {
   /* naviagtion */
@@ -23,13 +25,8 @@ const LoginComp = () => {
   /* use dispatch */
   const dispatch = useAppDispatch();
 
-  //  const appState = useAppSelector(state => state)
-
-  /* set the display of the loader */
-  const [loader, setLoader] = useState(false);
-  const [googleLoader, setGoogleLoader] = useState(false);
-
-  /* useEffect for responding to diffrent response from the user signup */
+  /* get the app state */
+  const appLoader = useAppSelector((state) => state.user.loading);
 
   const [hidePassword, setHidePassword] = useState(false);
 
@@ -45,47 +42,15 @@ const LoginComp = () => {
     password: "",
   });
 
+  const searchParam = useSearchParams();
+  const redirect = searchParam.get("redirect");
+
   const [isChecked, setIsChecked] = useState(false);
 
-  const { mutate, error } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: signIn,
-    onSuccess: async (data) => {
-      console.log("data sent", data);
-      dispatch(setLoaderAction(false));
-      console.log("login data:", data);
-      /*   dispatch(signIn(data.user));
-      dispatch(setWishlist(data.user.wishlist)); */
-
-      toast.success("Logged in successfully!");
-
-      const isAdmin = data.user?.role?.includes("admin");
-      const isVendor = data.user?.role?.includes("vendor");
-
-      /* router.push(
-        redirect
-          ? redirect
-          : isAdmin
-            ? "/admin/dashboard"
-            : isVendor
-              ? "/vendor/dashboard"
-              : "/",
-      ); */
-    },
-    onError: (err) => {
-      console.log("error occured");
-      dispatch(setLoaderAction(false));
-      if (err instanceof AxiosError) {
-        toast.error(
-          err?.response?.data?.message || "Sign in failed, please try again.",
-        );
-      } else {
-        toast.error("Unknown error");
-      }
-    },
-    onSettled: () => {},
   });
 
-  console.log("mutation error", error);
   /* check the box */
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
@@ -102,14 +67,25 @@ const LoginComp = () => {
     onSuccess: async (tokenResponse) => {
       try {
         // tokenResponse.access_token
-        console.log("googleToken", tokenResponse);
-        setGoogleLoader(true);
-        const user = await googleAuth(tokenResponse);
+        dispatch(setLoaderAction(true));
+        const result = await googleAuth(tokenResponse);
 
+        dispatch(signInAction(result.data.user));
+        dispatch(setWishlistAction(result.data.user.wishlist));
         toast.success("Login successfull");
-        console.log("google user", user);
 
-        setGoogleLoader(false);
+        dispatch(setLoaderAction(false));
+        const isAdmin = result.data.user?.role?.includes("admin");
+        const isVendor = result.data.user?.role?.includes("vendor");
+        const goto = redirect
+          ? redirect
+          : isAdmin
+            ? "/admin/dashboard"
+            : isVendor
+              ? "/vendor/dashboard"
+              : "/";
+
+        router.push(goto);
       } catch (err) {
         if (err instanceof AxiosError) {
           toast.error(
@@ -119,40 +95,57 @@ const LoginComp = () => {
           toast.error("Unknown error");
         }
       } finally {
-        setLoader(false);
+        dispatch(setLoaderAction(false));
       }
     },
 
     onError: () => {
-      console.log("Google login failed");
+      toast.error("Google login failed");
+      dispatch(setLoaderAction(false));
     },
   });
-  const onSubmit = async (data: { email: string; password: string }) => {
-    console.log("login input", data);
 
+  const onSubmit = async (data: { email: string; password: string }) => {
     try {
       dispatch(setLoaderAction(true));
-      /* make api call fro user signIn */
-      mutate({
+
+      const result = await mutateAsync({
         ...data,
         rememberMe: isChecked,
       });
+      dispatch(signInAction(result.user));
+      dispatch(setWishlistAction(result.user.wishlist));
 
-      /* dispatch(userLoggedInAndLoggedOutAction(true))
-      navigation.navigate('bottomTabNavigation') */
+      if (!result.user.isVerified) {
+        toast.error("Email not verified");
+
+        router.push("/auth-user/sendOtp/login");
+        return;
+      }
+      const isAdmin = result.user?.role?.includes("admin");
+      const isVendor = result.user?.role?.includes("vendor");
+
+      const goto = redirect
+        ? redirect
+        : isAdmin
+          ? "/admin/dashboard"
+          : isVendor
+            ? "/vendor/dashboard"
+            : "/";
+
+      router.push(goto);
+
+      toast.success("Logged in successfully!");
     } catch (err) {
-      dispatch(setLoaderAction(false));
-      console.log("login error", err);
       if (err instanceof AxiosError) {
         toast.error(
-          err?.response?.data?.message || "Sign in failed, please try again.",
+          err.response?.data?.message || "Sign in failed, please try again.",
         );
       } else {
         toast.error("Unknown error");
       }
     } finally {
-      setLoader(false);
-      // dispatch(setLoaderAction(false));
+      dispatch(setLoaderAction(false));
     }
   };
 
@@ -242,7 +235,7 @@ const LoginComp = () => {
               </span>
             </div>
             <div>
-              <Link href={"/auth-user/resetPassword"}>
+              <Link href={"/auth-user/sendOtp/forgetPassword"}>
                 <TextStyle
                   textContent="Forgot Password"
                   textStyle="text-[#6b916d] text-[16px]"
@@ -253,11 +246,11 @@ const LoginComp = () => {
 
           {/* submit button starts */}
           <button
-            disabled={loader}
+            disabled={appLoader}
             className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] bg-[#2E7D32] p-2.5`}
           >
             <span className="text-sm leading-[18.90px] font-semibold text-white">
-              {loader ? "Please wait.." : "Login To Your Account"}
+              {appLoader ? "Please wait.." : "Login To Your Account"}
             </span>
           </button>
         </form>
@@ -269,10 +262,10 @@ const LoginComp = () => {
         </div>
 
         <div
-          className={`flex h-13.75 ${googleLoader ? "cursor-not-allowed" : "cursor-pointer"} items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA]`}
+          className={`flex h-13.75 ${appLoader ? "cursor-not-allowed" : "cursor-pointer"} items-center justify-center space-x-2 rounded-[28px] bg-[#FAFAFA]`}
           onClick={() => loginWithGoogleFunc()}
         >
-          {!googleLoader ? (
+          {!appLoader ? (
             <>
               <Image
                 src={"/images/google.jpg"}
@@ -295,7 +288,7 @@ const LoginComp = () => {
         <p className="text-slate-700/opacity-60 font-['Inter'] text-sm leading-[18px] font-medium">
           Already you new?
         </p>
-        <Link href={"/auth-user/register/vendor"}>
+        <Link href={"/auth-user/register"}>
           <p className="font-['Inter'] text-sm leading-[18.90px] font-semibold text-[#2E7D32]">
             Create an account
           </p>

@@ -1,23 +1,53 @@
 export type userLoginType = {
-    email: string,
-    password: string,
-    rememberMe?: boolean
-}
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+};
 export type userSignupType = {
-    email: string,
-    password: string,
-    fullName: string,
-    phone: string
-}
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+};
 export type userSendOtpType = {
-    email: string
-}
+  email: string;
+};
 export type userVerifyOtpType = {
-    otp: string
-}
+  otp: string;
+  email: string
+};
 export type userResendOtpType = {
-    otp: string
-}
+  otp: string;
+};
+export type userSendVerificationOtpType = {
+  email:string
+};
 export type userForgetPasswordType = {
- email: string
-}
+  email: string;
+};
+export type userResetPasswordType = {
+  newPassword: string;
+  token: string
+};
+
+export type userType = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  cover: string;
+  status: boolean;
+  isVerified: boolean;
+  role: string;
+  gender: string;
+  phone: string;
+  wishList: string[];
+};
+
+export type userAuthType = {
+  isAuthenticated: boolean;
+  user: null | userType;
+  count: number;
+  isInitialized: boolean;
+  loading: boolean;
+};

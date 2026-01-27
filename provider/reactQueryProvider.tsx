@@ -1,4 +1,5 @@
 "use client";
+<<<<<<< HEAD
 import {
   QueryCache,
   QueryClient,
@@ -7,6 +8,10 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import toast from "react-hot-toast";
+=======
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+>>>>>>> origin/dev
 
 export default function ReactQueryProvider({
   children,
@@ -46,9 +51,13 @@ export default function ReactQueryProvider({
   );
 
   return (
+<<<<<<< HEAD
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       {children}
     </QueryClientProvider>
+=======
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+>>>>>>> origin/dev
   );
 }

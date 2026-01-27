@@ -5,8 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AxiosError } from "axios";
-import { signUpSchema } from "@/lib/utility/yupvalidation";
-import TextStyle from "../../../common/textStyle";
+import { profileSchema } from "@/lib/utility/yupvalidation";
+
 import { Eye, EyeOff, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -16,28 +16,27 @@ import { setLoaderAction, signInAction } from "@/redux/slices/user";
 import { setWishlistAction } from "@/redux/slices/wishlist";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
+import TextStyle from "@/components/common/textStyle";
+import { userInfoType } from "@/types/appTypes";
 
 // Define TypeScript types for form values
 
-const SignUpComp = () => {
+const UserInfoComp = () => {
   /* naviagtion */
   const router = useRouter();
   /* use dispatch */
   // const dispatch = useAppDispatch()
 
 
-
- 
-
 const searchParam = useSearchParams();
   const redirect = searchParam.get("redirect");
 
   const [hidePassword, setHidePassword] = useState(false);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
-
+  
   /* yup validation and react hook form */
 
-  const formOptions = { resolver: yupResolver(signUpSchema) };
+  const formOptions = { resolver: yupResolver(profileSchema) };
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -49,19 +48,7 @@ const searchParam = useSearchParams();
 
   const appLoader = useAppSelector(state => state.user.loading)
 
-  const [form, setForm] = useState<{
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    password: string;
-  }>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
+ 
 
   const {
     control,
@@ -77,13 +64,7 @@ const searchParam = useSearchParams();
     mutationFn: signUp,
   });
 
-  const onSubmit = async (data: {
-    email: string;
-    password: string;
-    phone: string;
-    firstName: string;
-    lastName: string;
-  }) => {
+  const onSubmit = async (data:userInfoType) => {
     try {
       dispatch(setLoaderAction(true));
 
@@ -401,4 +382,4 @@ const searchParam = useSearchParams();
   );
 };
 
-export default SignUpComp;
+export default UserInfoComp;

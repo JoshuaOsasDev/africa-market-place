@@ -1,7 +1,8 @@
 import Link from "next/link";
-
+import { BiSupport } from "react-icons/bi";
 import UserNavLinks from "./userNavLinks";
-import { Headphones, Settings } from "lucide-react";
+import UserSettingComp from "../pageComponents/user/dashboard/userSettingComp";
+import clsx from "clsx";
 
 const SideBar = () => {
   return (
@@ -12,19 +13,15 @@ const SideBar = () => {
         <div className="hidden md:block">
           <Link
             href={""}
-            className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3"
+            /* className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3" */
+            className={clsx(
+              "hidden grow place-items-start justify-center gap-2 rounded-xl p-3 px-3 py-2 text-[14px] font-bold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex md:flex-none md:justify-start md:p-2 md:px-3",
+            )}
           >
-            <Headphones />
+            <BiSupport size={20} color="grey" />
             <div className="hidden md:block">Support</div>
           </Link>
-
-          <Link
-            href={""}
-            className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3"
-          >
-            <Settings />
-            <div className="hidden md:block">Setting</div>
-          </Link>
+          <UserSettingComp />
         </div>
       </div>
     </div>

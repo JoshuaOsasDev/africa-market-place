@@ -2,13 +2,11 @@ import axios from 'axios';
 
 import toast from 'react-hot-toast';
 
-
-
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 console.log("baseUrl", baseURL)
 const http = axios.create({
   baseURL: baseURL + `/api`,
-   withCredentials: true
+  withCredentials: true
 });
 
 

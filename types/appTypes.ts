@@ -71,6 +71,7 @@ export type ShippingDataType = {
   deliveryDate: string;
   status: string;
 };
+<<<<<<< HEAD
 
 export type OrderItem = {
   image?: string;
@@ -151,3 +152,23 @@ export type UpdateOrderRequest = {
   trackingLink?: string;
   courierName?: string;
 };
+=======
+export type userInfoType = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  city: string;
+  address: string;
+  cover: {
+    _id: string,
+    url: string
+  }
+};
+
+export type changePasswordType = {
+  password: string,
+  newPassword: string,
+  confirmPassword: string
+}
+>>>>>>> origin/dev
