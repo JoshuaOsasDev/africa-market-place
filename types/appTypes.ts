@@ -66,13 +66,20 @@ export type ShippingDataType = {
   status: string;
 };
 export type userInfoType = {
-  firstName: string,
-  lastName: string,
-  email: string,
-  phoneNumber: string,
-  DOB: string,
-  city: string,
-  state: string,
-  address: string,
-  image: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  city: string;
+  address: string;
+  cover: {
+    _id: string,
+    url: string
+  }
+};
+
+export type changePasswordType = {
+  password: string,
+  newPassword: string,
+  confirmPassword: string
 }

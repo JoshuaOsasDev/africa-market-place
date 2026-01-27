@@ -1,10 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { CldUploadWidget } from "next-cloudinary";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { userProfileSchema } from "@/lib/utility/yupvalidation";
+
 import TextStyle from "../../../common/textStyle";
 import { Mail, Phone, User } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -14,7 +16,11 @@ import { setLoaderAction } from "@/redux/slices/user";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { FiCamera } from "react-icons/fi";
-import { useImageUpload } from "@/lib/hooks/useUpload";
+
+import { useState } from "react";
+import { MdCancel } from "react-icons/md";
+import { updateProfileApi } from "@/services/apiServices/userApi";
+import UKAddressAutocomplete from "@/components/common/googlAddressUserLocation";
 
 // Define TypeScript types for form values
 
@@ -22,7 +28,22 @@ const UserInfoComp = () => {
   /* naviagtion */
   const router = useRouter();
 
-  const { file, preview, onSelectFile, clear } = useImageUpload();
+  const onSelect = (data: any) => { 
+    console.log("location", data)
+  }
+  const onError = (error: any) => { 
+    console.log("error", error)
+  }
+
+  const userProfile = useAppSelector((state) => state.user.user!);
+
+  const [file, setFile] = useState<{
+    public_id: string;
+    secure_url: string;
+  }>({
+    public_id: "",
+    secure_url: "",
+  });
   /* yup validation and react hook form */
 
   const formOptions = { resolver: yupResolver(userProfileSchema) };
@@ -38,7 +59,7 @@ const UserInfoComp = () => {
   const dispatch = useAppDispatch();
 
   const { mutateAsync } = useMutation({
-    mutationFn: signUp,
+    mutationFn: updateProfileApi,
   });
 
   const onSubmit = async (data: {
@@ -51,9 +72,18 @@ const UserInfoComp = () => {
     city: string;
   }) => {
     try {
-      /* const result = await mutateAsync({
+      if (!file.secure_url) {
+        toast.error("Image is required");
+        return;
+      }
+
+      const result = await mutateAsync({
         ...data,
-      }); */
+        cover: {
+          _id: file.public_id,
+          url: file.secure_url,
+        },
+      });
     } catch (err) {
       if (err instanceof AxiosError) {
         toast.error(
@@ -69,48 +99,60 @@ const UserInfoComp = () => {
   };
 
   return (
-    <div className="mx-auto my-4 flex w-full  flex-col rounded-md bg-white p-2 md:p-4 md:w-4/5 lg:w-3/5">
+    <div className="mx-auto my-4 flex w-full flex-col rounded-md bg-white p-2 md:w-4/5 md:p-4 lg:w-3/5">
       <div className="flex flex-col gap-4">
-        {preview ? (
+        {file.secure_url ? (
           <div className="flex flex-col gap-2">
-            <div className="relative mx-auto flex lg:h-37.5 h-27.5 lg:w-37.5 w-27.5 items-center justify-center rounded-full">
-              <div className="relative mx-auto flex lg:h-37.5 h-27.5 lg:w-37.5 w-27.5 items-center justify-center rounded-full overflow-hidden">
+            <div className="relative mx-auto flex h-27.5 w-27.5 items-center justify-center rounded-full lg:h-37.5 lg:w-37.5">
+              <div className="relative mx-auto flex h-27.5 w-27.5 items-center justify-center overflow-hidden rounded-full lg:h-37.5 lg:w-37.5">
                 <Image
-                  src={preview}
+                  src={file.secure_url}
                   alt="Preview"
                   fill
                   className="rounded-lg"
                 />
               </div>
               <div className="absolute -right-1 bottom-2 rounded-full bg-white p-1">
-                <div className="relative flex h-9.5 w-9.5 items-center justify-center rounded-full bg-[#2E7D32]">
-                  <input
-                    type="file"
-                    className="z-2 h-9.5 w-9.5 opacity-0"
-                    accept="image/*"
-                    onChange={onSelectFile}
-                  />
-                  <FiCamera className="absolute text-white" />
-                </div>
+                <MdCancel
+                  className="relative flex h-8 w-8 items-center justify-center rounded-full text-red-400"
+                  onClick={() =>
+                    setFile({
+                      public_id: "",
+                      secure_url: "",
+                    })
+                  }
+                />
               </div>
             </div>
           </div>
         ) : (
-          <div className="relative mx-auto flex lg:h-37.5 h-27.5 lg:w-37.5 w-27.5 items-center justify-center rounded-full bg-[#F3F3F3]">
-            <Image
-              alt="user"
-              src={"/common/userLogo.png"}
-             fill
-            />
+          <div className="relative mx-auto flex h-27.5 w-27.5 items-center justify-center rounded-full bg-[#F3F3F3] lg:h-37.5 lg:w-37.5">
+            <Image alt="user" src={"/common/userLogo.png"} fill />
             <div className="absolute -right-1 bottom-2 rounded-full bg-white p-1">
               <div className="relative flex h-9.5 w-9.5 items-center justify-center rounded-full bg-[#2E7D32]">
-                <input
-                  type="file"
-                  className="z-2 h-9.5 w-9.5 opacity-0"
-                  accept="image/*"
-                  onChange={onSelectFile}
-                />
-                <FiCamera className="absolute text-white" />
+                <CldUploadWidget
+                  uploadPreset="africamarketplace"
+                  onSuccess={(data: any) => {
+                    setFile({
+                      public_id: data.info.public_id,
+                      secure_url: data.info.secure_url,
+                    });
+                  }}
+                  options={{
+                    showPoweredBy: false, // hides Cloudinary logo
+                    multiple: true, // allow multiple uploads
+
+                    clientAllowedFormats: ["png", "jpg"], // restrict file types
+                    folder: "user_profile", // optional folder
+                    maxFileSize: 1 * 1024 * 1024, // max 5MB per file
+                  }}
+                >
+                  {({ open }) => (
+                    <button type="button" onClick={() => open()}>
+                      <FiCamera className="text-white" />
+                    </button>
+                  )}
+                </CldUploadWidget>
               </div>
             </div>
           </div>
@@ -132,6 +174,7 @@ const UserInfoComp = () => {
             <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("firstName")}
+                defaultValue={userProfile.firstName}
                 placeholder="User"
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
@@ -151,6 +194,7 @@ const UserInfoComp = () => {
             <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("lastName")}
+                defaultValue={userProfile.lastName}
                 placeholder="User"
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
@@ -171,6 +215,7 @@ const UserInfoComp = () => {
               <input
                 {...register("email")}
                 placeholder="user@gmail.com"
+                value={userProfile.email}
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
               <Mail className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
@@ -189,6 +234,7 @@ const UserInfoComp = () => {
             <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("phone")}
+                defaultValue={userProfile.phone}
                 placeholder="07000000000"
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
@@ -254,11 +300,32 @@ const UserInfoComp = () => {
               {errors.postCode?.message}
             </p>
           </div>
-
+          <div className="flex w-full flex-col space-y-1">
+            <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
+              <TextStyle
+                textContent="Role"
+                textStyle="text-[16px] text-[##667185] text-bold"
+              />
+            </label>
+            <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
+              <input
+                {...register("role")}
+                value={userProfile.role}
+                placeholder="Enter post code"
+                className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
+              />
+            </div>
+            <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
+              {errors.role?.message}
+            </p>
+          </div>
+          <UKAddressAutocomplete
+           
+          />
           {/* submit button starts */}
           <button
             disabled={appLoader}
-            className={`mt-4 cursor-pointer flex ml-auto mr-auto lg:mr-0  px-8 lg:px-10 py-2.5 lg:py-3  border-0 items-center justify-center rounded-md bg-[#2E7D32] `}
+            className={`mt-4 mr-auto ml-auto flex cursor-pointer items-center justify-center rounded-md border-0 bg-[#2E7D32] px-8 py-2.5 lg:mr-0 lg:px-10 lg:py-3`}
           >
             <span className="text-sm leading-[18.90px] font-semibold text-white">
               {appLoader ? "Please wait.." : "Save Changes"}

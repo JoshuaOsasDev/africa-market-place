@@ -1,9 +1,21 @@
+import { changePasswordType, userInfoType } from "@/types/appTypes";
 import http from "./http";
 
+
+export const changeUserPasswordApi = async (payload:changePasswordType) => {
+  const { data } = await http.put(`/users/change-password`, payload);
+  return data;
+};
 export const getNotifications = async (page: string) => {
     const { data } = await http.get(`/admin/notifications?limit=${page}`, {});
     return data;
 };
+
+export const updateProfileApi = async (payload: userInfoType) => {
+  const { data } = await http.put(`/users/profile`, payload);
+  return data;
+};
+/*  
 export const updateOrderStatus = async ({ id, ...payload }) => {
     const { data } = await http.put(`/admin/orders/${id}`, payload);
     return data;
@@ -78,14 +90,9 @@ export const getProducts = async (query = '') => {
     return response;
   };
   
-  export const updateProfile = async ({ ...payload }) => {
-    const { data } = await http.put(`/users/profile`, payload);
-    return data;
-  };
-  export const changePassword = async ({ ...payload }) => {
-    const { data } = await http.put(`/users/change-password`, payload);
-    return data;
-  };
+ 
+  
+  
   
   export const getAddress = async (payload) => {
     const { data } = await http.get(`/users/addresses?id=${payload}`);
@@ -506,3 +513,5 @@ export const getNewsletter = async (page) => {
     const { data: response } = await http.get(`/users/invoice${page}`);
     return response;
   };
+
+  */

@@ -1,6 +1,15 @@
 import AuthProgressBarUserAuth from "@/components/common/authProgressBarUserAuth";
 import LoginComp from "@/components/pageComponents/auth/auth-user/loginComp";
+import { Metadata } from "next";
 
+
+
+
+export const metadata: Metadata = {
+  title: "User Login",
+  description: "A multivendor ecommerce website",
+  
+};
 function page() {
   return (
     <div className="py-2">

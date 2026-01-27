@@ -65,7 +65,8 @@ export const userProfileSchema = yup.object({
     .required("Email is required"),
   address: yup.string().required("Address is required"),
   city: yup.string().required("City is required"),
-  postCode: yup.string().required("Post code is required")
+  postCode: yup.string().required("Post code is required"),
+  role:yup.string().required("Role is required")
 
 
 });

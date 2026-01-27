@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setLoaderAction } from "@/redux/slices/user";
 import { useMutation } from "@tanstack/react-query";
 import { resetPassword } from "@/services/apiServices/authApi";
+import { changeUserPasswordApi } from "@/services/apiServices/userApi";
 
 // Define TypeScript types for form values
 export const PasswordSettingComp = () => {
@@ -46,29 +47,36 @@ export const PasswordSettingComp = () => {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm(formOptions);
 
   const { mutateAsync } = useMutation({
-    mutationFn: resetPassword,
+    mutationFn: changeUserPasswordApi
   });
 
-  const onSubmit = async (data: {
+  const onSubmit = async ({ 
+    currentPassword,
+    newPassword,
+    confirmPassword
+  }: {
     currentPassword: string;
     newPassword: string;
     confirmPassword: string;
   }) => {
     try {
-      /*  dispatch(setLoaderAction(true));
+       dispatch(setLoaderAction(true));
 
       const result = await mutateAsync({
-        token,
-        newPassword: data.password,
+        password: currentPassword,
+        newPassword,
+        confirmPassword
       });
 
-     // toast.success("Password updated successfully");
+   
       toast.success(result.message);
-      router.push("/auth-user/login"); */
+      reset()
+    
     } catch (err) {
       if (err instanceof AxiosError) {
         toast.error(
