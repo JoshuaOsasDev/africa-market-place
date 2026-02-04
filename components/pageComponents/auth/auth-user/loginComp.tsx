@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
@@ -46,9 +46,14 @@ const LoginComp = () => {
   const redirect = searchParam.get("redirect");
 
   const [isChecked, setIsChecked] = useState(false);
-
+  const queryClient = useQueryClient();
   const { mutateAsync } = useMutation({
     mutationFn: signIn,
+    onSuccess: () => {
+      // invalidate wishlist and all categories after successful login
+      queryClient.invalidateQueries({ queryKey: ["user-wishlist"] });
+      queryClient.invalidateQueries({ queryKey: ["get-all-categories"] });
+    },
   });
 
   /* check the box */
@@ -72,6 +77,8 @@ const LoginComp = () => {
 
         dispatch(signInAction(result.data.user));
         dispatch(setWishlistAction(result.data.user.wishlist));
+
+        console.log(result.data, "login details");
         toast.success("Login successfull");
 
         dispatch(setLoaderAction(false));

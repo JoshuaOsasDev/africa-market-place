@@ -1,16 +1,27 @@
+"use client";
 import TextStyle from "@/components/common/textStyle";
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
-import { topCategoriesData } from "@/lib/data";
 import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button";
+import { useAppSelector } from "@/redux/store";
 
 function Topcategories() {
+  //get categoty state
+
+  const categories = useAppSelector((state) => state.categories);
+  //const categoryOptions = categories.categories?.category || [];
+
+  const SubCategoryOptions = categories.categories?.category || [];
+  // const { isLoading, userProducts, error } = useUserProducts();
+
+  // const product = userProducts?.data;
+
   return (
     <div className="my-2 flex flex-col space-y-4 px-2">
       {/* top section starts */}
       <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row space-x-2 items-baseline">
+        <div className="flex flex-row items-baseline space-x-2">
           <TextStyle
             textContent={"Top Categories"}
             textStyle="text-[#000000] font-bold text-2xl sm:text-3xl"
@@ -20,32 +31,34 @@ function Topcategories() {
             textStyle="text-[#9CA3AF] hidden sm:block "
           />
         </div>
-        <Link href={"/topcategories"}
-         className={buttonVariants({
-          variant: "secondary",
-          size: "lg",
-        })}
+        <Link
+          href={"/topcategories"}
+          className={buttonVariants({
+            variant: "secondary",
+            size: "lg",
+          })}
         >
-          
-         <TextStyle textContent="See all"   />
-         <MoveRight className="text-[#6F6F6F] text-[10px]  lg:text-[12px]"   />
+          <TextStyle textContent="See all" />
+          <MoveRight className="text-[10px] text-[#6F6F6F] lg:text-[12px]" />
         </Link>
       </div>
       {/* bottom section starts */}
-      <div className="flex flex-row space-x-3 items-center overflow-x-scroll">
-        {topCategoriesData.map((data) => (
-          <Link href={data.url} key={data.id}>
-            <div className="flex flex-col bg-[#FCFCFCFC] space-y-2 items-center border-0 py-4 px-2 w-[150px] h-40">
+      <div className="no-scrollbar flex flex-row items-center space-x-3 overflow-x-scroll">
+        {SubCategoryOptions.map((data: any) => (
+          <div
+            key={data._id}
+            className="flex flex-col items-center space-y-2 border-0 bg-[#FCFCFCFC] px-2 py-4"
+          >
+            <div className="relative h-[86.7px] w-[130px]">
               <Image
-                src={data.imgurl}
-                width={130}
-                height={86.7}
-                alt={data.heading}
-                className="rounded-lg"
+                src={data?.cover?.url}
+                fill
+                alt={data.name}
+                className="rounded-lg object-cover"
               />
-              <TextStyle textContent={data.heading} textStyle="text-center" />
             </div>
-          </Link>
+            <TextStyle textContent={data.name} textStyle="text-center" />
+          </div>
         ))}
       </div>
     </div>

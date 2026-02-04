@@ -15,8 +15,8 @@ export function ProductDescription({
 }: ProductDescriptionProps) {
   return (
     <div className={cn("space-y-6", className)}>
-      <div className="text-[#6F6F6F] text-base leading-relaxed">
-        {description.split('\n').map((paragraph, index) => (
+      <div className="text-base leading-relaxed text-[#6F6F6F]">
+        {description?.split("\n").map((paragraph, index) => (
           <p key={index} className="mb-4 last:mb-0">
             {paragraph}
           </p>
@@ -27,10 +27,10 @@ export function ProductDescription({
         <ul className="space-y-3">
           {features.map((feature, index) => (
             <li key={index} className="flex items-start gap-3">
-              <div className="shrink-0 w-5 h-5 rounded-full bg-[#EAF2EA] flex items-center justify-center mt-0.5">
+              <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#EAF2EA]">
                 <Check size={14} className="text-[#2E7D32]" />
               </div>
-              <span className="text-[#6F6F6F] text-base leading-relaxed flex-1">
+              <span className="flex-1 text-base leading-relaxed text-[#6F6F6F]">
                 {feature}
               </span>
             </li>

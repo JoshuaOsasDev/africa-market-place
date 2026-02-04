@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/common/iconButton";
 import { Heart, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "@/redux/store";
+import { addCart } from "@/redux/slices/product";
+import { Product } from "@/types/product";
 
 interface ProductQuantitySelectorProps {
   quantity: number;
@@ -17,6 +20,7 @@ interface ProductQuantitySelectorProps {
   maxQuantity?: number;
   loading?: boolean;
   className?: string;
+  product: Product;
 }
 
 export function ProductQuantitySelector({
@@ -28,8 +32,12 @@ export function ProductQuantitySelector({
   inStock = true,
   maxQuantity = 999,
   loading = false,
+  product,
   className,
 }: ProductQuantitySelectorProps) {
+  const dispacth = useAppDispatch();
+
+  //console.log(isWishlisted, "isWishlisted");
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <QuantityInput
@@ -41,9 +49,9 @@ export function ProductQuantitySelector({
       />
 
       <Button
-        onClick={onAddToCart}
+        onClick={() => dispacth(addCart({ product, quantity }))}
         disabled={!inStock || loading}
-        className="flex-1 h-12 bg-[#2E7D32] hover:bg-[#246628] text-white rounded-full font-semibold text-base gap-2"
+        className="h-12 flex-1 gap-2 rounded-full bg-[#2E7D32] text-base font-semibold text-white hover:bg-[#246628]"
       >
         <ShoppingCart size={20} />
         {loading ? "Adding..." : inStock ? "Add to Cart" : "Out of Stock"}

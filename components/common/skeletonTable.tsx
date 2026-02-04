@@ -115,3 +115,85 @@ export default function SkeletonTable({ rows = 5 }: { rows?: number }) {
     </div>
   );
 }
+
+export function UserProductLoader() {
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Breadcrumb Skeleton */}
+        <div className="mb-8 flex items-center gap-2">
+          <div className="h-4 w-12 animate-pulse rounded bg-[#E5E7EB]" />
+          <span>/</span>
+          <div className="h-4 w-20 animate-pulse rounded bg-[#E5E7EB]" />
+          <span>/</span>
+          <div className="h-4 w-32 animate-pulse rounded bg-[#E5E7EB]" />
+        </div>
+
+        {/* Product Section Skeleton */}
+        <div className="mb-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+          {/* Image Gallery Skeleton */}
+          <div className="space-y-4">
+            <div className="aspect-square w-full animate-pulse rounded-2xl bg-[#E5E7EB]" />
+            <div className="flex gap-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="h-24 w-24 animate-pulse rounded-lg bg-[#E5E7EB]"
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Product Info Skeleton */}
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <div className="h-10 w-3/4 animate-pulse rounded bg-[#E5E7EB]" />
+              <div className="h-6 w-20 animate-pulse rounded bg-[#E5E7EB]" />
+            </div>
+            <div className="h-6 w-full animate-pulse rounded bg-[#E5E7EB]" />
+            <div className="h-12 w-48 animate-pulse rounded bg-[#E5E7EB]" />
+            <div className="h-20 w-full animate-pulse rounded bg-[#E5E7EB]" />
+            <div className="h-12 w-full animate-pulse rounded bg-[#E5E7EB]" />
+          </div>
+        </div>
+
+        {/* Tabs Skeleton */}
+        <div className="mb-16">
+          <div className="mb-6 flex gap-4">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-10 w-32 animate-pulse rounded bg-[#E5E7EB]"
+              />
+            ))}
+          </div>
+          <div className="space-y-3">
+            <div className="h-4 w-full animate-pulse rounded bg-[#E5E7EB]" />
+            <div className="h-4 w-full animate-pulse rounded bg-[#E5E7EB]" />
+            <div className="h-4 w-3/4 animate-pulse rounded bg-[#E5E7EB]" />
+          </div>
+        </div>
+
+        {/* Related Products Skeleton */}
+        <div>
+          <div className="mb-6 h-8 w-48 animate-pulse rounded bg-[#E5E7EB]" />
+          <div className="xs:grid-cols-2 grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="overflow-hidden rounded-lg border border-[#E5E7EB]"
+              >
+                <div className="aspect-square animate-pulse bg-[#E5E7EB]" />
+                <div className="space-y-3 p-4">
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-[#E5E7EB]" />
+                  <div className="h-4 w-1/2 animate-pulse rounded bg-[#E5E7EB]" />
+                  <div className="h-10 w-full animate-pulse rounded bg-[#E5E7EB]" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

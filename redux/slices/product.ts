@@ -1,6 +1,5 @@
-import { sum, map, filter, uniqBy } from 'lodash';
-import { createSlice } from '@reduxjs/toolkit';
-
+import { sum, map, filter, uniqBy } from "lodash";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: any = {
   checkout: {
@@ -10,19 +9,24 @@ const initialState: any = {
     total: 0,
     discount: 0,
     shipping: 0,
-    billing: null
-  }
+    billing: null,
+  },
 };
 
 const productSlice = createSlice({
-  name: 'product',
+  name: "product",
   initialState,
   reducers: {
     // CHECKOUT
     getCart(state, action) {
       const cart = action.payload.cart;
 
-      const subtotal = sum(cart.map((product: any) => (product.salePrice || product.price) * product.quantity));
+      const subtotal = sum(
+        cart.map(
+          (product: any) =>
+            (product.salePrice || product.price) * product.quantity,
+        ),
+      );
       const discount = cart.length === 0 ? 0 : state.checkout.discount;
       const shipping = cart.length === 0 ? 0 : action.payload.shipping;
       const billing = cart.length === 0 ? null : state.checkout.billing;
@@ -36,35 +40,48 @@ const productSlice = createSlice({
     },
 
     addCart(state, action) {
-      const product = action.payload;
+      const products = action.payload;
+
+      const product = products.product;
+      const value: number = products.quantity;
+
       const updatedProduct = {
-        ...product
+        ...product,
       };
       const isEmptyCart = state.checkout.cart.length === 0;
       if (isEmptyCart) {
         state.checkout.cart = [...state.checkout.cart, updatedProduct];
       } else {
         state.checkout.cart = map(state.checkout.cart, (_product) => {
-          const isExisted = _product.sku === updatedProduct.sku;
+          const isExisted = _product.slug === updatedProduct.slug;
           if (isExisted) {
             return {
               ..._product,
-              quantity: _product.quantity + product.quantity
+              stockQuantity: _product.stockQuantity + value,
             };
           }
           return _product;
         });
       }
-      state.checkout.cart = uniqBy([...state.checkout.cart, updatedProduct], 'sku');
+      state.checkout.cart = uniqBy(
+        [...state.checkout.cart, updatedProduct],
+        "slug",
+      );
     },
 
     clearCart(state, action) {
-      const updateCart = filter(state.checkout.cart, (item) => item.sku !== action.payload);
+      const updateCart = filter(
+        state.checkout.cart,
+        (item) => item.sku !== action.payload,
+      );
 
       state.checkout.cart = updateCart;
     },
     deleteCart(state, action) {
-      const updateCart = filter(state.checkout.cart, (item) => item.sku !== action.payload);
+      const updateCart = filter(
+        state.checkout.cart,
+        (item) => item.sku !== action.payload,
+      );
 
       state.checkout.cart = updateCart;
     },
@@ -84,7 +101,7 @@ const productSlice = createSlice({
         if (product.sku === productSku) {
           return {
             ...product,
-            quantity: product.quantity + 1
+            quantity: product.quantity + 1,
           };
         }
         return product;
@@ -99,7 +116,7 @@ const productSlice = createSlice({
         if (product.sku === productSku) {
           return {
             ...product,
-            quantity: product.quantity - 1
+            quantity: product.quantity - 1,
           };
         }
         return product;
@@ -118,8 +135,8 @@ const productSlice = createSlice({
       const discount = action.payload;
       state.checkout.discount = discount;
       state.checkout.total = state.checkout.subtotal - discount;
-    }
-  }
+    },
+  },
 });
 
 // Reducer
@@ -136,5 +153,5 @@ export const {
   createBilling,
   applyDiscount,
   increaseQuantity,
-  decreaseQuantity
+  decreaseQuantity,
 } = productSlice.actions;

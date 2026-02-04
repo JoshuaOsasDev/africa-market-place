@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  wishlist: [],
+  wishlist: Array<any>(),
 };
 
 const slice = createSlice({
@@ -22,5 +22,3 @@ export default slice.reducer;
 
 // Actions
 export const { setWishlistAction, resetWishlistAction } = slice.actions;
-
-

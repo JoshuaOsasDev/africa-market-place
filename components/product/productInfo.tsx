@@ -8,6 +8,7 @@ import { ProductRating } from "@/components/product/productRating";
 import { ProductShareButtons } from "@/components/product/productShareButtons";
 import { ProductQuantitySelector } from "@/components/product/productQuantitySelector";
 import { cn } from "@/lib/utils";
+import { Product } from "@/types/product";
 
 interface ProductInfoProps {
   name: string;
@@ -23,7 +24,8 @@ interface ProductInfoProps {
     slug: string;
   };
   tags: string[];
-  onAddToCart: (quantity: number) => void;
+  product: Product;
+  //onAddToCart: (quantity: number) => void;
   onToggleWishlist?: () => void;
   isWishlisted?: boolean;
   maxQuantity?: number;
@@ -41,15 +43,15 @@ export function ProductInfo({
   description,
   category,
   tags,
-  onAddToCart,
   onToggleWishlist,
-  isWishlisted = false,
+  isWishlisted,
   maxQuantity = 999,
+  product,
   className,
 }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  //console.log(isWishlisted, "info");
   const handleAddToCart = async () => {
     setLoading(true);
     try {
@@ -66,10 +68,10 @@ export function ProductInfo({
   return (
     <div className={cn("flex flex-col gap-4", className)}>
       <div className="flex flex-row items-center gap-4">
-        <h1 className="text-[#111827] text-[1.3rem] lg:text-[36px] font-bold leading-tight mb-2">
+        <h1 className="mb-2 text-[1.3rem] leading-tight font-bold text-[#111827] lg:text-[36px]">
           {name}
         </h1>
-        
+
         <Badge variant={inStock ? "inStock" : "secondary"} size="default">
           {inStock ? "In Stock" : "Out of Stock"}
         </Badge>
@@ -86,12 +88,13 @@ export function ProductInfo({
       <ProductShareButtons title={name} description={description} />
 
       <div className="border-t border-b border-[#E5E7EB] py-6">
-        <p className="text-[#6F6F6F] text-base leading-relaxed">
+        <p className="text-base leading-relaxed text-[#6F6F6F]">
           {description}
         </p>
       </div>
 
       <ProductQuantitySelector
+        product={product}
         quantity={quantity}
         onQuantityChange={setQuantity}
         onAddToCart={handleAddToCart}
@@ -103,32 +106,34 @@ export function ProductInfo({
       />
 
       {/* Category and Tags */}
-      <div className="space-y-3 pt-4 border-t border-[#E5E7EB]">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[#6F6F6F] text-sm font-medium">Category:</span>
+      <div className="space-y-3 border-t border-[#E5E7EB] pt-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm font-medium text-[#6F6F6F]">Category:</span>
           <Link
-            href={`/categories/${category.slug}`}
-            className="text-[#111827] text-sm font-medium hover:text-[#2E7D32] transition-colors"
+            href={`#`}
+            className="text-sm font-medium text-[#111827] transition-colors hover:text-[#2E7D32]"
           >
-            {category.name}
+            {category?.name}
           </Link>
         </div>
 
         {/* Tags */}
         <div className="flex items-start gap-2">
-          <span className="text-[#6F6F6F] text-sm font-medium whitespace-nowrap pt-0.5">
-            Tag:
-          </span>
+          {tags.length > 0 && (
+            <span className="pt-0.5 text-sm font-medium whitespace-nowrap text-[#6F6F6F]">
+              Tag: {tags}
+            </span>
+          )}
           <div className="flex flex-wrap gap-2">
-            {tags.map((tag, index) => (
+            {tags?.map((tag, index) => (
               <Link
                 key={index}
                 href={`/tags/${tag.toLowerCase().replace(/\s+/g, "-")}`}
-                className="text-[#111827] text-sm font-medium hover:text-[#2E7D32] transition-colors"
+                className="text-sm font-medium text-[#111827] transition-colors hover:text-[#2E7D32]"
               >
                 {tag}
                 {index < tags.length - 1 && (
-                  <span className="text-[#6F6F6F] ml-2">,</span>
+                  <span className="ml-2 text-[#6F6F6F]">,</span>
                 )}
               </Link>
             ))}

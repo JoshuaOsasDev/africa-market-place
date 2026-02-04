@@ -1,20 +1,20 @@
 import { changePasswordType, userInfoType } from "@/types/appTypes";
 import http from "./http";
 
-
-export const changeUserPasswordApi = async (payload:changePasswordType) => {
+export const changeUserPasswordApi = async (payload: changePasswordType) => {
   const { data } = await http.put(`/users/change-password`, payload);
   return data;
 };
 export const getNotifications = async (page: string) => {
-    const { data } = await http.get(`/admin/notifications?limit=${page}`, {});
-    return data;
+  const { data } = await http.get(`/admin/notifications?limit=${page}`, {});
+  return data;
 };
 
 export const updateProfileApi = async (payload: userInfoType) => {
   const { data } = await http.put(`/users/profile`, payload);
   return data;
 };
+
 /*  
 export const updateOrderStatus = async ({ id, ...payload }) => {
     const { data } = await http.put(`/admin/orders/${id}`, payload);

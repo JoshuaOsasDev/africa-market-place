@@ -23,15 +23,15 @@ export function ProductPrice({
       : 0;
 
   return (
-    <div className={cn("flex items-center gap-2 flex-wrap", className)}>
+    <div className={cn("flex flex-wrap items-center gap-2", className)}>
       {/* Current Price */}
-      <span className="text-[#2E7D32] text-[32px] lg:text-[40px] font-bold">
+      <span className="text-[32px] font-bold text-[#2E7D32] lg:text-[40px]">
         {currency}
-        {currentPrice.toFixed(2)}
+        {currentPrice?.toFixed(2)}
       </span>
 
       {originalPrice && originalPrice > currentPrice && (
-        <span className="text-[#9CA3AF] text-[18px] lg:text-[20px] line-through">
+        <span className="text-[18px] text-[#9CA3AF] line-through lg:text-[20px]">
           {currency}
           {originalPrice.toFixed(2)}
         </span>

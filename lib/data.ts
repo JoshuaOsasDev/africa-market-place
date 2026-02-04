@@ -1,4 +1,5 @@
 import { Product, ShippingDataType, WishlistItem } from "@/types/appTypes";
+import { url } from "inspector";
 
 export const countryListAndFlags = [
   {
@@ -21,20 +22,21 @@ export const navListArray = [
     url: "/",
   },
   {
-    name: "Shop",
-    url: "/user/shop",
-  },
-  {
-    name: "Contact",
-    url: "/contact",
+    name: "Order",
+    url: "/user/dashboard/orders",
   },
   {
     name: "Wishlist",
-    url: "/wishlist",
+    url: "/user/dashboard/wishlist",
   },
   {
-    name: "Sell",
-    url: "/sell",
+    name: "Notifications",
+    url: "/user/dashboard/notifications",
+  },
+
+  {
+    name: "Messages",
+    url: "/user/dashboard/messages",
   },
 ];
 
@@ -230,7 +232,6 @@ export const userSettingList = [
         name: "User Information",
         id: 1,
         url: "/user/dashboard/userInfo",
-    
       },
       {
         name: "Password Setting",
@@ -240,13 +241,12 @@ export const userSettingList = [
       {
         name: "Notification Setting",
         id: 3,
-        url:  "/user/dashboard/notificationSetting",
+        url: "/user/dashboard/notificationSetting",
       },
     ],
     imgUrl: "/images/apple.png",
     id: 1,
   },
- 
 ];
 
 export const topCategoriesData = [

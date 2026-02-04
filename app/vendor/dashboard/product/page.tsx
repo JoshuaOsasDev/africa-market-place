@@ -1,9 +1,5 @@
 "use client";
 import SetShowForm from "@/components/pageComponents/vendor/product/setShowForm";
-import { useAllCategories } from "@/lib/hooks/adminDashboardApi/useAdmin";
-import { setCategories } from "@/redux/slices/categories";
-import { useAppDispatch } from "@/redux/store";
-import { useEffect } from "react";
 
 const ProductPage = () => {
   // const dispatch = useAppDispatch();

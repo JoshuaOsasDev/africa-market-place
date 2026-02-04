@@ -12,15 +12,16 @@ import { Mail, Phone, User } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useMutation } from "@tanstack/react-query";
 import { signUp } from "@/services/apiServices/authApi";
-import { setLoaderAction } from "@/redux/slices/user";
+import { setLoaderAction, updateProfileAction } from "@/redux/slices/user";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { FiCamera } from "react-icons/fi";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdCancel } from "react-icons/md";
 import { updateProfileApi } from "@/services/apiServices/userApi";
 import UKAddressAutocomplete from "@/components/common/googlAddressUserLocation";
+import { span } from "framer-motion/client";
 
 // Define TypeScript types for form values
 
@@ -28,24 +29,30 @@ const UserInfoComp = () => {
   /* naviagtion */
   const router = useRouter();
 
-  const onSelect = (data: any) => { 
-    console.log("location", data)
-  }
-  const onError = (error: any) => { 
-    console.log("error", error)
-  }
+  const onSelect = (data: any) => {
+    console.log("location", data);
+  };
+  const onError = (error: any) => {
+    console.log("error", error);
+  };
+
+  const restoreScroll = () => {
+    document.body.style.overflow = "";
+  };
 
   const userProfile = useAppSelector((state) => state.user.user!);
 
+  // console.log("user info", userProfile);
   const [file, setFile] = useState<{
     public_id: string;
     secure_url: string;
   }>({
     public_id: "",
-    secure_url: "",
+    secure_url: userProfile?.cover?.url || "",
   });
   /* yup validation and react hook form */
 
+  // console.log(userProfile, "profile");
   const formOptions = { resolver: yupResolver(userProfileSchema) };
 
   const appLoader = useAppSelector((state) => state.user.loading);
@@ -72,6 +79,7 @@ const UserInfoComp = () => {
     city: string;
   }) => {
     try {
+      dispatch(setLoaderAction(true));
       if (!file.secure_url) {
         toast.error("Image is required");
         return;
@@ -84,6 +92,10 @@ const UserInfoComp = () => {
           url: file.secure_url,
         },
       });
+
+      dispatch(updateProfileAction(result.data));
+
+      toast.success("User profile updated successfully");
     } catch (err) {
       if (err instanceof AxiosError) {
         toast.error(
@@ -127,17 +139,25 @@ const UserInfoComp = () => {
           </div>
         ) : (
           <div className="relative mx-auto flex h-27.5 w-27.5 items-center justify-center rounded-full bg-[#F3F3F3] lg:h-37.5 lg:w-37.5">
-            <Image alt="user" src={"/common/userLogo.png"} fill />
+            <Image
+              alt="user"
+              src={userProfile?.cover?.url || "/common/userLogo.png"}
+              fill
+            />
             <div className="absolute -right-1 bottom-2 rounded-full bg-white p-1">
               <div className="relative flex h-9.5 w-9.5 items-center justify-center rounded-full bg-[#2E7D32]">
                 <CldUploadWidget
                   uploadPreset="africamarketplace"
                   onSuccess={(data: any) => {
+                    restoreScroll();
                     setFile({
                       public_id: data.info.public_id,
                       secure_url: data.info.secure_url,
                     });
                   }}
+                  // onClose={() => {
+                  //   document.body.style.overflow = "scroll";
+                  // }}
                   options={{
                     showPoweredBy: false, // hides Cloudinary logo
                     multiple: true, // allow multiple uploads
@@ -174,7 +194,7 @@ const UserInfoComp = () => {
             <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("firstName")}
-                defaultValue={userProfile.firstName}
+                defaultValue={userProfile?.firstName}
                 placeholder="User"
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
@@ -194,7 +214,7 @@ const UserInfoComp = () => {
             <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("lastName")}
-                defaultValue={userProfile.lastName}
+                defaultValue={userProfile?.lastName}
                 placeholder="User"
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
@@ -215,7 +235,7 @@ const UserInfoComp = () => {
               <input
                 {...register("email")}
                 placeholder="user@gmail.com"
-                value={userProfile.email}
+                value={userProfile?.email}
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
               <Mail className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
@@ -234,7 +254,7 @@ const UserInfoComp = () => {
             <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("phone")}
-                defaultValue={userProfile.phone}
+                defaultValue={userProfile?.phone}
                 placeholder="07000000000"
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
@@ -256,6 +276,7 @@ const UserInfoComp = () => {
               <input
                 {...register("address")}
                 placeholder="Enter Address"
+                defaultValue={userProfile?.address}
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
             </div>
@@ -275,6 +296,7 @@ const UserInfoComp = () => {
               <input
                 {...register("city")}
                 placeholder="Enter city"
+                defaultValue={userProfile?.city}
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
             </div>
@@ -310,7 +332,7 @@ const UserInfoComp = () => {
             <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
               <input
                 {...register("role")}
-                value={userProfile.role}
+                value={userProfile?.role}
                 placeholder="Enter post code"
                 className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
               />
@@ -319,16 +341,21 @@ const UserInfoComp = () => {
               {errors.role?.message}
             </p>
           </div>
-          <UKAddressAutocomplete
-           
-          />
+          <UKAddressAutocomplete />
           {/* submit button starts */}
           <button
             disabled={appLoader}
             className={`mt-4 mr-auto ml-auto flex cursor-pointer items-center justify-center rounded-md border-0 bg-[#2E7D32] px-8 py-2.5 lg:mr-0 lg:px-10 lg:py-3`}
           >
-            <span className="text-sm leading-[18.90px] font-semibold text-white">
-              {appLoader ? "Please wait.." : "Save Changes"}
+            <span className="flex items-center gap-2 text-sm font-semibold text-white">
+              {appLoader ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  <span>Please wait...</span>
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </span>
           </button>
         </form>

@@ -1,11 +1,17 @@
 import { notFound } from "next/navigation";
-import { getMockProduct, getMockRelatedProducts } from "@/lib/data/mockProducts";
+import {
+  getMockProduct,
+  getMockRelatedProducts,
+} from "@/lib/data/mockProducts";
 import { ProductDetailClient } from "./ProductDetailClient";
 import { Metadata } from "next";
+import { useUserProductsBySlug } from "@/lib/hooks/userDashboard/useUser";
 
 interface ProductPageProps {
   params: Promise<{
-    slug: string;
+    slug: {
+      slug: string;
+    };
   }>;
 }
 
@@ -33,19 +39,19 @@ export async function generateMetadata({
   };
 }
 
-
 export default async function ProductPage({ params }: ProductPageProps) {
   const resolvedParams = await params;
 
-//  Fetching Mock Data  
+  //  Fetching Mock Data
 
-  const product = getMockProduct(resolvedParams.slug);
-
-  if (!product) {
-    notFound();
-  }
+  //const product = getMockProduct(resolvedParams.slug);
 
   const relatedProducts = getMockRelatedProducts();
 
-  return <ProductDetailClient product={product} relatedProducts={relatedProducts} />;
+  return (
+    <ProductDetailClient
+      resolvedParams={resolvedParams}
+      relatedProducts={relatedProducts}
+    />
+  );
 }

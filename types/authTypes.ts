@@ -15,33 +15,36 @@ export type userSendOtpType = {
 };
 export type userVerifyOtpType = {
   otp: string;
-  email: string
+  email: string;
 };
 export type userResendOtpType = {
   otp: string;
 };
 export type userSendVerificationOtpType = {
-  email:string
+  email: string;
 };
 export type userForgetPasswordType = {
   email: string;
 };
 export type userResetPasswordType = {
   newPassword: string;
-  token: string
+  token: string;
 };
 
 export type userType = {
   email: string;
   firstName: string;
   lastName: string;
-  cover: string;
+  cover: { public_id: string; url: string };
   status: boolean;
   isVerified: boolean;
   role: string;
   gender: string;
   phone: string;
   wishList: string[];
+  city: string;
+  address: string;
+  poatalCode: string;
 };
 
 export type userAuthType = {

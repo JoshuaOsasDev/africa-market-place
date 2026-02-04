@@ -50,6 +50,11 @@ const slice = createSlice({
     setLoaderAction: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    updateProfileAction(state, action) {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
+    },
   },
 });
 
@@ -66,4 +71,5 @@ export const {
   verifyUserAction,
   updateUserRoleAction,
   setLoaderAction,
+  updateProfileAction,
 } = slice.actions;

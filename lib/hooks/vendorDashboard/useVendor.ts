@@ -14,7 +14,7 @@ import {
 } from "@/services/apiServices/vendorDashboard";
 import { Product } from "@/types/product";
 import toast from "react-hot-toast";
-import { CreateShopPayload, Shop, ShopFormInput } from "@/types/shop";
+import { CreateShopPayload } from "@/types/shop";
 export const useVendorDashboardAnalytics = () => {
   const {
     isLoading,

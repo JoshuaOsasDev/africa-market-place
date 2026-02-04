@@ -10,11 +10,13 @@ export default function NoOrder({
   show,
   showFormNoOrder,
   productForm,
+  paragraph = " You don’t have any orders at the moment. When customers place orders,they’ll appear here for you to manage.",
 }: {
   type: string;
   productForm: React.JSX.Element;
   showFormNoOrder: boolean;
   show: boolean;
+  paragraph?: string;
 }) {
   const dispatch = useAppDispatch();
   const openForm = () => {
@@ -47,21 +49,20 @@ export default function NoOrder({
 
         {/* Description */}
         <p className="max-w-md text-base font-normal text-[#475467]">
-          You don’t have any orders at the moment. When customers place orders,
-          they’ll appear here for you to manage.
+          {paragraph}
         </p>
       </div>
     );
 
   return (
-    <div className="flex flex-col items-center gap-4 pt-20">
+    <div className="mb-5 flex flex-col items-center gap-4 pt-20">
       {/* Icon */}
       <div className="flex h-40 w-40 items-center justify-center rounded-full bg-[#EAF2EA]">
         <CircleOff className="h-24 w-24 animate-spin text-[#2E7D32]" />
       </div>
       <h1 className="text-[32px] font-medium">No {type} yet</h1>
       <p className="w-88 text-center text-[16px] font-normal text-[#475467]">
-        You will have analytics when customers purchase your goods
+        {paragraph}
       </p>
       <Button
         onClick={openForm}

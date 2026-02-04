@@ -28,7 +28,7 @@ export function QuantityInput({
 
   const handleChange = (newValue: number) => {
     const clampedValue = Math.min(Math.max(newValue, min), max);
-    
+
     if (onChange) {
       onChange(clampedValue);
     } else {
@@ -58,9 +58,9 @@ export function QuantityInput({
   return (
     <div
       className={cn(
-        "inline-flex items-center border border-[#E5E7EB] rounded-lg overflow-hidden",
-        disabled && "opacity-50 pointer-events-none",
-        className
+        "inline-flex items-center overflow-hidden rounded-lg border border-[#E5E7EB]",
+        disabled && "pointer-events-none opacity-50",
+        className,
       )}
     >
       {/* Minus Button */}
@@ -68,7 +68,7 @@ export function QuantityInput({
         type="button"
         onClick={decrement}
         disabled={disabled || value <= min}
-        className="flex items-center justify-center w-10 h-10 bg-white hover:bg-[#F9FAFB] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        className="flex h-10 w-10 items-center justify-center bg-white transition-colors hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-30"
         aria-label="Decrease quantity"
       >
         <Minus size={16} className="text-[#6F6F6F]" />
@@ -82,7 +82,7 @@ export function QuantityInput({
         disabled={disabled}
         min={min}
         max={max}
-        className="w-12 h-10 text-center text-[#111827] font-medium text-sm border-x border-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-[#2E7D32] focus:border-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        className="h-10 w-12 [appearance:textfield] border-x border-[#E5E7EB] text-center text-sm font-medium text-[#111827] focus:border-transparent focus:ring-2 focus:ring-[#2E7D32] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         aria-label="Quantity"
       />
 
@@ -91,7 +91,7 @@ export function QuantityInput({
         type="button"
         onClick={increment}
         disabled={disabled || value >= max}
-        className="flex items-center justify-center w-10 h-10 bg-white hover:bg-[#F9FAFB] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        className="flex h-10 w-10 items-center justify-center bg-white transition-colors hover:bg-[#F9FAFB] disabled:cursor-not-allowed disabled:opacity-30"
         aria-label="Increase quantity"
       >
         <Plus size={16} className="text-[#6F6F6F]" />
