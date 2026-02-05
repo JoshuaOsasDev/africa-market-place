@@ -12,7 +12,7 @@ export default async function Page({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const { order } = (await searchParams) ?? "all";
-  console.log("filter", order);
+  //console.log("filter", order);
   return (
     <div>
       <div className="mt-[30px] md:my-2.5">

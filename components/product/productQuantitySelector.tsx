@@ -13,7 +13,6 @@ import { Product } from "@/types/product";
 interface ProductQuantitySelectorProps {
   quantity: number;
   onQuantityChange: (value: number) => void;
-  onAddToCart: () => void;
   onToggleWishlist?: () => void;
   isWishlisted?: boolean;
   inStock?: boolean;
@@ -26,7 +25,6 @@ interface ProductQuantitySelectorProps {
 export function ProductQuantitySelector({
   quantity,
   onQuantityChange,
-  onAddToCart,
   onToggleWishlist,
   isWishlisted = false,
   inStock = true,

@@ -24,7 +24,7 @@ export default function DashboardFilter() {
 
   // ---------- TIME ----------
   const handleTimeChange = (value: string) => {
-    console.log(value, "value");
+    //console.log(value, "value");
 
     const params = new URLSearchParams(searchParams.toString());
     params.set("time", value);

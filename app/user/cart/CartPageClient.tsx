@@ -19,12 +19,12 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
   const handleQuantityChange = (id: string, quantity: number) => {
     setCart((prevCart) => {
       const updatedItems = prevCart.items.map((item) =>
-        item.id === id ? { ...item, quantity } : item
+        item.id === id ? { ...item, quantity } : item,
       );
 
       const subtotal = updatedItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
-        0
+        0,
       );
 
       return {
@@ -44,7 +44,7 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
 
       const subtotal = updatedItems.reduce(
         (sum, item) => sum + item.price * item.quantity,
-        0
+        0,
       );
 
       return {
@@ -59,22 +59,22 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
   };
 
   const handleApplyCoupon = (code: string) => {
-    console.log("Applying coupon:", code);
+    //console.log("Applying coupon:", code);
     alert(`Coupon "${code}" applied!`);
   };
 
   if (cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F9FAFB] flex items-center justify-center px-4">
+      <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB] px-4">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#111827] mb-4">
+          <h1 className="mb-4 text-2xl font-bold text-[#111827]">
             Your cart is empty
           </h1>
-          <p className="text-[#6F6F6F] mb-6">
+          <p className="mb-6 text-[#6F6F6F]">
             Looks like you haven't added any items yet.
           </p>
           <Link href="/products">
-            <button className="px-6 py-3 bg-[#2E7D32] hover:bg-[#246628] text-white font-semibold rounded-full transition-colors">
+            <button className="rounded-full bg-[#2E7D32] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#246628]">
               Start Shopping
             </button>
           </Link>
@@ -85,18 +85,18 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Link
           href="/products"
-          className="inline-flex items-center gap-2 text-[#111827] hover:text-[#2E7D32] transition-colors mb-6"
+          className="mb-6 inline-flex items-center gap-2 text-[#111827] transition-colors hover:text-[#2E7D32]"
         >
           <ArrowLeft size={18} />
           <span className="font-medium">Back to shop</span>
         </Link>
 
-        <div className="hidden lg:grid lg:grid-cols-[1fr_350px] gap-8">
-          <div className="bg-white rounded-lg border border-[#E5E7EB] p-6">
-            <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-4 pb-4 border-b border-[#E5E7EB] text-xs font-semibold text-[#6F6F6F] uppercase tracking-wider">
+        <div className="hidden gap-8 lg:grid lg:grid-cols-[1fr_350px]">
+          <div className="rounded-lg border border-[#E5E7EB] bg-white p-6">
+            <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-4 border-b border-[#E5E7EB] pb-4 text-xs font-semibold tracking-wider text-[#6F6F6F] uppercase">
               <div>Product</div>
               <div>Price</div>
               <div className="text-center">Quantity</div>
@@ -118,7 +118,7 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
             <CouponCode onApply={handleApplyCoupon} />
           </div>
 
-          <div className="h-fit sticky top-8">
+          <div className="sticky top-8 h-fit">
             <CartSummary summary={cart.summary} />
           </div>
         </div>

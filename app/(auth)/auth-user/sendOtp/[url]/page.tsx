@@ -1,19 +1,16 @@
-"use client"
+"use client";
 import SendOtpcomp from "@/components/pageComponents/auth/auth-user/sendOtpComp";
 import { useParams } from "next/navigation";
 
 const page = () => {
-  const params = useParams()
-  console.log("params:", params)
+  const params = useParams();
+  // console.log("params:", params)
 
-  const url = params.url as string 
+  const url = params.url as string;
 
   return (
     <div>
-      <SendOtpcomp
-        url={ url }
-        
-      />
+      <SendOtpcomp url={url} />
     </div>
   );
 };

@@ -25,11 +25,7 @@ const SignUpComp = () => {
   /* use dispatch */
   // const dispatch = useAppDispatch()
 
-
-
- 
-
-const searchParam = useSearchParams();
+  const searchParam = useSearchParams();
   const redirect = searchParam.get("redirect");
 
   const [hidePassword, setHidePassword] = useState(false);
@@ -46,8 +42,7 @@ const searchParam = useSearchParams();
     setIsChecked(!isChecked);
   };
 
-
-  const appLoader = useAppSelector(state => state.user.loading)
+  const appLoader = useAppSelector((state) => state.user.loading);
 
   const [form, setForm] = useState<{
     firstName: string;
@@ -69,7 +64,6 @@ const searchParam = useSearchParams();
     handleSubmit,
     formState: { errors },
   } = useForm(formOptions);
-  
 
   const dispatch = useAppDispatch();
 
@@ -347,7 +341,7 @@ const searchParam = useSearchParams();
 
           {/* submit button starts */}
           <button
-            disabled={!isChecked || appLoader }
+            disabled={!isChecked || appLoader}
             className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] p-2.5 ${
               !isChecked ? "bg-opacity-70 bg-[#61ae64]" : "bg-[#2E7D32]"
             }`}

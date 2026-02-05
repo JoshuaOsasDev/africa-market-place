@@ -12,12 +12,12 @@ function page() {
   const [enabledEmailNotification, setEnabledEmailNotification] =
     useState(false);
 
-  console.log(
-    enabledOrderConfirmation,
-    enabledOrderStatusChange,
-    enabledOrderDelivered,
-    enabledEmailNotification,
-  );
+  // console.log(
+  //   enabledOrderConfirmation,
+  //   enabledOrderStatusChange,
+  //   enabledOrderDelivered,
+  //   enabledEmailNotification,
+  // );
 
   const notificationData = [
     {
@@ -42,16 +42,18 @@ function page() {
     },
   ];
   return (
-    <div className="flex flex-col space-y-3 mx-auto my-4  w-full rounded-md bg-white p-4 md:w-4/5 md:p-6 lg:w-3/5 ">
+    <div className="mx-auto my-4 flex w-full flex-col space-y-3 rounded-md bg-white p-4 md:w-4/5 md:p-6 lg:w-3/5">
       {notificationData.map((data) => {
         return (
-          <div key={data.id} className="flex justify-between items-baseline">
+          <div key={data.id} className="flex items-baseline justify-between">
             <div>
-              <TextStyle textContent={data.heading}
-              textStyle="text-4 text-[#000000] font-medium"
+              <TextStyle
+                textContent={data.heading}
+                textStyle="text-4 text-[#000000] font-medium"
               />
-              <TextStyle textContent={data.text}
-              textStyle="text-sm text-[#595959] "
+              <TextStyle
+                textContent={data.text}
+                textStyle="text-sm text-[#595959] "
               />
             </div>
             <div>

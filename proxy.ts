@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {
   const url = request.nextUrl;
-  console.log("CODE RAN 1");
+  // console.log("CODE RAN 1");
   const user = false; // example auth check
 
   if (url.pathname === "/admin/dashboard" && !user) {

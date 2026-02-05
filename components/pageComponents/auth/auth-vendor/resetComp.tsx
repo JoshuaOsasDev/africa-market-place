@@ -56,7 +56,7 @@ export const ResetComp = () => {
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
   };
-  console.log("john");
+  //console.log("john");
   const [form, setForm] = useState<{
     password: string;
     confirmPassword: string;
@@ -76,8 +76,8 @@ export const ResetComp = () => {
     password: string;
     confirmPassword: string;
   }) => {
-    console.log("code ran here");
-    console.log(data);
+    // console.log("code ran here");
+    // console.log(data);
     router.push("/sendOtp");
 
     try {

@@ -96,7 +96,7 @@ export default function DisplayShop({
   // Get status configuration
   const statusConfig = getShopStatus(shop?.status as ShopStatus);
 
-  console.log(shop, "shop");
+  //console.log(shop, "shop");
 
   return (
     <div className="min-h-screen bg-gray-50 py-6">

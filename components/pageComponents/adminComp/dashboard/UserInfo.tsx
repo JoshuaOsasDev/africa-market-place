@@ -30,10 +30,10 @@ const UserInfoComp = () => {
   const router = useRouter();
 
   const onSelect = (data: any) => {
-    console.log("location", data);
+    // console.log("location", data);
   };
   const onError = (error: any) => {
-    console.log("error", error);
+    // console.log("error", error);
   };
 
   const restoreScroll = () => {

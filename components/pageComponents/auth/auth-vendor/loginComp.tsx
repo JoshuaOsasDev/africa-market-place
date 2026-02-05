@@ -30,7 +30,7 @@ const LoginComp = () => {
   } = useForm(formOptions);
 
   const onSubmit = async (data: { email: string; password: string }) => {
-    console.log(data);
+    //console.log(data);
 
     try {
       setLoader(true);
@@ -39,14 +39,14 @@ const LoginComp = () => {
         position: "top-right",
       });
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     } finally {
       setLoader(false);
     }
   };
 
   return (
-    <div className="px-3 md:px-0 pt-2 mx-auto lg:mx-0">
+    <div className="mx-auto px-3 pt-2 md:px-0 lg:mx-0">
       <ToastContainer />
       <BackButton />
       <div className="flex flex-col md:flex-row md:space-x-15">

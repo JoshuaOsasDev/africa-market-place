@@ -70,7 +70,7 @@ export default function EditProduct({ existingData }: EditProductProps) {
     isSlug ? slug : "",
   );
 
-  console.log(vendorProductById, "slug id");
+ //console.log(vendorProductById, "slug id");
 
   // Use fetched data or provided data
   const data = productData || vendorProductById?.data;
@@ -136,7 +136,7 @@ export default function EditProduct({ existingData }: EditProductProps) {
   const selectedCategory = watch("category");
   const selectedSubCategory = watch("subCategory");
 
-  console.log(selectedCategory.id, "selected");
+ // console.log(selectedCategory.id, "selected");
   // Filter subcategories based on selected category
   // const filteredSubCategories = selectedCategory?.id
   //   ? subCategoryOptions.filter((sub) => sub._id === selectedCategory.id)
@@ -161,7 +161,7 @@ export default function EditProduct({ existingData }: EditProductProps) {
       )
     : [];
 
-  console.log(subCategoryOptions[0], "sub");
+ // console.log(subCategoryOptions[0], "sub");
   // Update form when data is loaded
   useEffect(() => {
     if (data) {
@@ -285,7 +285,7 @@ export default function EditProduct({ existingData }: EditProductProps) {
       images: images ? [{ _id: "img_123", url: images }] : [],
     };
 
-    console.log(productData?.slug || "", submitData, "submit");
+   // console.log(productData?.slug || "", submitData, "submit");
     // Call the mutation
     updateProduct(submitData);
   };

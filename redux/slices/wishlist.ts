@@ -1,7 +1,10 @@
+import { WishlistSliceState } from "@/components/pageComponents/user/wishlist/wishlistComp";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  wishlist: Array<any>(),
+const initialState: WishlistSliceState = {
+  wishlist: {
+    data: [],
+  },
 };
 
 const slice = createSlice({
@@ -12,7 +15,7 @@ const slice = createSlice({
       state.wishlist = action.payload;
     },
     resetWishlistAction(state) {
-      state.wishlist = [];
+      state.wishlist.data = [];
     },
   },
 });

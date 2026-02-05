@@ -13,7 +13,7 @@ export default function AdminPage() {
 
   const categories = useAppSelector((state) => state.categories);
 
-  console.log(adminDashboardAnalytics, categories, "admin");
+  // console.log(adminDashboardAnalytics, categories, "admin");
   if (isLoading) return <Loader />;
   return (
     <div>

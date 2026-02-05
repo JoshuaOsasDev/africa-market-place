@@ -23,7 +23,7 @@ const SendOtpcomp = ({ url }: { url: string }) => {
   const dispatch = useAppDispatch();
 
   const [newUrl, setNewUrl] = useState("");
-  console.log("url passed", url);
+  //console.log("url passed", url);
 
   const appState = useAppSelector((state) => state.user);
 
@@ -68,7 +68,7 @@ const SendOtpcomp = ({ url }: { url: string }) => {
       dispatch(setLoaderAction(false));
       newUrl === "verifyEmail" && router.push("/auth-user/verifyOtp");
     } catch (err) {
-      console.log("error", err);
+      // console.log("error", err);
       if (err instanceof AxiosError) {
         toast.error(
           err.response?.data?.message || "Failed to send otp... Pls retry.",
@@ -85,7 +85,7 @@ const SendOtpcomp = ({ url }: { url: string }) => {
     <div className="">
       <div className="flex flex-col md:space-x-15">
         <TextStyle
-          textContent={ ` ${newUrl === "verifyEmail" ? "Email Verification" : "Forget Password"}`}
+          textContent={` ${newUrl === "verifyEmail" ? "Email Verification" : "Forget Password"}`}
           textStyle="font-medium text-[20px] leading-[120%] tracking-[-0.02em] align-middle pt-5 pb-1"
         />
 
@@ -102,7 +102,6 @@ const SendOtpcomp = ({ url }: { url: string }) => {
                 />
               </label>
               <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
-               
                 {newUrl === "verifyEmail" ? (
                   <input
                     {...register("email")}

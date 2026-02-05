@@ -289,8 +289,20 @@ export const bestSellingProductData = [
     presentPrice: 500,
     pastPrice: 400,
     starRating: 4,
+    id: 0,
+    url: "",
+    wished: false
+  },
+  {
+    imgurl: "/images/food.jpg",
+    heading: "Fruit and Vegetables",
+    discount: 15,
+    presentPrice: 500,
+    pastPrice: 400,
+    starRating: 4,
     id: 1,
     url: "",
+    wished: false
   },
   {
     imgurl: "/images/food.jpg",
@@ -301,6 +313,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 2,
     url: "",
+    wished: true
   },
   {
     imgurl: "/images/food.jpg",
@@ -311,6 +324,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 3,
     url: "",
+    wished: false
   },
   {
     imgurl: "/images/food.jpg",
@@ -321,6 +335,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 4,
     url: "",
+    wished: false
   },
   {
     imgurl: "/images/food.jpg",
@@ -331,16 +346,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 5,
     url: "",
-  },
-  {
-    imgurl: "/images/food.jpg",
-    heading: "Fruit and Vegetables",
-    discount: 15,
-    presentPrice: 500,
-    pastPrice: 400,
-    starRating: 4,
-    id: 6,
-    url: "",
+    wished: true
   },
 ];
 

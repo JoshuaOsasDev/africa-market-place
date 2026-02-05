@@ -29,7 +29,7 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
 
     return () => setEnabled(false);
   }, [dispatch, allCategories, userWishlist]);
-  // console.log(allCategories, "all cat");
+  console.log(allCategories, "all cat");
   return (
     <>
       <Toaster position={"top-center"} />

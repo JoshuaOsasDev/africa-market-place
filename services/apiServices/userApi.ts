@@ -15,6 +15,15 @@ export const updateProfileApi = async (payload: userInfoType) => {
   return data;
 };
 
+export const getFilterProductsByChildCategory = async (
+  childCategory: string,
+) => {
+  const { data } = await http.get(`/products/childCategory/${childCategory}`);
+  return data;
+};
+
+// {{baseUrl}}
+
 /*  
 export const updateOrderStatus = async ({ id, ...payload }) => {
     const { data } = await http.put(`/admin/orders/${id}`, payload);

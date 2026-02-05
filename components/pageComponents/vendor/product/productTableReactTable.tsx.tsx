@@ -121,7 +121,7 @@ export default function ProductTableReactTable({
   //Select checkbox logic
   const select = useRowSelect(data, {
     onChange: (action, state) => {
-      console.log("Selected rows:", state.ids);
+     // console.log("Selected rows:", state.ids);
     },
   });
 

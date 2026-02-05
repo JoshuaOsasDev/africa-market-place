@@ -1,3 +1,5 @@
+import { Review } from "./review";
+
 export type ImageProp = {
   _id: string;
   url: string;
@@ -14,6 +16,8 @@ export type CategoryMock = {
   name: string;
   slug: string;
 };
+
+type AdditionalInfo = Record<string, string | number | boolean>;
 
 export type AdditionalInfoMock = {
   weight: string;
@@ -108,6 +112,7 @@ export type Product = {
   // Product attributes
   tags: string[];
   gender?: string;
+  inStock?: boolean;
 
   // Shipping / dimensions
   deliveryType: DeliveryType;
@@ -119,7 +124,9 @@ export type Product = {
   // Relations
   shop: string;
   relatedProducts: string[];
-  reviews: string[];
+  reviews: Review[];
+  rating?: number;
+  isFeatures: string[];
 
   // Variants (only when type === "variable")
   variants: ProductVariant[];
@@ -127,23 +134,25 @@ export type Product = {
   // Ratings (optional if computed later)
   averageRating?: number | null;
 
+  additionalInfo?: AdditionalInfo;
+
   // Timestamps
   createdAt: string;
   updatedAt: string;
 };
 
-export type RelatedProduct = {
-  id: string;
-  name: string;
-  slug: string;
-  image: string;
-  price: number;
-  originalPrice?: number;
-  discount?: number;
-  rating?: number;
-  reviewCount?: number;
-  inStock?: boolean;
-};
+// export type RelatedProduct = {
+//   id: string;
+//   name: string;
+//   slug: string;
+//   image: string;
+//   price: number;
+//   originalPrice?: number;
+//   discount?: number;
+//   rating?: number;
+//   reviewCount?: number;
+//   inStock?: boolean;
+// };
 
 export type ProductCompletionInput = {
   name?: string;
@@ -157,3 +166,45 @@ export type ProductCompletionInput = {
   width?: string;
   images?: { url: string }[];
 };
+export interface productType {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  images: string[];
+  price: number;
+  originalPrice?: number;
+  discount?: number;
+  inStock: boolean;
+  stockQuantity?: number;
+  sku: string;
+  rating: number;
+  reviewCount: number;
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  tags: string[];
+  features?: string[];
+  additionalInfo?: {
+    weight?: string;
+    dimensions?: string;
+    origin?: string;
+    storage?: string;
+    [key: string]: string | undefined;
+  };
+}
+
+export interface RelatedProduct {
+  id: string;
+  name: string;
+  slug: string;
+  image: string;
+  price: number;
+  originalPrice?: number;
+  discount?: number;
+  rating?: number;
+  reviewCount?: number;
+  inStock?: boolean;
+}

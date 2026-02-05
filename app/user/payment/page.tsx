@@ -8,6 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import axios, { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 function page() {
@@ -23,15 +24,17 @@ function page() {
       const cardElement = elements.getElement(CardElement)!;
       if (!cardElement) throw new Error("Failed to load stripe");
       // Create payment intent on the backend
-      const { data } = await axios.post("http://localhost:9000/api/payment-intents", {
-        amount: 5000,
-        currency: "gbp",
-        receipt_email: "ukonulucky@gmail.com",
-      });
-     
+      const { data } = await axios.post(
+        "http://localhost:9000/api/payment-intents",
+        {
+          amount: 5000,
+          currency: "gbp",
+          receipt_email: "ukonulucky@gmail.com",
+          userId: "69736e1c3afb5291f8075c3d",
+        },
+      );
 
-
-      console.log("paymentIntent:", data)
+      //console.log("paymentIntent:", data)
       const { client_secret } = data;
 
       const result = await stripe.confirmCardPayment(client_secret, {
@@ -50,8 +53,8 @@ function page() {
       } else {
         if (result.paymentIntent.status === "succeeded") {
           // Payment succeeded]
-          console.log("payment result:", result);
-          console.log("Payment successful!");
+          // console.log("payment result:", result);
+          // console.log("Payment successful!");
         }
       }
     } catch (error) {

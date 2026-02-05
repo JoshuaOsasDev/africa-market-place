@@ -269,7 +269,7 @@ export default function EditProductIconPage({ slug }: { slug: string }) {
 
   // ✅ FIXED: Submit handler
   const onSubmit = (formData: FormValues) => {
-    console.log("Form submitted with data:", formData);
+   // console.log("Form submitted with data:", formData);
     console.log("Form errors:", errors);
 
     // Don't pass slug here - the hook already has it

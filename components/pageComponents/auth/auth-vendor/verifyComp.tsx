@@ -61,7 +61,7 @@ export default function VerifyComp() {
 
   const onSubmit = async (data: { email: string }) => {
     /*  navigation.navigate('bottomTabNavigation') */
-    console.log(data);
+    // console.log(data);
 
     try {
       setLoader(!loader);
@@ -105,7 +105,7 @@ export default function VerifyComp() {
           />
 
           <div className="mx-auto my-6 flex w-full items-center justify-center">
-            <OtpComponent />
+            {/* <OtpComponent otp="" setOtp={""} /> */}
           </div>
 
           <div className="flex flex-row items-center space-x-2">

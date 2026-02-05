@@ -16,7 +16,9 @@ export function CustomerReviews({ reviews, className }: CustomerReviewsProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasMore = reviews.length > visibleCount;
-  const displayedReviews = isExpanded ? reviews : reviews.slice(0, visibleCount);
+  const displayedReviews = isExpanded
+    ? reviews
+    : reviews.slice(0, visibleCount);
 
   const handleLoadMore = () => {
     if (isExpanded) {
@@ -30,8 +32,8 @@ export function CustomerReviews({ reviews, className }: CustomerReviewsProps) {
 
   if (!reviews || reviews.length === 0) {
     return (
-      <div className={cn("text-center py-12", className)}>
-        <p className="text-[#6F6F6F] text-base mb-4">
+      <div className={cn("py-12 text-center", className)}>
+        <p className="mb-4 text-base text-[#6F6F6F]">
           No reviews yet. Be the first to review this product!
         </p>
         <Button className="bg-[#2E7D32] hover:bg-[#246628]">
@@ -53,7 +55,7 @@ export function CustomerReviews({ reviews, className }: CustomerReviewsProps) {
         <div className="mt-6 flex justify-center lg:justify-start">
           <button
             onClick={handleLoadMore}
-            className="px-6 py-2.5 bg-[#EAF2EA] text-[#2E7D32] rounded-lg font-semibold text-sm hover:bg-[#C0D8C1] transition-colors"
+            className="rounded-lg bg-[#EAF2EA] px-6 py-2.5 text-sm font-semibold text-[#2E7D32] transition-colors hover:bg-[#C0D8C1]"
           >
             {isExpanded ? "Show Less" : "Load More"}
           </button>

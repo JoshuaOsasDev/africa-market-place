@@ -45,8 +45,8 @@ const Navbar = () => {
   const headerText = getPageTitle(pathname);
   const slugDetails = getSlugDetails(pathname);
 
-  console.log(headerText, "path");
-  console.log(slugDetails, "slug");
+  // console.log(headerText, "path");
+  // console.log(slugDetails, "slug");
 
   return (
     <nav className="fixed z-100 h-[60px] w-full bg-white">

@@ -14,52 +14,53 @@ type AddressResult = {
 };
 
 export default function UKAddressAutocomplete() {
-  const inputRef = useRef<google.maps.places.SearchBox | null>(null)
+  const inputRef = useRef<google.maps.places.SearchBox | null>(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries: ["places"],
-    region: "gb"
+    region: "gb",
   });
 
   const handleChnage = () => {
-    const place = inputRef.current?.getPlaces() as any[]
-    const location = {
-      
-    }
+    const place = inputRef.current?.getPlaces() as any[];
+    const location = {};
 
-    const { geometry: { 
-      location: { 
-        lat, lng
-      }
-    } } = place[0]
-  
+    const {
+      geometry: {
+        location: { lat, lng },
+      },
+    } = place[0];
 
-    console.log("longitude:", lng(), "latitude:", lat())
-   
-  }
-  if (!isLoaded) return <input disabled placeholder="Loading address search..." className="w-full p-3 border rounded" />;
+    //console.log("longitude:", lng(), "latitude:", lat())
+  };
+  if (!isLoaded)
+    return (
+      <input
+        disabled
+        placeholder="Loading address search..."
+        className="w-full rounded border p-3"
+      />
+    );
 
   return (
     <div className="space-y-2">
       <StandaloneSearchBox
-       /*  options={
+        /*  options={
         
         } */
-        onLoad={(ref) => inputRef.current = ref}
+        onLoad={(ref) => (inputRef.current = ref)}
         onPlacesChanged={handleChnage}
-        
       >
-          <input
-            placeholder={
-              isLoaded
-                ? "Start typing your UK address..."
-                : "Loading address search..."
-            }
-          className="w-full rounded border p-3 bg-transparent!"
-         
-          />
-        </StandaloneSearchBox>
+        <input
+          placeholder={
+            isLoaded
+              ? "Start typing your UK address..."
+              : "Loading address search..."
+          }
+          className="w-full rounded border bg-transparent! p-3"
+        />
+      </StandaloneSearchBox>
     </div>
   );
 }

@@ -16,8 +16,8 @@ const SettingsPage = () => {
   //   const { data } = await http.get(`/admin/settings/settings`);
   //   return data;
   // };
-  console.log(adminSettings, "settings data");
-  console.log(adminCurrency, "currency data");
+  // console.log(adminSettings, "settings data");
+  // console.log(adminCurrency, "currency data");
   return (
     <div className="">
       <div className="bg-[#FFFFFF] p-5 sm:p-7.5">

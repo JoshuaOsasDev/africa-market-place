@@ -3,13 +3,11 @@ import OtpInput from "react-otp-input";
 
 export default function OtpComponent({
   otp,
-  setOtp
- }: {
-  otp: string,
+  setOtp,
+}: {
+  otp: string;
   setOtp: React.Dispatch<React.SetStateAction<string>>;
-
 }) {
-
   return (
     <OtpInput
       value={otp}
@@ -29,14 +27,12 @@ export default function OtpComponent({
         textAlign: "center",
       }} */
       renderInput={(props) => (
-<<<<<<< HEAD
-        <input className="h-[52px] w-[52px] rounded-xl border text-center lg:h-[61px]" />
-=======
-        <input {...props}  className="h-[51px] !w-[52px] rounded-[8px] border text-center lg:h-[55px]" />
->>>>>>> origin/dev
+        <input
+          {...props}
+          className="h-[51px] !w-[52px] rounded-[8px] border text-center lg:h-[55px]"
+        />
       )}
       shouldAutoFocus={true}
-      
     />
   );
 }

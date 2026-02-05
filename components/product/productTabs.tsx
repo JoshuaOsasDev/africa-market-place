@@ -34,11 +34,11 @@ export function ProductTabs({
       id: "additional",
       label: "Additional Information",
       content: additionalInfo || (
-        <div className="text-[#6F6F6F] text-base">
+        <div className="text-base text-[#6F6F6F]">
           <table className="w-full">
             <tbody>
               <tr className="border-b border-[#E5E7EB]">
-                <td className="py-3 pr-4 font-medium text-[#111827] w-1/3">
+                <td className="w-1/3 py-3 pr-4 font-medium text-[#111827]">
                   Weight
                 </td>
                 <td className="py-3 text-[#6F6F6F]">1 kg</td>

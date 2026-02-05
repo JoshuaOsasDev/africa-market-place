@@ -151,7 +151,7 @@ export default function CompleteProductForm({
   const subCategoryOptions = categories.categories?.subCategory || [];
   const childCategoryOptions = categories.categories?.childCategory || [];
 
-  console.log(categoryOptions, "cat name");
+  //console.log(categoryOptions, "cat name");
   //Redux form
 
   const dispatch = useAppDispatch();
@@ -316,8 +316,8 @@ export default function CompleteProductForm({
   };
 
   const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-    console.log("Images:", productImages);
+    // console.log("Form Data:", data);
+    // console.log("Images:", productImages);
 
     // createVendorProduct({
     //   ...data,
@@ -990,7 +990,7 @@ export default function CompleteProductForm({
                           className="w-full cursor-pointer appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 transition outline-none focus:border-transparent focus:ring-2 focus:ring-green-500 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
                           onChange={(e) => {
                             const selectedId = e.target.value;
-                            console.log(selectedId, "selectedId");
+                            //console.log(selectedId, "selectedId");
                             const selectedSubCat = filteredSubCategories.find(
                               (sub: any) => sub._id === selectedId,
                             );

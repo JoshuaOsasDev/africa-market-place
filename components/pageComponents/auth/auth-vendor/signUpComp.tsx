@@ -12,6 +12,15 @@ import { Eye, EyeOff, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import { signUpSchema } from "@/lib/utility/yupvalidation";
 
+type SignUpFormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+};
+
 const SignUpComp = () => {
   const router = useRouter();
 
@@ -35,32 +44,32 @@ const SignUpComp = () => {
   };
 
   const [form, setForm] = useState<{
-    fullname: string;
+    firstName: string;
+    lastName: string;
     email: string;
     phone: string;
     password: string;
+    confirmPassword: string;
   }>({
-    fullname: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     password: "",
+    confirmPassword: "",
   });
 
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(formOptions);
+  } = useForm<SignUpFormValues>({
+    resolver: yupResolver(signUpSchema),
+  });
 
-  const onSubmit = async (data: {
-    email: string;
-    password: string;
-    phone: string;
-    fullname: string;
-  }) => {
+  const onSubmit = async (data: SignUpFormValues) => {
     if (!isChecked) return;
-    console.log(data, "data");
+    //console.log(data, "data");
 
     try {
       setLoader(!loader);
@@ -113,23 +122,45 @@ const SignUpComp = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="mt-4 flex w-full flex-col space-y-2"
             >
+              {/* FIRST NAME */}
               <div className="flex w-full flex-col space-y-2">
                 <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
                   <TextStyle
-                    textContent="Full Name"
+                    textContent="First Name"
                     textStyle="text-[16px] text-[##667185] text-bold"
                   />
                 </label>
                 <div className="group mr-3 flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
                   <input
-                    {...register("fullname")}
-                    placeholder="User"
+                    {...register("firstName")}
+                    placeholder="First name"
                     className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
                   />
                   <User className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
                 </div>
                 <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
-                  {errors.fullname?.message}
+                  {errors.firstName?.message}
+                </p>
+              </div>
+
+              {/* LAST NAME */}
+              <div className="flex w-full flex-col space-y-2">
+                <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
+                  <TextStyle
+                    textContent="Last Name"
+                    textStyle="text-[16px] text-[##667185] text-bold"
+                  />
+                </label>
+                <div className="group mr-3 flex h-[39px] flex-row items-center overflow-hidden rounded-sm border border-[#F4F4F4F4] bg-white px-2.5 shadow transition-colors focus-within:border-green-600">
+                  <input
+                    {...register("lastName")}
+                    placeholder="Last name"
+                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
+                  />
+                  <User className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
+                </div>
+                <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
+                  {errors.lastName?.message}
                 </p>
               </div>
 

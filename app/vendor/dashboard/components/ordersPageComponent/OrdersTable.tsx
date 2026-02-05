@@ -149,7 +149,7 @@ export default function OrdersTable() {
 
  const select = useRowSelect(data, {
   onChange: (action, state) => {
-   console.log("Selected orders:", state.ids);
+  // console.log("Selected orders:", state.ids);
   },
  });
 
@@ -157,7 +157,7 @@ export default function OrdersTable() {
   data, 
   {
    onChange: (action, state) => {
-    console.log("Sort state:", state);
+   // console.log("Sort state:", state);
    },
   },
   {

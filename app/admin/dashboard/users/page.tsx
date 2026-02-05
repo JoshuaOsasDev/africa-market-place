@@ -14,7 +14,7 @@ import {
 
 export default function UsersPage() {
   const { useradminData, isLoading, error } = useAdminUsers();
-  console.log(useradminData?.data?.length, isLoading, "admin data");
+  // console.log(useradminData?.data?.length, isLoading, "admin data");
 
   if (isLoading) return <Loader />;
   return (

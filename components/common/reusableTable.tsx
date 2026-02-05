@@ -70,7 +70,7 @@ export default function ReusableTable({
     }),
     [data],
   );
-  console.log(order, "reuseable");
+  //console.log(order, "reuseable");
   // Theme customization
   const theme = {
     ...getTheme(),

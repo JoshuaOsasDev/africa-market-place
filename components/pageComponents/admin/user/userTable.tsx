@@ -46,7 +46,7 @@ export default function UserTable({
     }
   };
 
-  console.log(data, "resuable");
+  // console.log(data, "resuable");
   return (
     <div className="mt-5">
       <ReusableTable
@@ -141,7 +141,7 @@ export default function UserTable({
                     <DeleteProductModal
                       text={`Shipping ${item.trackingNo}`}
                       productName="Shipping"
-                      onConfirm={() => console.log("Delete shipping:", item.id)}
+                      onConfirm={() => console.log("Delete shipping:")}
                     />
                   </Modal.Window>
                 </Modal>

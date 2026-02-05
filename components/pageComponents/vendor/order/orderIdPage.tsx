@@ -12,7 +12,7 @@ export default function OrderIdPage(ordersId: { ordersId: string }) {
     error,
   } = useVEndorOrderSlug(ordersId.ordersId);
 
-  console.log(order, "order details");
+  // console.log(order, "order details");
   return (
     <div>
       <div className="hidden items-end justify-between md:flex">

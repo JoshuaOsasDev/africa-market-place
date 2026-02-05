@@ -54,7 +54,7 @@ export default function CreateRoles() {
       permissions,
     };
 
-    console.log("Form Payload:", payload);
+    //console.log("Form Payload:", payload);
 
     // Example API call
     // await axios.post("/api/roles", payload);

@@ -37,18 +37,15 @@ const VerifyOtpComp = () => {
       router.push("/auth-user/sendOpt");
       return;
     }
-    if (otp.length === 5) { 
+    if (otp.length === 5) {
       handleSubmit({
         otp: otp.toString(),
-        email: appState?.email
-      })
+        email: appState?.email,
+      });
     }
   }, [otp]);
 
-
- 
-
-  const handleSubmit = async (data: { otp: string, email: string }) => {
+  const handleSubmit = async (data: { otp: string; email: string }) => {
     try {
       if (!appState?.email) {
         router.push("/auth-user/sendOpt");
@@ -57,14 +54,14 @@ const VerifyOtpComp = () => {
       dispatch(setLoaderAction(true));
 
       const result = await mutateAsync({
-        ...data
+        ...data,
       });
 
       toast.success(result.message);
       dispatch(setLoaderAction(false));
       router.push("/auth-user/login");
     } catch (err) {
-      console.log("error", err);
+      // console.log("error", err);
       if (err instanceof AxiosError) {
         toast.error(
           err.response?.data?.message || "Failed to send otp... Pls retry.",
@@ -103,8 +100,6 @@ const VerifyOtpComp = () => {
       </div>
 
       <div className="flex flex-row space-x-2">
-        
-      
         <OtpTimer />
       </div>
     </div>

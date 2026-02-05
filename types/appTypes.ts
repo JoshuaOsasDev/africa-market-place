@@ -15,6 +15,12 @@ export type sliderCardPropType = {
   id: number;
 };
 
+export type changePasswordType = {
+  password: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
 type Image = {
   url: string;
 };
@@ -96,6 +102,19 @@ export type OrderUser = {
   phone: string;
   state: string;
   zip: string;
+};
+
+export type userInfoType = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  city: string;
+  address: string;
+  cover: {
+    _id: string;
+    url: string;
+  };
 };
 
 export type OrderStatus =

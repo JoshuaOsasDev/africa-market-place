@@ -1,5 +1,23 @@
 "use client";
 
+// types/wishlist.ts
+export interface WishlistItem {
+  _id: string;
+  name: string;
+  price: number;
+  salePrice?: number;
+  images: { url: string }[];
+  status?: string;
+}
+
+export interface WishlistState {
+  data: WishlistItem[];
+}
+
+export interface WishlistSliceState {
+  wishlist: WishlistState;
+}
+
 import Modal from "@/components/common/Modal";
 import Pagination from "@/components/common/Pagination";
 import { Button } from "@/components/ui/button";
@@ -13,14 +31,13 @@ import NoOrder from "../../vendor/order/noOrder";
 export default function WishListComp() {
   const itemsPerPage = 12; // 4 columns × 3 rows
   const [currentPage, setCurrentPage] = useState(1);
-  const Data = useAppSelector((state) => state.wishlist);
-  const wishlistData = Data.wishlist.data;
+  const wishlistData = useAppSelector((state) => state.wishlist.wishlist.data);
   // console.log(wishlistData, "wishlist");
   // Calculate visible items
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  if (wishlistData.length === 0) {
+  if (wishlistData?.length === 0) {
     return (
       <div className="mt-10 flex flex-col items-center justify-center gap-5 md:mt-0">
         <NoOrder
@@ -41,7 +58,7 @@ export default function WishListComp() {
 
       {/* GRID */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {visibleItems?.map((item) => (
+        {visibleItems?.map((item: any) => (
           <div
             key={item._id}
             className="flex w-full flex-col justify-center gap-5 rounded-[12px] bg-white px-4 py-6 md:w-[260px] md:gap-2.5 md:p-3"
@@ -87,7 +104,7 @@ export default function WishListComp() {
                   className="max-w-md"
                 >
                   <DeleteProductModal
-                    onConfirm={() => console.log("DELETE:", item.id)}
+                    onConfirm={() => console.log("DELETE:")}
                     text="order"
                     productName={item.name}
                   />

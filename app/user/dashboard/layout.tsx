@@ -1,8 +1,6 @@
-import DashboardNavbar from "@/components/common/dashboardNavbar";
 import Footer from "@/components/common/footer";
 import Header from "@/components/common/header";
 
-import SideBar from "@/components/common/sideBar";
 import UserSideBar from "@/components/common/userSideBar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -11,7 +11,7 @@ export default function ProductIdPage({ productId }: { productId: string }) {
   console.log(productId, "params");
   const { vendorProductById, isLoading, error } =
     useVendorProductById(productId);
-  console.log(vendorProductById, "ProductID data");
+  //(vendorProductById, "ProductID data");
 
   const product: Product = vendorProductById?.data;
   if (isLoading) return <Loader />;

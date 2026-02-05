@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ProductMock, RelatedProduct } from "@/types/product";
+import { Product, ProductMock, RelatedProduct } from "@/types/product";
 import { Review } from "@/types/review";
 import { ProductImageGallery } from "@/components/product/productImageGallery";
 import { ProductInfo } from "@/components/product/productInfo";
@@ -16,11 +16,12 @@ import Loader from "@/components/common/loader";
 import { UserProductLoader } from "@/components/common/skeletonTable";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setWishlistAction } from "@/redux/slices/wishlist";
+import { WishlistSliceState } from "@/components/pageComponents/user/wishlist/wishlistComp";
 
 interface ProductDetailClientProps {
   // product: ProductMock & { reviews: Review[] };
   relatedProducts: RelatedProduct[];
-  resolvedParams: { slug: { slug: string } };
+  resolvedParams: { slug: string };
 }
 
 export function ProductDetailClient({
@@ -29,7 +30,7 @@ export function ProductDetailClient({
 }: ProductDetailClientProps) {
   const dispatch = useAppDispatch();
   const wishlist = useAppSelector((state) => state.wishlist);
-  const [wishlistedProducts, setWishlistedProducts] = useState<string[]>(
+  const [wishlistedProducts, setWishlistedProducts] = useState(
     wishlist.wishlist?.data || [],
   );
 
@@ -44,7 +45,7 @@ export function ProductDetailClient({
     error: wishlistError,
   } = useUserWishlist();
 
-  const product = userProductsSlug?.data;
+  const product: Product = userProductsSlug?.data;
 
   if (isLoading) return <UserProductLoader />;
   // const handleAddToCart = async (quantity: number) => {
@@ -79,10 +80,10 @@ export function ProductDetailClient({
     // dispatch(setWishlistAction([...wishlistedProducts, product.slug]));
 
     setWishlistedProducts((prev = []) => {
-      const exists = prev.some((item) => item.slug === product.slug);
+      const exists = prev.some((item: any) => item.slug === product.slug);
 
       return exists
-        ? prev.filter((item) => item.slug !== product.slug)
+        ? prev.filter((item: any) => item.slug !== product.slug)
         : [...prev, product];
     });
   };
@@ -93,9 +94,9 @@ export function ProductDetailClient({
   };
 
   const handleRelatedProductWishlist = (productId: string) => {
-    setWishlistedProducts((prev) =>
+    setWishlistedProducts((prev: any) =>
       prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
+        ? prev.filter((id: any) => id !== productId)
         : [...prev, productId],
     );
   };
@@ -134,14 +135,14 @@ export function ProductDetailClient({
               originalPrice={product?.salePrice}
               inStock={product?.inStock}
               rating={product?.rating || 5}
-              reviewCount={product?.review?.length}
+              reviewCount={product?.reviews?.length}
               sku={product?.sku}
               description={product?.description.split("\n")[0]}
               category={product?.category}
               tags={product?.tags}
               onToggleWishlist={handleToggleWishlist}
               isWishlisted={wishlistedProducts?.some(
-                (item) => item?.slug === product?.slug,
+                (item: any) => item?.slug === product?.slug,
               )}
               maxQuantity={product?.stockQuantity}
             />
@@ -160,7 +161,7 @@ export function ProductDetailClient({
                   <table className="w-full">
                     <tbody>
                       {Object.entries(product.additionalInfo).map(
-                        ([key, value], index, array) => (
+                        ([key, value], index, array: any[]) => (
                           <tr
                             key={key}
                             className={

@@ -121,7 +121,7 @@ export default function ShippingTable({
                     <DeleteProductModal
                       text={`Shipping ${item.trackingNo}`}
                       productName="Shipping"
-                      onConfirm={() => console.log("Delete shipping:", item.id)}
+                      onConfirm={() => console.log("Delete shipping:")}
                     />
                   </Modal.Window>
                 </Modal>

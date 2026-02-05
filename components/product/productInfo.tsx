@@ -52,18 +52,18 @@ export function ProductInfo({
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   //console.log(isWishlisted, "info");
-  const handleAddToCart = async () => {
-    setLoading(true);
-    try {
-      await onAddToCart(quantity);
-      // Optionally reset quantity after adding
-      setQuantity(1);
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleAddToCart = async () => {
+  //   setLoading(true);
+  //   try {
+  //     await onAddToCart(quantity);
+  //     // Optionally reset quantity after adding
+  //     setQuantity(1);
+  //   } catch (error) {
+  //     console.error("Error adding to cart:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
@@ -97,7 +97,6 @@ export function ProductInfo({
         product={product}
         quantity={quantity}
         onQuantityChange={setQuantity}
-        onAddToCart={handleAddToCart}
         onToggleWishlist={onToggleWishlist}
         isWishlisted={isWishlisted}
         inStock={inStock}

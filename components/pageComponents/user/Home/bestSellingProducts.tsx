@@ -5,7 +5,6 @@ import { MoveRight, Star, Text } from "lucide-react";
 
 import Image from "next/image";
 import { MdStar } from "react-icons/md";
-
 import { buttonVariants } from "@/components/ui/button";
 import { useUserProducts } from "@/lib/hooks/userDashboard/useUser";
 

@@ -9,9 +9,7 @@ import { useUserProductsBySlug } from "@/lib/hooks/userDashboard/useUser";
 
 interface ProductPageProps {
   params: Promise<{
-    slug: {
-      slug: string;
-    };
+    slug: string;
   }>;
 }
 

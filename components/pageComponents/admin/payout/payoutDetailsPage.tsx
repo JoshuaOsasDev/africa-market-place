@@ -134,7 +134,7 @@ export default function PayoutDetailsPage() {
                                 />
                               </div>
                             }
-                            onClick={() => console.log("View:", item.id)}
+                            onClick={() => console.log("View:")}
                           >
                             Approve Withdrawal
                           </Menus.Button>
@@ -145,7 +145,7 @@ export default function PayoutDetailsPage() {
                                 <Eye className="text-[#FCCD57]" size={16} />
                               </div>
                             }
-                            onClick={() => console.log("View:", item.id)}
+                            onClick={() => console.log("View:")}
                           >
                             Preview Withdrawal
                           </Menus.Button>
