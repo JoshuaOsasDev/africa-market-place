@@ -94,6 +94,7 @@ export type Product = {
   stockQuantity: number;
   sold: number;
   likes: number;
+  discount?: number;
 
   // Description / SEO
   description: string;
@@ -154,6 +155,23 @@ export type Product = {
 //   inStock?: boolean;
 // };
 
+export interface ProductCardProps {
+  _id: string;
+  name: string;
+  slug: string;
+  images: ImageProp;
+  price: number;
+  originalPrice?: number;
+  discount?: number;
+  rating?: number;
+  reviewCount?: number;
+  inStock?: boolean;
+  onAddToCart?: (id: string) => void;
+  onToggleWishlist?: (id: string) => void;
+  isWishlisted?: boolean;
+  className?: string;
+}
+
 export type ProductCompletionInput = {
   name?: string;
   description?: string;
@@ -208,3 +226,20 @@ export interface RelatedProduct {
   reviewCount?: number;
   inStock?: boolean;
 }
+
+export type ProductReview = {
+  _id: string;
+  name: string;
+  price: number;
+  salesPrice?: number;
+  slug: string;
+  status: string;
+  shop: {
+    _id: string;
+    name: string;
+  };
+  createdAt: Date;
+  image: {
+    url: string;
+  };
+};

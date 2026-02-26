@@ -6,8 +6,8 @@ export function proxy(request: NextRequest) {
   // console.log("CODE RAN 1");
   const user = false; // example auth check
 
-  if (url.pathname === "/admin/dashboard" && !user) {
-    console.log("CODE RAN 2");
+  if (url.pathname === "/admin/dashboard" && user) {
+    // console.log("CODE RAN 2");
     return NextResponse.redirect(new URL("/auth-user/login", request.url));
   }
 

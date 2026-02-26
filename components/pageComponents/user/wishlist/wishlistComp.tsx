@@ -37,7 +37,7 @@ export default function WishListComp() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  if (wishlistData?.length === 0) {
+  if (wishlistData?.length === 0 || !wishlistData) {
     return (
       <div className="mt-10 flex flex-col items-center justify-center gap-5 md:mt-0">
         <NoOrder

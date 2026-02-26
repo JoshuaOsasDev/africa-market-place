@@ -28,7 +28,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "tailwind.config.js"  ],
+    "**/*.mts",
+    "tailwind.config.js",
+    "components/pageComponents/admin/productReview"
+  ],
   "exclude": ["node_modules"]
 }

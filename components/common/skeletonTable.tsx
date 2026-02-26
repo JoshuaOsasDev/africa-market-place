@@ -1,7 +1,7 @@
 export default function SkeletonTable({ rows = 5 }: { rows?: number }) {
   return (
     <div className="mt-2 w-full overflow-x-auto">
-      <div className="min-w-[1200px] overflow-hidden rounded-lg border-b border-[#F0F1F3] bg-white shadow-sm">
+      <div className="overflow-hidden rounded-lg border-b border-[#F0F1F3] bg-white shadow-sm">
         {/* Header Skeleton */}
         <div className="grid items-center border-b border-[#F0F1F3] bg-[#F9F9FC] px-5.5 py-4.5">
           <div

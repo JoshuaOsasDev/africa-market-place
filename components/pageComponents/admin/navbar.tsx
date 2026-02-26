@@ -3,15 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, ChevronDown } from "lucide-react";
+import { Bell, ChevronDown, ChevronRight } from "lucide-react";
 
 const Navbar = () => {
   const pathname = usePathname();
 
   const routes: { prefix: string; title: string }[] = [
     { prefix: "/admin/dashboard/users", title: "Users" },
-    { prefix: "/admin/dashboard/sellers", title: "Sellers" },
-    { prefix: "/admin/dashboard/productReview", title: "Product Review" },
+    { prefix: "/admin/dashboard/shops", title: "Shops" },
+    { prefix: "/admin/dashboard/product-review", title: "Product Review" },
     { prefix: "/admin/dashboard/shipping", title: "Shipping" },
     { prefix: "/admin/dashboard/roles", title: "Roles" },
     { prefix: "/admin/dashboard/payout", title: "Payout" },
@@ -85,11 +85,15 @@ const Navbar = () => {
         </div>
 
         <div className="hidden items-center px-[21px] md:flex">
-          <h1 className="text-[20px] font-medium text-[#45464E]">
-            Dashboard/{headerText}
+          <h1 className="flex items-center text-[20px] font-medium text-[#45464E]">
+            <span className="flex items-center">
+              {" "}
+              Dashboard <ChevronRight /> {headerText}
+            </span>
             {slugDetails && (
-              <span className="text-[#667085]">
-                /Shipping-information ({slugDetails})
+              <span className="flex items-center text-[#667085]">
+                <ChevronRight />
+                {slugDetails}
               </span>
             )}
           </h1>

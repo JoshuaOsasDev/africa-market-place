@@ -1,29 +1,76 @@
 "use client";
 import Modal from "@/components/common/Modal";
 import ReusableTable from "@/components/common/reusableTable";
-import { ordersData } from "@/lib/data";
 import { Eye, Pen, Trash } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import EditProduct from "../../vendor/product/EditProduct";
 import DeleteProductModal from "../../vendor/product/DeleteProductModal";
+import SkeletonTable from "@/components/common/skeletonTable";
+import { formatDate } from "@/lib/utils";
+import { UsersOrder } from "@/types/order";
 
 export default function OrderTable({
-  order,
+  orderParams,
+  userOders,
+  isLoading,
 }: {
-  order: string | string[] | undefined;
+  orderParams: string | string[] | undefined;
+  userOders: UsersOrder[];
+  isLoading: boolean;
 }) {
+  let filteredOrders = userOders || [];
+
+  if (orderParams && typeof orderParams === "string") {
+    if (orderParams === "pending") {
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status?.toLowerCase() === "pending",
+      );
+    }
+
+    if (orderParams === "on-the-way") {
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status?.toLowerCase() === "on-the-way",
+      );
+    }
+
+    if (orderParams === "canceled") {
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status?.toLowerCase() === "canceled",
+      );
+    }
+
+    if (orderParams === "delivered") {
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status?.toLowerCase() === "delivered",
+      );
+    }
+
+    if (orderParams === "canceled") {
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status?.toLowerCase() === "cancelled",
+      );
+    }
+
+    if (orderParams === "returned") {
+      filteredOrders = filteredOrders.filter(
+        (order) => order.status?.toLowerCase() === "returned",
+      );
+    }
+  }
+  //console.log(userOders, "orders");
+
+  if (isLoading) return <SkeletonTable />;
   return (
     <ReusableTable
-      order={order}
-      data={ordersData}
+      order={orderParams}
+      data={filteredOrders}
       columnsStyle="44px .5fr 1fr .5fr .5fr .5fr .5fr .5fr"
       columns={[
         {
           label: "Order Id",
           renderCell: (item) => (
             <span className="font-semibold text-[#2E7D32]">
-              #{item.orderId}
+              #{item.orderNo}
             </span>
           ),
         },
@@ -32,19 +79,21 @@ export default function OrderTable({
           renderCell: (item) => (
             <div className="flex items-center gap-3">
               <div className="rounded-xl bg-[#F6F6F6] p-1">
-                <Image
-                  src={item.image}
+                {/* <Image
+                  src={item?.items[0].imageUrl}
                   alt={item.product}
                   width={40}
                   height={40}
-                />
+                /> */}
+
+                <p className="p-4"></p>
               </div>
               <p className="flex flex-col">
                 {" "}
                 <span className="font-medium text-[#333843]">
                   {item.product}
                 </span>
-                <span className="text-[#667085]">+3 other products</span>
+                <span className="text-[#667085]">{`+${item.items.length} other products`}</span>
               </p>
             </div>
           ),
@@ -52,7 +101,7 @@ export default function OrderTable({
         {
           label: "Date",
           renderCell: (item) => (
-            <span className="text-[#333843]">{item.date}</span>
+            <span className="text-[#333843]">{formatDate(item.createdAt)}</span>
           ),
         },
         {
@@ -64,19 +113,21 @@ export default function OrderTable({
         {
           label: "Payment",
           renderCell: (item) => (
-            <span className="font-medium text-[#667085]">{item.payment}</span>
+            <span className="font-medium text-[#667085]">
+              {item.paymentMethod}
+            </span>
           ),
         },
 
         {
           label: "Status",
           renderCell: (item) => {
-            type OrderStatus = "Processing" | "Shipped" | "Cancelled";
+            type OrderStatus = "pending" | "shipped" | "cancelled";
 
             const colors: Record<OrderStatus, string> = {
-              Processing: "bg-[#FFF9EA] text-[#FBC02D]",
-              Shipped: "bg-[#E8F8FD] text-[#13B2E4]",
-              Cancelled: "bg-[#FFE8E5] text-[#FF4733]",
+              pending: "bg-[#FFF9EA] text-[#FBC02D]",
+              shipped: "bg-[#E8F8FD] text-[#13B2E4]",
+              cancelled: "bg-[#FFE8E5] text-[#FF4733]",
             };
 
             const status = item.status as OrderStatus;
@@ -93,10 +144,10 @@ export default function OrderTable({
           label: "Action",
           renderCell: (item) => (
             <div className="flex items-center gap-1">
-              <Link href={"/vendor/dashboard/product/details"}>
+              <Link href={"#"}>
                 <Eye className="h-5 w-5 text-[#667085] hover:text-gray-900" />
               </Link>
-              {order !== "cancelled" && order !== "shipped" && (
+              {orderParams !== "cancelled" && orderParams !== "shipped" && (
                 <Modal>
                   <Modal.Open opens={`edit-product-${item.id}`}>
                     <button
@@ -133,7 +184,7 @@ export default function OrderTable({
                   <DeleteProductModal
                     text="order"
                     productName={item.name}
-                    onConfirm={() => console.log("DELETE:", item.id)}
+                    onConfirm={() => console.log("DELETE:")}
                   />
                 </Modal.Window>
               </Modal>

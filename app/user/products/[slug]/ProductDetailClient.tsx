@@ -15,8 +15,7 @@ import {
 import Loader from "@/components/common/loader";
 import { UserProductLoader } from "@/components/common/skeletonTable";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { setWishlistAction } from "@/redux/slices/wishlist";
-import { WishlistSliceState } from "@/components/pageComponents/user/wishlist/wishlistComp";
+import { useRouter } from "next/navigation";
 
 interface ProductDetailClientProps {
   // product: ProductMock & { reviews: Review[] };
@@ -33,6 +32,10 @@ export function ProductDetailClient({
   const [wishlistedProducts, setWishlistedProducts] = useState(
     wishlist.wishlist?.data || [],
   );
+  const router = useRouter();
+  const handleCategoryClick = (categoryId: string) => {
+    router.push(`/user/categories?category=${categoryId}`);
+  };
 
   //Hook to fecth Product Details
   const { userProductsSlug, isLoading, error } = useUserProductsBySlug(
@@ -110,9 +113,12 @@ export function ProductDetailClient({
             Home
           </Link>
           <span>/</span>
-          <Link href={`#`} className="transition-colors hover:text-[#2E7D32]">
+          <button
+            onClick={() => handleCategoryClick(product?.category?._id)}
+            className="cursor-pointer transition-colors hover:text-[#2E7D32]"
+          >
             {product?.category?.name}
-          </Link>
+          </button>
           <span>/</span>
           <span className="font-medium text-[#111827]">{product?.name}</span>
         </nav>

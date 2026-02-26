@@ -2,18 +2,39 @@
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const orderTabs = [
-  { label: "All Orders", value: "all", count: null, active: true },
-  { label: "Ongoing Orders", value: "ongoing", count: 10, active: false },
-  { label: "Cancelled Orders", value: "cancelled", count: 6, active: false },
-  { label: "Shipped Orders", value: "shipped", count: 5, active: false },
-];
+// const orderTabs = [
+//   { label: "All Orders", value: "all", count: null, active: true },
+//   { label: "Ongoing Orders", value: "pending", count: 10, active: false },
+//   { label: "Progress", value: "on-the-way", count: 0, active: false },
+//   { label: "Shipped Orders", value: "delivered", count: 5, active: false },
+//   { label: "Cancelled Orders", value: "canceled", count: 6, active: false },
+//   { label: "Returned", value: "returned", count: 5, active: false },
+// ];
 
-export default function OrderTabs() {
+export default function OrderTabs({
+  tabCounts,
+}: {
+  tabCounts: Record<string, number>;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const activeValue = searchParams.get("order") || "all";
+
+  const orderTabs = [
+    { label: "All Orders", value: "all", count: tabCounts.all },
+
+    { label: "Ongoing Orders", value: "pending", count: tabCounts.pending },
+
+    { label: "Progress", value: "on-the-way", count: tabCounts["on-the-way"] },
+
+    { label: "Shipped Orders", value: "delivered", count: tabCounts.delivered },
+
+    { label: "Cancelled Orders", value: "canceled", count: tabCounts.canceled },
+
+    { label: "Returned", value: "returned", count: tabCounts.returned },
+  ];
+
   const activeTabIndex = orderTabs.findIndex(
     (tab) => tab.value === activeValue,
   );
@@ -60,7 +81,7 @@ export default function OrderTabs() {
       {/* 
           DESKTOP TABS
       */}
-      <div className="hidden w-[832px] items-center justify-around rounded-[35px] border-b-2 border-gray-200 bg-white px-4 py-2 md:flex">
+      <div className="hidden w-full items-center justify-around rounded-[35px] border-b-2 border-gray-200 bg-white px-4 py-2 md:flex">
         {orderTabs.map((tab, index) => (
           <button
             key={index}
@@ -76,7 +97,7 @@ export default function OrderTabs() {
           >
             <span>{tab.label}</span>
 
-            {tab.count !== null && (
+            {tab.count > 0 && (
               <span
                 className={`rounded-full px-2.5 py-1 text-[12px] font-semibold ${
                   activeTab === index

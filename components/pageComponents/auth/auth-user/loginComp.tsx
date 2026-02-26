@@ -53,6 +53,7 @@ const LoginComp = () => {
       // invalidate wishlist and all categories after successful login
       queryClient.invalidateQueries({ queryKey: ["user-wishlist"] });
       queryClient.invalidateQueries({ queryKey: ["get-all-categories"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 
@@ -78,7 +79,7 @@ const LoginComp = () => {
         dispatch(signInAction(result.data.user));
         dispatch(setWishlistAction(result.data.user.wishlist));
 
-       // console.log(result.data, "login details");
+        // console.log(result.data, "login details");
         toast.success("Login successfull");
 
         dispatch(setLoaderAction(false));

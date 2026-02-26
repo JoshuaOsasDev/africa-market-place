@@ -1,43 +1,48 @@
-export default function ProductsAndRegionalPerformance() {
+import Image from "next/image";
+
+export default function ProductsAndRegionalPerformance(products: any) {
   // Top Products Data
-  const topProducts = [
-    {
-      id: 1,
-      name: "Green Beans",
-      sales: 2568,
-      amount: "₦45,007",
-    },
-    {
-      id: 2,
-      name: "Salad Greens",
-      sales: 1850,
-      amount: "₦43,104",
-    },
-    {
-      id: 3,
-      name: "Cocoa Yam",
-      sales: 1500,
-      amount: "₦2,933",
-    },
-    {
-      id: 4,
-      name: "Maize",
-      sales: 1200,
-      amount: "₦6,012",
-    },
-    {
-      id: 5,
-      name: "Red Pepper",
-      sales: 2968,
-      amount: "₦10,378",
-    },
-    {
-      id: 6,
-      name: "Tomatoes",
-      sales: 2368,
-      amount: "₦9,815",
-    },
-  ];
+
+  const topProducts = products.products;
+  // console.log(topProducts, "bestSellingP");
+  // const topProducts = [
+  //   {
+  //     id: 1,
+  //     name: "Green Beans",
+  //     sales: 2568,
+  //     amount: "₦45,007",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Salad Greens",
+  //     sales: 1850,
+  //     amount: "₦43,104",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Cocoa Yam",
+  //     sales: 1500,
+  //     amount: "₦2,933",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Maize",
+  //     sales: 1200,
+  //     amount: "₦6,012",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Red Pepper",
+  //     sales: 2968,
+  //     amount: "₦10,378",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Tomatoes",
+  //     sales: 2368,
+  //     amount: "₦9,815",
+  //   },
+  // ];
 
   // Regional Performance Data
   const regionalData = [
@@ -56,9 +61,9 @@ export default function ProductsAndRegionalPerformance() {
           </h2>
 
           <div className="space-y-4">
-            {topProducts.map((product) => (
+            {topProducts.map((product: any) => (
               <div
-                key={product.id}
+                key={product._id}
                 className="flex items-center justify-between border-b border-[#F0F1F3] pb-4 last:border-b-0"
               >
                 {/* Product Info */}
@@ -66,12 +71,24 @@ export default function ProductsAndRegionalPerformance() {
                   {/* <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F6F6F6]">
                     <span className="text-lg">{product.icon}</span>
                   </div> */}
+                  {product?.images[0] ? (
+                    <div className="relative h-10 w-10">
+                      <Image
+                        src={product?.images[0].url}
+                        alt={product?.images[0]._id}
+                        fill
+                        className="rounded-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-10 w-10 rounded-full bg-gray-400 p-5"></div>
+                  )}
                   <div>
                     <p className="text-[14px] font-medium text-[#333843]">
                       {product.name}
                     </p>
                     <p className="text-[12px] text-[#667085]">
-                      {product.sales} Sales
+                      {product.sold} Sales
                     </p>
                   </div>
                 </div>
@@ -79,7 +96,7 @@ export default function ProductsAndRegionalPerformance() {
                 {/* Amount */}
                 <div className="text-right">
                   <p className="text-[14px] font-semibold text-[#333843]">
-                    {product.amount}
+                    {`₤${product.salePrice}`}
                   </p>
                 </div>
               </div>

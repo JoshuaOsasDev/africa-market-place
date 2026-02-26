@@ -2,12 +2,12 @@
 
 import { useMemo, useRef, useEffect, Suspense, ReactNode } from "react";
 import { CompactTable } from "@table-library/react-table-library/compact";
-//import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { useRowSelect } from "@table-library/react-table-library/select";
-import { usePagination } from "@table-library/react-table-library/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SkeletonTable from "@/components/common/skeletonTable";
+import { useRouter, useSearchParams } from "next/navigation";
+import page from "@/app/(auth)/auth-vendor/resetPassword/page";
 
 type Column = {
   label: ReactNode;
@@ -18,6 +18,7 @@ type Column = {
 type ReusableTableProps = {
   order: string | string[] | undefined;
   data: any[];
+  totalPages?: number;
   columnsStyle?: string;
   columns: Column[];
   itemsPerPage?: number;
@@ -55,22 +56,52 @@ function HeaderCheckbox({
 
 export default function ReusableTable({
   order,
-  data,
+  data = [], // Add default empty array
   columns,
+  totalPages = 1,
   columnsStyle = "",
-  itemsPerPage = 5,
   onSelectChange,
 }: ReusableTableProps) {
+  //Search params navigation
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const totalItems = data.length;
+  const limit = 10;
+  // Current page from URL (1-based)
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const startItem = totalItems === 0 ? 0 : (currentPage - 1) * limit + 1;
+
+  const endItem = Math.min(currentPage * limit, totalItems);
+
+  const updateSearchParams = (key: string, value: string | number) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (!value) {
+      params.delete(key);
+    } else {
+      params.set(key, String(value));
+    }
+
+    // Reset page if search changes
+    if (key !== "page") {
+      params.set("page", "1");
+    }
+
+    router.push(`?${params.toString()}`);
+  };
+  // Safely create tableData with fallback
   const tableData = useMemo(
     () => ({
-      nodes: data?.map((item) => ({
-        ...item,
-        id: item.id || item._id,
-      })),
+      nodes: Array.isArray(data)
+        ? data.map((item) => ({
+            ...item,
+            id: item.id || item._id,
+          }))
+        : [],
     }),
     [data],
   );
-  //console.log(order, "reuseable");
+
   // Theme customization
   const theme = {
     ...getTheme(),
@@ -105,28 +136,13 @@ export default function ReusableTable({
     `,
   };
 
-  // Pagination hook
-  const pagination = usePagination(tableData, {
-    state: {
-      page: 0,
-      size: itemsPerPage,
-    },
-    onChange: onPaginationChange,
-  });
-
-  function onPaginationChange(action: any, state: any) {
-    console.log(action, state);
-  }
-
-  // Select checkbox logic
+  // Select checkbox logic - only initialize if nodes exist
   const select = useRowSelect(tableData, {
     onChange: (action, state) => {
       onSelectChange?.(state.ids);
     },
   });
 
-  //select is a functional object given by the library to manage row selection
-  // console.log("Selected IDs:", select.fns);
   // Build columns with checkbox
   const tableColumns = [
     {
@@ -154,66 +170,42 @@ export default function ReusableTable({
     ...columns,
   ];
 
-  const totalPages = pagination.state.getTotalPages(tableData.nodes);
-  const pageNumbers = pagination.state.getPages(tableData.nodes);
-  const currentPage = pagination.state.page;
-
-  // Calculate item range
-  const startItem = currentPage * itemsPerPage + 1;
-  const endItem = Math.min((currentPage + 1) * itemsPerPage, data.length);
-
-  // Generate page numbers with ellipsis
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    const maxVisiblePages = 5;
-
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 0; i < totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      pages.push(0);
-
-      let startPage = Math.max(1, currentPage - 1);
-      let endPage = Math.min(totalPages - 1, currentPage + 1);
-
-      if (currentPage <= 2) {
-        endPage = Math.min(maxVisiblePages - 1, totalPages - 1);
-      }
-
-      if (currentPage >= totalPages - 3) {
-        startPage = Math.max(1, totalPages - (maxVisiblePages - 1));
-      }
-
-      if (startPage > 1) {
-        pages.push("...");
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-
-      if (endPage < totalPages - 1) {
-        pages.push("...");
-      }
-
-      pages.push(totalPages - 1);
-    }
-
-    return pages;
-  };
-
+  // Safe calculation with fallback
   const handlePrevious = () => {
-    if (currentPage > 0) {
-      pagination.fns.onSetPage(currentPage - 1);
+    if (currentPage > 1) {
+      updateSearchParams("page", currentPage - 1);
     }
   };
 
   const handleNext = () => {
-    if (currentPage < totalPages - 1) {
-      pagination.fns.onSetPage(currentPage + 1);
+    if (currentPage < totalPages) {
+      updateSearchParams("page", currentPage + 1);
     }
   };
+  // Generate page numbers with ellipsis
+  const getPageNumbers = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
+  // Show empty state if no data
+  if (!tableData.nodes || tableData.nodes.length === 0) {
+    return (
+      <div className="w-full rounded-lg border border-[#E0E2E7] bg-white p-12">
+        <div className="text-center">
+          <p className="text-lg font-medium text-[#667085]">
+            No data available
+          </p>
+          <p className="mt-2 text-sm text-[#858D9D]">
+            There are no items to display at this time.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -225,7 +217,6 @@ export default function ReusableTable({
             theme={theme}
             layout={{ custom: true }}
             select={select}
-            pagination={pagination}
           />
         </Suspense>
       </div>
@@ -233,43 +224,37 @@ export default function ReusableTable({
       {/* Pagination */}
       <div className="flex items-center justify-center border-t border-[#E0E2E7] bg-white px-6 py-4 md:justify-between">
         <div className="hidden text-sm font-medium text-[#667085] md:block">
-          Showing {startItem}-{endItem} from {data.length}
+          Showing {startItem}-{endItem} from {totalItems}
         </div>
 
         <div className="flex items-center gap-2 md:justify-center">
           {/* Previous button */}
           <button
             onClick={handlePrevious}
-            disabled={currentPage === 0}
+            disabled={currentPage === 1}
             className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E0E2E7] bg-[#EAF2EA] p-1.5 text-[#2E7D32] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronLeft size={18} />
           </button>
 
           {/* Page numbers */}
-          {getPageNumbers().map((page, index) => (
+          {getPageNumbers().map((page) => (
             <button
-              key={index}
-              onClick={() =>
-                typeof page === "number" && pagination.fns.onSetPage(page)
-              }
-              disabled={page === "..."}
-              className={`flex h-9 min-w-9 items-center justify-center rounded-xl p-1.5 text-sm font-semibold transition-colors ${
+              key={page}
+              onClick={() => updateSearchParams("page", page)}
+              className={`h-9 min-w-9 rounded-xl px-3 font-semibold ${
                 page === currentPage
                   ? "bg-[#2E7D32] text-white"
-                  : page === "..."
-                    ? "cursor-default border-transparent bg-transparent text-[#667085]"
-                    : "bg-[#EAF2EA] text-[#2E7D32] hover:bg-gray-100"
+                  : "bg-[#EAF2EA] text-[#2E7D32]"
               }`}
             >
-              {typeof page === "number" ? page + 1 : page}
+              {page}
             </button>
           ))}
 
-          {/* Next button */}
           <button
             onClick={handleNext}
-            disabled={currentPage === totalPages - 1}
+            disabled={currentPage === totalPages}
             className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E0E2E7] bg-[#EAF2EA] p-1.5 text-[#2E7D32] transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronRight size={18} />

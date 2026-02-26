@@ -23,40 +23,42 @@ export function CartItemCard({
   return (
     <div
       className={cn(
-        "flex items-start gap-3 py-4 border-b border-[#E5E7EB]",
-        className
+        "flex items-start gap-3 border-b border-[#E5E7EB] py-4",
+        className,
       )}
     >
       {/* Product Image */}
-      <div className="relative w-16 h-16 bg-[#F9FAFB] rounded-lg overflow-hidden flex-shrink-0">
-        <Image
-          src={item.image}
-          alt={item.name}
-          fill
-          className="object-contain p-1"
-        />
+      <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-[#F9FAFB]">
+        {item && (
+          <Image
+            src={item?.images[0].url}
+            alt={item.name}
+            fill
+            className="object-contain p-1"
+          />
+        )}
       </div>
 
       {/* Product Details */}
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-[#111827] font-medium text-sm">{item.name}</h3>
-          <span className="text-[#111827] font-semibold text-sm whitespace-nowrap">
-            ${(item.price * item.quantity).toFixed(2)}
+          <h3 className="text-sm font-medium text-[#111827]">{item.name}</h3>
+          <span className="text-sm font-semibold whitespace-nowrap text-[#111827]">
+            ${(item.salePrice * item.quantity).toFixed(2)}
           </span>
         </div>
 
-        <div className="flex items-center justify-between mt-3">
+        <div className="mt-3 flex items-center justify-between">
           <QuantityInput
             value={item.quantity}
-            onChange={(qty) => onQuantityChange(item.id, qty)}
+            onChange={(qty) => onQuantityChange(item.pid, qty)}
             min={1}
-            max={item.maxQuantity}
-            className="scale-75 origin-left"
+            // max={item.maxQuantity}
+            className="origin-left scale-75"
           />
           <button
-            onClick={() => onRemove(item.id)}
-            className="text-[#9CA3AF] hover:text-[#FF0000] transition-colors p-1"
+            onClick={() => onRemove(item.pid)}
+            className="p-1 text-[#9CA3AF] transition-colors hover:text-[#FF0000]"
             aria-label="Remove item"
           >
             <X size={18} />

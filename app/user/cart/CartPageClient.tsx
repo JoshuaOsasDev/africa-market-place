@@ -1,69 +1,40 @@
 "use client";
 
-import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { Cart } from "@/types/cart";
+import { CartItem } from "@/types/cart";
 import { CartItemRow } from "@/components/cart/CartItemRow";
 import { CartSummary } from "@/components/cart/CartSummary";
 import { CouponCode } from "@/components/cart/CouponCode";
 import { MobileOrderSummary } from "@/components/cart/MobileOrderSummary";
+import { useAppSelector } from "@/redux/store";
+import { useCart } from "@/lib/hooks/useCart";
 
-interface CartPageClientProps {
-  initialCart: Cart;
-}
+export function CartPageClient() {
+  const cart: CartItem[] = useAppSelector(
+    (state) => state.product.checkout.cart,
+  );
 
-export function CartPageClient({ initialCart }: CartPageClientProps) {
-  const [cart, setCart] = useState<Cart>(initialCart);
+  //console.log(cart, "carts");
 
-  const handleQuantityChange = (id: string, quantity: number) => {
-    setCart((prevCart) => {
-      const updatedItems = prevCart.items.map((item) =>
-        item.id === id ? { ...item, quantity } : item,
-      );
+  const { cartItems, updateQuantity, removeFromCart } = useCart();
 
-      const subtotal = updatedItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0,
-      );
-
-      return {
-        items: updatedItems,
-        summary: {
-          ...prevCart.summary,
-          subtotal,
-          total: subtotal - (prevCart.summary.discount || 0),
-        },
-      };
-    });
+  const handleQuantityChange = (productId: string, quantity: number) => {
+    updateQuantity(productId, quantity);
   };
 
-  const handleRemove = (id: string) => {
-    setCart((prevCart) => {
-      const updatedItems = prevCart.items.filter((item) => item.id !== id);
-
-      const subtotal = updatedItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0,
-      );
-
-      return {
-        items: updatedItems,
-        summary: {
-          ...prevCart.summary,
-          subtotal,
-          total: subtotal - (prevCart.summary.discount || 0),
-        },
-      };
-    });
+  const handleRemove = (productId: string) => {
+    const product = cartItems?.find((item: CartItem) => item.pid === productId);
+    if (product) {
+      removeFromCart(product);
+    }
   };
 
   const handleApplyCoupon = (code: string) => {
-    //console.log("Applying coupon:", code);
     alert(`Coupon "${code}" applied!`);
   };
 
-  if (cart.items.length === 0) {
+  if (cart?.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB] px-4">
         <div className="text-center">
@@ -71,7 +42,7 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
             Your cart is empty
           </h1>
           <p className="mb-6 text-[#6F6F6F]">
-            Looks like you haven't added any items yet.
+            Looks like you have not added any items yet.
           </p>
           <Link href="/products">
             <button className="rounded-full bg-[#2E7D32] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#246628]">
@@ -105,9 +76,9 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
             </div>
 
             <div>
-              {cart.items.map((item) => (
+              {cart?.map((item: CartItem) => (
                 <CartItemRow
-                  key={item.id}
+                  key={item.pid}
                   item={item}
                   onQuantityChange={handleQuantityChange}
                   onRemove={handleRemove}
@@ -119,14 +90,13 @@ export function CartPageClient({ initialCart }: CartPageClientProps) {
           </div>
 
           <div className="sticky top-8 h-fit">
-            <CartSummary summary={cart.summary} />
+            <CartSummary summary={cart} />
           </div>
         </div>
 
         <div className="lg:hidden">
           <MobileOrderSummary
-            items={cart.items}
-            summary={cart.summary}
+            items={cart}
             onQuantityChange={handleQuantityChange}
             onRemove={handleRemove}
             onApplyCoupon={handleApplyCoupon}

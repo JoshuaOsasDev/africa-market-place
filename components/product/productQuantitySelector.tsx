@@ -1,14 +1,11 @@
 "use client";
-
-import React from "react";
 import { QuantityInput } from "@/components/common/quantityInput";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/common/iconButton";
 import { Heart, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAppDispatch } from "@/redux/store";
-import { addCart } from "@/redux/slices/product";
 import { Product } from "@/types/product";
+import { useCart } from "@/lib/hooks/useCart";
 
 interface ProductQuantitySelectorProps {
   quantity: number;
@@ -33,9 +30,17 @@ export function ProductQuantitySelector({
   product,
   className,
 }: ProductQuantitySelectorProps) {
-  const dispacth = useAppDispatch();
+  const { isInCart, addToCart, removeFromCart, isAdding, isRemoving } =
+    useCart(product);
 
-  //console.log(isWishlisted, "isWishlisted");
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
+  };
+
+  const handleRemoveFromCart = () => {
+    removeFromCart(product);
+  };
+
   return (
     <div className={cn("flex items-center gap-3", className)}>
       <QuantityInput
@@ -46,14 +51,25 @@ export function ProductQuantitySelector({
         disabled={!inStock || loading}
       />
 
-      <Button
-        onClick={() => dispacth(addCart({ product, quantity }))}
-        disabled={!inStock || loading}
-        className="h-12 flex-1 gap-2 rounded-full bg-[#2E7D32] text-base font-semibold text-white hover:bg-[#246628]"
-      >
-        <ShoppingCart size={20} />
-        {loading ? "Adding..." : inStock ? "Add to Cart" : "Out of Stock"}
-      </Button>
+      {isInCart ? (
+        <Button
+          onClick={handleRemoveFromCart}
+          disabled={isRemoving}
+          className="h-12 flex-1 gap-2 rounded-full bg-red-500 text-base font-semibold text-white hover:bg-[#246628]"
+        >
+          <ShoppingCart size={20} />
+          {isRemoving ? "Removing..." : "Remove from Cart"}
+        </Button>
+      ) : (
+        <Button
+          onClick={handleAddToCart}
+          disabled={!inStock || loading || isAdding}
+          className="h-12 flex-1 gap-2 rounded-full bg-[#2E7D32] text-base font-semibold text-white hover:bg-[#246628]"
+        >
+          <ShoppingCart size={20} />
+          {isAdding ? "Adding..." : inStock ? "Add to Cart" : "Out of Stock"}
+        </Button>
+      )}
 
       {onToggleWishlist && (
         <IconButton

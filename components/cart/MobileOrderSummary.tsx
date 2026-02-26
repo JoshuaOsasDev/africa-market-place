@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { CartItem, CartSummary } from "@/types/cart";
+import { CartItem } from "@/types/cart";
 import { CartItemCard } from "@/components/cart/CartItemCard";
 import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/redux/store";
 
 interface MobileOrderSummaryProps {
   items: CartItem[];
-  summary: CartSummary;
   onQuantityChange: (id: string, quantity: number) => void;
   onRemove: (id: string) => void;
   onApplyCoupon: (code: string) => void;
@@ -17,13 +17,17 @@ interface MobileOrderSummaryProps {
 
 export function MobileOrderSummary({
   items,
-  summary,
   onQuantityChange,
   onRemove,
   onApplyCoupon,
   className,
 }: MobileOrderSummaryProps) {
   const [couponCode, setCouponCode] = useState("");
+  //const subtotal = items.price * items?.quantity;
+  const subtotal = useAppSelector((state) => state.product.checkout.subtotal);
+  const total = useAppSelector((state) => state.product.checkout.total);
+  const discount = useAppSelector((state) => state.product.checkout.discount);
+  const shipping = useAppSelector((state) => state.product.checkout.shipping);
 
   const handleApplyCoupon = () => {
     if (couponCode.trim()) {
@@ -32,13 +36,13 @@ export function MobileOrderSummary({
   };
 
   return (
-    <div className={cn("bg-white rounded-lg shadow-sm p-4", className)}>
-      <h2 className="text-[#111827] text-xl font-bold mb-4">Order summary</h2>
+    <div className={cn("rounded-lg bg-white p-4 shadow-sm", className)}>
+      <h2 className="mb-4 text-xl font-bold text-[#111827]">Order summary</h2>
 
       <div className="space-y-0">
         {items.map((item) => (
           <CartItemCard
-            key={item.id}
+            key={item.pid}
             item={item}
             onQuantityChange={onQuantityChange}
             onRemove={onRemove}
@@ -46,45 +50,52 @@ export function MobileOrderSummary({
         ))}
       </div>
 
-      <div className="flex items-center gap-2 mt-4 py-4 border-t border-[#E5E7EB]">
+      <div className="mt-4 flex items-center gap-2 border-t border-[#E5E7EB] py-4">
         <input
           type="text"
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}
           placeholder="Input"
-          className="flex-1 px-3 py-2 border border-[#E5E7EB] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32] focus:border-transparent"
+          className="flex-1 rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm focus:border-transparent focus:ring-2 focus:ring-[#2E7D32] focus:outline-none"
         />
         <button
           onClick={handleApplyCoupon}
-          className="px-4 py-2 bg-[#2E7D32] hover:bg-[#246628] text-white font-semibold text-sm rounded-full transition-colors"
+          className="rounded-full bg-[#2E7D32] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#246628]"
         >
           Place Order
         </button>
       </div>
 
-      <div className="space-y-3 mt-4 pt-4 border-t border-[#E5E7EB]">
+      <div className="mt-4 space-y-3 border-t border-[#E5E7EB] pt-4">
         <div className="flex items-center justify-between">
-          <span className="text-[#111827] font-medium">Shipping</span>
+          <span className="font-medium text-[#111827]">Shipping</span>
           <span className="text-[#111827]">
-            {summary.shipping === "Free" ? "Free" : `$${summary.shipping}`}
+            {shipping === 0 ? "Free" : `$${shipping}`}
           </span>
         </div>
+
+        {discount > 0 && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-[#6F6F6F]">Discount:</span>
+            <span className="font-medium text-[#2E7D32]">
+              -${discount?.toFixed(2)}
+            </span>
+          </div>
+        )}
 
         <div className="flex items-center justify-between">
-          <span className="text-[#111827] font-medium">Subtotal</span>
-          <span className="text-[#111827]">${summary.subtotal.toFixed(2)}</span>
+          <span className="font-medium text-[#111827]">Subtotal</span>
+          <span className="text-[#111827]">${subtotal}</span>
         </div>
 
-        <div className="flex items-center justify-between pt-3 border-t border-[#E5E7EB]">
-          <span className="text-[#111827] font-bold text-lg">Total</span>
-          <span className="text-[#111827] font-bold text-xl">
-            ${summary.total.toFixed(2)}
-          </span>
+        <div className="flex items-center justify-between border-t border-[#E5E7EB] pt-3">
+          <span className="text-lg font-bold text-[#111827]">Total</span>
+          <span className="text-xl font-bold text-[#111827]">${total}</span>
         </div>
       </div>
 
-      <Link href="/checkout" className="block mt-6">
-        <button className="w-full py-3 bg-[#2E7D32] hover:bg-[#246628] text-white font-semibold rounded-full transition-colors">
+      <Link href="#" className="mt-6 block">
+        <button className="w-full rounded-full bg-[#2E7D32] py-3 font-semibold text-white transition-colors hover:bg-[#246628]">
           Proceed to checkout
         </button>
       </Link>

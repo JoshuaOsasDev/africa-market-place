@@ -8,16 +8,16 @@ import {
 export default function DashboardSummary(dashboardData: any) {
   //calcuating sales and revenue and balance
 
-  const analytics = dashboardData.dashboardData;
-  const totalSales = analytics.salesReport?.reduce(
+  const analytics = dashboardData?.dashboardData;
+  const totalSales = analytics?.salesReport?.reduce(
     (sum: any, sale: any) => sum + sale,
     0,
   );
 
-  console.log(totalSales, "total sales");
-  const revenue = analytics?.monthlyEarningsByVendor;
+  const revenue = analytics?.dailyEarning;
 
   const balance = revenue - totalSales;
+  // console.log(analytics, "admin");
   const stats = [
     {
       icon: BanknoteArrowUp,

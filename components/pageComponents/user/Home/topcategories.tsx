@@ -5,17 +5,17 @@ import { MoveRight } from "lucide-react";
 import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/store";
+import { Category } from "@/types/categories";
+import { useRouter } from "next/navigation";
 
 function Topcategories() {
-  //get categoty state
-
+  const router = useRouter();
   const categories = useAppSelector((state) => state.categories);
-  //const categoryOptions = categories.categories?.category || [];
+  const CategoryOptions = categories.categories?.category || [];
 
-  const SubCategoryOptions = categories.categories?.category || [];
-  // const { isLoading, userProducts, error } = useUserProducts();
-
-  // const product = userProducts?.data;
+  const handleCategoryClick = (categoryId: string) => {
+    router.push(`/user/categories?category=${categoryId}`);
+  };
 
   return (
     <div className="my-2 flex flex-col space-y-4 px-2">
@@ -28,11 +28,11 @@ function Topcategories() {
           />
           <TextStyle
             textContent={"New products with updated stocks."}
-            textStyle="text-[#9CA3AF] hidden sm:block "
+            textStyle="text-[#9CA3AF] text-[13px] hidden sm:block "
           />
         </div>
         <Link
-          href={"/topcategories"}
+          href={"/user/categories"}
           className={buttonVariants({
             variant: "secondary",
             size: "lg",
@@ -44,10 +44,11 @@ function Topcategories() {
       </div>
       {/* bottom section starts */}
       <div className="no-scrollbar flex flex-row items-center space-x-3 overflow-x-scroll">
-        {SubCategoryOptions.map((data: any) => (
+        {CategoryOptions.map((data: Category) => (
           <div
             key={data._id}
-            className="flex flex-col items-center space-y-2 border-0 bg-[#FCFCFCFC] px-2 py-4"
+            onClick={() => handleCategoryClick(data._id)}
+            className="flex cursor-pointer flex-col items-center space-y-2 border-0 bg-[#FCFCFCFC] px-2 py-4 transition-colors hover:bg-gray-100"
           >
             <div className="relative h-[86.7px] w-[130px]">
               <Image

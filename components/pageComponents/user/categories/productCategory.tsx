@@ -1,4 +1,5 @@
 "use client";
+import { CartButton } from "@/components/common/cartButton";
 import Loader from "@/components/common/loader";
 import TextStyle from "@/components/common/textStyle";
 import { bestSellingProductData } from "@/lib/data";
@@ -16,7 +17,8 @@ import toast from "react-hot-toast";
 function ProductCategory({ category }: { category: string }) {
   const [data, setData] = useState<any>(null);
 
-  const { mutateAsync } = useMutation({
+  console.log(data, "pdata");
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: getFilterProductsByChildCategory,
   });
   // getFilterProductsByChildCategory
@@ -49,84 +51,106 @@ function ProductCategory({ category }: { category: string }) {
     // setData(bestSellingProductData);
   }, []);
 
-  const handleWish = (id: number) => {
-    const item = data.filter((i: any) => {
-      if (i.id === id) {
-        //   console.log("index:", i, "data list:", data);
-        data[i.id].wished = !data[i.id].wished;
-        setData(data);
-      }
-    });
-  };
+  // const handleWish = (id: number) => {
+  //   const item = data.filter((i: any) => {
+  //     if (i.id === id) {
+  //       //   console.log("index:", i, "data list:", data);
+  //       data[i.id].wished = !data[i.id].wished;
+  //       setData(data);
+  //     }
+  //   });
+  // };
 
-  console.log("new data state", data);
+  // console.log("new data state", data);
   if (!data?.data) return <Loader />;
+  if (data?.data?.length === 0) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-6 text-center">
+        <div className="rounded-full bg-gray-100 p-6">
+          <Heart size={48} className="text-gray-400" />
+        </div>
+
+        <h2 className="text-xl font-semibold text-gray-800">
+          No products found
+        </h2>
+
+        <p className="max-w-md text-sm text-gray-500">
+          There are currently no products available under this category. Please
+          check back later or explore other categories.
+        </p>
+
+        <Link
+          href="/user/categories"
+          className="mt-2 rounded-lg border border-[#2E7D32] px-6 py-2 text-sm font-medium text-[#2E7D32] transition hover:bg-[#2E7D32] hover:text-white"
+        >
+          Browse categories
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="xs:grid-cols-2 grid grid-cols-1 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4">
       {data?.data?.map((data: any) => (
-        <div className="col-span-1 bg-[#FCFCFCFC] shadow-md" key={data._id}>
-          <div className="relative flex h-[300px] w-full flex-col space-y-2 border-0 px-2 py-3">
-            {/* wish section starts */}
-            <div
-              onClick={() => handleWish(data._id)}
-              className="absolute top-1.5 right-1.5 flex flex-row items-center justify-center rounded-full border-0 bg-white p-2 py-1"
+        <div
+          key={data._id}
+          className="col-span-1 overflow-hidden rounded-lg bg-[#FCFCFCFC] shadow-md"
+        >
+          {/* CLICKABLE PRODUCT AREA */}
+          <Link
+            href={`/user/products/${data.slug}`}
+            className="relative flex flex-col space-y-2 px-2 py-3"
+          >
+            {/* Wishlist */}
+            {/* <div
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleWish(data._id);
+              }}
+              className="absolute top-1.5 right-1.5 rounded-full bg-white p-2"
             >
-              {data.wished ? (
-                <Heart
-                  color="red"
-                  className=""
-                  fill="red"
-                  /* onClick={() => { }} */
+              <Heart
+                size={20}
+                color={data.wished ? "red" : "gray"}
+                fill={data.wished ? "red" : "none"}
+              />
+            </div> */}
 
-                  size={20}
-                />
-              ) : (
-                <Heart
-                  color="gray"
-                  className=""
-                  /* onClick={() => { }} */
-
-                  size={20}
+            {/* Image */}
+            <div className="relative mx-auto mt-8 h-[175.67px] w-[175.67px]">
+              {data?.images && (
+                <Image
+                  src={data?.images?.[0].url}
+                  fill
+                  alt={data?.images?.[0]._id}
+                  className="rounded-lg transition-transform duration-500 group-hover:scale-140"
                 />
               )}
             </div>
-            {/* wish section ends */}
 
-            <div className="mx-auto mt-8">
-              <Image
-                src={data.images[0].url}
-                width={175.67}
-                height={175.67}
-                alt={category}
-                className="rounded-lg transition-transform duration-500 group-hover:scale-140"
-              />
-            </div>
-
-            {/* discription section starts */}
-            <div className="flex flex-1 flex-row items-end justify-between md:flex-col md:items-start md:space-y-2 lg:flex-row lg:items-end lg:space-y-0">
-              <div className="flex flex-1 flex-col justify-end space-y-1">
-                <TextStyle textContent={data?.name} textStyle="" />
-                <div className="flex flex-row items-baseline space-x-1">
-                  <TextStyle
-                    textContent={"$" + data.price.toString()}
-                    textStyle="text-black text-[18px] text-tracking-[2px]"
-                  />
-                  <TextStyle
-                    textContent={"$" + data.price.toString()}
-                    textStyle="text-[#6F6F6F] line-through text-[14]"
-                  />
-                </div>
-              </div>
-
-              <div className="ml-auto flex h-10.25 w-26 flex-row items-center justify-center rounded-[10px] border border-[#2E7D32] text-center md:ml-0 md:w-full lg:ml-auto lg:w-26">
+            {/* Description */}
+            <div className="mt-4 flex flex-col space-y-1">
+              <TextStyle textContent={data?.name} />
+              <div className="flex items-baseline space-x-1">
                 <TextStyle
-                  textContent="Add To Cart"
-                  textStyle="text-[#2E7D32] hover:animate-heartbeat"
+                  textContent={"$" + data.price.toString()}
+                  textStyle="text-black text-[18px]"
+                />
+                <TextStyle
+                  textContent={"$" + data.price.toString()}
+                  textStyle="text-[#6F6F6F] line-through text-[14px]"
                 />
               </div>
             </div>
-            {/* description section ends */}
+          </Link>
+
+          {/* CART BUTTON AREA (Outside Link) */}
+          <div className="p-3 pt-0">
+            <CartButton
+              product={data}
+              className="hover:animate-heartbeat w-full"
+            />
           </div>
         </div>
       ))}

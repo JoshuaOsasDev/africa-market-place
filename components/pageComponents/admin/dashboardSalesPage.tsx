@@ -11,6 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { DashboardChartsProps } from "../vendorComp/dashboard/DashboardCharts";
 
 // const CustomTooltip = ({ active, payload }) => {
 //   if (active && payload && payload.length) {
@@ -27,38 +28,71 @@ import {
 //   );
 // };
 
-export default function DashboardSalesPage() {
-  // Sales Dynamics Data
-  const salesData = [
-    { month: "Jan", sales: 2400 },
-    { month: "Feb", sales: 1398 },
-    { month: "Mar", sales: 3200 },
-    { month: "Apr", sales: 2780 },
-    { month: "May", sales: 1890 },
-    { month: "Jun", sales: 2390 },
-    { month: "Jul", sales: 3490 },
-    { month: "Aug", sales: 2100 },
-    { month: "Sep", sales: 2800 },
-    { month: "Oct", sales: 2390 },
-    { month: "Nov", sales: 3200 },
-    { month: "Dec", sales: 2800 },
+export default function DashboardSalesPage({
+  incomeReport,
+  orderReport,
+  salesReport = [],
+}: DashboardChartsProps) {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
+  const chartData = monthNames.map((month, index) => ({
+    month,
+    revenue: incomeReport?.month?.[index] || 0,
+    sales: salesReport[index] || 0,
+  }));
+
+  // Fix the typo in weekNames first
+  const weekNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  const revenueChartData = weekNames.map((month, index) => ({
+    month, // This contains "Mon", "Tue", "Wed", etc.
+    revenue: orderReport?.[index] || 0,
+    day: incomeReport?.week?.[index] ?? 0,
+  }));
+  // Sales Dynamics Data
+  // const salesData = [
+  //   { month: "Jan", sales: 2400 },
+  //   { month: "Feb", sales: 1398 },
+  //   { month: "Mar", sales: 3200 },
+  //   { month: "Apr", sales: 2780 },
+  //   { month: "May", sales: 1890 },
+  //   { month: "Jun", sales: 2390 },
+  //   { month: "Jul", sales: 3490 },
+  //   { month: "Aug", sales: 2100 },
+  //   { month: "Sep", sales: 2800 },
+  //   { month: "Oct", sales: 2390 },
+  //   { month: "Nov", sales: 3200 },
+  //   { month: "Dec", sales: 2800 },
+  // ];
+
   // Revenue Overview Data
-  const revenueData = [
-    { day: "01am", revenue: 30 },
-    { day: "02am", revenue: 35 },
-    { day: "03am", revenue: 28 },
-    { day: "04am", revenue: 40 },
-    { day: "05am", revenue: 32 },
-    { day: "06am", revenue: 45 },
-    { day: "07am", revenue: 50 },
-    { day: "08am", revenue: 48 },
-    { day: "09am", revenue: 55 },
-    { day: "10am", revenue: 60 },
-    { day: "11am", revenue: 65 },
-    { day: "12am", revenue: 70 },
-  ];
+  // const revenueData = [
+  //   { day: "01am", revenue: 30 },
+  //   { day: "02am", revenue: 35 },
+  //   { day: "03am", revenue: 28 },
+  //   { day: "04am", revenue: 40 },
+  //   { day: "05am", revenue: 32 },
+  //   { day: "06am", revenue: 45 },
+  //   { day: "07am", revenue: 50 },
+  //   { day: "08am", revenue: 48 },
+  //   { day: "09am", revenue: 55 },
+  //   { day: "10am", revenue: 60 },
+  //   { day: "11am", revenue: 65 },
+  //   { day: "12am", revenue: 70 },
+  // ];
 
   return (
     <div className="w-full space-y-6 bg-gray-50 py-6">
@@ -78,7 +112,7 @@ export default function DashboardSalesPage() {
           </div>
 
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={salesData} barCategoryGap={"20%"}>
+            <BarChart data={chartData} barCategoryGap={"20%"}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F0F1F3" />
               <XAxis
                 dataKey="month"
@@ -121,7 +155,7 @@ export default function DashboardSalesPage() {
             </div>
           </div>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={revenueData}>
+            <LineChart data={revenueChartData}>
               {/* Gradient definition */}
               <defs>
                 <linearGradient
@@ -135,10 +169,9 @@ export default function DashboardSalesPage() {
                   <stop offset="100%" stopColor="#FF5BEF" />
                 </linearGradient>
               </defs>
-
               <CartesianGrid strokeDasharray="3 3" stroke="#F0F1F3" />
               <XAxis
-                dataKey="day"
+                dataKey="month" // Changed from "day" to "month"
                 tick={{ fill: "#667085", fontSize: 12 }}
                 axisLine={{ stroke: "#F0F1F3" }}
               />
@@ -153,11 +186,10 @@ export default function DashboardSalesPage() {
                   borderRadius: "8px",
                 }}
               />
-
               <Line
                 type="monotone"
                 dataKey="revenue"
-                stroke="url(#revenueGradient)" // 👈 gradient here
+                stroke="url(#revenueGradient)"
                 strokeWidth={3}
                 dot={false}
                 activeDot={{ r: 6 }}

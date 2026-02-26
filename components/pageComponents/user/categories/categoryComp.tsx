@@ -4,6 +4,8 @@
 import { useCategory } from "@/lib/hooks/useCategory";
 import { useAppSelector } from "@/redux/store";
 import { CategoriesData } from "@/types/categories";
+import { div } from "framer-motion/client";
+import Image from "next/image";
 import Link from "next/link";
 
 function CategoryComp() {
@@ -59,12 +61,16 @@ function CategoryComp() {
                       >
                         {/* Child Category Image */}
                         {child.cover && (
-                          <img
-                            src={child.cover.url}
-                            alt={child.name}
-                            className="mb-3 h-32 w-full rounded-md object-cover"
-                          />
+                          <div className="relative h-52 w-full">
+                            <Image
+                              src={child.cover.url}
+                              alt={child.name}
+                              fill
+                              className="mb-3 rounded-md object-cover"
+                            />
+                          </div>
                         )}
+
                         {/* Child Category Name */}
                         <p className="font-medium text-gray-700">
                           {child.name}

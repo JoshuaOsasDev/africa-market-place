@@ -2,59 +2,65 @@
 
 import React from "react";
 import Link from "next/link";
-import { CartSummary as CartSummaryType } from "@/types/cart";
+import { CartItem } from "@/types/cart";
 import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/redux/store";
 
 interface CartSummaryProps {
-  summary: CartSummaryType;
+  summary: CartItem[];
   className?: string;
 }
 
-export function CartSummary({ summary, className }: CartSummaryProps) {
-  const shippingDisplay =
-    summary.shipping === "Free" ? "Free" : `$${summary.shipping.toFixed(2)}`;
+export function CartSummary({ className }: CartSummaryProps) {
+  const subtotal = useAppSelector((state) => state.product.checkout.subtotal);
+  const total = useAppSelector((state) => state.product.checkout.total);
+  const discount = useAppSelector((state) => state.product.checkout.discount);
+  const shipping = useAppSelector((state) => state.product.checkout.shipping);
 
+  // console.log(discount, "dis");
   return (
     <div
       className={cn(
-        "bg-white rounded-lg border border-[#E5E7EB] p-6",
-        className
+        "rounded-lg border border-[#E5E7EB] bg-white p-6",
+        className,
       )}
     >
-      <h2 className="text-[#111827] text-lg font-semibold mb-4">Cart Summary</h2>
+      <h2 className="mb-4 text-lg font-semibold text-[#111827]">
+        Cart Summary
+      </h2>
 
-      <div className="space-y-3 mb-6">
+      <div className="mb-6 space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-[#6F6F6F] text-sm">Subtotal:</span>
-          <span className="text-[#111827] font-medium">
-            ${summary.subtotal.toFixed(2)}
+          <span className="text-sm text-[#6F6F6F]">Subtotal:</span>
+          <span className="font-medium text-[#111827]">
+            ${subtotal?.toFixed(2)}
           </span>
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="text-[#6F6F6F] text-sm">Shipping:</span>
-          <span className="text-[#111827] font-medium">{shippingDisplay}</span>
+          <span className="text-sm text-[#6F6F6F]">Shipping:</span>
+          <span className="font-medium text-[#111827]">{shipping}</span>
         </div>
 
-        {summary.discount && summary.discount > 0 && (
+        {discount > 0 && (
           <div className="flex items-center justify-between">
-            <span className="text-[#6F6F6F] text-sm">Discount:</span>
-            <span className="text-[#2E7D32] font-medium">
-              -${summary.discount.toFixed(2)}
+            <span className="text-sm text-[#6F6F6F]">Discount:</span>
+            <span className="font-medium text-[#2E7D32]">
+              -${discount?.toFixed(2)}
             </span>
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-3 border-t border-[#E5E7EB]">
-          <span className="text-[#111827] font-semibold">Total:</span>
-          <span className="text-[#111827] font-bold text-lg">
-            ${summary.total.toFixed(2)}
+        <div className="flex items-center justify-between border-t border-[#E5E7EB] pt-3">
+          <span className="font-semibold text-[#111827]">Total:</span>
+          <span className="text-lg font-bold text-[#111827]">
+            ${total?.toFixed(2)}
           </span>
         </div>
       </div>
 
-      <Link href="/checkout">
-        <button className="w-full py-3 bg-[#2E7D32] hover:bg-[#246628] text-white font-semibold rounded-full transition-colors">
+      <Link href="#">
+        <button className="w-full cursor-pointer rounded-full bg-[#2E7D32] py-3 font-semibold text-white transition-colors hover:bg-[#246628]">
           Proceed to Checkout
         </button>
       </Link>

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { countryListAndFlags, navListArray } from "@/lib/data";
 import SearchFieldComp from "@/components/common/search";
 import TextStyle from "@/components/common/textStyle";
-import LanguageSelect from "@/components/common/selectdropdown";
 
 import {
   Menu,
@@ -16,7 +15,6 @@ import {
   MapPinCheckInside,
   Heart,
   Store,
-  LogInIcon,
   LogIn,
   UserRound,
   LogOut,
@@ -27,15 +25,14 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/store";
-import { data, div } from "framer-motion/client";
 import { signOut } from "@/services/apiServices/authApi";
 import { useRouter } from "next/navigation";
 import { useSignOut } from "@/lib/hooks/userDashboard/useUser";
-import { log } from "console";
 
 function Header() {
   const wishlist = useAppSelector((state) => state.wishlist);
   const user = useAppSelector((state) => state.user);
+  const cart = useAppSelector((state) => state.product.checkout.cart);
   const [userTextInput, setuserTextInput] = useState("");
   const [countryListData, setCountryListData] = useState<
     | {
@@ -55,11 +52,11 @@ function Header() {
     alt: string;
   } | null>(null);
 
-  const { cart } = useAppSelector((state) => state.product.checkout);
+  //console.log(cart, "cart");
 
   const router = useRouter();
 
-  const { mutate: logout, isPending } = useSignOut();
+  const { mutate: logout, isPending: isLoggingOut } = useSignOut();
   useEffect(() => {
     setCountryListData(countryListAndFlags);
     const isSelected = countryListAndFlags.filter((data) => {
@@ -292,19 +289,25 @@ function Header() {
                   className="relative h-6 w-6"
                 >
                   <Heart className="h-6 w-6 text-[#6F6F6F]" />
-                  <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
-                    <span className="text-[10px] text-white">
-                      {wishlist.wishlist?.data?.length || 0}
-                    </span>
-                  </div>
+                  {wishlist.wishlist?.data?.length > 0 && (
+                    <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                      <span className="text-[10px] text-white">
+                        {wishlist.wishlist?.data?.length || 0}
+                      </span>
+                    </div>
+                  )}
                 </Link>
                 <div className="relative h-6 w-6">
-                  <ShoppingCart className="h-6 w-6 text-[#6F6F6F]" />
-                  <div className="absolute -right-2 bottom-3 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
-                    <span className="text-[10px] text-white">
-                      {cart?.length}
-                    </span>
-                  </div>
+                  <Link href={"/user/cart"}>
+                    <ShoppingCart className="h-6 w-6 text-[#6F6F6F]" />
+                    {cart?.length > 0 && (
+                      <div className="absolute -right-2 bottom-3 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                        <span className="text-[10px] text-white">
+                          {cart?.length}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
                 </div>
               </div>
             </div>
@@ -403,7 +406,8 @@ function Header() {
                   {/* Logout */}
                   <button
                     onClick={() => logout()}
-                    className="text-gray-700px-3 flex w-full items-center justify-center gap-2 rounded-md border border-gray-400 py-2 text-sm text-gray-800 hover:bg-gray-300"
+                    disabled={isLoggingOut}
+                    className="text-gray-700px-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-400 py-2 text-sm text-gray-800 hover:bg-gray-300"
                   >
                     <LogOut size={16} />
                     Log out

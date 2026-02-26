@@ -1,14 +1,19 @@
 import {
+  approveAdminProduct,
+  approveAdminShop,
   createAdminCurrency,
   getAdminCurrency,
   getAdminCurrencyById,
   getAdminDashboardAnalytics,
+  getAdminProduct,
   getAdminSettings,
+  getAdminShop,
+  getAdminShops,
   getAdminUser,
   getAllCategories,
 } from "@/services/apiServices/adminDashboardApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { boolean } from "yup";
+import toast from "react-hot-toast";
 
 // Hook to fetch admin settings
 export const useAdminSettings = () => {
@@ -70,14 +75,19 @@ export const useCreateAdminCurrency = () => {
 };
 
 //Hook to fetch admin users
-export const useAdminUsers = () => {
+export const useAdminUsers = (
+  page: { page: number },
+  limit: number,
+  search: string,
+  role: string,
+) => {
   const {
     isLoading,
     data: useradminData,
     error,
   } = useQuery({
-    queryKey: ["admin-users"],
-    queryFn: getAdminUser,
+    queryKey: ["admin-users", page, limit, search, role],
+    queryFn: () => getAdminUser(page, limit, search, role),
   });
 
   return { isLoading, useradminData, error };
@@ -109,4 +119,110 @@ export const useAllCategories = (enabledFire: boolean) => {
     queryFn: getAllCategories,
   });
   return { isLoading, allCategories, error };
+};
+
+//Hook to fecth admin product
+
+export const useAdminProducts = (
+  page: { page: number },
+  limit: number,
+  search: string,
+  status: string,
+) => {
+  const {
+    isLoading,
+    data: adminProducts,
+    error,
+  } = useQuery({
+    queryKey: ["admin-products", page, limit, search, status],
+    queryFn: () => getAdminProduct(page, limit, search, status),
+  });
+
+  return { isLoading, adminProducts, error };
+};
+
+export const useAdminProductApproval = () => {
+  const queryClient = useQueryClient();
+  const { isPending, mutate, error } = useMutation({
+    mutationKey: ["admin-product-approval"],
+
+    mutationFn: ({ slug, details }: { slug: string; details: string }) =>
+      approveAdminProduct(slug, details),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-products"] });
+      queryClient.invalidateQueries({ queryKey: ["vendor-product"] });
+      queryClient.invalidateQueries({ queryKey: ["user-products"] });
+
+      toast.success("Prouct Updated Succesfully", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+  });
+
+  return { isPending, mutate, error };
+};
+
+export const useAdminShops = (
+  page: { page: number },
+  limit: number,
+  search: string,
+  status: string,
+) => {
+  const {
+    isLoading,
+    data: adminShops,
+    error,
+  } = useQuery({
+    queryKey: ["admin-shops", page, limit, search, status],
+    queryFn: () => getAdminShops(page, limit, search, status),
+  });
+
+  return { isLoading, adminShops, error };
+};
+
+export const useAdminShop = (slug: string) => {
+  const {
+    isLoading,
+    data: adminShop,
+    error,
+  } = useQuery({
+    queryKey: ["admin-shop"],
+    queryFn: () => getAdminShop(slug),
+  });
+
+  return { isLoading, adminShop, error };
+};
+
+export const useAdminShopApproval = () => {
+  const queryClient = useQueryClient();
+  const { isPending, mutate, error } = useMutation({
+    mutationKey: ["admin-shop-approval"],
+
+    mutationFn: ({ slug, details }: { slug: string; details: string }) =>
+      approveAdminShop(slug, details),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-shops"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-shop"] });
+      queryClient.invalidateQueries({ queryKey: ["vendor-product"] });
+      queryClient.invalidateQueries({ queryKey: ["user-products"] });
+
+      toast.success("Shop Updated Succesfully", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+  });
+
+  return { isPending, mutate, error };
 };

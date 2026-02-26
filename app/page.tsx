@@ -6,14 +6,16 @@ import SlidderComp from "@/components/pageComponents/user/Home/slidderComp";
 import BestSellingProducts from "@/components/pageComponents/user/Home/bestSellingProducts";
 import Newletter from "@/components/pageComponents/user/Home/Newletter";
 import Topcategories from "@/components/pageComponents/user/Home/topcategories";
+import { HealthSafetyBanner } from "@/components/common/healthSafetyBanner";
 
 export default async function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col gap-2 bg-white px-2">
       <Header />
-      <Banner />
+      {/* <Banner /> */}
       <SlidderComp />
       <Topcategories />
+      <HealthSafetyBanner />
       <BestSellingProducts />
       <Newletter />
       <Footer />

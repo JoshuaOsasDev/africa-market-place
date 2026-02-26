@@ -48,7 +48,7 @@ export const updateVendorProduct = async ({
 
 export const createVendorProduct = async (FormData: Product) => {
   const { data } = await http.post(`/vendor/products`, FormData);
-  console.log(data);
+  //console.log(data);
   return data;
 };
 
@@ -94,6 +94,6 @@ export async function getVendorProductByIdServer(productId: string) {
 
   if (!res.ok) return null;
 
-  console.log(res, "metadat");
+  //console.log(res, "metadat");
   return res.json();
 }

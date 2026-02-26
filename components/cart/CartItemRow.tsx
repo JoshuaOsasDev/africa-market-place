@@ -18,47 +18,51 @@ export function CartItemRow({
   onRemove,
   className,
 }: CartItemRowProps) {
-  const subtotal = item.price * item.quantity;
+  const subtotal = item.salePrice * item?.quantity;
 
   return (
     <div
       className={cn(
-        "grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-4 items-center py-4 border-b border-[#E5E7EB]",
-        className
+        "grid grid-cols-[2fr_1fr_1fr_1fr_auto] items-center gap-4 border-b border-[#E5E7EB] py-4",
+        className,
       )}
     >
       {/* Product */}
       <div className="flex items-center gap-3">
-        <div className="relative w-16 h-16 bg-[#F9FAFB] rounded-lg overflow-hidden flex-shrink-0">
-          <Image
-            src={item.image}
-            alt={item.name}
-            fill
-            className="object-contain p-1"
-          />
+        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-[#F9FAFB]">
+          {item?.images && (
+            <Image
+              src={item.images[0].url}
+              alt={item.name}
+              fill
+              className="object-contain p-1"
+            />
+          )}
         </div>
-        <span className="text-[#111827] font-medium text-sm">{item.name}</span>
+        <span className="text-sm font-medium text-[#111827]">{item.name}</span>
       </div>
 
-      <div className="text-[#111827] text-sm">${item.price.toFixed(2)}</div>
+      <div className="text-sm text-[#111827]">
+        ${item?.salePrice.toFixed(2)}
+      </div>
 
       <div className="flex justify-center">
         <QuantityInput
           value={item.quantity}
-          onChange={(qty) => onQuantityChange(item.id, qty)}
+          onChange={(qty) => onQuantityChange(item.pid, qty)}
           min={1}
-          max={item.maxQuantity}
+          // max={item.maxQuantity}
           className="scale-90"
         />
       </div>
 
-      <div className="text-[#111827] font-semibold text-sm">
+      <div className="text-sm font-semibold text-[#111827]">
         ${subtotal.toFixed(2)}
       </div>
 
       <button
-        onClick={() => onRemove(item.id)}
-        className="text-[#9CA3AF] hover:text-[#FF0000] transition-colors p-1"
+        onClick={() => onRemove(item.pid)}
+        className="p-1 text-[#9CA3AF] transition-colors hover:text-[#FF0000]"
         aria-label="Remove item"
       >
         <X size={18} />

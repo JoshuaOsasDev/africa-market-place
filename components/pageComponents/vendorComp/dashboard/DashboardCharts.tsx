@@ -12,10 +12,12 @@ import {
 import { MoreVertical } from "lucide-react";
 
 // Props interface for the component
-type DashboardChartsProps = {
+export type DashboardChartsProps = {
   incomeReport?: {
     month?: number[];
+    week?: number[];
   };
+  orderReport?: string[];
   monthlyEarningsByVendor?: number;
   dailyEarning?: number;
   salesReport?: number[];
@@ -40,7 +42,6 @@ type DashboardChartsProps = {
 export default function DashboardCharts({
   incomeReport,
   monthlyEarningsByVendor = 0,
-  dailyEarning = 0,
   salesReport = [],
 }: DashboardChartsProps) {
   // Transform monthly income data for the chart

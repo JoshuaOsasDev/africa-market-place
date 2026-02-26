@@ -27,13 +27,13 @@ const Navlinks = () => {
       icon: UsersRound,
     },
     {
-      name: "Sellers",
-      href: "/admin/dashboard/sellers",
+      name: "Shops",
+      href: "/admin/dashboard/shops",
       icon: Store,
     },
     {
       name: "Product Review",
-      href: "/admin/dashboard/productReview",
+      href: "/admin/dashboard/product-review",
       icon: Package,
     },
     {

@@ -65,7 +65,7 @@ const SendOtpcomp = () => {
   const onSubmit = async (data: { email: string }) => {
     router.push("/auth-vendor/sendOtp");
     /*  navigation.navigate('bottomTabNavigation') */
-    console.log(data);
+    //console.log(data);
 
     try {
       setLoader(!loader);

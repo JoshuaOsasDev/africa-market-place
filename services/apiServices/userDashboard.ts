@@ -1,3 +1,4 @@
+import { Product } from "@/types/product";
 import http from "./http";
 
 //get User Product
@@ -15,11 +16,45 @@ export const getUserProductsBySlug = async (slug: string) => {
 
 export const PostUserWishlist = async (list: string) => {
   const { data } = await http.post("/wishlist", { pid: list });
-  console.log(data, "data");
+  //console.log(data, "data");
   return data;
 };
 
 export const getUserWishlist = async () => {
   const { data } = await http.get("/wishlist");
+  return data;
+};
+
+export const getUserCart = async () => {
+  const { data } = await http.get("/cart");
+  return data;
+};
+
+export const addToCart = async ({
+  pid,
+  quantity,
+}: {
+  pid: Product;
+  quantity: number;
+}) => {
+  const { data } = await http.post("/cart/add", {
+    pid: pid._id,
+    quantity: quantity,
+  });
+
+  return data;
+};
+
+export const removeFromCart = async (pid: Product) => {
+  const { data } = await http.post("/cart/remove", {
+    pid: pid._id,
+  });
+  return data;
+};
+
+// Users Orders
+
+export const getUserOrder = async () => {
+  const { data } = await http.get("/user/orders");
   return data;
 };

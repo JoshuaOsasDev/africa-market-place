@@ -8,13 +8,18 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DeleteProductModal from "../../vendor/product/DeleteProductModal";
 import { formatDate } from "@/lib/utils";
+import { capitalize } from "lodash";
+import { div } from "framer-motion/client";
+import Image from "next/image";
 
 export default function UserTable({
   user,
   data,
+  page,
 }: {
   user: string | string[] | undefined;
   data: any[];
+  page: { page: number };
 }) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const router = useRouter();
@@ -54,11 +59,28 @@ export default function UserTable({
         data={data}
         columns={[
           {
-            label: "Customer Name",
+            label: "Customer Details",
             renderCell: (item) => (
-              <span className="font-medium text-[#333843]">
-                {item.firstName} {item.lastName}
-              </span>
+              <div className="flex items-center space-x-2">
+                {item?.cover ? (
+                  <div className="relative h-10 w-10">
+                    <Image
+                      src={item?.cover.url}
+                      alt={item?.cover._id}
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-10 w-10 rounded-full bg-gray-400 p-5"></div>
+                )}
+                <div>
+                  <span className="font-medium text-[#333843]">
+                    {capitalize(item.firstName)} {capitalize(item.lastName)}
+                  </span>
+                  <p className="font-medium text-[#333843]">{item?.email}</p>
+                </div>
+              </div>
             ),
           },
           {
@@ -112,9 +134,9 @@ export default function UserTable({
                               <EyeIcon className="text-[#2E7D32]" size={18} />
                             </div>
                           }
-                          onClick={() =>
-                            router.push(`/admin/dashboard/shipping/${item.id}`)
-                          }
+                          // onClick={() =>
+                          //   router.push(`/admin/dashboard/shipping/${item.id}`)
+                          // }
                         >
                           View
                         </Menus.Button>

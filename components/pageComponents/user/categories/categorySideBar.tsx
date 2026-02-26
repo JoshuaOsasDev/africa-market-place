@@ -3,7 +3,7 @@
 
 import { useCategory } from "@/lib/hooks/useCategory";
 import { useAppSelector } from "@/redux/store";
-import { CategoriesData } from "@/types/categories";
+import { CategoriesData, Category } from "@/types/categories";
 import { useEffect } from "react";
 
 export default function CategorySideBar() {
@@ -18,7 +18,7 @@ export default function CategorySideBar() {
   //   }
   // }, [categoriesData, selectedCategory, setSelectedCategory]);
 
-  const handleCategoryClick = (category: any) => {
+  const handleCategoryClick = (category: Category) => {
     setSelectedCategory(category);
   };
 

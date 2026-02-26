@@ -6,6 +6,10 @@ import {
 import { ProductDetailClient } from "./ProductDetailClient";
 import { Metadata } from "next";
 import { useUserProductsBySlug } from "@/lib/hooks/userDashboard/useUser";
+import { div } from "framer-motion/client";
+import Header from "@/components/common/header";
+import Banner from "@/components/common/banner";
+import Footer from "@/components/common/footer";
 
 interface ProductPageProps {
   params: Promise<{
@@ -47,9 +51,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const relatedProducts = getMockRelatedProducts();
 
   return (
-    <ProductDetailClient
-      resolvedParams={resolvedParams}
-      relatedProducts={relatedProducts}
-    />
+    <div>
+      <ProductDetailClient
+        resolvedParams={resolvedParams}
+        relatedProducts={relatedProducts}
+      />
+    </div>
   );
 }

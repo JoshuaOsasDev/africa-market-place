@@ -8,13 +8,18 @@ import profilePicture from "../../lib/public/vendor/dashboard-images/profile-pic
 
 import Link from "next/link";
 import { Bell, Mail, MailIcon, Menu, Search, User, X } from "lucide-react";
+import { useAppSelector } from "@/redux/store";
+import { capitalize } from "@/lib/hooks/useOutsideClick";
 
 const DashboardNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const user = useAppSelector((state) => state.user);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  //console.log(user.user, "user");
   return (
     <>
       <nav className="fixed z-50 w-full items-center justify-between border-b border-[#F0F1F3] bg-white px-6 md:flex md:h-20">
@@ -59,26 +64,30 @@ const DashboardNavbar = () => {
           />
         </div>
 
-        <div className="hidden gap-2 md:flex">
-          <Image
-            src={notificationIcon}
-            alt="notification-icon"
-            className="h-10 w-10 rounded-[20px] bg-[#F6F6F6] p-2"
-          />
-          <MailIcon />
-
-          <div className="flex items-center gap-4">
-            <Image
-              src={profilePicture}
-              alt="user-profile-picture"
-              className="h-10 w-10"
-            />
+        <div className="hidden gap-4 md:flex md:items-center">
+          <div className="flex items-center gap-2">
+            <Bell className="h-10 w-10 rounded-[20px] bg-[#F6F6F6] p-2 text-gray-500" />
+            <MailIcon className="text-gray-500" />
+          </div>
+          <div className="flex items-center gap-1">
+            {user?.user?.cover ? (
+              <div className="relative h-10 w-10 rounded-full">
+                <Image
+                  src={user.user?.cover?.url}
+                  alt="user-profile-picture"
+                  className="h-10 w-10 rounded-full"
+                  fill
+                />
+              </div>
+            ) : (
+              <div className="h-10 w-10 rounded-full bg-gray-400"></div>
+            )}
             <div className="flex flex-col items-start justify-center">
               <span className="text-[16px] font-medium text-[#000000]">
-                Johnmarvel
+                {`${capitalize(user.user?.firstName)} ${capitalize(user.user?.lastName)}`}
               </span>
               <span className="text-[14px] font-light text-[#979797]">
-                Vendor
+                {capitalize(user?.user?.role)}
               </span>
             </div>
           </div>
@@ -90,7 +99,7 @@ const DashboardNavbar = () => {
         <div className="absolute top-20 right-0 left-0 z-50 border-b border-[#F0F1F3] bg-white shadow-lg md:hidden">
           <div className="flex flex-col space-y-4 p-6">
             {/* Search Bar (Mobile) */}
-            <div className="flex h-[52px] items-center gap-2.5 rounded-[26px] bg-[#F6F6F6] px-4 py-3.5">
+            <div className="flex h-13 items-center gap-2.5 rounded-[26px] bg-[#F6F6F6] px-4 py-3.5">
               <Search className="h-6 w-6 text-[#BABABA]" />
               <input
                 type="text"
@@ -109,10 +118,10 @@ const DashboardNavbar = () => {
               />
               <div className="flex flex-col">
                 <span className="text-[16px] font-medium text-[#000000]">
-                  Johnmarvel
+                  {`${user.user?.firstName} ${user.user?.lastName}`}
                 </span>
                 <span className="text-[14px] font-light text-[#979797]">
-                  Vendor
+                  {user?.user?.role}
                 </span>
               </div>
             </div>

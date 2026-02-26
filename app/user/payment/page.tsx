@@ -49,7 +49,7 @@ function page() {
       if (result.error) {
         // Show error to your customer
 
-        console.error(result.error.message);
+        //console.error(result.error.message);
       } else {
         if (result.paymentIntent.status === "succeeded") {
           // Payment succeeded]

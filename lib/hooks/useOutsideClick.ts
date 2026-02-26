@@ -20,3 +20,6 @@ export function useOutsideClick(handler: () => void | undefined) {
 
   return ref;
 }
+
+export const capitalize = (value?: string) =>
+  value ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : "";

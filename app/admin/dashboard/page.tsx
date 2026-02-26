@@ -11,15 +11,22 @@ export default function AdminPage() {
   const { isLoading, adminDashboardAnalytics, adminDashboardAnalyticsError } =
     useAdminDashboardAnalytics();
 
-  const categories = useAppSelector((state) => state.categories);
+  // const categories = useAppSelector((state) => state.categories);
 
   // console.log(adminDashboardAnalytics, categories, "admin");
   if (isLoading) return <Loader />;
   return (
     <div>
       <DashboardSummary dashboardData={adminDashboardAnalytics} />
-      <DashboardSalesPage />
-      <ProductsAndRegionalPerformance />
+      <DashboardSalesPage
+        incomeReport={adminDashboardAnalytics?.data?.incomeReport}
+        dailyEarning={adminDashboardAnalytics?.data?.dailyEarning}
+        orderReport={adminDashboardAnalytics?.data?.ordersReport}
+        salesReport={adminDashboardAnalytics?.data?.salesReport}
+      />
+      <ProductsAndRegionalPerformance
+        products={adminDashboardAnalytics.data.bestSellingProducts}
+      />
     </div>
   );
 }
