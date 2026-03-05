@@ -15,7 +15,7 @@ export default function OrderUserPage({
 
   const orders: UsersOrder[] = userOders?.data || [];
 
-  // console.log(orders, "orders");
+  console.log(orders, "orders");
   const tabCounts = {
     all: orders.length,
 

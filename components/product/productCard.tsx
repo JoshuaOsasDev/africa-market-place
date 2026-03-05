@@ -10,6 +10,14 @@ import { Product } from "@/types/product";
 export function ProductCard(product: any) {
   const data = product?.product;
 
+  //  Discount logic
+  const hasDiscount = data?.salePrice && data?.salePrice < data?.price;
+  const displayPrice = hasDiscount ? data?.salePrice : data?.price;
+
+  const discountPercent = hasDiscount
+    ? Math.round(((data?.price - data?.salePrice) / data?.price) * 100)
+    : (product?.discount ?? "");
+
   return (
     <div className="group col-span-1 shadow-md transition-shadow duration-300 hover:shadow-xl">
       <Link href={`user/products/${data?.slug}`}>
@@ -17,7 +25,7 @@ export function ProductCard(product: any) {
           {/* discount section starts */}
           <div className="absolute top-1 left-1 flex flex-row items-center justify-center rounded-[5px] border-0 bg-[#FF0000] px-2 py-1">
             <TextStyle
-              textContent={`%${data?.discount || 0}`}
+              textContent={`%${discountPercent}`}
               textStyle=" text-white  text-center text-[8px]"
             />
           </div>

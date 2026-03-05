@@ -28,7 +28,12 @@ function Footer() {
         {/* social icons start */}
         <div className="flex flex-row items-center space-x-4">
           {socialData.map((icon) => (
-            <Link href={icon.url} key={icon.id}>
+            <Link
+              href={icon.url}
+              key={icon.id}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#636363] transition-all duration-500 ease-in-out hover:bg-[#a0b7a1]">
                 {icon.id === 1 ? (
                   <Facebook className="h-5 w-5 text-white" />

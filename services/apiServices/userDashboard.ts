@@ -58,3 +58,9 @@ export const getUserOrder = async () => {
   const { data } = await http.get("/user/orders");
   return data;
 };
+
+export const postUserOrder = async (payload: any) => {
+  const { data } = await http.post("/orders", payload);
+  console.log(data, "data");
+  return data;
+};

@@ -16,6 +16,7 @@ import {
   getUserProducts,
   getUserProductsBySlug,
   getUserWishlist,
+  postUserOrder,
   PostUserWishlist,
   removeFromCart,
 } from "@/services/apiServices/userDashboard";
@@ -194,4 +195,28 @@ export const useUserOder = () => {
   });
 
   return { isLoading, userOders, error };
+};
+
+export const usePostOrder = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending, error, isSuccess, variables } = useMutation({
+    mutationKey: ["add-order"],
+    mutationFn: (data) => postUserOrder(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user-oders"],
+      });
+
+      toast.success("Prouct Added to Order", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+  });
+  return { mutate, isPending, error, isSuccess, variables };
 };

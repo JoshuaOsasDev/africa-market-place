@@ -1,16 +1,15 @@
 "use client";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Slider from "react-slick";
-import Image from "next/image";
-import Link from "next/link";
 import { sliderCardData } from "@/lib/data";
 import SlideCard from "../pageComponents/user/Home/slideCard";
 import { sliderCardPropType } from "@/types/appTypes";
 
 function Carousel() {
-  const [curentIndex, setCurentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const sliderRef = useRef<Slider>(null);
 
   const settings = {
     fade: true,
@@ -20,18 +19,41 @@ function Carousel() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 7000,
-    pauseOnHover: false,
+    pauseOnHover: true,
     cssEase: "linear",
-    dots: true,
     arrows: false,
+    dots: false,
+    beforeChange: (_: number, next: number) => setCurrentIndex(next),
   };
+
+  const goToSlide = (index: number) => {
+    sliderRef.current?.slickGoTo(index);
+    setCurrentIndex(index);
+  };
+
   return (
-    <div className="">
-      <Slider {...settings}>
-        {sliderCardData.map((data: sliderCardPropType) => {
-          return <SlideCard {...data} />;
-        })}
+    <div className="relative">
+      <Slider ref={sliderRef} {...settings}>
+        {sliderCardData.map((data: sliderCardPropType) => (
+          <SlideCard key={data.id} {...data} />
+        ))}
       </Slider>
+
+      {/* Clickable dot indicators */}
+      <div className="mt-4 flex items-center justify-center gap-2">
+        {sliderCardData.map((_: sliderCardPropType, index: number) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            className={`block cursor-pointer rounded-full transition-all duration-500 ease-in-out ${
+              index === currentIndex
+                ? "h-2 w-5 bg-[#2d6a2d]"
+                : "h-2 w-2 rounded-full bg-[#a8d5a8] hover:bg-[#4a8f4a]"
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
 }

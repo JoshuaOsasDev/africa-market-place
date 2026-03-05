@@ -1,18 +1,17 @@
-import Carousel from '@/components/common/carousel'
-import HomeAccordion from './HomeAccordion'
+import Carousel from "@/components/common/carousel";
+import HomeAccordion from "./HomeAccordion";
 
 function SlidderComp() {
   return (
-      <div className='grid grid-cols-10  gap-3 my-3 px-2 '>
-          <div className='  hidden lg:block  lg:col-span-2 border-[#EAEAEA] rounded-[10px] border-2 p-4 '>
-              <HomeAccordion />
-          </div>
-          <div className=' col-span-10 lg:col-span-8 '>
-              <Carousel />
-          </div>
-        
+    <div className="my-3 mt-20 grid grid-cols-10 gap-3 px-2 sm:mt-0">
+      <div className="hidden rounded-[10px] border-2 border-[#EAEAEA] p-4 lg:col-span-2 lg:block">
+        <HomeAccordion />
+      </div>
+      <div className="col-span-10 lg:col-span-8">
+        <Carousel />
+      </div>
     </div>
-  )
+  );
 }
 
-export default SlidderComp
+export default SlidderComp;

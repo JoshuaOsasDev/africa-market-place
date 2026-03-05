@@ -10,20 +10,20 @@ const http = axios.create({
 });
 
 // Response interceptor: catch 401
-http.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // ✅ show toast once
-      toast.error("Session expired, please login again.");
+// http.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       // ✅ show toast once
+//       toast.error("Session expired, please login again.");
 
-      // ✅ clear auth state
-      //   store.dispatch(setLogout());
-      // ✅ optional: redirect to login page
-      // window.location.href = '/auth-user/sign-in';
-    }
-    return Promise.reject(error);
-  },
-);
+//       // ✅ clear auth state
+//       //   store.dispatch(setLogout());
+//       // ✅ optional: redirect to login page
+//       // window.location.href = '/auth-user/sign-in';
+//     }
+//     return Promise.reject(error);
+//   },
+// );
 
 export default http;

@@ -1,14 +1,11 @@
 "use client";
 
-import ProductCard, {
-  ProductCardComp,
-  ProductCardProps,
-} from "@/components/common/productCardComp";
+import ProductCard from "@/components/common/productCardComp";
 import { useUserProducts } from "@/lib/hooks/userDashboard/useUser";
 import { Product } from "@/types/product";
 
 export default function ProductCardExample() {
-  const { isLoading, userProducts, error } = useUserProducts();
+  const { userProducts } = useUserProducts();
 
   const product: Product[] = userProducts?.data;
 

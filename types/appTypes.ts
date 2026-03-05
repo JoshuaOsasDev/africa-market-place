@@ -1,3 +1,4 @@
+import { LucideIcon } from "lucide-react";
 import { ReactElement, ReactNode } from "react";
 
 export type searchFieldCompType = {
@@ -169,4 +170,20 @@ export type UpdateOrderRequest = {
   trackingId?: string;
   trackingLink?: string;
   courierName?: string;
+};
+
+export type NavItem = {
+  href: string;
+  name: string;
+  image?: string; // for next/image
+  icon?: LucideIcon; // for Lucide icons
+};
+
+export type DealsTodayProps = {
+  image: string;
+  discount: string;
+  title: string;
+  price: number;
+  oldPrice: number;
+  description: string;
 };

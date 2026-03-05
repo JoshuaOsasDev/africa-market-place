@@ -1,5 +1,60 @@
 import { Product, ShippingDataType, WishlistItem } from "@/types/appTypes";
-import { url } from "inspector";
+import { BaggageClaim, Bell, Heart, ShoppingBag } from "lucide-react";
+
+// Mobile Data Information
+
+export const navMobileData = (path = "/") => {
+  if (path === "/") {
+    return [
+      {
+        image: "/images/africa_market_logo.jfif",
+        href: "/",
+        name: "image",
+      },
+      {
+        icon: Heart,
+        href: "/",
+        name: "Home",
+      },
+      {
+        icon: ShoppingBag,
+        href: "/user/dashboard/orders",
+        name: "Orders",
+      },
+      {
+        href: "/user/dashboard/wishlist",
+        name: "Wishlist",
+        icon: Heart,
+      },
+      {
+        icon: Bell,
+        href: "/user/dashboard/notifications",
+        name: "Notifications",
+      },
+    ];
+  } else if (path.includes("/orders")) {
+    return [
+      {
+        image: "/images/logo.png",
+        href: "/",
+        name: "image",
+      },
+      {
+        icon: BaggageClaim,
+        href: "/user/dashboard/notifications",
+        name: "View All",
+      },
+    ];
+  }
+
+  return [
+    {
+      image: "/images/logo.png",
+      href: "/",
+      name: "image",
+    },
+  ];
+};
 
 export const countryListAndFlags = [
   {
@@ -43,12 +98,12 @@ export const navListArray = [
 export const socialData = [
   {
     id: 1,
-    url: "",
+    url: "https://www.facebook.com/profile.php?id=61575640694194",
     name: "facebook",
   },
   {
     id: 2,
-    url: "",
+    url: "https://www.instagram.com/africamarketplace.co.uk?igsh=MTFwNTdsbWh6MmQ4Mw==",
     name: "instagram",
   },
   {
@@ -58,7 +113,7 @@ export const socialData = [
   },
   {
     id: 4,
-    url: "",
+    url: "mailto:Contact@africamarketplace.co.uk",
     name: "mail",
   },
 ];
@@ -66,22 +121,22 @@ export const socialData = [
 export const socialData2 = [
   {
     id: 1,
-    url: "",
-    name: "Shop",
+    url: "http://localhost:3000/user/dashboard/notifications",
+    name: "Notifications",
   },
   {
     id: 2,
-    url: "",
+    url: "http://localhost:3000/user/dashboard/userInfo",
     name: "My account",
   },
   {
     id: 3,
-    url: "",
-    name: "Login",
+    url: "http://localhost:3000/user/dashboard/orders",
+    name: "Order",
   },
   {
     id: 4,
-    url: "",
+    url: "http://localhost:3000/user/dashboard/wishlist",
     name: "Wishlist",
   },
 ];
@@ -153,6 +208,12 @@ export const sliderCardData = [
     link: "",
     id: 2,
     alt: "advert 2",
+  },
+  {
+    imgUrl: "/images/slider_4.png",
+    link: "",
+    id: 3,
+    alt: "advert 3",
   },
 ];
 
@@ -291,7 +352,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 0,
     url: "",
-    wished: false
+    wished: false,
   },
   {
     imgurl: "/images/food.jpg",
@@ -302,7 +363,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 1,
     url: "",
-    wished: false
+    wished: false,
   },
   {
     imgurl: "/images/food.jpg",
@@ -313,7 +374,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 2,
     url: "",
-    wished: true
+    wished: true,
   },
   {
     imgurl: "/images/food.jpg",
@@ -324,7 +385,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 3,
     url: "",
-    wished: false
+    wished: false,
   },
   {
     imgurl: "/images/food.jpg",
@@ -335,7 +396,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 4,
     url: "",
-    wished: false
+    wished: false,
   },
   {
     imgurl: "/images/food.jpg",
@@ -346,7 +407,7 @@ export const bestSellingProductData = [
     starRating: 4,
     id: 5,
     url: "",
-    wished: true
+    wished: true,
   },
 ];
 
@@ -1043,5 +1104,45 @@ export const shippingData: ShippingDataType[] = [
     destination: "Ilaro",
     deliveryDate: "28-06-2024",
     status: "In Transit",
+  },
+];
+
+export const dealsToday = [
+  {
+    id: 1,
+    image: "/images/food.jpg",
+    discount: "59%",
+    title: "Assorted fresh fruit basket for top customers",
+    price: 10.5,
+    oldPrice: 15.0,
+    description:
+      "Lorem ipsum hendrerit ultrices odio sit massa nunc imperdiet odio nunc mi ipsum.",
+  },
+  {
+    id: 2,
+    image: "/images/food.jpg",
+    discount: "40%",
+    title: "Organic vegetable combo pack",
+    price: 8.2,
+    oldPrice: 12.0,
+    description: "Fresh farm vegetables delivered straight to your doorstep.",
+  },
+  {
+    id: 3,
+    image: "/images/food.jpg",
+    discount: "30%",
+    title: "Premium breakfast combo",
+    price: 14.99,
+    oldPrice: 20.0,
+    description: "Healthy breakfast selection for energetic mornings.",
+  },
+  {
+    id: 4,
+    image: "/images/food.jpg",
+    discount: "50%",
+    title: "Exotic fruit selection",
+    price: 18.75,
+    oldPrice: 25.0,
+    description: "Taste the world with this premium exotic fruit collection.",
   },
 ];
