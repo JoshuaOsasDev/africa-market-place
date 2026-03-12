@@ -1,10 +1,4 @@
-import { setCategories } from "@/redux/slices/categories";
-import {
-  addCart,
-  deleteCart,
-  getCart,
-  resetCart,
-} from "@/redux/slices/product";
+import { addCart, deleteCart, resetCart } from "@/redux/slices/product";
 import { setLogoutAction } from "@/redux/slices/user";
 import { resetWishlistAction } from "@/redux/slices/wishlist";
 import { useAppDispatch } from "@/redux/store";
