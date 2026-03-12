@@ -88,6 +88,7 @@ export type Product = {
   discountType?: number;
   percentage?: number;
   barcode?: number;
+  isDeal?: boolean;
 
   // Inventory
   sku: string;
@@ -124,7 +125,7 @@ export type Product = {
 
   // Relations
   shop: string;
-  relatedProducts: string[];
+  relatedProducts: RelatedProduct[];
   reviews: Review[];
   rating?: number;
   isFeatures: string[];
@@ -140,6 +141,8 @@ export type Product = {
   // Timestamps
   createdAt: string;
   updatedAt: string;
+
+  pid?: string;
 };
 
 // export type RelatedProduct = {
@@ -172,6 +175,18 @@ export interface ProductCardProps {
   className?: string;
 }
 
+export type wishlistProps = {
+  averageRating: null;
+  images: ImageProp;
+  likes: number;
+  price: number;
+  salePrice: number;
+  shop: string;
+  slug: string;
+  _id: string;
+  name: string;
+  createdAt?: Date;
+};
 export type ProductCompletionInput = {
   name?: string;
   description?: string;

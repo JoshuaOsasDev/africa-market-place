@@ -47,7 +47,7 @@ export const addToCart = async ({
 
 export const removeFromCart = async (pid: Product) => {
   const { data } = await http.post("/cart/remove", {
-    pid: pid._id,
+    pid: pid._id ?? pid.pid,
   });
   return data;
 };
@@ -61,6 +61,17 @@ export const getUserOrder = async () => {
 
 export const postUserOrder = async (payload: any) => {
   const { data } = await http.post("/orders", payload);
-  console.log(data, "data");
+  //console.log(data, "data");
+  return data;
+};
+
+export const getSlider = async () => {
+  const { data } = await http.get("/settings/slider");
+  return data;
+};
+
+export const createImageSlider = async (payload: any) => {
+  const { data } = await http.post(`/settings/slider/create`, payload);
+
   return data;
 };

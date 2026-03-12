@@ -1,30 +1,26 @@
 import { Product, ShippingDataType, WishlistItem } from "@/types/appTypes";
-import { BaggageClaim, Bell, Heart, ShoppingBag } from "lucide-react";
-
+import {
+  BaggageClaim,
+  Bell,
+  Heart,
+  HousePlus,
+  ShoppingBag,
+} from "lucide-react";
+import logo from "../lib/public/images/africa1_logo.png";
 // Mobile Data Information
 
 export const navMobileData = (path = "/") => {
   if (path === "/") {
     return [
       {
-        image: "/images/africa_market_logo.jfif",
+        image: logo,
         href: "/",
         name: "image",
-      },
-      {
-        icon: Heart,
-        href: "/",
-        name: "Home",
       },
       {
         icon: ShoppingBag,
         href: "/user/dashboard/orders",
         name: "Orders",
-      },
-      {
-        href: "/user/dashboard/wishlist",
-        name: "Wishlist",
-        icon: Heart,
       },
       {
         icon: Bell,
@@ -35,21 +31,21 @@ export const navMobileData = (path = "/") => {
   } else if (path.includes("/orders")) {
     return [
       {
-        image: "/images/logo.png",
+        image: logo,
         href: "/",
         name: "image",
       },
       {
         icon: BaggageClaim,
         href: "/user/dashboard/notifications",
-        name: "View All",
+        name: "Notification",
       },
     ];
   }
 
   return [
     {
-      image: "/images/logo.png",
+      image: logo,
       href: "/",
       name: "image",
     },
@@ -176,7 +172,7 @@ export const socialData4 = [
   },
   {
     id: 2,
-    url: "",
+    url: "/about",
     name: "About Us",
   },
   {

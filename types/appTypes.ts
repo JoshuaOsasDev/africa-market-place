@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react";
+import { StaticImageData } from "next/image";
 import { ReactElement, ReactNode } from "react";
 
 export type searchFieldCompType = {
@@ -10,10 +11,11 @@ export type searchFieldCompType = {
 };
 
 export type sliderCardPropType = {
-  imgUrl: string;
-  link: string;
-  alt: string;
-  id: number;
+  _id: string;
+  mobileImageUrl: string;
+  webImageUrl: string;
+  productId: string;
+  productName: string;
 };
 
 export type changePasswordType = {
@@ -175,15 +177,17 @@ export type UpdateOrderRequest = {
 export type NavItem = {
   href: string;
   name: string;
-  image?: string; // for next/image
+  image?: StaticImageData; // for next/image
   icon?: LucideIcon; // for Lucide icons
 };
 
 export type DealsTodayProps = {
-  image: string;
+  _id: string;
+  images?: { url: string }[];
+  rate: number;
   discount: string;
-  title: string;
+  name: string;
   price: number;
-  oldPrice: number;
+  salePrice: number;
   description: string;
 };

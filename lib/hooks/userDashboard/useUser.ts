@@ -11,6 +11,8 @@ import { useAppDispatch } from "@/redux/store";
 import { signOut } from "@/services/apiServices/authApi";
 import {
   addToCart,
+  createImageSlider,
+  getSlider,
   getUserCart,
   getUserOrder,
   getUserProducts,
@@ -35,6 +37,7 @@ export const useUserProducts = () => {
   } = useQuery({
     queryKey: ["user-products"],
     queryFn: getUserProducts,
+    throwOnError: true,
   });
 
   return { isLoading, userProducts, error };
@@ -92,7 +95,7 @@ export const useSignOut = () => {
     onSettled: () => {
       // 🔥 Clear ALL client auth state
       dispatch(setLogoutAction()); // Redux update → UI re-renders
-      dispatch(setCategories([])); // Clear categories on logout
+      // dispatch(setCategories([])); // Clear categories on logout
       dispatch(resetCart()); // Clear cart on logout
       dispatch(resetWishlistAction()); // Clear wishlist on logout
       queryClient.clear(); // Clear cached user data
@@ -151,7 +154,9 @@ export const useRemoveFromCart = () => {
     onSuccess: (_, variables) => {
       const { pid } = variables;
 
-      dispatch(deleteCart(pid._id));
+      if (pid._id) dispatch(deleteCart(pid._id));
+      if (pid.pid) dispatch(deleteCart(pid.pid));
+
       queryClient.invalidateQueries({
         queryKey: ["cart"],
       });
@@ -219,4 +224,44 @@ export const usePostOrder = () => {
     },
   });
   return { mutate, isPending, error, isSuccess, variables };
+};
+
+export const useSlider = () => {
+  const {
+    isLoading,
+    data: sliderImage,
+    error,
+  } = useQuery({
+    queryKey: ["slider-image"],
+    queryFn: getSlider,
+    throwOnError: true,
+  });
+
+  return { isLoading, sliderImage, error };
+};
+
+export const useCreateSlider = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createImageSlider,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["slider-image"],
+      });
+
+      toast.success("Slider Image Added", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+  });
+
+  return { mutate, isPending };
 };

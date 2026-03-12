@@ -18,7 +18,7 @@ export function ProductRating({
   showSku = true,
 }: ProductRatingProps) {
   return (
-    <div className={cn("flex items-center gap-3 flex-wrap", className)}>
+    <div className={cn("flex flex-wrap items-center gap-3", className)}>
       <StarRating rating={rating} reviewCount={reviewCount} size={18} />
 
       {showSku && sku && (
@@ -27,8 +27,8 @@ export function ProductRating({
 
           {/* SKU */}
           <div className="flex items-center gap-2">
-            <span className="text-[#6F6F6F] text-sm font-medium">SKU:</span>
-            <span className="text-[#111827] text-sm font-semibold">{sku}</span>
+            <span className="text-sm font-medium text-[#6F6F6F]">SKU:</span>
+            <span className="text-sm font-semibold text-[#111827]">{sku}</span>
           </div>
         </>
       )}

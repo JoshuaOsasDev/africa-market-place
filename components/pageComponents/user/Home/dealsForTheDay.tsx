@@ -5,9 +5,17 @@ import TextStyle from "@/components/common/textStyle";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import ProductHoverCard from "./productHoverCard";
-import { dealsToday } from "@/lib/data";
+
+import { useUserProducts } from "@/lib/hooks/userDashboard/useUser";
+import { DealsTodayProps } from "@/types/appTypes";
+import { Product } from "@/types/product";
 
 export default function DealsForTheDay() {
+  const { userProducts: deals } = useUserProducts();
+
+  const filteredDeals =
+    deals?.data?.filter((d: Product) => d.isDeal === true) || [];
+
   return (
     <div className="my-3 flex flex-col gap-5 px-2">
       {/* top section starts */}
@@ -36,16 +44,19 @@ export default function DealsForTheDay() {
           <MoveRight className="text-[10px] text-[#6F6F6F] lg:text-[12px]" />
         </Link>
       </div>
+
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
-        {dealsToday.map((product) => (
+        {filteredDeals.map((product: DealsTodayProps) => (
           <ProductHoverCard
-            key={product.id}
-            image={product.image}
+            key={product._id}
+            _id={product._id}
             discount={product.discount}
-            title={product.title}
-            price={product.price}
-            oldPrice={product.oldPrice}
-            description={product.description}
+            images={product.images}
+            name={product.name}
+            price={product.salePrice}
+            salePrice={product.price}
+            rate={product.rate}
+            description={product.description || ""}
           />
         ))}
       </div>

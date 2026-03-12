@@ -19,6 +19,10 @@ import {
   User,
   Home,
   KeyRound,
+  ShoppingCartIcon,
+  HousePlus,
+  LogInIcon,
+  FileStack,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -72,16 +76,57 @@ function Header() {
               </Link>
             </div>
           )}
+          <div className="flex items-center justify-center space-x-10">
+            <div className="relative flex h-6 w-6 items-center space-x-3">
+              <Link
+                href={"/user/dashboard/wishlist"}
+                className="relative h-6 w-6"
+              >
+                <Heart
+                  className={`h-6 w-6 ${
+                    path === "/user/dashboard/wishlist"
+                      ? "text-[#4F912F]"
+                      : "text-[#6F6F6F]"
+                  }`}
+                />
+                {wishlist.wishlist?.data?.length > 0 && (
+                  <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                    <span className="text-[10px] text-white">
+                      {wishlist.wishlist?.data?.length || 0}
+                    </span>
+                  </div>
+                )}
+              </Link>
 
-          {/* Hamburger Menu Button (Mobile only) */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-lg text-gray-700 hover:bg-gray-100 md:hidden"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+              <Link href={"/user/cart"} className="relative h-6 w-6">
+                <ShoppingCart
+                  className={`h-6 w-6 ${
+                    path === "/user/cart" ? "text-[#4F912F]" : "text-[#6F6F6F]"
+                  }`}
+                />
+                {cart?.length > 0 && (
+                  <div className="absolute -right-2 bottom-3 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                    <span className="text-[10px] text-white">
+                      {cart?.length}
+                    </span>
+                  </div>
+                )}
+              </Link>
+            </div>
+            {/* Hamburger Menu Button (Mobile only) */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-lg text-gray-700 hover:bg-gray-100 md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
         </div>
 
         {/* Animated Mobile Menu */}
@@ -92,7 +137,7 @@ function Header() {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "100%", opacity: 0 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="fixed top-0 right-0 z-40 flex h-full w-3/6 flex-col border-l border-gray-200 bg-white shadow-lg md:hidden"
+              className="fixed top-0 right-0 z-40 flex h-screen w-3/6 flex-col border-l border-gray-200 bg-white shadow-lg md:hidden"
             >
               <div className="flex justify-end pb-1">
                 <Button
@@ -106,6 +151,7 @@ function Header() {
               </div>
               {mobile.slice(1).map((data) => {
                 const Icon = data.icon;
+                const isActive = path === data.href;
 
                 return (
                   <nav
@@ -117,11 +163,19 @@ function Header() {
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.1 }}
                       href={data.href}
-                      className="group flex items-center space-x-3 py-2 transition-colors duration-200 hover:text-green-600"
+                      className={`group mb-1 flex items-center space-x-3 py-2 transition-colors duration-200 hover:text-green-600 ${
+                        isActive
+                          ? "rounded-lg border-l-2 border-[#4F912F] bg-gray-100 pl-2 text-[#4F912F]"
+                          : "rounded-lg bg-gray-100 pl-2"
+                      }`}
                       onClick={() => setIsOpen(false)}
                     >
                       {Icon && (
-                        <Icon className="h-5 w-5 text-gray-500 transition-colors duration-200 group-hover:text-green-600" />
+                        <Icon
+                          className={`h-5 w-5 transition-colors duration-200 group-hover:text-green-600 ${
+                            isActive ? "text-[#4F912F]" : "text-gray-500"
+                          }`}
+                        />
                       )}
 
                       <TextStyle textContent={data.name} textStyle="text-14" />
@@ -129,19 +183,191 @@ function Header() {
                   </nav>
                 );
               })}
-              <div className="flex flex-1 flex-col items-end justify-end p-1">
-                <div className="flex flex-row items-center justify-center space-x-2">
-                  <LogIn />
-                </div>
+              <div className="absolute bottom-5 mt-auto w-full border-t border-gray-200 p-4">
+                <Link
+                  href="/"
+                  className={`mb-1 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 hover:text-[#4F912F] ${
+                    path === "/" ? "bg-[#E8F5E9]" : "bg-gray-100"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <HousePlus
+                      className={`h-5 w-5 ${
+                        path === "/" ? "text-[#4F912F]" : "text-gray-700"
+                      }`}
+                    />
+                    <span
+                      className={`text-sm font-medium ${
+                        path === "/" ? "text-[#4F912F]" : "text-gray-700"
+                      }`}
+                    >
+                      Home
+                    </span>
+                  </div>
+                </Link>
+                <Link
+                  href="/user/cart"
+                  className={`mb-1 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                    path === "/user/cart" ? "bg-[#E8F5E9]" : "bg-gray-100"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <ShoppingCartIcon
+                      className={`h-5 w-5 ${
+                        path === "/user/cart"
+                          ? "text-[#4F912F]"
+                          : "text-gray-700 hover:text-[#4F912F]"
+                      }`}
+                    />
+                    <span
+                      className={`text-sm font-medium ${
+                        path === "/user/cart"
+                          ? "text-[#4F912F]"
+                          : "text-gray-700"
+                      }`}
+                    >
+                      Cart
+                    </span>
+                  </div>
+
+                  {cart?.length > 0 && (
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                      {cart.length}
+                    </div>
+                  )}
+                </Link>
+
+                <Link
+                  href="/user/dashboard/wishlist"
+                  className={`flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                    path === "/user/dashboard/wishlist"
+                      ? "bg-[#E8F5E9]"
+                      : "bg-gray-100"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Heart
+                      className={`h-5 w-5 ${
+                        path === "/user/dashboard/wishlist"
+                          ? "text-[#4F912F]"
+                          : "text-gray-700"
+                      }`}
+                    />
+                    <span
+                      className={`text-sm font-medium ${
+                        path === "/user/dashboard/wishlist"
+                          ? "text-[#4F912F]"
+                          : "text-gray-700"
+                      }`}
+                    >
+                      WishList
+                    </span>
+                  </div>
+
+                  {wishlist.wishlist?.data?.length > 0 && (
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                      {wishlist.wishlist?.data?.length || ""}
+                    </div>
+                  )}
+                </Link>
+
+                {user?.user ? (
+                  <button
+                    onClick={() => logout()}
+                    className={`mt-5 flex w-full items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                      path === "/user/dashboard/wishlist"
+                        ? "bg-[#E8F5E9]"
+                        : "bg-gray-100"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <LogInIcon
+                        className={`h-5 w-5 ${
+                          path === "/user/dashboard/wishlist"
+                            ? "text-[#4F912F]"
+                            : "text-gray-700"
+                        }`}
+                      />
+                      <span
+                        className={`text-sm font-medium ${
+                          path === "/user/dashboard/wishlist"
+                            ? "text-[#4F912F]"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        Log Out
+                      </span>
+                    </div>
+                  </button>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth-user/login"
+                      className={`mt-5 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                        path === "/user/dashboard/wishlist"
+                          ? "bg-[#E8F5E9]"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <LogInIcon
+                          className={`h-5 w-5 ${
+                            path === "/user/dashboard/wishlist"
+                              ? "text-[#4F912F]"
+                              : "text-gray-700"
+                          }`}
+                        />
+                        <span
+                          className={`text-sm font-medium ${
+                            path === "/user/dashboard/wishlist"
+                              ? "text-[#4F912F]"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          Sign In
+                        </span>
+                      </div>
+                    </Link>
+
+                    <Link
+                      href="/auth-user/register"
+                      className={`mt-1 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                        path === "/user/dashboard/wishlist"
+                          ? "bg-[#E8F5E9]"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileStack
+                          className={`h-5 w-5 ${
+                            path === "/user/dashboard/wishlist"
+                              ? "text-[#4F912F]"
+                              : "text-gray-700"
+                          }`}
+                        />
+                        <span
+                          className={`text-sm font-medium ${
+                            path === "/user/dashboard/wishlist"
+                              ? "text-[#4F912F]"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          Register
+                        </span>
+                      </div>
+                    </Link>
+                  </>
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
+      {/* DESTOP VIEW */}
       <div className="hidden flex-row space-x-4 px-4 pb-1 md:flex">
         {/* logo section starts */}
-        <div className="relative mr-5 h-[30px] w-[30px] bg-red-500 sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
+        <div className="relative h-[83px] w-50">
           <Link href={"/"}>
             <Image
               src={logo}
@@ -166,41 +392,18 @@ function Header() {
               />
             </div>
             <div className="flex flex-row items-center space-x-2">
-              {/* <div className="hidden flex-row space-x-2 lg:flex">
-                {selectedCountryListData && (
-                  <div className="flex flex-row items-center justify-center space-x-1 rounded-xl border border-[#F6F6F6] px-3 py-2.5">
-                    <div className="relative h-5 w-5">
-                      <Image
-                        src={selectedCountryListData.flagImage}
-                        alt={selectedCountryListData.alt}
-                        fill
-                        className="rounded-full object-cover"
-                      />
-                    </div>
-
-                    <select
-                      name=""
-                      className="px-2 outline-0"
-                      id=""
-                      onChange={(e) => {
-                        setselectedCountryListData(JSON.parse(e.target.value));
-                      }}
-                    >
-                      {countryListData.map((data, id) => (
-                        <option key={id} value={JSON.stringify(data)}>
-                          {data.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-              </div> */}
               <div className="ml-2 flex flex-row items-center space-x-3">
                 <Link
                   href={"/user/dashboard/wishlist"}
                   className="relative h-6 w-6"
                 >
-                  <Heart className="h-6 w-6 text-[#6F6F6F]" />
+                  <Heart
+                    className={`h-6 w-6 ${
+                      path === "/user/dashboard/wishlist"
+                        ? "text-[#4F912F]"
+                        : "text-[#6F6F6F]"
+                    }`}
+                  />
                   {wishlist.wishlist?.data?.length > 0 && (
                     <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
                       <span className="text-[10px] text-white">
@@ -211,7 +414,13 @@ function Header() {
                 </Link>
                 <div className="relative h-6 w-6">
                   <Link href={"/user/cart"}>
-                    <ShoppingCart className="h-6 w-6 text-[#6F6F6F]" />
+                    <ShoppingCart
+                      className={`h-6 w-6 ${
+                        path === "/user/cart"
+                          ? "text-[#4F912F]"
+                          : "text-[#6F6F6F]"
+                      }`}
+                    />
                     {cart?.length > 0 && (
                       <div className="absolute -right-2 bottom-3 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
                         <span className="text-[10px] text-white">
@@ -225,28 +434,6 @@ function Header() {
             </div>
 
             {user?.user ? (
-              // <div className="ml-2 flex flex-row items-center space-x-3">
-              //   <div className="relative h-10 w-10">
-              //     {user?.user?.cover ? (
-              //       <Image
-              //         src={user.user?.cover?.url || ""}
-              //         alt="User Cover Image"
-              //         fill
-              //         className="rounded-full object-cover"
-              //       />
-              //     ) : (
-              //       <div className="h-10 w-10 rounded-full bg-gray-200"></div>
-              //     )}
-              //   </div>
-
-              //   <Button
-              //     onClick={() => logout()}
-              //     className="cursor-pointer rounded-xl bg-[#2E7D32] px-3.5 py-2.5 text-sm font-medium text-white"
-              //   >
-              //     Log Out
-              //   </Button>
-              // </div>
-
               <div className="group relative ml-2 flex items-center">
                 {/* Profile Image */}
                 <div className="relative h-10 w-10 cursor-pointer">
@@ -291,7 +478,11 @@ function Header() {
                   {/* Links */}
                   <Link
                     href="/"
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 ${
+                      path === "/"
+                        ? "bg-[#E8F5E9] text-[#4F912F]"
+                        : "text-gray-700"
+                    }`}
                   >
                     <Home size={16} />
                     Home
@@ -299,7 +490,11 @@ function Header() {
 
                   <Link
                     href="/user/dashboard/userInfo"
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 ${
+                      path === "/user/dashboard/userInfo"
+                        ? "bg-[#E8F5E9] text-[#4F912F]"
+                        : "text-gray-700"
+                    }`}
                   >
                     <User size={16} />
                     Profile
@@ -307,7 +502,11 @@ function Header() {
 
                   <Link
                     href="/user/change-password"
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 ${
+                      path === "/user/change-password"
+                        ? "bg-[#E8F5E9] text-[#4F912F]"
+                        : "text-gray-700"
+                    }`}
                   >
                     <KeyRound size={16} />
                     Change Password
@@ -319,7 +518,7 @@ function Header() {
                   <button
                     onClick={() => logout()}
                     disabled={isLoggingOut}
-                    className="text-gray-700px-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-400 py-2 text-sm text-gray-800 hover:bg-gray-300"
+                    className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-400 px-3 py-2 text-sm text-gray-800 hover:bg-gray-300"
                   >
                     <LogOut size={16} />
                     Log out
@@ -333,7 +532,7 @@ function Header() {
                   <TextStyle textContent="Sign In" textStyle="text-[#6F6F6F]" />
                 </Link>
                 <hr className="h-5 w-px bg-[#b0adad]" />
-                <Link href={"/auth-user/register/vendor"}>
+                <Link href={"/auth-user/register"}>
                   <TextStyle
                     textContent="Register"
                     textStyle="text-[#6F6F6F]"
@@ -345,43 +544,33 @@ function Header() {
           {/* top left section ends */}
           <div className="flex flex-row items-center lg:justify-between">
             <div className="flex flex-row items-center space-x-4 lg:space-x-8">
-              {
-                /*  */
-                navListArray.map((item, i) => {
-                  return (
-                    <div className="group flex flex-col space-y-2 pt-3" key={i}>
-                      <Link
-                        className="cursor-pointer text-lg font-medium hover:text-blue-500"
-                        key={item.url}
-                        href={item.url}
-                      >
-                        <TextStyle
-                          textContent={item.name}
-                          textStyle="hover:text-[#4F912F] text-[#6F6F6F]"
-                        />
-                      </Link>
-                      <div className="h-0.5 w-0 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full"></div>
-                    </div>
-                  );
-                })
-              }
-              {/* <div className="group flex flex-col space-y-1 pt-2 lg:hidden">
-                <Link
-                  className="cursor-pointer text-lg font-medium hover:text-blue-500"
-                  href={"/tracking"}
-                >
-                  <TextStyle
-                    textContent={"Order Tracking"}
-                    textStyle="hover:text-[#4F912F]"
-                  />
-                </Link>
-                <div className="h-0.5 w-0 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full lg:hidden"></div>
-              </div> */}
+              {navListArray.map((item, i) => {
+                const isActive = path === item.url;
+
+                return (
+                  <div className="group flex flex-col space-y-2 pt-3" key={i}>
+                    <Link
+                      className="cursor-pointer text-lg font-medium hover:text-blue-500"
+                      key={item.url}
+                      href={item.url}
+                    >
+                      <TextStyle
+                        textContent={item.name}
+                        textStyle={`hover:text-[#4F912F] ${
+                          isActive ? "text-[#4F912F]" : "text-[#6F6F6F]"
+                        }`}
+                      />
+                    </Link>
+                    <div
+                      className={`h-0.5 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full ${
+                        isActive ? "w-full" : "w-0"
+                      }`}
+                    ></div>
+                  </div>
+                );
+              })}
             </div>
             <div className="flex items-center justify-center space-x-4 lg:flex-1">
-              {/* <LanguageSelect showFlag={false} />
-              <LanguageSelect showFlag={true} /> */}
-
               <div className="group hidden flex-col space-y-1 pt-2 lg:flex">
                 <Link
                   className="cursor-pointer text-lg font-medium hover:text-blue-500"
@@ -389,10 +578,16 @@ function Header() {
                 >
                   <TextStyle
                     textContent={"Order Tracking"}
-                    textStyle="hover:text-[#4F912F] text-[#6F6F6F]"
+                    textStyle={`hover:text-[#4F912F] ${
+                      path === "/tracking" ? "text-[#4F912F]" : "text-[#6F6F6F]"
+                    }`}
                   />
                 </Link>
-                <div className="h-0.5 w-0 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full"></div>
+                <div
+                  className={`h-0.5 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full ${
+                    path === "/tracking" ? "w-full" : "w-0"
+                  }`}
+                ></div>
               </div>
             </div>
           </div>

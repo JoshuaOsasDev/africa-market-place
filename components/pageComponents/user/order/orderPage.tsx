@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useUserOder } from "@/lib/hooks/userDashboard/useUser";
 import { UsersOrder } from "@/types/order";
 import { SlidersHorizontal } from "lucide-react";
+import Link from "next/link";
 
 export default function OrderUserPage({
   orderParams,
@@ -49,7 +50,7 @@ export default function OrderUserPage({
 
       <div className="rounded-xl border border-[#E0E2E7] md:my-3">
         <div className="">
-          <div className="flex items-center space-x-2.5 bg-white px-6 py-4.5 md:w-full md:justify-between">
+          <div className="flex w-full items-center justify-between space-x-2.5 bg-white px-6 py-4.5">
             <div className="flex items-center md:space-x-2.5">
               <h3 className="text-[18px] font-medium">Recent Orders</h3>
               <div className="hidden w-fit rounded-full bg-[#E7F4EE] px-3 py-1 md:block">
@@ -57,15 +58,12 @@ export default function OrderUserPage({
               </div>
             </div>
             <div className="flex items-center space-x-2.5">
-              <Button className="text rounded-xl border border-[#E0E2E7] bg-[#FFFFFF] px-3.5 py-2.5 font-semibold text-black">
-                <span>
-                  <SlidersHorizontal />
-                </span>{" "}
-                <span>Filter</span>
-              </Button>
-              <Button className="rounded-xl bg-[#2E7D32] px-3.5 py-2.5 font-semibold text-white">
+              <Link
+                href={"/user/products"}
+                className="rounded-xl bg-[#2E7D32] px-3.5 py-2.5 font-semibold text-white"
+              >
                 Order Again
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

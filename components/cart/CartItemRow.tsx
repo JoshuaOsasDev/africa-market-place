@@ -18,7 +18,7 @@ export function CartItemRow({
   onRemove,
   className,
 }: CartItemRowProps) {
-  const subtotal = item.salePrice * item?.quantity;
+  const subtotal = item?.salePrice || item?.price * item?.quantity;
 
   return (
     <div
@@ -43,13 +43,13 @@ export function CartItemRow({
       </div>
 
       <div className="text-sm text-[#111827]">
-        ${item?.salePrice.toFixed(2)}
+        ${item?.salePrice?.toFixed(2)}
       </div>
 
       <div className="flex justify-center">
         <QuantityInput
-          value={item.quantity}
-          onChange={(qty) => onQuantityChange(item.pid, qty)}
+          value={item?.quantity}
+          onChange={(qty) => onQuantityChange(item?.pid, qty)}
           min={1}
           // max={item.maxQuantity}
           className="scale-90"
@@ -57,11 +57,11 @@ export function CartItemRow({
       </div>
 
       <div className="text-sm font-semibold text-[#111827]">
-        ${subtotal.toFixed(2)}
+        ${subtotal?.toFixed(2)}
       </div>
 
       <button
-        onClick={() => onRemove(item.pid)}
+        onClick={() => onRemove(item?.pid)}
         className="p-1 text-[#9CA3AF] transition-colors hover:text-[#FF0000]"
         aria-label="Remove item"
       >

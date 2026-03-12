@@ -1,11 +1,15 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import logo from "../../lib/public/images/africa1_logo.png";
 import { Facebook, Instagram, Twitter, Mail } from "lucide-react";
 
 import TextStyle from "./textStyle";
 import { socialData, socialData2, socialData3, socialData4 } from "@/lib/data";
+import { useAppSelector } from "@/redux/store";
 
 function Footer() {
+  const user = useAppSelector((state) => state.user);
   return (
     <div className="mx-2 mb-4 grid grid-cols-1 gap-6 rounded-[20px] bg-[#1A1A1A] p-4 md:grid-cols-5">
       <div className="col-span-2 flex flex-col space-y-4">
@@ -13,7 +17,7 @@ function Footer() {
         <div className="relative h-[50px] w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
           <Link href={"/"}>
             <Image
-              src={"/images/logo.png"}
+              src={logo}
               alt="africa market place logo"
               fill
               className="object-contain"
@@ -50,17 +54,19 @@ function Footer() {
         </div>
         {/* social icon start */}
       </div>
-      <div className="col-span-3 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
-        <div className="flex flex-col space-y-2">
-          {socialData2.map((data) => (
-            <Link href={data.url} key={data.id}>
-              <TextStyle
-                textContent={data.name}
-                textStyle="text-white text-[16px] hover:text-[#a0b7a1] duration-500 transtion-all ease-in-out "
-              />
-            </Link>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 gap-10 md:col-span-3 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] md:gap-4">
+        {user?.user && (
+          <div className="flex flex-col space-y-2">
+            {socialData2.map((data) => (
+              <Link href={data.url} key={data.id}>
+                <TextStyle
+                  textContent={data.name}
+                  textStyle="text-white text-[16px] hover:text-[#a0b7a1] duration-500 transtion-all ease-in-out "
+                />
+              </Link>
+            ))}
+          </div>
+        )}
         <div className="flex flex-col space-y-2">
           {socialData3.map((data) => (
             <Link href={data.url} key={data.id}>

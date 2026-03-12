@@ -20,7 +20,7 @@ export function CartSummary({ className }: CartSummaryProps) {
   const shipping = useAppSelector((state) => state.product.checkout.shipping);
   const users = useAppSelector((state) => state.user.user);
   const cart = useAppSelector((state) => state.product.checkout.cart);
-  // console.log(users, cart, "dis");
+  // console.log(subtotal, cart, "dis");
 
   const { mutate: createOrder, isPending } = usePostOrder();
 

@@ -28,7 +28,9 @@ export function StarRating({
         {Array.from({ length: maxRating }, (_, index) => {
           const starPosition = index + 1;
           const isFilled = starPosition <= normalizedRating;
-          const isPartial = starPosition > normalizedRating && starPosition - 1 < normalizedRating;
+          const isPartial =
+            starPosition > normalizedRating &&
+            starPosition - 1 < normalizedRating;
 
           return (
             <Star
@@ -38,7 +40,7 @@ export function StarRating({
                 "transition-colors",
                 isFilled
                   ? "fill-[#FF8A00] text-[#FF8A00]"
-                  : "fill-[#E5E7EB] text-[#E5E7EB]"
+                  : "fill-00000 text-00000",
               )}
             />
           );

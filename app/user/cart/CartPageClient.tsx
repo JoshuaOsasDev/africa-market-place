@@ -7,26 +7,46 @@ import { CartItemRow } from "@/components/cart/CartItemRow";
 import { CartSummary } from "@/components/cart/CartSummary";
 import { CouponCode } from "@/components/cart/CouponCode";
 import { MobileOrderSummary } from "@/components/cart/MobileOrderSummary";
-import { useAppSelector } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useCart } from "@/lib/hooks/useCart";
+import { useCallback } from "react";
+import { deleteCart } from "@/redux/slices/product";
+import { useRemoveFromCart } from "@/lib/hooks/userDashboard/useUser";
+import { Product } from "@/types/product";
 
 export function CartPageClient() {
+  const dispatch = useAppDispatch();
   const cart: CartItem[] = useAppSelector(
     (state) => state.product.checkout.cart,
   );
+
+  const {
+    mutate: removeFromCartAPI,
+    isPending: isRemoving,
+    variables: removingVariables,
+  } = useRemoveFromCart();
 
   //console.log(cart, "carts");
 
   const { cartItems, updateQuantity, removeFromCart } = useCart();
 
+  const removeP = (productToRemove: Product) => {
+    // Update Redux store
+    dispatch(deleteCart(productToRemove.pid));
+
+    // Sync with backend
+    removeFromCartAPI({ pid: productToRemove });
+  };
   const handleQuantityChange = (productId: string, quantity: number) => {
     updateQuantity(productId, quantity);
   };
 
   const handleRemove = (productId: string) => {
+    // console.log(productId, "productId");
     const product = cartItems?.find((item: CartItem) => item.pid === productId);
+    // console.log(product, "product");
     if (product) {
-      removeFromCart(product);
+      removeP(product);
     }
   };
 
@@ -34,6 +54,7 @@ export function CartPageClient() {
     alert(`Coupon "${code}" applied!`);
   };
 
+  // console.log(cartItems, "cart items");
   if (cart?.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB] px-4">
@@ -44,7 +65,7 @@ export function CartPageClient() {
           <p className="mb-6 text-[#6F6F6F]">
             Looks like you have not added any items yet.
           </p>
-          <Link href="/products">
+          <Link href="/user/products">
             <button className="rounded-full bg-[#2E7D32] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#246628]">
               Start Shopping
             </button>
@@ -58,7 +79,7 @@ export function CartPageClient() {
     <div className="min-h-screen bg-[#F9FAFB]">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Link
-          href="/products"
+          href="/user/products"
           className="mb-6 inline-flex items-center gap-2 text-[#111827] transition-colors hover:text-[#2E7D32]"
         >
           <ArrowLeft size={18} />

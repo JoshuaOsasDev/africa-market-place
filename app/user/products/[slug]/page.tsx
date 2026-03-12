@@ -42,14 +42,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   //const product = getMockProduct(resolvedParams.slug);
 
-  const relatedProducts = getMockRelatedProducts();
-
   return (
     <div>
-      <ProductDetailClient
-        resolvedParams={resolvedParams}
-        relatedProducts={relatedProducts}
-      />
+      <ProductDetailClient resolvedParams={resolvedParams} />
     </div>
   );
 }

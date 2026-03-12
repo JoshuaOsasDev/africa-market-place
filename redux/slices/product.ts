@@ -145,7 +145,7 @@ const productSlice = createSlice({
       const productId = action.payload;
       const updateCart = filter(
         state.checkout.cart,
-        (item) => item._id !== productId,
+        (item) => item.pid !== productId,
       );
 
       state.checkout.cart = updateCart;

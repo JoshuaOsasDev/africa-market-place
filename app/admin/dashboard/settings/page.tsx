@@ -1,23 +1,79 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
   useAdminCurrency,
   useAdminSettings,
 } from "@/lib/hooks/adminDashboardApi/useAdmin";
+import { useCreateSlider } from "@/lib/hooks/userDashboard/useUser";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
+import { useState } from "react";
+import { FiCamera } from "react-icons/fi";
 // import facebookLogo from '../../../../public/admin/dashboard_images_and_icons/facebook-logo.svg'
 // import twitterLogo from '../../../../public/admin/dashboard_images_and_icons/twitter-logo.svg'
 // import linkedinLogo from '../../../../public/admin/dashboard_images_and_icons/linkedin-logo.svg'
 // import instagramLogo from '../../../../public/admin/dashboard_images_and_icons/instagram-logo.svg'
 
+type SliderType = {
+  productId: string;
+  productName: string;
+  webImageUrl: string;
+  mobileImageUrl: string;
+};
 const SettingsPage = () => {
+  const [sliderData, setSliderData] = useState<SliderType>({
+    productId: "",
+    productName: "",
+    webImageUrl: "",
+    mobileImageUrl: "",
+  });
+
+  const restoreScroll = () => {
+    document.body.style.overflow = "";
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSliderData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+
+    if (files && files[0]) {
+      setSliderData((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+    }
+  };
+
   const { adminSettings } = useAdminSettings();
   const { adminCurrency } = useAdminCurrency();
+  const { mutate: createSlider, isPending } = useCreateSlider();
   //   export const getAdminSettings = async () => {
   //   const { data } = await http.get(`/admin/settings/settings`);
   //   return data;
   // };
   // console.log(adminSettings, "settings data");
   // console.log(adminCurrency, "currency data");
+  const handleSliderSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    createSlider(sliderData, {
+      onSuccess: () => {
+        setSliderData({
+          productId: "",
+          productName: "",
+          webImageUrl: "",
+          mobileImageUrl: "",
+        });
+      },
+    });
+  };
   return (
     <div className="">
       <div className="bg-[#FFFFFF] p-5 sm:p-7.5">
@@ -333,6 +389,161 @@ const SettingsPage = () => {
             </div>
             <Switch />
           </div>
+        </div>
+
+        {/* Image Slider Settings */}
+        <div className="mb-8 w-full rounded-[10px] border border-[#E6E6E6] p-4">
+          <h1 className="mb-2 text-2xl font-bold text-[#424242]">
+            Homepage Image Slider
+          </h1>
+
+          <p className="mb-4 text-[16px] text-[#595959]">
+            Upload images that will appear on the homepage slider
+          </p>
+
+          <form onSubmit={handleSliderSubmit} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 lg:flex-row">
+              <label className="w-full">
+                <span className="text-[16px] font-medium">Product ID</span>
+                <input
+                  type="text"
+                  name="productId"
+                  value={sliderData.productId}
+                  onChange={handleChange}
+                  placeholder="Enter Product ID"
+                  className="mt-2 w-full rounded-lg border border-[#E0E0E0] px-[14px] py-3"
+                />
+              </label>
+
+              <label className="w-full">
+                <span className="text-[16px] font-medium">
+                  Product Name(Slug)
+                </span>
+                <input
+                  type="text"
+                  name="productName"
+                  value={sliderData.productName}
+                  onChange={handleChange}
+                  placeholder="Laptop"
+                  className="mt-2 w-full rounded-lg border border-[#E0E0E0] px-[14px] py-3"
+                />
+              </label>
+            </div>
+
+            <div className="flex flex-col gap-6 lg:flex-row">
+              {/* Web Image */}
+              <div className="w-full">
+                <span className="mb-2 block text-[16px] font-medium text-[#424242]">
+                  Web Slider Image
+                </span>
+
+                <CldUploadWidget
+                  uploadPreset="africamarketplace"
+                  onSuccess={(result: any) => {
+                    restoreScroll();
+                    const imageUrl = result.info.secure_url;
+
+                    setSliderData((prev) => ({
+                      ...prev,
+                      webImageUrl: imageUrl,
+                    }));
+                  }}
+                  options={{
+                    showPoweredBy: false,
+                    multiple: false,
+                    clientAllowedFormats: ["png", "jpg", "jpeg"],
+                    folder: "slider-image",
+                    maxFileSize: 1 * 1024 * 1024,
+                  }}
+                >
+                  {({ open }) => (
+                    <button
+                      type="button"
+                      onClick={() => open()}
+                      className="relative flex h-37.5 w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#2E7D32] bg-[#F9FAFB] transition hover:bg-[#F1F5F9]"
+                    >
+                      {sliderData.webImageUrl ? (
+                        <Image
+                          src={sliderData.webImageUrl}
+                          alt="web slider"
+                          fill
+                          className="h-full w-full rounded-xl object-cover"
+                        />
+                      ) : (
+                        <>
+                          <FiCamera className="text-3xl text-[#2E7D32]" />
+                          <p className="text-sm text-gray-500">
+                            Click to upload web slider
+                          </p>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </CldUploadWidget>
+              </div>
+
+              {/* Mobile Image */}
+              <div className="w-full">
+                <span className="mb-2 block text-[16px] font-medium text-[#424242]">
+                  Mobile Slider Image
+                </span>
+
+                <CldUploadWidget
+                  uploadPreset="africamarketplace"
+                  onSuccess={(result: any) => {
+                    restoreScroll();
+                    const imageUrl = result.info.secure_url;
+
+                    setSliderData((prev) => ({
+                      ...prev,
+                      mobileImageUrl: imageUrl,
+                    }));
+                  }}
+                  options={{
+                    showPoweredBy: false,
+                    multiple: false,
+                    clientAllowedFormats: ["png", "jpg", "jpeg"],
+                    folder: "slider-image",
+                    maxFileSize: 1 * 1024 * 1024,
+                  }}
+                >
+                  {({ open }) => (
+                    <button
+                      type="button"
+                      onClick={() => open()}
+                      className="relative flex h-[150px] w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#2E7D32] bg-[#F9FAFB] transition hover:bg-[#F1F5F9]"
+                    >
+                      {sliderData.mobileImageUrl ? (
+                        <Image
+                          src={sliderData.mobileImageUrl}
+                          alt="mobile slider"
+                          fill
+                          className="rounded-xl object-cover"
+                        />
+                      ) : (
+                        <>
+                          <FiCamera className="text-3xl text-[#2E7D32]" />
+                          <p className="text-sm text-gray-500">
+                            Click to upload mobile slider
+                          </p>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </CldUploadWidget>
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="mt-4 w-fit cursor-pointer rounded-[27px] bg-[#2E7D32] px-6 py-3 text-white disabled:cursor-not-allowed"
+              >
+                Upload Slider
+              </Button>
+            </div>
+          </form>
         </div>
 
         <button className="rounded-[27px] bg-[#2E7D32] px-8 py-4 text-[16px] font-medium text-[#EAF2EA]">

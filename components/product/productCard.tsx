@@ -6,6 +6,7 @@ import TextStyle from "../common/textStyle";
 import { MdStar } from "react-icons/md";
 import { CartButton } from "../common/cartButton";
 import { Product } from "@/types/product";
+import { StarRating } from "../common/starRating";
 
 export function ProductCard(product: any) {
   const data = product?.product;
@@ -19,7 +20,7 @@ export function ProductCard(product: any) {
     : (product?.discount ?? "");
 
   return (
-    <div className="group col-span-1 shadow-md transition-shadow duration-300 hover:shadow-xl">
+    <div className="group col-span-1 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-xl">
       <Link href={`user/products/${data?.slug}`}>
         <div className="relative flex h-75 w-full flex-col space-y-2 border-0 bg-[#FCFCFCFC] px-2 py-2">
           {/* discount section starts */}
@@ -59,10 +60,12 @@ export function ProductCard(product: any) {
               <div className="flex flex-row items-center space-x-0">
                 {/* star rating  starts */}
                 <div className="flex flex-row items-center space-x-1">
-                  {[...Array(data?.rate)].map((_, i) => (
-                    <MdStar key={i} className="h-3 w-3 text-yellow-500" />
-                  ))}
+                  {/* {[...Array(data?.rating)].map((_, i) => (
+                    <MdStar key={i} className="h-3 w-3 text-yellow-400" />
+                  ))} */}
+                  <StarRating rating={data?.rating} />
                 </div>
+
                 {/* star rating ends */}
               </div>
             </div>

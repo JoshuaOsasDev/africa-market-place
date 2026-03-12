@@ -1,7 +1,8 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
-const DEMO_STATUS = "failed";
+const DEMO_STATUS = "succeeded";
 
 // Icons
 const CheckIcon = () => (
@@ -90,7 +91,7 @@ const CONFIG = {
     heading: "Payment Successful!",
     sub: "Your order has been placed and is being prepared.",
     note: "A confirmation email has been sent.",
-    ctaLabel: "Continue Shopping",
+    ctaLabel: "Check Order Status",
   },
 
   pending: {
@@ -242,9 +243,11 @@ export default function PaymentStatus() {
 
         {/* CTA */}
         <div className="p-6">
-          <button className="w-full rounded-lg bg-[#2E7D32] py-3 font-semibold text-white transition hover:opacity-90">
-            {cfg.ctaLabel}
-          </button>
+          <Link href={"/user/dashboard/orders"}>
+            <button className="w-full rounded-lg bg-[#2E7D32] py-3 font-semibold text-white transition hover:opacity-90">
+              {cfg.ctaLabel}
+            </button>
+          </Link>
         </div>
 
         {/* Footer */}

@@ -1,10 +1,12 @@
 "use client";
+import ErrorScreen from "@/components/common/errorScreen";
 import {
   QueryCache,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -23,32 +25,35 @@ export default function ReactQueryProvider({
         },
 
         //Handle general error
-        queryCache: new QueryCache({
-          onError: (error: any) => {
-            const message =
-              error?.response?.data?.message ||
-              error?.message ||
-              "Something went wrong";
+        // queryCache: new QueryCache({
+        //   onError: (error: any) => {
+        //     const message =
+        //       error?.response?.data?.message ||
+        //       error?.message ||
+        //       "Something went wrong";
 
-            toast.error(message, {
-              duration: 4000,
-              icon: "✗",
-              position: "top-center",
-              style: {
-                background: "#fee2e2",
-                color: "#b91c1c",
-                border: "1px solid #fecaca",
-              },
-            });
-          },
-        }),
+        //     toast.error(message, {
+        //       duration: 4000,
+        //       icon: "✗",
+        //       position: "top-center",
+        //       style: {
+        //         background: "#fee2e2",
+        //         color: "#b91c1c",
+        //         border: "1px solid #fecaca",
+        //       },
+        //     });
+        //   },
+        // }),
       }),
   );
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      {children}
+      <ErrorBoundary errorComponent={ErrorScreen}>
+        <ReactQueryDevtools initialIsOpen={false} />
+
+        {children}
+      </ErrorBoundary>
     </QueryClientProvider>
   );
 }

@@ -81,7 +81,7 @@ export function ProductImageGallery({
               src={imageList[selectedIndex]}
               alt={`${alt} - Image ${selectedIndex + 1}`}
               fill
-              className="object-contain p-4"
+              className="object-cover p-4"
               priority={selectedIndex === 0}
             />
           </motion.div>

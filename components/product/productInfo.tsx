@@ -118,7 +118,7 @@ export function ProductInfo({
 
         {/* Tags */}
         <div className="flex items-start gap-2">
-          {tags.length > 0 && (
+          {tags?.length > 0 && (
             <span className="pt-0.5 text-sm font-medium whitespace-nowrap text-[#6F6F6F]">
               Tag: {tags}
             </span>

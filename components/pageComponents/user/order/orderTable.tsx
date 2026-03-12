@@ -8,6 +8,8 @@ import DeleteProductModal from "../../vendor/product/DeleteProductModal";
 import SkeletonTable from "@/components/common/skeletonTable";
 import { formatDate } from "@/lib/utils";
 import { UsersOrder } from "@/types/order";
+import { useState } from "react";
+import OrderSummaryModal from "./orderSummaryModal";
 
 export default function OrderTable({
   orderParams,
@@ -18,6 +20,7 @@ export default function OrderTable({
   userOders: UsersOrder[];
   isLoading: boolean;
 }) {
+  const [activeOrder, setActiveOrder] = useState(null);
   let filteredOrders = userOders || [];
 
   if (orderParams && typeof orderParams === "string") {
@@ -61,139 +64,131 @@ export default function OrderTable({
 
   if (isLoading) return <SkeletonTable />;
   return (
-    <ReusableTable
-      order={orderParams}
-      data={filteredOrders}
-      columnsStyle="44px .5fr 1fr .5fr .5fr .5fr .5fr .5fr"
-      columns={[
-        {
-          label: "Order Id",
-          renderCell: (item) => (
-            <span className="font-semibold text-[#2E7D32]">
-              #{item.orderNo}
-            </span>
-          ),
-        },
-        {
-          label: "Product",
-          renderCell: (item) => (
-            <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-[#F6F6F6] p-1">
-                {/* <Image
+    <>
+      <ReusableTable
+        order={orderParams}
+        data={filteredOrders}
+        columnsStyle="44px .5fr 1fr .5fr .5fr .5fr .5fr .5fr"
+        columns={[
+          {
+            label: "Order Id",
+            renderCell: (item) => (
+              <span className="font-semibold text-[#2E7D32]">
+                #{item.orderNo}
+              </span>
+            ),
+          },
+          {
+            label: "Product",
+            renderCell: (item) => (
+              <div className="flex items-center gap-3">
+                <div className="rounded-xl bg-[#F6F6F6] p-1">
+                  {/* <Image
                   src={item?.items[0].imageUrl}
                   alt={item.product}
                   width={40}
                   height={40}
                 /> */}
 
-                <p className="p-4"></p>
+                  <p className="p-4"></p>
+                </div>
+                <p className="flex flex-col">
+                  {" "}
+                  <span className="font-medium text-[#333843]">
+                    {item.product}
+                  </span>
+                  <span className="text-[#667085]">{`+${item.items.length} other products`}</span>
+                </p>
               </div>
-              <p className="flex flex-col">
-                {" "}
-                <span className="font-medium text-[#333843]">
-                  {item.product}
-                </span>
-                <span className="text-[#667085]">{`+${item.items.length} other products`}</span>
-              </p>
-            </div>
-          ),
-        },
-        {
-          label: "Date",
-          renderCell: (item) => (
-            <span className="text-[#333843]">{formatDate(item.createdAt)}</span>
-          ),
-        },
-        {
-          label: "Total",
-          renderCell: (item) => (
-            <span className="font-medium text-[#667085]">{item.total}</span>
-          ),
-        },
-        {
-          label: "Payment",
-          renderCell: (item) => (
-            <span className="font-medium text-[#667085]">
-              {item.paymentMethod}
-            </span>
-          ),
-        },
-
-        {
-          label: "Status",
-          renderCell: (item) => {
-            type OrderStatus = "pending" | "shipped" | "cancelled";
-
-            const colors: Record<OrderStatus, string> = {
-              pending: "bg-[#FFF9EA] text-[#FBC02D]",
-              shipped: "bg-[#E8F8FD] text-[#13B2E4]",
-              cancelled: "bg-[#FFE8E5] text-[#FF4733]",
-            };
-
-            const status = item.status as OrderStatus;
-            const colorClass = colors[status] ?? "bg-green-100 text-green-700";
-
-            return (
-              <span className={`rounded-full px-3 py-1 ${colorClass}`}>
-                {item.status}
-              </span>
-            );
+            ),
           },
-        },
-        {
-          label: "Action",
-          renderCell: (item) => (
-            <div className="flex items-center gap-1">
-              <Link href={"#"}>
-                <Eye className="h-5 w-5 text-[#667085] hover:text-gray-900" />
-              </Link>
-              {orderParams !== "cancelled" && orderParams !== "shipped" && (
+          {
+            label: "Date",
+            renderCell: (item) => (
+              <span className="text-[#333843]">
+                {formatDate(item.createdAt)}
+              </span>
+            ),
+          },
+          {
+            label: "Total",
+            renderCell: (item) => (
+              <span className="font-medium text-[#667085]">{item.total}</span>
+            ),
+          },
+          {
+            label: "Payment",
+            renderCell: (item) => (
+              <span className="font-medium text-[#667085]">
+                {item.paymentMethod}
+              </span>
+            ),
+          },
+
+          {
+            label: "Status",
+            renderCell: (item) => {
+              type OrderStatus = "pending" | "shipped" | "cancelled";
+
+              const colors: Record<OrderStatus, string> = {
+                pending: "bg-[#FFF9EA] text-[#FBC02D]",
+                shipped: "bg-[#E8F8FD] text-[#13B2E4]",
+                cancelled: "bg-[#FFE8E5] text-[#FF4733]",
+              };
+
+              const status = item.status as OrderStatus;
+              const colorClass =
+                colors[status] ?? "bg-green-100 text-green-700";
+
+              return (
+                <span className={`rounded-full px-3 py-1 ${colorClass}`}>
+                  {item.status}
+                </span>
+              );
+            },
+          },
+          {
+            label: "Action",
+            renderCell: (item) => (
+              <div className="flex items-center gap-2">
+                <button onClick={() => setActiveOrder(item)}>
+                  <Eye className="h-5 w-5 text-[#667085] hover:text-gray-900" />
+                </button>
+
                 <Modal>
-                  <Modal.Open opens={`edit-product-${item.id}`}>
+                  <Modal.Open opens={`delete-product-${item.id}`}>
                     <button
                       type="button"
-                      className="flex cursor-pointer items-center hover:text-gray-900"
+                      className="flex cursor-pointer items-center"
                     >
-                      <Pen className="h-5 w-5 text-[#667085]" />
+                      <Trash className="h-5 w-5 cursor-pointer text-[#667085] hover:text-red-700" />
                     </button>
                   </Modal.Open>
 
                   <Modal.Window
-                    name={`edit-product-${item.id}`}
-                    className="top-4.5 my-auto max-w-3xl overflow-y-scroll"
+                    name={`delete-product-${item.id}`}
+                    className="max-w-md"
                   >
-                    <EditProduct />
+                    <DeleteProductModal
+                      text="order"
+                      productName={item.name}
+                      onConfirm={() => console.log("DELETE:")}
+                    />
                   </Modal.Window>
                 </Modal>
-              )}
-
-              <Modal>
-                <Modal.Open opens={`delete-product-${item.id}`}>
-                  <button
-                    type="button"
-                    className="flex cursor-pointer items-center"
-                  >
-                    <Trash className="h-5 w-5 cursor-pointer text-[#667085] hover:text-red-700" />
-                  </button>
-                </Modal.Open>
-
-                <Modal.Window
-                  name={`delete-product-${item.id}`}
-                  className="max-w-md"
-                >
-                  <DeleteProductModal
-                    text="order"
-                    productName={item.name}
-                    onConfirm={() => console.log("DELETE:")}
-                  />
-                </Modal.Window>
-              </Modal>
-            </div>
-          ),
-        },
-      ]}
-      itemsPerPage={5}
-      onSelectChange={(selectedIds) => console.log("Selected:", selectedIds)}
-    />
+              </div>
+            ),
+          },
+        ]}
+        itemsPerPage={5}
+        onSelectChange={(selectedIds) => console.log("Selected:", selectedIds)}
+      />
+      {activeOrder && (
+        <OrderSummaryModal
+          order={activeOrder}
+          onClose={() => setActiveOrder(null)}
+        />
+      )}
+    </>
   );
 }

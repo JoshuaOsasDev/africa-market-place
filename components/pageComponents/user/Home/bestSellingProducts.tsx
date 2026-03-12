@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { useUserProducts } from "@/lib/hooks/userDashboard/useUser";
 import { ProductCard } from "@/components/product/productCard";
 import { Product } from "@/types/product";
+import NoProducts from "@/components/common/noProducts";
 
 function BestSellingProducts() {
   //get product hook
@@ -14,6 +15,7 @@ function BestSellingProducts() {
   const product = userProducts?.data;
 
   if (isLoading) return;
+
   return (
     <div className="my-2 flex flex-col space-y-2 px-2">
       {/* top section starts */}
@@ -36,11 +38,17 @@ function BestSellingProducts() {
         </Link>
       </div>
       {/* bottom section starts */}
-      <div className="xs:grid-cols-2 grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4">
-        {product?.map((data: Product) => (
-          <ProductCard key={data._id} product={data} />
-        ))}
-      </div>
+      {!product || product?.length === 0 ? (
+        <p className="py-6 text-center text-lg font-bold text-[#6F6F6F]">
+          Vendors have not uploaded any products yet.
+        </p>
+      ) : (
+        <div className="xs:grid-cols-2 grid grid-cols-1 gap-4 px-5 sm:grid-cols-3 md:grid-cols-4 md:px-1">
+          {product?.map((data: Product) => (
+            <ProductCard key={data._id} product={data} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

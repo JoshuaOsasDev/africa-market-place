@@ -6,11 +6,13 @@ import Slider from "react-slick";
 import { sliderCardData } from "@/lib/data";
 import SlideCard from "../pageComponents/user/Home/slideCard";
 import { sliderCardPropType } from "@/types/appTypes";
+import { useSlider } from "@/lib/hooks/userDashboard/useUser";
+import SliderSkeleton from "./sliderSkeleton";
 
 function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const sliderRef = useRef<Slider>(null);
-
+  const { isLoading, sliderImage } = useSlider();
   const settings = {
     fade: true,
     infinite: true,
@@ -31,17 +33,23 @@ function Carousel() {
     setCurrentIndex(index);
   };
 
+  // console.log(sliderImage, "image slider");
+  const slider = sliderImage?.data;
+
+  if (isLoading) {
+    return <SliderSkeleton />;
+  }
   return (
     <div className="relative">
       <Slider ref={sliderRef} {...settings}>
-        {sliderCardData.map((data: sliderCardPropType) => (
-          <SlideCard key={data.id} {...data} />
+        {slider?.map((data: sliderCardPropType) => (
+          <SlideCard key={data._id} {...data} />
         ))}
       </Slider>
 
       {/* Clickable dot indicators */}
       <div className="mt-4 flex items-center justify-center gap-2">
-        {sliderCardData.map((_: sliderCardPropType, index: number) => (
+        {slider?.map((_id: sliderCardPropType, index: number) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}

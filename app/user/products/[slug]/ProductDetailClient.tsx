@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Product, ProductMock, RelatedProduct } from "@/types/product";
-import { Review } from "@/types/review";
+import { Product, RelatedProduct } from "@/types/product";
 import { ProductImageGallery } from "@/components/product/productImageGallery";
 import { ProductInfo } from "@/components/product/productInfo";
 import { ProductTabs } from "@/components/product/productTabs";
@@ -12,22 +11,19 @@ import {
   useUserProductsBySlug,
   useUserWishlist,
 } from "@/lib/hooks/userDashboard/useUser";
-import Loader from "@/components/common/loader";
 import { UserProductLoader } from "@/components/common/skeletonTable";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { useAppSelector } from "@/redux/store";
 import { useRouter } from "next/navigation";
 
 interface ProductDetailClientProps {
   // product: ProductMock & { reviews: Review[] };
-  relatedProducts: RelatedProduct[];
+  // relatedProducts: RelatedProduct[];
   resolvedParams: { slug: string };
 }
 
 export function ProductDetailClient({
-  relatedProducts,
   resolvedParams,
 }: ProductDetailClientProps) {
-  const dispatch = useAppDispatch();
   const wishlist = useAppSelector((state) => state.wishlist);
   const [wishlistedProducts, setWishlistedProducts] = useState(
     wishlist.wishlist?.data || [],
@@ -38,49 +34,21 @@ export function ProductDetailClient({
   };
 
   //Hook to fecth Product Details
-  const { userProductsSlug, isLoading, error } = useUserProductsBySlug(
+  const { userProductsSlug, isLoading } = useUserProductsBySlug(
     resolvedParams.slug,
   );
 
-  const {
-    isPending,
-    mutate: postWishlist,
-    error: wishlistError,
-  } = useUserWishlist();
+  const { mutate: postWishlist } = useUserWishlist();
 
   const product: Product = userProductsSlug?.data;
+  const relatedProducts = product?.relatedProducts;
 
   if (isLoading) return <UserProductLoader />;
-  // const handleAddToCart = async (quantity: number) => {
-  //   return new Promise((resolve) => {
-  //     setTimeout(() => {
-  //       console.log(`Added ${quantity} of ${product?.name} to cart`);
-  //       alert(`Added ${quantity} ${product?.name} to cart!`);
-  //       resolve(true);
-  //     }, 500);
-  //   });
-  // };
-
-  // const handleToggleWishlist = () => {
-  //   if (product?._id) {
-  //     postWishlist(product._id);
-
-  //     setWishlistedProducts((prev) =>
-  //       prev.includes(product?.slug)
-  //         ? prev.filter((id) => id !== product.slug)
-  //         : [...prev, product?.slug],
-  //     );
-  //   }
-
-  //   // dispatch(setWishlistAction([...wishlistedProducts, product._id]));
-  // };
 
   const handleToggleWishlist = () => {
     if (!product?.slug) return;
 
     postWishlist(product._id);
-
-    // dispatch(setWishlistAction([...wishlistedProducts, product.slug]));
 
     setWishlistedProducts((prev = []) => {
       const exists = prev.some((item: any) => item.slug === product.slug);
@@ -103,7 +71,7 @@ export function ProductDetailClient({
         : [...prev, productId],
     );
   };
-
+  // console.log("Add related product to cart:", wishlistedProducts);
   return (
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -140,7 +108,7 @@ export function ProductDetailClient({
               price={product?.price}
               originalPrice={product?.salePrice}
               inStock={product?.inStock}
-              rating={product?.rating || 5}
+              rating={product?.rating || 0}
               reviewCount={product?.reviews?.length}
               sku={product?.sku}
               description={product?.description.split("\n")[0]}

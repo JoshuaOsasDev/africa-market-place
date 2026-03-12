@@ -6,6 +6,8 @@ import { X } from "lucide-react";
 import { QuantityInput } from "../common/quantityInput";
 import { CartItem } from "@/types/cart";
 import { cn } from "@/lib/utils";
+import { p } from "framer-motion/client";
+import { useAppSelector } from "@/redux/store";
 
 interface CartItemCardProps {
   item: CartItem;
@@ -29,9 +31,9 @@ export function CartItemCard({
     >
       {/* Product Image */}
       <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-[#F9FAFB]">
-        {item && (
+        {item?.images?.[0] && (
           <Image
-            src={item?.images[0].url}
+            src={item?.images?.[0]?.url}
             alt={item.name}
             fill
             className="object-contain p-1"

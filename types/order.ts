@@ -51,6 +51,12 @@ export type UsersOrder = {
     lastName: string;
     email: string;
     phone: string;
+    state: string;
+    country: string;
+    zip: string;
+    address: string;
+    city: string;
+
     // add more if backend sends more fields
   };
 

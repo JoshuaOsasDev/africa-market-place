@@ -4,6 +4,7 @@
 export interface WishlistItem {
   _id: string;
   name: string;
+  slug: string;
   price: number;
   salePrice?: number;
   images: { url: string }[];
@@ -58,7 +59,7 @@ export default function WishListComp() {
 
       {/* GRID */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {visibleItems?.map((item: any) => (
+        {visibleItems?.map((item: WishlistItem) => (
           <div
             key={item._id}
             className="flex w-full flex-col justify-center gap-5 rounded-[12px] bg-white px-4 py-6 md:w-[260px] md:gap-2.5 md:p-3"
@@ -93,14 +94,14 @@ export default function WishListComp() {
 
             <div className="flex justify-between gap-2 pr-3">
               <Modal>
-                <Modal.Open opens={`delete-wishlist-${item.id}`}>
+                <Modal.Open opens={`delete-wishlist-${item._id}`}>
                   <Button className="rounded-[27px] bg-transparent px-3 py-2 font-medium text-[#FF7566]">
                     <Trash />
                     <span>Remove</span>
                   </Button>
                 </Modal.Open>
                 <Modal.Window
-                  name={`delete-wishlist-${item.id}`}
+                  name={`delete-wishlist-${item._id}`}
                   className="max-w-md"
                 >
                   <DeleteProductModal
