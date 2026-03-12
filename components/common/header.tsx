@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import logo from "../../lib/public/images/africa1_logo.png";
 import { navListArray, navMobileData } from "@/lib/data";
@@ -13,7 +13,6 @@ import {
   X,
   ShoppingCart,
   Heart,
-  LogIn,
   UserRound,
   LogOut,
   User,
@@ -35,24 +34,23 @@ function Header() {
   const wishlist = useAppSelector((state) => state.wishlist);
   const user = useAppSelector((state) => state.user);
   const cart = useAppSelector((state) => state.product.checkout.cart);
-  const [countryListData, setCountryListData] = useState<
-    | {
-        name: string;
-        flagImage: string;
-        alt: string;
-        selected: boolean;
-      }[]
-    | []
-  >([]);
+  // const [countryListData, setCountryListData] = useState<
+  //   | {
+  //       name: string;
+  //       flagImage: string;
+  //       alt: string;
+  //       selected: boolean;
+  //     }[]
+  //   | []
+  // >([]);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCountryListData, setselectedCountryListData] = useState<{
-    name: string;
-    flagImage: string;
-    alt: string;
-  } | null>(null);
+  // const [selectedCountryListData, setselectedCountryListData] = useState<{
+  //   name: string;
+  //   flagImage: string;
+  //   alt: string;
+  // } | null>(null);
   const { mutate: logout, isPending: isLoggingOut } = useSignOut();
-  const router = useRouter();
 
   const path = usePathname();
 
@@ -64,7 +62,7 @@ function Header() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-2 py-3 md:py-4">
           {/* Logo */}
           {mobile[0] && (
-            <div className="relative h-[50px] w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
+            <div className="relative h-12.5 w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
               <Link href={"/"}>
                 <Image
                   src={mobile[0].image ?? ""}
