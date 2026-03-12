@@ -1,10 +1,10 @@
 "use client";
-import Modal from "@/components/common/Modal";
+import Modal from "@/components/common/modal";
 import ReusableTable from "@/components/common/reusableTable";
 import { Eye, Pen, Trash } from "lucide-react";
 import Link from "next/link";
-import EditProduct from "../../vendor/product/EditProduct";
-import DeleteProductModal from "../../vendor/product/DeleteProductModal";
+import EditProduct from "../../vendor/product/editProduct";
+import DeleteProductModal from "../../vendor/product/deleteProductModal";
 import SkeletonTable from "@/components/common/skeletonTable";
 import { formatDate } from "@/lib/utils";
 import { UsersOrder } from "@/types/order";

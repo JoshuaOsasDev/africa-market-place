@@ -1,5 +1,5 @@
 import { getMockCheckoutSummary } from "@/lib/data/mockCheckout";
-import { CheckoutPageClient } from "./CheckoutPageClient";
+import { CheckoutPageClient } from "./checkoutPageClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

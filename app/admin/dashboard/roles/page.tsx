@@ -1,5 +1,5 @@
 "use client";
-import Modal from "@/components/common/Modal";
+import Modal from "@/components/common/modal";
 import CreateRoles from "@/components/pageComponents/admin/roles/createRoles";
 import {
   ChevronDown,

@@ -19,13 +19,13 @@ export interface WishlistSliceState {
   wishlist: WishlistState;
 }
 
-import Modal from "@/components/common/Modal";
-import Pagination from "@/components/common/Pagination";
+import Modal from "@/components/common/modal";
+import Pagination from "@/components/common/pagination";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, Trash } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import DeleteProductModal from "../../vendor/product/DeleteProductModal";
+import DeleteProductModal from "../../vendor/product/deleteProductModal";
 import { useAppSelector } from "@/redux/store";
 import NoOrder from "../../vendor/order/noOrder";
 

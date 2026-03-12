@@ -1,4 +1,4 @@
-import UserInfoComp from "@/components/pageComponents/adminComp/dashboard/UserInfo";
+import UserInfoComp from "@/components/pageComponents/adminComp/dashboard/userInfo";
 
 function page() {
   return (

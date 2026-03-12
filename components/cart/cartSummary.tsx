@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
 import { CartItem } from "@/types/cart";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";

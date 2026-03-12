@@ -6,8 +6,6 @@ import { X } from "lucide-react";
 import { QuantityInput } from "../common/quantityInput";
 import { CartItem } from "@/types/cart";
 import { cn } from "@/lib/utils";
-import { p } from "framer-motion/client";
-import { useAppSelector } from "@/redux/store";
 
 interface CartItemCardProps {
   item: CartItem;

@@ -1,7 +1,7 @@
 "use client";
 
 import ProductHeading from "./productHeading";
-import ProductGeneralInfo from "./ProductGeneralInfo";
+import ProductGeneralInfo from "./productGeneralInfo";
 import SearchAndFilterProduct from "./searchAndFilterProduct";
 import ProductTableReactTable from "./productTableReactTable.tsx";
 import { useAppSelector } from "@/redux/store";

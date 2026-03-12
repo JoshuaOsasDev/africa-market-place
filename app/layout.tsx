@@ -3,11 +3,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/provider/reactQueryProvider";
-import ReduxProvider from "@/provider/ReduxProvider";
+import ReduxProvider from "@/provider/reduxProvider";
 import ToastProvider from "@/provider/toastProvider";
 import StripProvider from "@/provider/stripPaymentProvider";
-
-
 
 export const nunito = Nunito({
   subsets: ["latin"],

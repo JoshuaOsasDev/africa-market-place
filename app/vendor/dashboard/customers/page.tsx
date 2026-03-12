@@ -1,4 +1,4 @@
-import { CustomerReviewStarRating } from "@/components/common/CustomerReviewStarRating";
+import { CustomerReviewStarRating } from "@/components/common/customerReviewStarRating";
 import FilterOptions from "@/components/common/filterOptions";
 import ReviewsSummary from "@/components/pageComponents/vendor/customersReviews/reviewsSummary";
 import { Button } from "@/components/ui/button";

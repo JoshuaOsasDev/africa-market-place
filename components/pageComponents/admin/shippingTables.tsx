@@ -1,11 +1,11 @@
 "use client";
-import Menus from "@/components/common/Menus";
-import Modal from "@/components/common/Modal";
+import Menus from "@/components/common/menus";
+import Modal from "@/components/common/modal";
 import ReusableTable from "@/components/common/reusableTable";
 import { shippingData } from "@/lib/data";
 import { EyeIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
-import DeleteProductModal from "../vendor/product/DeleteProductModal";
+import DeleteProductModal from "../vendor/product/deleteProductModal";
 import { useRouter } from "next/navigation";
 import { div } from "framer-motion/client";
 

@@ -4,12 +4,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { ContactInformationForm } from "@/components/checkout/ContactInformationForm";
-import { ShippingAddressForm } from "@/components/checkout/ShippingAddressForm";
-import { PaymentMethodForm } from "@/components/checkout/PaymentMethodForm";
-import { CheckoutOrderSummary } from "@/components/checkout/CheckoutOrderSummary";
+import { ContactInformationForm } from "@/components/checkout/contactInformationForm";
+import { ShippingAddressForm } from "@/components/checkout/shippingAddressForm";
+import { PaymentMethodForm } from "@/components/checkout/paymentMethodForm";
+import { CheckoutOrderSummary } from "@/components/checkout/checkoutOrderSummary";
 import {
-  CheckoutFormData,
   CheckoutSummary,
   ContactInformation,
   ShippingAddress,

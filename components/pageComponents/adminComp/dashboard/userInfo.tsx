@@ -11,7 +11,7 @@ import TextStyle from "../../../common/textStyle";
 import { Mail, Phone, User } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useMutation } from "@tanstack/react-query";
-import { signUp } from "@/services/apiServices/authApi";
+
 import { setLoaderAction, updateProfileAction } from "@/redux/slices/user";
 import toast from "react-hot-toast";
 import Image from "next/image";
@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { MdCancel } from "react-icons/md";
 import { updateProfileApi } from "@/services/apiServices/userApi";
 import UKAddressAutocomplete from "@/components/common/googlAddressUserLocation";
-import { span } from "framer-motion/client";
+
 
 // Define TypeScript types for form values
 

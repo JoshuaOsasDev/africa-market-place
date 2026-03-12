@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import NavLinks from "./NavLinks";
+import NavLinks from "./navLinks";
 import { Headphones, Settings } from "lucide-react";
 
 const SideBar = () => {

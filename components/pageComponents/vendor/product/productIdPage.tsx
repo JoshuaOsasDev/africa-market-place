@@ -3,7 +3,7 @@ import { useVendorProductById } from "@/lib/hooks/vendorDashboard/useVendor";
 import ProductLinkNav from "./productLinkNav";
 import ProductDetailsButton from "./productDetailsButton";
 import { ArrowLeft } from "lucide-react";
-import ProductDetails from "./ProductDetails";
+import ProductDetails from "./productDetails";
 import Loader from "@/components/common/loader";
 import { Product } from "@/types/product";
 

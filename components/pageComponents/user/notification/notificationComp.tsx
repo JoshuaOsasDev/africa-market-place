@@ -2,8 +2,8 @@
 import { Search, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Modal from "@/components/common/Modal";
-import DeleteProductModal from "../../vendor/product/DeleteProductModal";
+import Modal from "@/components/common/modal";
+import DeleteProductModal from "../../vendor/product/deleteProductModal";
 
 export default function InboxUI() {
   const messages = [
@@ -143,7 +143,7 @@ export default function InboxUI() {
                         </p>
                       </div>
                       {msg.unread && (
-                        <div className="h-4.5 flex w-3.5 items-center rounded-full bg-red-500 px-1 py-0.5">
+                        <div className="flex h-4.5 w-3.5 items-center rounded-full bg-red-500 px-1 py-0.5">
                           <span className="text-xs font-semibold text-white">
                             2
                           </span>

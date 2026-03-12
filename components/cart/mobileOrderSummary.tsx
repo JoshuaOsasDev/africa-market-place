@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { CartItem } from "@/types/cart";
-import { CartItemCard } from "@/components/cart/CartItemCard";
+import { CartItemCard } from "@/components/cart/cartItemCard";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 

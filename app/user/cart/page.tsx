@@ -1,4 +1,4 @@
-import { CartPageClient } from "./CartPageClient";
+import { CartPageClient } from "./cartPageClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -10,12 +10,12 @@ import Link from "next/link";
 
 import { Product } from "@/types/appTypes";
 
-import Modal from "@/components/common/Modal";
+import Modal from "@/components/common/modal";
 
 import SkeletonTable from "@/components/common/skeletonTable";
-import DeleteProductModal from "./DeleteProductModal";
-import EditProduct from "./EditProduct";
-import Pagination from "@/components/common/Pagination";
+import DeleteProductModal from "./deleteProductModal";
+import EditProduct from "./editProduct";
+import Pagination from "@/components/common/pagination";
 
 const statusStyles: Record<Product["status"], string> = {
   published: "bg-green-100 text-green-700",
@@ -121,7 +121,7 @@ export default function ProductTableReactTable({
   //Select checkbox logic
   const select = useRowSelect(data, {
     onChange: (action, state) => {
-     // console.log("Selected rows:", state.ids);
+      // console.log("Selected rows:", state.ids);
     },
   });
 

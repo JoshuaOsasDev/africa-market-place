@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import React, { useRef, useState } from "react";
 import Slider from "react-slick";
 import { sliderCardData } from "@/lib/data";
-import SlideCard from "../pageComponents/user/Home/slideCard";
+import SlideCard from "../pageComponents/user/home/slideCard";
 import { sliderCardPropType } from "@/types/appTypes";
 import { useSlider } from "@/lib/hooks/userDashboard/useUser";
 import SliderSkeleton from "./sliderSkeleton";

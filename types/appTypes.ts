@@ -3,11 +3,7 @@ import { StaticImageData } from "next/image";
 import { ReactElement, ReactNode } from "react";
 
 export type searchFieldCompType = {
-  inputPlaceholder: string;
-  inputTextStyle: string;
   inputDivStyle: string;
-  inputState: string;
-  setInputState: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export type sliderCardPropType = {

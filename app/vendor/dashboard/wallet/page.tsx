@@ -1,5 +1,5 @@
 "use client";
-import Modal from "@/components/common/Modal";
+import Modal from "@/components/common/modal";
 import PayoutHistoryTable from "@/components/pageComponents/vendor/wallet/payoutHistoryTable";
 import WithdrawModal from "@/components/pageComponents/vendor/wallet/withdrawModal";
 import { Button } from "@/components/ui/button";

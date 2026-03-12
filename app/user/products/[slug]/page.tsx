@@ -2,7 +2,7 @@ import {
   getMockProduct,
   getMockRelatedProducts,
 } from "@/lib/data/mockProducts";
-import { ProductDetailClient } from "./ProductDetailClient";
+import { ProductDetailClient } from "./productDetailClient";
 import { Metadata } from "next";
 
 interface ProductPageProps {

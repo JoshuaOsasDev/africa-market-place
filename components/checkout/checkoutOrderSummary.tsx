@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckoutOrderItem } from "@/components/checkout/CheckoutOrderItem";
+import { CheckoutOrderItem } from "@/components/checkout/checkoutOrderItem";
 import { CheckoutSummary, CheckoutOrderItem as OrderItemType } from "@/types/checkout";
 import { cn } from "@/lib/utils";
 

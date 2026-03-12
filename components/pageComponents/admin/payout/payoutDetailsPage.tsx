@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { BadgeCheck, Ban, Copy, Eye, MoreVertical } from "lucide-react";
 import ReusableTable from "@/components/common/reusableTable";
-import Modal from "@/components/common/Modal";
-import Menus from "@/components/common/Menus";
-import DeleteProductModal from "../../vendor/product/DeleteProductModal";
+import Modal from "@/components/common/modal";
+import Menus from "@/components/common/menus";
+import DeleteProductModal from "../../vendor/product/deleteProductModal";
 
 export default function PayoutDetailsPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

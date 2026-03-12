@@ -35,7 +35,6 @@ function Header() {
   const wishlist = useAppSelector((state) => state.wishlist);
   const user = useAppSelector((state) => state.user);
   const cart = useAppSelector((state) => state.product.checkout.cart);
-  const [userTextInput, setuserTextInput] = useState("");
   const [countryListData, setCountryListData] = useState<
     | {
         name: string;
@@ -149,6 +148,7 @@ function Header() {
                   <X className="h-6 w-6" />
                 </Button>
               </div>
+
               {mobile.slice(1).map((data) => {
                 const Icon = data.icon;
                 const isActive = path === data.href;
@@ -377,19 +377,13 @@ function Header() {
             />
           </Link>
         </div>
-        {/* logo section ends */}
+
         {/* other section starts */}
         <div className="w-full flex-1 space-y-1">
           {/* top left section starts */}
           <div className="flex flex-1 flex-row space-x-5">
             <div className="flex-1">
-              <SearchFieldComp
-                inputDivStyle="block w-full max-w-lg"
-                inputPlaceholder="Search for food items here..."
-                setInputState={setuserTextInput}
-                inputState={userTextInput}
-                inputTextStyle="flex-1"
-              />
+              <SearchFieldComp inputDivStyle="block w-full max-w-lg" />
             </div>
             <div className="flex flex-row items-center space-x-2">
               <div className="ml-2 flex flex-row items-center space-x-3">

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { StarRating } from "@/components/common/starRating";
-import { CountryFlag } from "@/components/common/CountryFlag";
+import { CountryFlag } from "@/components/common/countryFlag";
 import { Review } from "@/types/review";
 import { cn } from "@/lib/utils";
 
@@ -14,14 +14,14 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
   return (
     <div
       className={cn(
-        "py-4 border-b border-[#E5E7EB] last:border-b-0",
-        className
+        "border-b border-[#E5E7EB] py-4 last:border-b-0",
+        className,
       )}
     >
       <div className="flex items-start gap-3">
         <div className="shrink-0">
           {review.userAvatar ? (
-            <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[#E5E7EB]">
+            <div className="relative h-10 w-10 overflow-hidden rounded-full bg-[#E5E7EB]">
               <Image
                 src={review.userAvatar}
                 alt={review.userName}
@@ -30,9 +30,9 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
               />
             </div>
           ) : (
-            <div className="w-10 h-10 rounded-full bg-[#E5E7EB] flex items-center justify-center">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E5E7EB]">
               <svg
-                className="w-6 h-6 text-[#9CA3AF]"
+                className="h-6 w-6 text-[#9CA3AF]"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -47,9 +47,9 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
         </div>
 
         {/* Review Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <h4 className="text-[#111827] font-semibold text-sm lg:text-base">
+        <div className="min-w-0 flex-1">
+          <div className="mb-1 flex flex-wrap items-center gap-2">
+            <h4 className="text-sm font-semibold text-[#111827] lg:text-base">
               {review.userName}
             </h4>
             {review.countryFlag && (
@@ -61,11 +61,11 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
             <StarRating rating={review.rating} size={14} />
           </div>
 
-          <p className="text-[#6F6F6F] text-sm lg:text-base leading-relaxed mb-2">
+          <p className="mb-2 text-sm leading-relaxed text-[#6F6F6F] lg:text-base">
             {review.comment}
           </p>
 
-          <p className="text-[#9CA3AF] text-xs lg:text-sm">{review.date}</p>
+          <p className="text-xs text-[#9CA3AF] lg:text-sm">{review.date}</p>
         </div>
       </div>
     </div>

@@ -5,7 +5,6 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useVendorCreateProduct } from "@/lib/hooks/vendorDashboard/useVendor";
-import { createVendorProduct } from "@/services/apiServices/vendorDashboard";
 import { CategoryType } from "@/types/product";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setShowForm } from "@/redux/slices/showFormSlice";

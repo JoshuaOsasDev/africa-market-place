@@ -1,7 +1,7 @@
 import Banner from "@/components/common/banner";
 import Footer from "@/components/common/footer";
 import Header from "@/components/common/header";
-import { CategoryProvider } from "@/components/pageComponents/user/categories/CategoryContext";
+import { CategoryProvider } from "@/components/pageComponents/user/categories/categoryContext";
 
 function layout({ children }: { children: React.ReactNode }) {
   return (

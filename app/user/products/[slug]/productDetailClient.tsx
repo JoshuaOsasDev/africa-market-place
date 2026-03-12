@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Product, RelatedProduct } from "@/types/product";
+import { Product } from "@/types/product";
 import { ProductImageGallery } from "@/components/product/productImageGallery";
 import { ProductInfo } from "@/components/product/productInfo";
 import { ProductTabs } from "@/components/product/productTabs";

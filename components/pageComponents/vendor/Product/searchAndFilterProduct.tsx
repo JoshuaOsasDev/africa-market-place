@@ -1,6 +1,6 @@
 "use client";
 
-import FilterDates from "@/components/common/FilterDates";
+import FilterDates from "@/components/common/filterDates";
 import FilterOptions from "@/components/common/filterOptions";
 import SearchBar from "@/components/common/searchBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

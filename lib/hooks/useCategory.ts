@@ -1,4 +1,4 @@
-import { CategoryContext } from "@/components/pageComponents/user/categories/CategoryContext";
+import { CategoryContext } from "@/components/pageComponents/user/categories/categoryContext";
 import { useContext } from "react";
 
 export function useCategory() {

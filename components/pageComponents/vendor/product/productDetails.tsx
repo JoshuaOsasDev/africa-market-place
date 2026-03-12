@@ -2,8 +2,8 @@ import Image from "next/image";
 
 import { ImageOff, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Modal from "@/components/common/Modal";
-import EditProduct from "./EditProduct";
+import Modal from "@/components/common/modal";
+import EditProduct from "./editProduct";
 import { CategoryType, Product } from "@/types/product";
 import { calculateProductStatus } from "./productStatus";
 import { useAppSelector } from "@/redux/store";

@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { CartItem } from "@/types/cart";
-import { CartItemRow } from "@/components/cart/CartItemRow";
-import { CartSummary } from "@/components/cart/CartSummary";
-import { CouponCode } from "@/components/cart/CouponCode";
-import { MobileOrderSummary } from "@/components/cart/MobileOrderSummary";
+import { CartItemRow } from "@/components/cart/cartItemRow";
+import { CartSummary } from "@/components/cart/cartSummary";
+import { CouponCode } from "@/components/cart/couponCode";
+import { MobileOrderSummary } from "@/components/cart/mobileOrderSummary";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useCart } from "@/lib/hooks/useCart";
 import { useCallback } from "react";
