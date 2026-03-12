@@ -11,7 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { DashboardChartsProps } from "../vendorComp/dashboard/DashboardCharts";
+import { DashboardChartsProps } from "../vendorComp/dashboard/dashboardCharts";
 
 // const CustomTooltip = ({ active, payload }) => {
 //   if (active && payload && payload.length) {

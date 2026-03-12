@@ -1,5 +1,5 @@
 import Carousel from "@/components/common/carousel";
-import HomeAccordion from "./HomeAccordion";
+import HomeAccordion from "./homeAccordion";
 
 function SlidderComp() {
   return (

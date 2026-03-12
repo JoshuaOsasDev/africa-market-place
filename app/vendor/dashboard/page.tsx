@@ -1,13 +1,10 @@
 "use client";
 import Loader from "@/components/common/loader";
-import DashboardCharts from "@/components/pageComponents/vendorComp/dashboard/DashboardCharts";
+import DashboardCharts from "@/components/pageComponents/vendorComp/dashboard/dashboardCharts";
 import DashboardFilter from "@/components/pageComponents/vendorComp/dashboard/dashboardFilter";
 import DashboardSalesAndProduct from "@/components/pageComponents/vendorComp/dashboard/dashboardSalesAndProduct";
 import DashboardSummary from "@/components/pageComponents/vendorComp/dashboard/dashboardSumarry";
-import {
-  useVendorDashboardAnalytics,
-  useVendorProducts,
-} from "@/lib/hooks/vendorDashboard/useVendor";
+import { useVendorDashboardAnalytics } from "@/lib/hooks/vendorDashboard/useVendor";
 
 const DashboardPage = () => {
   //Hook to get DashBoard analytics
