@@ -219,13 +219,7 @@ function Header() {
           {/* top left section starts */}
           <div className="flex w-full items-center justify-between pr-5">
             <div className="">
-              <SearchFieldComp
-                inputDivStyle="block py-2.5 px-3 w-[440px]"
-                inputPlaceholder="Search for food items here..."
-                setInputState={setuserTextInput}
-                inputState={userTextInput}
-                inputTextStyle="flex-1"
-              />
+              <SearchFieldComp inputDivStyle="block py-2.5 px-3 w-[440px]" />
             </div>
             <div className="flex flex-row items-center space-x-2">
               <div className="hidden flex-row space-x-2 lg:flex">
