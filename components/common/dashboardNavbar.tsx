@@ -2,9 +2,6 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import searchIcon from "../../lib/public//vendor/dashboard-images/search-icon.svg";
-import notificationIcon from "../../lib/public/common/notification-icon-filled.svg";
-
-import profilePicture from "../../lib/public/vendor/dashboard-images/profile-picture.svg";
 
 import Link from "next/link";
 import { Bell, Mail, MailIcon, Menu, Search, User, X } from "lucide-react";

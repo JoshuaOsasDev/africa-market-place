@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { loginSchema } from "@/lib/utility/yupvalidation";
-import TextStyle from "../../../common/textStyle";
+import TextStyle from "@/components/common/textStyle";
 import { Eye, EyeOff, Mail } from "lucide-react";
 import Image from "next/image";
 import { useGoogleLogin } from "@react-oauth/google";

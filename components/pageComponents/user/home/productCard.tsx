@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MdStar } from "react-icons/md";
 
-function ProductCard({ product }: { product: any }) {
+export default function ProductCard({ product }: { product: any }) {
   const { isInCart, addToCart, removeFromCart, isAdding, isRemoving } =
     useCart(product);
 

@@ -2,11 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import TextStyle from "../common/textStyle";
-import { MdStar } from "react-icons/md";
-import { CartButton } from "../common/cartButton";
-import { Product } from "@/types/product";
-import { StarRating } from "../common/starRating";
+import TextStyle from "@/components/common/textStyle";
+import { CartButton } from "@/components/common/cartButton";
+import { StarRating } from "@/components/common/starRating";
 
 export function ProductCard(product: any) {
   const data = product?.product;

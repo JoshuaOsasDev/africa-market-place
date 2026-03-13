@@ -1,5 +1,3 @@
-import Banner from "@/components/common/banner";
-import Header from "../components/common/header";
 import Footer from "@/components/common/footer";
 import SlidderComp from "@/components/pageComponents/user/home/slidderComp";
 
@@ -8,6 +6,7 @@ import Newletter from "@/components/pageComponents/user/home/newletter";
 import Topcategories from "@/components/pageComponents/user/home/topcategories";
 import { HealthSafetyBanner } from "@/components/common/healthSafetyBanner";
 import DealsForTheDay from "@/components/pageComponents/user/home/dealsForTheDay";
+import Header from "@/components/common/header";
 
 export default async function Home() {
   return (

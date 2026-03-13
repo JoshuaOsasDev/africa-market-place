@@ -1,6 +1,6 @@
 import { searchFieldCompType } from "@/types/appTypes";
 import React from "react";
-import HomeSearch from "../pageComponents/user/home/homeSearch";
+import HomeSearch from "@/components/pageComponents/user/home/homeSearch";
 
 function SearchFieldComp({ inputDivStyle }: searchFieldCompType) {
   return (

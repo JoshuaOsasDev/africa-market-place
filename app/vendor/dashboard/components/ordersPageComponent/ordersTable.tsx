@@ -10,12 +10,7 @@ import { getTheme } from "@table-library/react-table-library/baseline";
 import { useRowSelect } from "@table-library/react-table-library/select";
 import { useSort } from "@table-library/react-table-library/sort";
 import { Identifier } from "@table-library/react-table-library/types/table";
-// -----------------------------------
 
-// --- External Component Imports (Assumed Paths) ---
-// NOTE: Ensure the path to your Pagination component is correct.
-import Pagination from "../../../../../components/common/pagination";
-// ---------------------------------------------------
 
 // --- ICON & IMAGE IMPORTS (Ensure these paths are correct) ---
 import viewIcon from "../../../../../public/vendor/dashboard-images/view-icon.svg";
@@ -23,6 +18,7 @@ import editIcon from "../../../../../public/vendor/dashboard-images/edit-icon.sv
 import tomatoesImage from "../../../../../public/vendor/dashboard-images/orders-page-images/tomatoes-image.png";
 import greenPepperImage from "../../../../../public/vendor/dashboard-images/orders-page-images/green-pepper-image.png";
 import potatoesImage from "../../../../../public/vendor/dashboard-images/orders-page-images/potatoes-image.png";
+import Pagination from "@/components/common/pagination";
 // -------------------------------------------------------------------------------
 
 // --- 1. TYPES, DATA, AND HELPERS ---

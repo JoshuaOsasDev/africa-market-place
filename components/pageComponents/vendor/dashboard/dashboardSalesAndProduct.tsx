@@ -2,7 +2,6 @@ import { salesData } from "@/lib/data";
 import { MoreVertical } from "lucide-react";
 import Image from "next/image";
 import FilterButton from "@/components/common/filterButton";
-import ProductTableReactTable from "../product/productTableReactTable.tsx";
 
 export default function DashboardSalesAndProduct() {
   return (

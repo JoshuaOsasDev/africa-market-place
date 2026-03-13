@@ -7,10 +7,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-import TextStyle from "../../../common/textStyle";
+import TextStyle from "@/components/common/textStyle";
 import { Eye, EyeOff, Mail } from "lucide-react";
-import BackButton from "../../../common/backButton";
-import DailyLayout from "../../../common/vendorDailyLayout";
+import BackButton from "@/components/common/backButton";
+import DailyLayout from "@/components/common/vendorDailyLayout";
 import { toast, ToastContainer } from "react-toastify";
 import { loginSchema } from "@/lib/utility/yupvalidation";
 

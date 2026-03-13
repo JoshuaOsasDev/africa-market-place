@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { userProfileSchema } from "@/lib/utility/yupvalidation";
 
-import TextStyle from "../../../common/textStyle";
+import TextStyle from "@/components/common/textStyle";
 import { Mail, Phone, User } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useMutation } from "@tanstack/react-query";

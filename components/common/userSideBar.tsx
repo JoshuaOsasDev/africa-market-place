@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { BiSupport } from "react-icons/bi";
 import UserNavLinks from "./userNavLinks";
-import UserSettingComp from "../pageComponents/user/dashboard/userSettingComp";
+import UserSettingComp from "@/components/pageComponents/user/dashboard/userSettingComp";
 import clsx from "clsx";
 
 const SideBar = () => {

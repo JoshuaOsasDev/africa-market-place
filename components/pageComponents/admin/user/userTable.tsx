@@ -6,7 +6,7 @@ import ReusableTable from "@/components/common/reusableTable";
 import { EyeIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import DeleteProductModal from "../../vendor/product/deleteProductModal";
+import DeleteProductModal from "@/components/pageComponents/vendor/product/deleteProductModal";
 import { formatDate } from "@/lib/utils";
 import { capitalize } from "lodash";
 import { div } from "framer-motion/client";

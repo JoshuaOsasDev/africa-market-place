@@ -4,7 +4,7 @@ import Modal from "@/components/common/modal";
 import ReusableTable from "@/components/common/reusableTable";
 import { BadgeCheck, Ban, Eye } from "lucide-react";
 import { useState } from "react";
-import DeleteProductModal from "../../vendor/product/deleteProductModal";
+import DeleteProductModal from "@/components/pageComponents/vendor/product/deleteProductModal";
 import { useAdminShopApproval } from "@/lib/hooks/adminDashboardApi/useAdmin";
 import Image from "next/image";
 import SkeletonTable from "@/components/common/skeletonTable";

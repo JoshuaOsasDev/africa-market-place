@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AxiosError } from "axios";
 import { signUpSchema } from "@/lib/utility/yupvalidation";
-import TextStyle from "../../../common/textStyle";
+import TextStyle from "@/components/common/textStyle";
 import { Eye, EyeOff, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/redux/store";

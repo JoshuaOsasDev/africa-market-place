@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
-import { QuantityInput } from "../common/quantityInput";
+import { QuantityInput } from "@/components/common/quantityInput";
 import { CartItem } from "@/types/cart";
 import { cn } from "@/lib/utils";
 

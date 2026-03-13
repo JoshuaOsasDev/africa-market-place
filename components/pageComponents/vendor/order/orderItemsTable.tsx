@@ -1,19 +1,14 @@
-import Menus from "@/components/common/menus";
-import Modal from "@/components/common/modal";
 import ReusableTable from "@/components/common/reusableTable";
-import { Eye, Pen, Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useState } from "react";
 
 import { useRouter } from "next/navigation";
-import DeleteProductModal from "../product/deleteProductModal";
 import { formatDate } from "@/lib/utils";
 import { Order } from "@/types/appTypes";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function OrderItemsTable({ orders }: { orders: Order[] }) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const router = useRouter();
 
   // Status badge styles
   const getStatusStyles = (status: string) => {

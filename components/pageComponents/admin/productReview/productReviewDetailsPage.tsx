@@ -4,13 +4,12 @@ import Modal from "@/components/common/modal";
 import ReusableTable from "@/components/common/reusableTable";
 import { BadgeCheck, Ban, Eye } from "lucide-react";
 import { useState } from "react";
-import DeleteProductModal from "../../vendor/product/deleteProductModal";
+import DeleteProductModal from "@/components/pageComponents/vendor/product/deleteProductModal";
 import { useAdminProductApproval } from "@/lib/hooks/adminDashboardApi/useAdmin";
 import { format } from "date-fns";
 import Image from "next/image";
 import SkeletonTable from "@/components/common/skeletonTable";
 import { ProductReview } from "@/types/product";
-import EditProduct from "../../vendor/product/editProduct";
 import ProductReviewModal from "./productReviewModal";
 
 export default function ProductReviewDetailsPage({

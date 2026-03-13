@@ -2,15 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { AxiosError } from "axios";
 
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
+import { Mail } from "lucide-react";
 import Image from "next/image";
 import TextStyle from "@/components/common/textStyle";
-import BackButton from "../../../common/backButton";
-import DailyLayout from "../../../common/vendorDailyLayout";
+import BackButton from "@/components/common/backButton";
+import DailyLayout from "@/components/common/vendorDailyLayout";
 import Link from "next/link";
 import { verifyEmailSchema } from "@/lib/utility/yupvalidation";
 

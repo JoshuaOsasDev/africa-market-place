@@ -1,16 +1,10 @@
 "use client";
 import { useVEndorOrderSlug } from "@/lib/hooks/vendorDashboard/useVendor";
-import ProductDetailsButton from "../product/productDetailsButton";
-import ProductLinkNav from "../product/productLinkNav";
-import OrderDetails from "./orderDetails";
-import { getvendorOrderSlug } from "@/services/apiServices/vendorDashboard";
+import ProductDetailsButton from "@/components/pageComponents/vendor/product/productDetailsButton";
+import ProductLinkNav from "@/components/pageComponents/vendor/product/productLinkNav";
 import OrderManagementUI from "./orderDetails";
 export default function OrderIdPage(ordersId: { ordersId: string }) {
-  const {
-    data: order,
-    isLoading,
-    error,
-  } = useVEndorOrderSlug(ordersId.ordersId);
+  const { data: order } = useVEndorOrderSlug(ordersId.ordersId);
 
   // console.log(order, "order details");
   return (

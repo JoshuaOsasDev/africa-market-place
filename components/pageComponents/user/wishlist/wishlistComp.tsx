@@ -25,9 +25,9 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBag, Trash } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import DeleteProductModal from "../../vendor/product/deleteProductModal";
+import DeleteProductModal from "@/components/pageComponents/vendor/product/deleteProductModal";
 import { useAppSelector } from "@/redux/store";
-import NoOrder from "../../vendor/order/noOrder";
+import NoOrder from "@/components/pageComponents/vendor/order/noOrder";
 
 export default function WishListComp() {
   const itemsPerPage = 12; // 4 columns × 3 rows
