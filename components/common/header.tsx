@@ -22,6 +22,9 @@ import {
   HousePlus,
   LogInIcon,
   FileStack,
+  Settings,
+  Contact,
+  ContactIcon,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -58,58 +61,9 @@ function Header() {
 
   return (
     <div className="md:pt-2">
-      <div className="fixed z-50 w-full bg-white shadow-md md:hidden">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-2 py-3 md:py-4">
-          {/* Logo */}
-          {mobile[0] && (
-            <div className="relative h-12.5 w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
-              <Link href={"/"}>
-                <Image
-                  src={mobile[0].image ?? ""}
-                  alt="africa market place logo"
-                  fill
-                  className="object-contain"
-                />
-              </Link>
-            </div>
-          )}
-          <div className="flex items-center justify-center space-x-10">
-            <div className="relative flex h-6 w-6 items-center space-x-3">
-              <Link
-                href={"/user/dashboard/wishlist"}
-                className="relative h-6 w-6"
-              >
-                <Heart
-                  className={`h-6 w-6 ${
-                    path === "/user/dashboard/wishlist"
-                      ? "text-[#4F912F]"
-                      : "text-[#6F6F6F]"
-                  }`}
-                />
-                {wishlist.wishlist?.data?.length > 0 && (
-                  <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
-                    <span className="text-[10px] text-white">
-                      {wishlist.wishlist?.data?.length || 0}
-                    </span>
-                  </div>
-                )}
-              </Link>
-
-              <Link href={"/user/cart"} className="relative h-6 w-6">
-                <ShoppingCart
-                  className={`h-6 w-6 ${
-                    path === "/user/cart" ? "text-[#4F912F]" : "text-[#6F6F6F]"
-                  }`}
-                />
-                {cart?.length > 0 && (
-                  <div className="absolute -right-2 bottom-3 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
-                    <span className="text-[10px] text-white">
-                      {cart?.length}
-                    </span>
-                  </div>
-                )}
-              </Link>
-            </div>
+      <div className="fixed z-50 w-full bg-white pr-7 shadow-md md:hidden">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-2 md:py-4">
+          <div className="flex items-center justify-center">
             {/* Hamburger Menu Button (Mobile only) */}
             <Button
               variant="ghost"
@@ -120,23 +74,71 @@ function Header() {
               {isOpen ? (
                 <X className="h-6 w-6" />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className="h-12.5 w-12.5" size={2000} />
               )}
             </Button>
+            {/* Logo */}
+            {mobile[0] && (
+              <div className="relative h-12.5 w-12.5">
+                <Link href={"/"}>
+                  <Image
+                    src={mobile[0].image ?? ""}
+                    alt="africa market place logo"
+                    fill
+                    className="object-contain"
+                  />
+                </Link>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center justify-center space-x-1">
+            <div className="relative flex h-6 w-6 items-center">
+              <div className="group relative mr-2 flex items-center space-x-1">
+                <Link href={"/user/cart"} className="relative h-6 w-6">
+                  <ShoppingCart
+                    className={`h-6 w-6 ${
+                      path === "/user/cart"
+                        ? "text-[#4F912F]"
+                        : "text-[#6F6F6F]"
+                    }`}
+                  />
+                  {cart?.length > 0 && (
+                    <div className="absolute -right-2 bottom-3 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                      <span className="text-[10px] text-white">
+                        {cart?.length}
+                      </span>
+                    </div>
+                  )}
+                </Link>
+                {/* Profile Image */}
+                {user?.user && (
+                  <div className="relative h-6 w-6 cursor-pointer">
+                    <Image
+                      src={
+                        user.user?.cover?.url ||
+                        "/images/avatar-placeholder.png"
+                      }
+                      alt="User Profile"
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-
         {/* Animated Mobile Menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ x: "100%", opacity: 0 }}
+              initial={{ x: "-100%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "100%", opacity: 0 }}
+              exit={{ x: "-100%", opacity: 0 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="fixed top-0 right-0 z-40 flex h-screen w-3/6 flex-col border-l border-gray-200 bg-white shadow-lg md:hidden"
+              className="fixed top-0 left-0 z-40 flex h-screen w-3/6 flex-col border-l border-gray-200 bg-white shadow-lg md:hidden"
             >
-              <div className="flex justify-end pb-1">
+              <div className="flex pb-1 pl-1">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -203,71 +205,36 @@ function Header() {
                     </span>
                   </div>
                 </Link>
-                <Link
-                  href="/user/cart"
-                  className={`mb-1 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
-                    path === "/user/cart" ? "bg-[#E8F5E9]" : "bg-gray-100"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <ShoppingCartIcon
-                      className={`h-5 w-5 ${
-                        path === "/user/cart"
-                          ? "text-[#4F912F]"
-                          : "text-gray-700 hover:text-[#4F912F]"
-                      }`}
-                    />
-                    <span
-                      className={`text-sm font-medium ${
-                        path === "/user/cart"
-                          ? "text-[#4F912F]"
-                          : "text-gray-700"
-                      }`}
-                    >
-                      Cart
-                    </span>
-                  </div>
 
-                  {cart?.length > 0 && (
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                      {cart.length}
+                {user.user && (
+                  <Link
+                    href="/user/dashboard/userInfo"
+                    className={`flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                      path === "/user/dashboard/userInfo"
+                        ? "bg-[#E8F5E9]"
+                        : "bg-gray-100"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <UserRound
+                        className={`h-5 w-5 ${
+                          path === "/user/dashboard/userInfo"
+                            ? "text-[#4F912F]"
+                            : "text-gray-700"
+                        }`}
+                      />
+                      <span
+                        className={`text-sm font-medium ${
+                          path === "/user/dashboard/userInfo"
+                            ? "text-[#4F912F]"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        User
+                      </span>
                     </div>
-                  )}
-                </Link>
-
-                <Link
-                  href="/user/dashboard/wishlist"
-                  className={`flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
-                    path === "/user/dashboard/wishlist"
-                      ? "bg-[#E8F5E9]"
-                      : "bg-gray-100"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Heart
-                      className={`h-5 w-5 ${
-                        path === "/user/dashboard/wishlist"
-                          ? "text-[#4F912F]"
-                          : "text-gray-700"
-                      }`}
-                    />
-                    <span
-                      className={`text-sm font-medium ${
-                        path === "/user/dashboard/wishlist"
-                          ? "text-[#4F912F]"
-                          : "text-gray-700"
-                      }`}
-                    >
-                      WishList
-                    </span>
-                  </div>
-
-                  {wishlist.wishlist?.data?.length > 0 && (
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                      {wishlist.wishlist?.data?.length || ""}
-                    </div>
-                  )}
-                </Link>
+                  </Link>
+                )}
 
                 {user?.user ? (
                   <button

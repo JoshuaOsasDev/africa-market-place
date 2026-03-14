@@ -108,14 +108,14 @@ export const useAdminDashboardAnalytics = () => {
 
 //Hook for all categories
 
-export const useAllCategories = (enabledFire: boolean) => {
+export const useAllCategories = () => {
   const {
     isLoading,
     data: allCategories,
     error,
   } = useQuery({
     queryKey: ["get-all-categories"],
-    enabled: enabledFire,
+    enabled: true,
     queryFn: getAllCategories,
   });
   return { isLoading, allCategories, error };

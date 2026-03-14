@@ -22,7 +22,7 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const shouldFetch =
     user?.user?.role === "user" || user?.user?.role === "vendor";
-  const { allCategories } = useAllCategories(shouldFetch);
+  const { allCategories } = useAllCategories();
   useEffect(() => {
     if (allCategories?.length > 0) return;
     if (allCategories) {
