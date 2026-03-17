@@ -57,6 +57,7 @@ export default function DealsForTheDay() {
             salePrice={product.price}
             rate={product.rate}
             description={product.description || ""}
+            slug={product.slug}
           />
         ))}
       </div>

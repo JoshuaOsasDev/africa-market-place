@@ -9,7 +9,7 @@ import { Product } from "@/types/product";
 
 function BestSellingProducts() {
   //get product hook
-  const { isLoading, userProducts, error } = useUserProducts();
+  const { isLoading, userProducts } = useUserProducts();
 
   const product = userProducts?.data;
 
@@ -42,7 +42,7 @@ function BestSellingProducts() {
           Vendors have not uploaded any products yet.
         </p>
       ) : (
-        <div className="xs:grid-cols-2 grid grid-cols-1 gap-4 px-5 sm:grid-cols-3 md:grid-cols-4 md:px-1">
+        <div className="grid grid-cols-1 justify-items-center gap-3 px-4 sm:grid-cols-2 sm:justify-items-stretch md:grid-cols-3 md:gap-6 lg:grid-cols-4 xl:grid-cols-5">
           {product?.map((data: Product) => (
             <ProductCard key={data._id} product={data} />
           ))}

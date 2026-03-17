@@ -94,7 +94,7 @@ export function MobileOrderSummary({
         </div>
       </div>
 
-      <Link href="#" className="mt-6 block">
+      <Link href="/user/checkout" className="mt-6 block">
         <button className="w-full rounded-full bg-[#2E7D32] py-3 font-semibold text-white transition-colors hover:bg-[#246628]">
           Proceed to checkout
         </button>

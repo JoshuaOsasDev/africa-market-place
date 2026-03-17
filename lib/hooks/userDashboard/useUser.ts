@@ -1,20 +1,30 @@
-import { addCart, deleteCart, resetCart } from "@/redux/slices/product";
+import {
+  addCart,
+  deleteCart,
+  resetCart,
+  setCart,
+} from "@/redux/slices/product";
 import { setLogoutAction } from "@/redux/slices/user";
 import { resetWishlistAction } from "@/redux/slices/wishlist";
 import { useAppDispatch } from "@/redux/store";
 import { signOut } from "@/services/apiServices/authApi";
 import {
   addToCart,
+  clearUserCart,
   createImageSlider,
+  deleteDelivery,
+  getAllDelivery,
   getSlider,
   getUserCart,
   getUserOrder,
   getUserProducts,
   getUserProductsBySlug,
   getUserWishlist,
+  postDelivery,
   postUserOrder,
   PostUserWishlist,
   removeFromCart,
+  updateDelivery,
 } from "@/services/apiServices/userDashboard";
 import { Product } from "@/types/product";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -254,6 +264,133 @@ export const useCreateSlider = () => {
           fontWeight: "500",
         },
       });
+    },
+  });
+
+  return { mutate, isPending };
+};
+
+export const useAllDelivery = () => {
+  const {
+    isLoading,
+    data: deliveries,
+    error,
+  } = useQuery({
+    queryKey: ["all-deliveries"],
+    queryFn: getAllDelivery,
+    throwOnError: true,
+  });
+
+  return { isLoading, deliveries, error };
+};
+
+export const useUpdateDelivery = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: any }) =>
+      updateDelivery(id, payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["all-deliveries"],
+      });
+
+      toast.success("Delivery Details Updated", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+  });
+
+  return { mutate, isPending };
+};
+
+export const useCreateDelivery = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (payload: any) => postDelivery(payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["all-deliveries"],
+      });
+
+      toast.success("Delivery Details Posted", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+  });
+
+  return { mutate, isPending };
+};
+
+export const useDeleteDelivery = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (id: string) => deleteDelivery(id),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["all-deliveries"],
+      });
+
+      toast.success("Delivery Details Posted", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+  });
+
+  return { mutate, isPending };
+};
+
+export const useCreateOrder = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (payload: any) => postUserOrder(payload),
+
+    onSuccess: async (data) => {
+      const orderId = data._id;
+      // 1. Clear cart on server
+      await clearUserCart();
+
+      // 2. Clear cart in Redux
+      dispatch(resetCart());
+
+      // 3. Invalidate both cart and order queries
+      queryClient.invalidateQueries({ queryKey: ["order"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+
+      toast.success("Order placed successfully!", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: { color: "#16a34a", fontWeight: "500" },
+      });
+
+      router.push(`/user/payment/${orderId}`);
     },
   });
 

@@ -8,7 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function CheckoutPage() {
-  const checkoutSummary = getMockCheckoutSummary();
-
-  return <CheckoutPageClient initialSummary={checkoutSummary} />;
+  return <CheckoutPageClient />;
 }

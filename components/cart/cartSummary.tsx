@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { usePostOrder } from "@/lib/hooks/userDashboard/useUser";
 import { postUserOrder } from "@/services/apiServices/userDashboard";
+import Link from "next/link";
 
 interface CartSummaryProps {
   summary: CartItem[];
@@ -20,38 +21,6 @@ export function CartSummary({ className }: CartSummaryProps) {
   const cart = useAppSelector((state) => state.product.checkout.cart);
   // console.log(subtotal, cart, "dis");
 
-  const { mutate: createOrder, isPending } = usePostOrder();
-
-  const handlePostOrder = () => {
-    const data = {
-      user: {
-        firstName: users?.firstName,
-        lastName: users?.lastName,
-        email: users?.email,
-        address: users?.address,
-        city: users?.city,
-        phone: users?.phone,
-      },
-
-      items: cart?.map((item: any) => ({
-        pid: item.pid,
-        name: item.name,
-        salePrice: item.salePrice,
-        sku: item.sku,
-        shop: item.shop,
-        quantity: item.quantity,
-        subtotal: item.subtotal,
-        image: item.images[0]?.url,
-      })),
-      subtotal,
-      shipping,
-      discount,
-      total,
-    };
-
-    // createOrder(data);
-    postUserOrder(data);
-  };
   return (
     <div
       className={cn(
@@ -93,12 +62,11 @@ export function CartSummary({ className }: CartSummaryProps) {
         </div>
       </div>
 
-      <button
-        onClick={handlePostOrder}
-        className="w-full cursor-pointer rounded-full bg-[#2E7D32] py-3 font-semibold text-white transition-colors hover:bg-[#246628]"
-      >
-        Proceed to Checkout
-      </button>
+      <Link href={"/user/checkout"}>
+        <button className="w-full cursor-pointer rounded-full bg-[#2E7D32] py-3 font-semibold text-white transition-colors hover:bg-[#246628]">
+          Proceed to Checkout
+        </button>
+      </Link>
     </div>
   );
 }
