@@ -12,6 +12,7 @@ interface ShippingAddressFormProps {
   onChange: (values: ShippingAddress) => void;
   useDifferentBilling: boolean;
   onBillingChange: (useDifferent: boolean) => void;
+  onSubmit: () => void;
   errors?: Partial<Record<keyof ShippingAddress, string>>;
 }
 
@@ -30,13 +31,15 @@ export function ShippingAddressForm({
   useDifferentBilling,
   onBillingChange,
   errors = {},
+  onSubmit,
 }: ShippingAddressFormProps) {
-  const handleChange = (field: keyof ShippingAddress) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    onChange({ ...values, [field]: e.target.value });
-  };
+  const handleChange =
+    (field: keyof ShippingAddress) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      onChange({ ...values, [field]: e.target.value });
+    };
 
+  // console.log(values.id, "shipping id");
   return (
     <SectionCard title="Shipping Address">
       <div className="space-y-4">
@@ -44,9 +47,9 @@ export function ShippingAddressForm({
           label="Street Address"
           required
           placeholder="Street address"
-          value={values.streetAddress}
-          onChange={handleChange("streetAddress")}
-          error={errors.streetAddress}
+          value={values.address}
+          onChange={handleChange("address")}
+          error={errors.address}
         />
 
         <FormSelect
@@ -63,12 +66,29 @@ export function ShippingAddressForm({
           label="Town / City"
           required
           placeholder="Town / City"
-          value={values.townCity}
-          onChange={handleChange("townCity")}
-          error={errors.townCity}
+          value={values.city}
+          onChange={handleChange("city")}
+          error={errors.city}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormInput
+            label="Phone number"
+            placeholder="phoneNumber"
+            value={values.phoneNumber}
+            onChange={handleChange("phoneNumber")}
+            error={errors.phoneNumber}
+          />
+          <FormInput
+            label="Email"
+            placeholder="Zip Code"
+            value={values.email}
+            onChange={handleChange("email")}
+            error={errors.email}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <FormInput
             label="State"
             placeholder="State"
@@ -79,9 +99,9 @@ export function ShippingAddressForm({
           <FormInput
             label="Zip Code"
             placeholder="Zip Code"
-            value={values.zipCode}
-            onChange={handleChange("zipCode")}
-            error={errors.zipCode}
+            value={values.zip}
+            onChange={handleChange("zip")}
+            error={errors.zip}
           />
         </div>
 
@@ -91,6 +111,16 @@ export function ShippingAddressForm({
             checked={useDifferentBilling}
             onChange={(e) => onBillingChange(e.target.checked)}
           />
+        </div>
+
+        <div className="flex justify-end pt-4">
+          <button
+            type="submit"
+            onClick={() => onSubmit()}
+            className="w-fit rounded-full bg-[#2E7D32] px-2 py-1 text-sm font-semibold text-white transition-colors hover:bg-[#246628] md:px-5 md:py-3"
+          >
+            {values.address ? "Update Address" : "Save Address"}
+          </button>
         </div>
       </div>
     </SectionCard>

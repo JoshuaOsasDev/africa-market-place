@@ -136,7 +136,7 @@ export default function ProductCard({
                 src={imageUrl}
                 alt={name}
                 fill
-                className="object-contain transition-transform duration-500 group-hover:scale-110"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
             </div>
           ) : (
@@ -147,20 +147,20 @@ export default function ProductCard({
         </div>
 
         {/* Content */}
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between px-3 py-1 md:p-4">
           <div>
-            <h3 className="mb-1 line-clamp-2 text-lg font-medium group-hover:text-[#2E7D32]">
+            <h3 className="mb-1 line-clamp-2 font-medium group-hover:text-[#2E7D32] md:text-lg">
               {name}
             </h3>
 
             {/* Price */}
             <div className="mb-3 flex items-end gap-2">
-              <span className="text-xl font-bold">
+              <span className="text-sm font-bold md:text-xl">
                 €{displayPrice.toFixed(2)}
               </span>
 
               {hasDiscount && (
-                <span className="text-[16px] text-[#BABABA] line-through">
+                <span className="text-[10px] text-[#BABABA] line-through md:text-[16px]">
                   €{price.toFixed(2)}
                 </span>
               )}

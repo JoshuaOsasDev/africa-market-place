@@ -35,10 +35,11 @@ export function CartButton({
     }
   };
 
+  //hover:bg-[#2E7D32] hover:text-white border-[#2E7D32]
   const dynamicClasses = useMemo(() => {
     return isInCart
       ? "border-red-500 bg-red-50 text-red-600 hover:bg-red-100"
-      : "border-[#2E7D32] bg-white text-[#2E7D32] hover:bg-green-50";
+      : "border-[#2E7D32] bg-white text-[#2E7D32] hover:bg-[#2E7D32] hover:text-white";
   }, [isInCart]);
 
   return (

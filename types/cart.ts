@@ -13,6 +13,10 @@ export interface CartItem {
   type: "simple" | "variable";
   variant: ProductVariant;
   images: ImageProp[];
+  sku?: string;
+  subtotal?: number;
+  shop?: string;
+  variantId?: string | undefined;
   //cartQuantity: number; // quantity added to cart
 }
 

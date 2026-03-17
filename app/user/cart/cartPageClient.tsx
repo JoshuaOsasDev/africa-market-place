@@ -28,7 +28,7 @@ export function CartPageClient() {
 
   //console.log(cart, "carts");
 
-  const { cartItems, updateQuantity, removeFromCart } = useCart();
+  const { cartItems, updateQuantity } = useCart();
 
   const removeP = (productToRemove: Product) => {
     // Update Redux store
@@ -42,9 +42,8 @@ export function CartPageClient() {
   };
 
   const handleRemove = (productId: string) => {
-    // console.log(productId, "productId");
     const product = cartItems?.find((item: CartItem) => item.pid === productId);
-    // console.log(product, "product");
+
     if (product) {
       removeP(product);
     }

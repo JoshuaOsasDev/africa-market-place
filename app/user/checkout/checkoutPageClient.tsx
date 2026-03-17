@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -15,36 +15,63 @@ import {
   PaymentMethod,
   CardPayment,
 } from "@/types/checkout";
+import { CartItem } from "@/types/cart";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { useCart } from "@/lib/hooks/useCart";
+import {
+  useAllDelivery,
+  useRemoveFromCart,
+  useCreateOrder,
+} from "@/lib/hooks/userDashboard/useUser";
+import { deleteCart } from "@/redux/slices/product";
+import { Product } from "@/types/product";
+import { DeliveryAddressSelector } from "@/components/checkout/deliveryAddressSelector";
 
-interface CheckoutPageClientProps {
-  initialSummary: CheckoutSummary;
-}
+export function CheckoutPageClient() {
+  const dispatch = useAppDispatch();
+  const cart: CartItem[] = useAppSelector(
+    (state) => state.product.checkout.cart,
+  );
 
-export function CheckoutPageClient({
-  initialSummary,
-}: CheckoutPageClientProps) {
-  const router = useRouter();
+  const user = useAppSelector((state) => state.user.user);
+  const shippingCost = useAppSelector(
+    (state) => state.product.checkout.shipping,
+  );
+  const subtotal = useAppSelector((state) => state.product.checkout.subtotal);
+  const total = useAppSelector((state) => state.product.checkout.total);
+  const discount = useAppSelector((state) => state.product.checkout.discount);
+
+  const { cartItems, updateQuantity } = useCart();
+  const { mutate: removeFromCartAPI } = useRemoveFromCart();
+
+  const { mutate: createOrder } = useCreateOrder();
+  const { deliveries } = useAllDelivery();
+  // console.log(deliveries, "delivery");
+  const delivery = deliveries?.addresses || [];
+
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState<CheckoutSummary>(initialSummary);
 
   const [contact, setContact] = useState<ContactInformation>({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    emailAddress: "",
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    phoneNumber: user?.phone,
+    emailAddress: user?.email,
   });
 
   const [shipping, setShipping] = useState<ShippingAddress>({
-    streetAddress: "",
-    country: "",
-    townCity: "",
-    state: "",
-    zipCode: "",
+    id: delivery._id,
+    address: delivery.address,
+    country: delivery.country,
+    city: delivery.city,
+    state: delivery.state,
+    zip: delivery.zip,
+    email: delivery.email,
+    phoneNumber: delivery.phoneNumber,
   });
 
   const [useDifferentBilling, setUseDifferentBilling] = useState(false);
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("stripe");
 
   const [cardDetails, setCardDetails] = useState<CardPayment>({
     cardNumber: "",
@@ -52,60 +79,76 @@ export function CheckoutPageClient({
     cvc: "",
   });
 
-  const handleQuantityChange = (id: string, quantity: number) => {
-    setSummary((prev) => {
-      const updatedItems = prev.items.map((item) =>
-        item.id === id ? { ...item, quantity } : item,
-      );
+  const removeP = (productToRemove: Product) => {
+    // Update Redux store
+    dispatch(deleteCart(productToRemove.pid));
 
-      const subtotal = updatedItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0,
-      );
-
-      return {
-        ...prev,
-        items: updatedItems,
-        subtotal,
-        total: subtotal + (prev.shipping === "Free" ? 0 : prev.shipping),
-      };
-    });
+    // Sync with backend
+    removeFromCartAPI({ pid: productToRemove });
   };
 
-  const handleRemove = (id: string) => {
-    setSummary((prev) => {
-      const updatedItems = prev.items.filter((item) => item.id !== id);
+  const handleQuantityChange = (productId: string, quantity: number) => {
+    // console.log(quantity, "qut");
+    updateQuantity(productId, quantity);
+  };
+  const handleRemove = (productId: string) => {
+    const product = cartItems?.find((item: CartItem) => item.pid === productId);
 
-      const subtotal = updatedItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0,
-      );
-
-      return {
-        ...prev,
-        items: updatedItems,
-        subtotal,
-        total: subtotal + (prev.shipping === "Free" ? 0 : prev.shipping),
-      };
-    });
+    if (product) {
+      removeP(product);
+    }
   };
 
   const handlePlaceOrder = async () => {
     setLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const data = {
+        user: {
+          firstName: contact.firstName,
+          lastName: contact.lastName,
+          phone: contact.phoneNumber,
+          address: shipping.address,
+          city: shipping.city,
+          state: shipping.state,
+          country: shipping.country,
+          zip: shipping.zip,
+          email: contact.emailAddress, // backend uses user.email
+        },
+        items: cart.map((item: CartItem) => ({
+          pid: item.pid,
+          name: item.name,
+          salePrice: item.salePrice,
+          sku: item.sku,
+          shop: item.shop,
+          quantity: item.quantity,
+          subtotal: item.subtotal,
+          image: item.images?.[0]?.url,
+          variantId: item.variantId || undefined,
+        })),
+        subtotal,
+        shipping: shippingCost,
+        discount,
+        total,
+        paymentMethod: "Stripe",
+        currency: "EUR",
+        conversionRate: 1200,
+        totalItems: cart.length,
+      };
 
-      // console.log("Order placed:", {
-      //   contact,
-      //   shipping,
-      //   useDifferentBilling,
-      //   paymentMethod,
-      //   cardDetails: paymentMethod === "card" ? cardDetails : null,
-      //   summary,
-      // });
+      // createOrder(data);
+      createOrder(data);
 
-      router.push("/order/success");
+      console.log("Order placed:", {
+        contact,
+        shipping,
+        useDifferentBilling,
+        paymentMethod,
+        cardDetails: paymentMethod === "stripe" ? "stripe" : null,
+        cart,
+      });
+
+      // router.push("/user/payment");
     } catch (error) {
       console.error("Error placing order:", error);
       alert("There was an error placing your order. Please try again.");
@@ -114,7 +157,24 @@ export function CheckoutPageClient({
     }
   };
 
-  if (summary.items.length === 0) {
+  useEffect(() => {
+    if (deliveries?.addresses?.length) {
+      const firstAddress = deliveries.addresses[0];
+
+      setShipping({
+        id: firstAddress._id,
+        address: firstAddress.address,
+        country: firstAddress.country,
+        city: firstAddress.city,
+        state: firstAddress.state,
+        zip: firstAddress.zip,
+        phoneNumber: firstAddress.phoneNumber,
+        email: firstAddress.email,
+      });
+    }
+  }, [deliveries]);
+
+  if (cart.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB] px-4">
         <div className="text-center">
@@ -124,7 +184,7 @@ export function CheckoutPageClient({
           <p className="mb-6 text-[#6F6F6F]">
             Add some items to your cart before checking out.
           </p>
-          <Link href="/products">
+          <Link href="/user/products">
             <button className="rounded-full bg-[#2E7D32] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#246628]">
               Start Shopping
             </button>
@@ -138,7 +198,7 @@ export function CheckoutPageClient({
     <div className="min-h-screen bg-[#F9FAFB]">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Link
-          href="/cart"
+          href="/user/cart"
           className="mb-6 inline-flex items-center gap-2 text-[#111827] transition-colors hover:text-[#2E7D32]"
         >
           <ArrowLeft size={18} />
@@ -149,11 +209,12 @@ export function CheckoutPageClient({
           <div className="space-y-6">
             <ContactInformationForm values={contact} onChange={setContact} />
 
-            <ShippingAddressForm
-              values={shipping}
-              onChange={setShipping}
+            <DeliveryAddressSelector
+              deliveries={delivery}
+              shipping={shipping}
+              setShipping={setShipping}
               useDifferentBilling={useDifferentBilling}
-              onBillingChange={setUseDifferentBilling}
+              setUseDifferentBilling={setUseDifferentBilling}
             />
 
             <PaymentMethodForm
@@ -166,7 +227,7 @@ export function CheckoutPageClient({
 
           <div className="h-fit lg:sticky lg:top-8">
             <CheckoutOrderSummary
-              summary={summary}
+              summary={cart}
               onQuantityChange={handleQuantityChange}
               onRemove={handleRemove}
               onPlaceOrder={handlePlaceOrder}

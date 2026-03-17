@@ -52,6 +52,11 @@ export const removeFromCart = async (pid: Product) => {
   return data;
 };
 
+export const clearUserCart = async () => {
+  const { data } = await http.get("/cart/clear");
+  return data;
+};
+
 // Users Orders
 
 export const getUserOrder = async () => {
@@ -59,9 +64,13 @@ export const getUserOrder = async () => {
   return data;
 };
 
+export const getUserOrderId = async (id: string) => {
+  const { data } = await http.get(`/orders/${id}`);
+  return data;
+};
 export const postUserOrder = async (payload: any) => {
   const { data } = await http.post("/orders", payload);
-  //console.log(data, "data");
+  console.log(data, "data");
   return data;
 };
 
@@ -73,5 +82,25 @@ export const getSlider = async () => {
 export const createImageSlider = async (payload: any) => {
   const { data } = await http.post(`/settings/slider/create`, payload);
 
+  return data;
+};
+
+export const getAllDelivery = async () => {
+  const { data } = await http.get("/delivery/all");
+  return data;
+};
+
+export const updateDelivery = async (id: string, payload: any) => {
+  const { data } = await http.put(`/delivery/${id}`, payload);
+  return data;
+};
+
+export const postDelivery = async (payload: any) => {
+  const { data } = await http.post(`/delivery/create`, payload);
+  return data;
+};
+
+export const deleteDelivery = async (id: string) => {
+  const { data } = await http.delete(`/delivery/${id}`);
   return data;
 };

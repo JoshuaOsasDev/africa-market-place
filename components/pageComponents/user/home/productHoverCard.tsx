@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { DealsTodayProps } from "@/types/appTypes";
 import { StarRating } from "@/components/common/starRating";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export default function ProductHoverCard({
   images,
   name,
@@ -12,12 +14,16 @@ export default function ProductHoverCard({
   rate,
   salePrice,
   description,
+  slug,
 }: DealsTodayProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   //  Discount logic
   const hasDiscount = salePrice && price > salePrice;
+  const displayPrice = hasDiscount ? salePrice : price;
 
+  console.log(price, "price");
+  console.log(salePrice, "sales");
   const discountPercent = hasDiscount
     ? Math.round(((price - salePrice) / price) * 100)
     : "No Discount";
@@ -59,11 +65,13 @@ export default function ProductHoverCard({
             <div className="mt-2 flex items-center space-x-2">
               <span className="text-xl font-bold text-gray-900">
                 {" "}
-                £{salePrice}
+                £{displayPrice}
               </span>
-              <span className="text-sm text-gray-400 line-through">
-                £{price}
-              </span>
+              {hasDiscount && (
+                <span className="text-[16px] text-[#BABABA] line-through">
+                  €{price.toFixed(2)}
+                </span>
+              )}
             </div>
 
             {/* Rating */}
@@ -75,9 +83,11 @@ export default function ProductHoverCard({
             <p className="mt-3 text-sm text-gray-600">{description}</p>
 
             {/* Button */}
-            <button className="mt-4 w-full cursor-pointer rounded-lg border border-[#2E7D32] py-2 text-sm font-medium text-[#2E7D32] transition hover:bg-[#2E7D32] hover:text-white">
-              View This Deal
-            </button>
+            <Link href={`user/products/${slug}`}>
+              <Button className="mt-4 w-full cursor-pointer rounded-lg border border-[#2E7D32] bg-white py-2 text-sm font-medium text-[#2E7D32] transition hover:bg-[#2E7D32] hover:text-white">
+                View This Deal
+              </Button>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

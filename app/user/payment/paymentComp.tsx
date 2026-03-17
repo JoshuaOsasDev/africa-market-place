@@ -1,5 +1,6 @@
 "use client";
 
+import { getUserOrderId } from "@/services/apiServices/userDashboard";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -24,44 +25,60 @@ const CARD_ELEMENT_OPTIONS = {
   },
 };
 
-function PaymentForm() {
+function PaymentForm({ orderId }: { orderId: string }) {
   const stripe = useStripe();
   const elements = useElements();
+  const [order, setOrder] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentIntent, setPaymentIntent] = useState(null);
 
-  const createPaymentIntent = async () => {
+  console.log(order?.data, "order");
+
+  const orderData = order?.data;
+  const createPaymentIntent = async (orderData: any) => {
     try {
-      // Create payment intent on the backend
       const { data } = await axios.post(
         "https://africarmarketplaceserver-9285e6ea6a8d.herokuapp.com/api/payment-intents",
         {
-          amount: 1,
-          currency: "gbp",
-          receipt_email: "ukonulucky@gmail.com",
-          userId: "69736e1c3afb5291f8075c3d",
-          orderId: "69763c971290e388b03fd047",
-          email: "joshua@example.com",
+          amount: "1",
+          currency: orderData?.currency,
+          receipt_email: orderData?.user?.email,
+          userId: orderData?.user?._id,
+          orderId: orderData?._id,
+          email: orderData?.user?.email,
         },
       );
 
       setPaymentIntent(data.client_secret);
-      console.log(data.client_secret, "payment intent client secret");
     } catch (error) {
-      console.log(error, "ERROR-1");
-      if (error instanceof AxiosError) {
-        const errorMessage =
-          error.response?.data.message || error.message || "Payment error";
-        toast.error(errorMessage);
-      } else {
-        toast.error("Unknown error");
-      }
+      console.log(error, "Error 1");
+      toast.error("Payment initialization failed");
     }
   };
 
   useEffect(() => {
-    createPaymentIntent();
-  }, []);
+    const initPayment = async () => {
+      try {
+        if (!orderId) return;
+
+        // 1. Fetch order
+        const res = await getUserOrderId(orderId);
+
+        const orderData = res; //
+        if (!orderData) throw new Error("Order not found");
+
+        setOrder(orderData);
+
+        // 2. Pass directly (DO NOT rely on state here)
+        await createPaymentIntent(orderData);
+      } catch (error) {
+        console.log(error, "Error 2, 'Order'");
+        toast.error("Failed to initialize payment");
+      }
+    };
+
+    initPayment();
+  }, [orderId]);
   const handleSubmit = async (event: any) => {
     try {
       event.preventDefault();
@@ -77,18 +94,16 @@ function PaymentForm() {
         const { data } = await axios.post(
           "https://africarmarketplaceserver-9285e6ea6a8d.herokuapp.com/api/payment-intents",
           {
-            amount: 1,
-            currency: "gbp",
-            receipt_email: "ukonulucky@gmail.com",
-            userId: "69736e1c3afb5291f8075c3d",
-            orderId: "6976388a1290e388b03fcfd8",
-            email: "joshua@example.com",
+            amount: "1",
+            currency: orderData?.currency,
+            receipt_email: orderData?.user?.email,
+            userId: orderData?.user?._id,
+            orderId: orderData?._id,
+            email: orderData?.user?.email,
           },
         );
 
-        //console.log("paymentIntent:", data)
         client_secret = data.client_secret;
-        console.log(data.client_secret, "handleSubmit client secret");
       }
 
       if (!client_secret) throw new Error("Payment Failed, please retry");
@@ -96,7 +111,7 @@ function PaymentForm() {
         payment_method: {
           card: cardElement,
           billing_details: {
-            name: "Ukonu Lucky",
+            name: order.user?.firstName,
           },
         },
       });

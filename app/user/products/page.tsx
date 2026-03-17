@@ -1,15 +1,17 @@
 "use client";
 
+import Loader from "@/components/common/loader";
 import NoProducts from "@/components/common/noProducts";
 import ProductCard from "@/components/common/productCardComp";
 import { useUserProducts } from "@/lib/hooks/userDashboard/useUser";
 import { Product } from "@/types/product";
 
 export default function ProductCardExample() {
-  const { userProducts } = useUserProducts();
+  const { userProducts, isLoading } = useUserProducts();
 
   const product: Product[] = userProducts?.data;
 
+  if (isLoading) return <Loader />;
   if (!product || product.length === 0) return <NoProducts />;
   return (
     <div className="min-h-screen bg-[#F8F9FA] py-8">

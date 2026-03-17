@@ -1,8 +1,9 @@
 "use client";
+import { getUserOrderId } from "@/services/apiServices/userDashboard";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, JSX } from "react";
 
-const DEMO_STATUS = "succeeded";
+type PaymentStatusType = "succeeded" | "pending" | "failed";
 
 // Icons
 const CheckIcon = () => (
@@ -84,7 +85,17 @@ const BagIcon = () => (
   </svg>
 );
 
-const CONFIG = {
+const CONFIG: Record<
+  PaymentStatusType,
+  {
+    icon: JSX.Element;
+    badge: string;
+    heading: string;
+    sub: string;
+    note: string;
+    ctaLabel: string;
+  }
+> = {
   succeeded: {
     icon: <CheckIcon />,
     badge: "Confirmed",
@@ -93,7 +104,6 @@ const CONFIG = {
     note: "A confirmation email has been sent.",
     ctaLabel: "Check Order Status",
   },
-
   pending: {
     icon: <ClockIcon />,
     badge: "Processing",
@@ -102,7 +112,6 @@ const CONFIG = {
     note: "We'll notify you once payment clears.",
     ctaLabel: "Check Order Status",
   },
-
   failed: {
     icon: <XIcon />,
     badge: "Declined",
@@ -162,27 +171,55 @@ function StepTracker({ stepDone }: { stepDone: any }) {
   );
 }
 
-export default function PaymentStatus() {
-  const status = DEMO_STATUS;
-  const cfg = CONFIG[status];
-
+export default function PaymentStatus({ orderId }: { orderId: string }) {
+  const [order, setOrder] = useState<any>(null);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    async function fecthOrder() {
+      try {
+        if (!orderId) return;
+
+        // 1. Fetch order
+        const res = await getUserOrderId(orderId);
+
+        const orderData = res;
+        if (!orderData) throw new Error("Order not found");
+
+        setOrder(orderData);
+      } catch (error) {
+        console.log(error, "Error 1");
+      }
+    }
+
+    fecthOrder();
     const t = setTimeout(() => setShow(true), 100);
     return () => clearTimeout(t);
-  }, []);
+  }, [orderId]);
 
+  console.log(order, "order");
+
+  const status = order?.data?.paymentStatus as PaymentStatusType;
+  const cfg = CONFIG[status];
   const rows = [
-    { label: "Order ID", value: "#Z125775" },
-    { label: "Amount", value: "£50.00" },
+    { label: "Order ID", value: order?.data?.orderNo },
+    { label: "Amount", value: `£${order?.data?.total}` },
     { label: "Merchant", value: "Africa Marketplace" },
     {
       label: "Date",
-      value: new Date().toLocaleDateString("en-GB"),
+      value: order?.data?.updatedAt
+        ? new Date(order.data.updatedAt).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })
+        : "—",
     },
   ];
 
+  if (!order?.data) {
+    return <div className="mt-10 text-center">Loading...</div>;
+  }
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#E1E2E4] px-4">
       {/* Logo */}
@@ -209,16 +246,16 @@ export default function PaymentStatus() {
         {/* Hero */}
         <div className="border-b border-[#E1E2E4] px-8 py-10 text-center">
           <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#2E7D32] text-white">
-            {cfg.icon}
+            {cfg?.icon}
           </div>
 
           <div className="mb-3 text-xs font-bold tracking-widest text-[#2E7D32] uppercase">
-            {cfg.badge}
+            {cfg?.badge}
           </div>
 
-          <h1 className="mb-2 text-2xl font-bold">{cfg.heading}</h1>
+          <h1 className="mb-2 text-2xl font-bold">{cfg?.heading}</h1>
 
-          <p className="text-sm text-gray-500">{cfg.sub}</p>
+          <p className="text-sm text-gray-500">{cfg?.sub}</p>
 
           <StepTracker stepDone={2} />
         </div>
@@ -227,25 +264,25 @@ export default function PaymentStatus() {
         <div>
           {rows.map((row, i) => (
             <div
-              key={row.label}
+              key={row?.label}
               className="flex justify-between border-b border-[#E1E2E4] px-8 py-4"
             >
-              <span className="text-sm text-gray-400">{row.label}</span>
-              <span className="text-sm font-semibold">{row.value}</span>
+              <span className="text-sm text-gray-400">{row?.label}</span>
+              <span className="text-sm font-semibold">{row?.value}</span>
             </div>
           ))}
         </div>
 
         {/* Note */}
         <div className="mx-6 mt-4 rounded-lg bg-[#E1E2E4] px-4 py-3 text-sm">
-          {cfg.note}
+          {cfg?.note}
         </div>
 
         {/* CTA */}
         <div className="p-6">
           <Link href={"/user/dashboard/orders"}>
             <button className="w-full rounded-lg bg-[#2E7D32] py-3 font-semibold text-white transition hover:opacity-90">
-              {cfg.ctaLabel}
+              {cfg?.ctaLabel}
             </button>
           </Link>
         </div>

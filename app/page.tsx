@@ -12,7 +12,6 @@ export default async function Home() {
   return (
     <div className="flex min-h-screen flex-col gap-2 bg-white lg:px-2">
       <Header />
-      {/* <Banner /> */}
       <SlidderComp />
       <Topcategories />
       <HealthSafetyBanner />

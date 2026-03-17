@@ -5,11 +5,19 @@ import Link from "next/link";
 import TextStyle from "@/components/common/textStyle";
 import { CartButton } from "@/components/common/cartButton";
 import { StarRating } from "@/components/common/starRating";
+import { useAppSelector } from "@/redux/store";
+import { Heart } from "lucide-react";
+import { useState } from "react";
+import { useUserWishlist } from "@/lib/hooks/userDashboard/useUser";
 
 export function ProductCard(product: any) {
+  const wishlist = useAppSelector((state) => state.wishlist);
+  const [wishlistedProducts, setWishlistedProducts] = useState(
+    wishlist.wishlist?.data || [],
+  );
   const data = product?.product;
 
-  //  Discount logic
+  // Discount logic
   const hasDiscount = data?.salePrice && data?.salePrice < data?.price;
   const displayPrice = hasDiscount ? data?.salePrice : data?.price;
 
@@ -17,64 +25,105 @@ export function ProductCard(product: any) {
     ? Math.round(((data?.price - data?.salePrice) / data?.price) * 100)
     : (product?.discount ?? "");
 
+  //WishList function
+
+  const { isPending, mutate: postWishlist } = useUserWishlist();
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!data?.slug) return;
+
+    postWishlist(data._id);
+
+    // dispatch(setWishlistAction([...wishlistedProducts, product.slug]));
+
+    setWishlistedProducts((prev = []) => {
+      const exists = prev.some((item: any) => item.slug === data.slug);
+
+      return exists
+        ? prev.filter((item: any) => item.slug !== data.slug)
+        : [...prev, data];
+    });
+  };
+
+  const isWishlisted = wishlistedProducts?.some(
+    (item: any) => item?.slug === data?.slug,
+  );
+
   return (
-    <div className="group col-span-1 rounded-lg shadow-md transition-shadow duration-300 hover:shadow-xl">
+    <div className="group relative w-85 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-lg sm:w-70 md:w-62.5">
+      {/* Discount Badge */}
+      {hasDiscount && (
+        <span className="absolute top-1 left-2 z-10 rounded-full bg-red-500 px-2 py-1 text-xs font-semibold text-white">
+          -{discountPercent}%
+        </span>
+      )}
+
+      {/* Wishlist (optional UI only) */}
+
+      <button
+        onClick={handleToggleWishlist}
+        className="absolute top-0 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-white active:scale-95"
+      >
+        <Heart
+          size={16}
+          className={`transition-colors duration-200 ${
+            isWishlisted
+              ? "fill-[#E74C3C] stroke-[#E74C3C]"
+              : "fill-none stroke-[#999999] group-hover:stroke-[#666666]"
+          }`}
+        />
+      </button>
+
       <Link href={`user/products/${data?.slug}`}>
-        <div className="relative flex h-75 w-full flex-col space-y-2 border-0 bg-[#FCFCFCFC] px-2 py-2">
-          {/* discount section starts */}
-          <div className="absolute top-1 left-1 flex flex-row items-center justify-center rounded-[5px] border-0 bg-[#FF0000] px-2 py-1">
-            <TextStyle
-              textContent={`%${discountPercent}`}
-              textStyle=" text-white  text-center text-[8px]"
+        {/* Image */}
+        <div className="relative mb-3 h-[180px] w-full overflow-hidden rounded-xl bg-gray-100">
+          {data?.images?.[0] && (
+            <Image
+              src={data.images[0].url}
+              alt={data.images[0]._id}
+              fill
+              className="object-cover transition duration-500 group-hover:scale-105"
             />
-          </div>
-          {/* discount section ends */}
+          )}
 
-          <div className="relative mx-auto mt-8 h-[175.67px] w-[175.67px]">
-            {data?.images[0] && (
-              <Image
-                src={data?.images?.[0].url}
-                fill
-                alt={data?.images?.[0]._id}
-                className="rounded-lg transition-transform duration-500 group-hover:scale-140"
-              />
+          {/* Hover overlay */}
+          <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
+        </div>
+
+        {/* Content */}
+        <div className="space-y-2 px-1">
+          {/* Title */}
+          <h3 className="text-sm font-semibold text-gray-900 md:text-base">
+            {data?.name}
+          </h3>
+
+          {/* Rating */}
+          <div className="flex items-center gap-1">
+            <StarRating rating={data?.rating} />
+            <span className="text-xs text-gray-500">({data?.rating || 0})</span>
+          </div>
+
+          {/* Price */}
+          <div className="flex items-center gap-2">
+            <span className="text-base font-bold text-gray-900 md:text-lg">
+              ${displayPrice}
+            </span>
+
+            {hasDiscount && (
+              <span className="text-sm text-gray-400 line-through">
+                ${data?.price}
+              </span>
             )}
-          </div>
-
-          {/* discription section starts */}
-          <div className="flex flex-1 flex-col justify-end space-y-1">
-            <TextStyle textContent={data?.name} textStyle="" />
-            <div className="flex flex-row items-center justify-between">
-              <div className="flex flex-row items-center justify-baseline space-x-1">
-                <TextStyle
-                  textContent={"$" + data?.salePrice?.toString()}
-                  textStyle="text-black text-[24px] text-tracking-[2px]"
-                />
-                <TextStyle
-                  textContent={"$" + data?.salePrice?.toString()}
-                  textStyle="text-[#6F6F6F] line-through"
-                />
-              </div>
-              <div className="flex flex-row items-center space-x-0">
-                {/* star rating  starts */}
-                <div className="flex flex-row items-center space-x-1">
-                  {/* {[...Array(data?.rating)].map((_, i) => (
-                    <MdStar key={i} className="h-3 w-3 text-yellow-400" />
-                  ))} */}
-                  <StarRating rating={data?.rating} />
-                </div>
-
-                {/* star rating ends */}
-              </div>
-            </div>
-            {/* Cart Button - prevents Link navigation */}
           </div>
         </div>
       </Link>
-      <div className="pb-2">
+
+      {/* Add to Cart */}
+      <div className="mt-4">
         <CartButton
-          product={product?.product}
-          className="lg-[205px] mx-auto w-3/4 md:w-45"
+          product={data}
+          className="flex w-full items-center justify-center gap-2 rounded-xl border py-2 text-sm font-medium transition"
         />
       </div>
     </div>

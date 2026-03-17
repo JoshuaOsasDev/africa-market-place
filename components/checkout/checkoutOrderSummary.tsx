@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 import { CheckoutOrderItem } from "@/components/checkout/checkoutOrderItem";
-import { CheckoutSummary, CheckoutOrderItem as OrderItemType } from "@/types/checkout";
+import {
+  CheckoutSummary,
+  CheckoutOrderItem as OrderItemType,
+} from "@/types/checkout";
 import { cn } from "@/lib/utils";
+import { useAppSelector } from "@/redux/store";
+import { CartItem } from "@/types/cart";
 
 interface CheckoutOrderSummaryProps {
-  summary: CheckoutSummary;
+  summary: CartItem[];
   onQuantityChange: (id: string, quantity: number) => void;
   onRemove: (id: string) => void;
   onPlaceOrder: () => void;
@@ -23,23 +28,28 @@ export function CheckoutOrderSummary({
   className,
 }: CheckoutOrderSummaryProps) {
   const [couponCode, setCouponCode] = useState("");
+  const subtotal = useAppSelector((state) => state.product.checkout.subtotal);
+  const total = useAppSelector((state) => state.product.checkout.total);
+  const discount = useAppSelector((state) => state.product.checkout.discount);
+  const shipping = useAppSelector((state) => state.product.checkout.shipping);
 
-  const shippingDisplay =
-    summary.shipping === "Free" ? "Free" : `$${summary.shipping.toFixed(2)}`;
+  const shippingDisplay = shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`;
 
   return (
     <div
       className={cn(
-        "bg-white rounded-lg border border-[#E5E7EB] p-6",
-        className
+        "rounded-lg border border-[#E5E7EB] bg-white p-6",
+        className,
       )}
     >
-      <h2 className="text-[#111827] text-xl font-semibold mb-4">Order summary</h2>
+      <h2 className="mb-4 text-xl font-semibold text-[#111827]">
+        Order summary
+      </h2>
 
-      <div className="space-y-0 mb-4">
-        {summary.items.map((item) => (
+      <div className="mb-4 space-y-0">
+        {summary.map((item) => (
           <CheckoutOrderItem
-            key={item.id}
+            key={item.pid}
             item={item}
             onQuantityChange={onQuantityChange}
             onRemove={onRemove}
@@ -47,46 +57,44 @@ export function CheckoutOrderSummary({
         ))}
       </div>
 
-      <div className="flex items-center gap-2 py-4 border-t border-[#E5E7EB]">
+      {/* <div className="flex items-center gap-2 border-t border-[#E5E7EB] py-4">
         <input
           type="text"
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}
           placeholder="Input"
-          className="flex-1 px-3 py-2 border border-[#E5E7EB] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2E7D32] focus:border-transparent"
+          className="flex-1 rounded-lg border border-[#E5E7EB] px-3 py-2 text-sm focus:border-transparent focus:ring-2 focus:ring-[#2E7D32] focus:outline-none"
         />
-        <button
-          className="px-4 py-2 bg-[#2E7D32] hover:bg-[#246628] text-white font-semibold text-sm rounded-full transition-colors"
-        >
+        <button className="rounded-full bg-[#2E7D32] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#246628]">
           Place Order
         </button>
-      </div>
+      </div> */}
 
-      <div className="space-y-3 pt-4 border-t border-[#E5E7EB]">
+      <div className="space-y-3 border-t border-[#E5E7EB] pt-4">
         <div className="flex items-center justify-between">
-          <span className="text-[#111827] font-medium">Shipping</span>
-          <span className="text-[#111827] font-medium">{shippingDisplay}</span>
+          <span className="font-medium text-[#111827]">Shipping</span>
+          <span className="font-medium text-[#111827]">{shippingDisplay}</span>
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="text-[#111827] font-medium">Subtotal</span>
-          <span className="text-[#111827] font-medium">
-            ${summary.subtotal.toFixed(2)}
+          <span className="font-medium text-[#111827]">Subtotal</span>
+          <span className="font-medium text-[#111827]">
+            ${subtotal.toFixed(2)}
           </span>
         </div>
 
-        <div className="flex items-center justify-between pt-3 border-t border-[#E5E7EB]">
-          <span className="text-[#111827] font-bold text-lg">Total</span>
-          <span className="text-[#111827] font-bold text-xl">
-            ${summary.total.toFixed(2)}
+        <div className="flex items-center justify-between border-t border-[#E5E7EB] pt-3">
+          <span className="text-lg font-bold text-[#111827]">Total</span>
+          <span className="text-xl font-bold text-[#111827]">
+            ${total.toFixed(2)}
           </span>
         </div>
       </div>
 
       <button
         onClick={onPlaceOrder}
-        disabled={loading || summary.items.length === 0}
-        className="w-full mt-6 py-3 bg-[#2E7D32] hover:bg-[#246628] text-white font-semibold rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={loading || summary.length === 0}
+        className="mt-6 w-full rounded-full bg-[#2E7D32] py-3 font-semibold text-white transition-colors hover:bg-[#246628] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? "Processing..." : "Place Order"}
       </button>

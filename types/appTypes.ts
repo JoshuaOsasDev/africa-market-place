@@ -186,4 +186,5 @@ export type DealsTodayProps = {
   price: number;
   salePrice: number;
   description: string;
+  slug: string;
 };
