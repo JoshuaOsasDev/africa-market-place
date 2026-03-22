@@ -3,6 +3,7 @@ import OrderTable from "@/components/pageComponents/user/order/orderTable";
 import OrderTabs from "@/components/pageComponents/user/order/orderTabs";
 import { Button } from "@/components/ui/button";
 import { useUserOder } from "@/lib/hooks/userDashboard/useUser";
+import { useAppSelector } from "@/redux/store";
 import { UsersOrder } from "@/types/order";
 import { SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
@@ -12,11 +13,11 @@ export default function OrderUserPage({
 }: {
   orderParams: string | string[] | undefined;
 }) {
+  const user = useAppSelector((state) => state.user.user);
   const { userOders, isLoading } = useUserOder();
 
   const orders: UsersOrder[] = userOders?.data || [];
 
-  console.log(orders, "orders");
   const tabCounts = {
     all: orders.length,
 
@@ -39,7 +40,7 @@ export default function OrderUserPage({
     <div>
       <div className="mt-15 md:my-2.5">
         <h3 className="md:text[28px] text-xl font-semibold">
-          Hi John! Welcome back 👋
+          Hi {user?.firstName}! Welcome back 👋
         </h3>
         <p className="text-sm text-[#6F6F6F] md:text-[16px]">
           What do you want to order today?

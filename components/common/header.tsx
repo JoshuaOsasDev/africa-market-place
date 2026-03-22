@@ -61,7 +61,7 @@ function Header() {
 
   return (
     <div className="md:pt-2">
-      <div className="fixed z-50 w-full bg-white pr-7 shadow-md md:hidden">
+      <div className="fixed z-50 w-full bg-white shadow-md md:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-2 md:py-4">
           <div className="flex items-center justify-center">
             {/* Hamburger Menu Button (Mobile only) */}
@@ -91,9 +91,28 @@ function Header() {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-center space-x-1">
-            <div className="relative flex h-6 w-6 items-center">
-              <div className="group relative mr-2 flex items-center space-x-1">
+          <div className="">
+            <div className="group relative flex items-center space-x-2.5">
+              <div className="flex items-center space-x-2">
+                <Link
+                  href={"/user/dashboard/wishlist"}
+                  className="relative h-6 w-6"
+                >
+                  <Heart
+                    className={`h-6 w-6 ${
+                      path === "/user/dashboard/wishlist"
+                        ? "text-[#4F912F]"
+                        : "text-[#6F6F6F]"
+                    }`}
+                  />
+                  {wishlist.wishlist?.data?.length > 0 && (
+                    <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                      <span className="text-[10px] text-white">
+                        {wishlist.wishlist?.data?.length || 0}
+                      </span>
+                    </div>
+                  )}
+                </Link>
                 <Link href={"/user/cart"} className="relative h-6 w-6">
                   <ShoppingCart
                     className={`h-6 w-6 ${
@@ -110,21 +129,20 @@ function Header() {
                     </div>
                   )}
                 </Link>
-                {/* Profile Image */}
-                {user?.user && (
-                  <div className="relative h-6 w-6 cursor-pointer">
-                    <Image
-                      src={
-                        user.user?.cover?.url ||
-                        "/images/avatar-placeholder.png"
-                      }
-                      alt="User Profile"
-                      fill
-                      className="rounded-full object-cover"
-                    />
-                  </div>
-                )}
               </div>
+              {/* Profile Image */}
+              {user?.user && (
+                <div className="relative h-6 w-6 cursor-pointer">
+                  <Image
+                    src={
+                      user.user?.cover?.url || "/images/avatar-placeholder.png"
+                    }
+                    alt="User Profile"
+                    fill
+                    className="rounded-full object-cover"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

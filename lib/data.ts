@@ -1,4 +1,9 @@
-import { Product, ShippingDataType, WishlistItem } from "@/types/appTypes";
+import {
+  FAQGroup,
+  Product,
+  ShippingDataType,
+  WishlistItem,
+} from "@/types/appTypes";
 import {
   BaggageClaim,
   Bell,
@@ -117,77 +122,58 @@ export const socialData = [
 export const socialData2 = [
   {
     id: 1,
-    url: "http://localhost:3000/user/dashboard/notifications",
+    url: "/user/dashboard/notifications",
     name: "Notifications",
   },
   {
     id: 2,
-    url: "http://localhost:3000/user/dashboard/userInfo",
+    url: "/user/dashboard/userInfo",
     name: "My account",
   },
   {
     id: 3,
-    url: "http://localhost:3000/user/dashboard/orders",
+    url: "/user/dashboard/orders",
     name: "Order",
   },
   {
     id: 4,
-    url: "http://localhost:3000/user/dashboard/wishlist",
+    url: "/user/dashboard/wishlist",
     name: "Wishlist",
   },
 ];
 
 export const socialData3 = [
   {
-    id: 1,
-    url: "",
-    name: "Information",
-  },
-  {
     id: 2,
-    url: "",
+    url: "/shipping-policy",
     name: "Shipping Policy",
   },
   {
     id: 3,
-    url: "",
+    url: "/return_and_refund",
     name: "Return And Refunds",
   },
-  {
-    id: 4,
-    url: "",
-    name: "Cookies Policy",
-  },
+
   {
     id: 5,
-    url: "",
+    url: "/faqs",
     name: "Frequently Asked",
   },
 ];
 export const socialData4 = [
-  {
-    id: 1,
-    url: "",
-    name: "Company",
-  },
   {
     id: 2,
     url: "/about",
     name: "About Us",
   },
   {
-    id: 3,
-    url: "",
-    name: "Privacy Policy",
-  },
-  {
     id: 4,
-    url: "",
+    url: "/user/terms-and-conditions",
     name: "Terms And Conditions",
   },
   {
     id: 5,
-    url: "",
+    url: "/contact-us",
     name: "Contact Us",
   },
 ];
@@ -1140,5 +1126,98 @@ export const dealsToday = [
     price: 18.75,
     oldPrice: 25.0,
     description: "Taste the world with this premium exotic fruit collection.",
+  },
+];
+
+export const FAQS: FAQGroup[] = [
+  {
+    cat: "orders",
+    group: "📦 Orders",
+    items: [
+      {
+        q: "How do I track my order?",
+        a: "Once your order ships, you'll receive a confirmation email with your tracking number. You can also find it in your order history under My Account → Orders. Tracking updates every 24 hours.",
+      },
+      {
+        q: "Can I change or cancel my order after placing it?",
+        a: "Orders can be modified or cancelled within 1 hour of placement. After that, the order enters processing and changes may not be possible. Please contact our support team immediately if you need to make changes.",
+      },
+      {
+        q: "Why is my order delayed?",
+        a: "Delays can happen due to high order volumes, weather disruptions, or courier issues. Your tracking link will reflect the latest estimated delivery. If it's been more than 3 days past the expected date, please raise a support ticket.",
+      },
+    ],
+  },
+  {
+    cat: "shipping",
+    group: "🚚 Shipping",
+    items: [
+      {
+        q: "What shipping options do you offer?",
+        a: "We offer Standard (5–7 business days), Express (2–3 business days), and Same-Day delivery in select cities. Shipping costs are calculated at checkout based on your location and chosen method.",
+      },
+      {
+        q: "Do you ship internationally?",
+        a: "Yes! We ship to over 40 countries. International orders typically take 7–14 business days. Please note that customs duties and taxes may apply and are the responsibility of the recipient.",
+      },
+      {
+        q: "Is free shipping available?",
+        a: "Free standard shipping is available on all orders over $50 within the contiguous US. International orders and express shipping are always paid services.",
+      },
+    ],
+  },
+  {
+    cat: "returns",
+    group: "🔄 Returns & Refunds",
+    items: [
+      {
+        q: "What is your return policy?",
+        a: "We accept returns within 30 days of delivery for unused, unopened items in their original packaging. Food items and perishables cannot be returned for safety reasons. Simply raise a support ticket to initiate a return.",
+      },
+      {
+        q: "How long does a refund take?",
+        a: "Once we receive and inspect your returned item, refunds are processed within 2–3 business days. The amount will appear in your original payment method within 5–10 business days depending on your bank.",
+      },
+      {
+        q: "My item arrived damaged — what do I do?",
+        a: "We're so sorry to hear that! Please take photos of the damaged item and packaging, then raise a support ticket within 48 hours of delivery. We'll send a replacement or issue a full refund right away.",
+      },
+    ],
+  },
+  {
+    cat: "payments",
+    group: "💳 Payments",
+    items: [
+      {
+        q: "What payment methods do you accept?",
+        a: "We accept all major credit and debit cards (Visa, Mastercard, Amex), PayPal, Apple Pay, Google Pay, and bank transfers. All transactions are secured with 256-bit SSL encryption.",
+      },
+      {
+        q: "Is it safe to save my card details?",
+        a: "Absolutely. We use tokenization — your actual card details are never stored on our servers. Payment data is handled by our PCI-DSS compliant payment processor.",
+      },
+      {
+        q: "Why was my payment declined?",
+        a: "Declines can happen if your card details are incorrect, there are insufficient funds, or your bank flagged the transaction as unusual. Try another card or contact your bank. If the issue persists, reach out to our support team.",
+      },
+    ],
+  },
+  {
+    cat: "account",
+    group: "👤 Account",
+    items: [
+      {
+        q: "How do I reset my password?",
+        a: "Click 'Forgot Password' on the login page and enter your email address. You'll receive a reset link within a few minutes. If you don't see it, check your spam folder.",
+      },
+      {
+        q: "How do I update my shipping address?",
+        a: "Go to My Account → Address Book to add, edit, or remove addresses. You can also update the shipping address at checkout before placing an order. Note that addresses cannot be changed on an existing order.",
+      },
+      {
+        q: "Can I have multiple accounts?",
+        a: "Our system allows one account per email address. If you need to manage orders for multiple people, you can add multiple shipping addresses and payment methods within a single account.",
+      },
+    ],
   },
 ];

@@ -188,3 +188,22 @@ export type DealsTodayProps = {
   description: string;
   slug: string;
 };
+
+export type Category =
+  | "all"
+  | "orders"
+  | "shipping"
+  | "returns"
+  | "payments"
+  | "account";
+
+export interface FAQItem {
+  q: string;
+  a: string;
+}
+
+export interface FAQGroup {
+  cat: Exclude<Category, "all">;
+  group: string;
+  items: FAQItem[];
+}

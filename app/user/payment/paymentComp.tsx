@@ -32,27 +32,29 @@ function PaymentForm({ orderId }: { orderId: string }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentIntent, setPaymentIntent] = useState(null);
 
-  console.log(order?.data, "order");
+  // console.log(order?.data, "order");
 
-  const orderData = order?.data;
+  const orders = order?.data;
   const createPaymentIntent = async (orderData: any) => {
     try {
       const { data } = await axios.post(
         "https://africarmarketplaceserver-9285e6ea6a8d.herokuapp.com/api/payment-intents",
         {
-          amount: "1",
-          currency: orderData?.currency,
-          receipt_email: orderData?.user?.email,
-          userId: orderData?.user?._id,
-          orderId: orderData?._id,
-          email: orderData?.user?.email,
+          amount: 1,
+          currency: orderData?.data.currency,
+          receipt_email: orderData?.data.user?.email,
+          userId: orderData?.data.user?._id,
+          orderId: orderData?.data._id,
+          email: orderData?.data.user?.email,
         },
       );
 
       setPaymentIntent(data.client_secret);
     } catch (error) {
       console.log(error, "Error 1");
-      toast.error("Payment initialization failed");
+      toast.error(
+        "Payment intent not automatically created, Please fill in Card details to Proceed",
+      );
     }
   };
 
@@ -63,7 +65,7 @@ function PaymentForm({ orderId }: { orderId: string }) {
 
         // 1. Fetch order
         const res = await getUserOrderId(orderId);
-
+        // console.log(res, "res");
         const orderData = res; //
         if (!orderData) throw new Error("Order not found");
 
@@ -72,8 +74,8 @@ function PaymentForm({ orderId }: { orderId: string }) {
         // 2. Pass directly (DO NOT rely on state here)
         await createPaymentIntent(orderData);
       } catch (error) {
-        console.log(error, "Error 2, 'Order'");
-        toast.error("Failed to initialize payment");
+        console.log(error, "data fecth Error, 'Order'");
+        toast.error("Fialed to fecth Orders Details");
       }
     };
 
@@ -81,6 +83,7 @@ function PaymentForm({ orderId }: { orderId: string }) {
   }, [orderId]);
   const handleSubmit = async (event: any) => {
     try {
+      setIsProcessing(true);
       event.preventDefault();
 
       if (!stripe || !elements) return;
@@ -94,16 +97,17 @@ function PaymentForm({ orderId }: { orderId: string }) {
         const { data } = await axios.post(
           "https://africarmarketplaceserver-9285e6ea6a8d.herokuapp.com/api/payment-intents",
           {
-            amount: "1",
-            currency: orderData?.currency,
-            receipt_email: orderData?.user?.email,
-            userId: orderData?.user?._id,
-            orderId: orderData?._id,
-            email: orderData?.user?.email,
+            amount: 1,
+            currency: orders?.data.currency,
+            receipt_email: orders?.data.user?.email,
+            userId: orders?.data.user?._id,
+            orderId: orders?.data._id,
+            email: orders?.data.user?.email,
           },
         );
 
         client_secret = data.client_secret;
+        //console.log(client_secret, "secret");
       }
 
       if (!client_secret) throw new Error("Payment Failed, please retry");
@@ -116,12 +120,16 @@ function PaymentForm({ orderId }: { orderId: string }) {
         },
       });
 
-      console.log("result", result);
+      //console.log("result", result);
+
+      if (result.paymentIntent) {
+      }
 
       if (result.error) {
         // Show error to your customer
 
-        console.log(result.error.message);
+        console.error(result.error.message);
+        alert(result.error.message);
         console.log(result.error, "ERROR-2");
       } else {
         if (result.paymentIntent.status === "succeeded") {
@@ -140,6 +148,8 @@ function PaymentForm({ orderId }: { orderId: string }) {
       } else {
         toast.error("Unknown error");
       }
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -164,7 +174,9 @@ function PaymentForm({ orderId }: { orderId: string }) {
 
         <div className="flex items-center justify-between border-t border-gray-100 py-4">
           <span className="text-gray-600">Total Amount</span>
-          <span className="text-xl font-bold text-gray-900">£50.00</span>
+          <span className="text-xl font-bold text-gray-900">
+            £{orders?.total}
+          </span>
         </div>
 
         <button

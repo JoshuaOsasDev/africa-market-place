@@ -372,7 +372,8 @@ export const useCreateOrder = () => {
     mutationFn: (payload: any) => postUserOrder(payload),
 
     onSuccess: async (data) => {
-      const orderId = data._id;
+      console.log(data, "onSuccess");
+      const orderId = data.orderId;
       // 1. Clear cart on server
       await clearUserCart();
 
