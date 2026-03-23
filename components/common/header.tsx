@@ -18,18 +18,14 @@ import {
   User,
   Home,
   KeyRound,
-  ShoppingCartIcon,
   HousePlus,
   LogInIcon,
   FileStack,
-  Settings,
-  Contact,
-  ContactIcon,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/store";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useSignOut } from "@/lib/hooks/userDashboard/useUser";
 import { NavItem } from "@/types/appTypes";
 
@@ -61,7 +57,7 @@ function Header() {
 
   return (
     <div className="md:pt-2">
-      <div className="fixed z-50 w-full bg-white pr-7 shadow-md md:hidden">
+      <div className="fixed z-50 w-full bg-white shadow-md md:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-2 md:py-4">
           <div className="flex items-center justify-center">
             {/* Hamburger Menu Button (Mobile only) */}
@@ -91,9 +87,28 @@ function Header() {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-center space-x-1">
-            <div className="relative flex h-6 w-6 items-center">
-              <div className="group relative mr-2 flex items-center space-x-1">
+          <div className="">
+            <div className="group relative flex items-center space-x-2.5">
+              <div className="flex items-center space-x-2">
+                <Link
+                  href={"/user/dashboard/wishlist"}
+                  className="relative h-6 w-6"
+                >
+                  <Heart
+                    className={`h-6 w-6 ${
+                      path === "/user/dashboard/wishlist"
+                        ? "text-[#4F912F]"
+                        : "text-[#6F6F6F]"
+                    }`}
+                  />
+                  {wishlist.wishlist?.data?.length > 0 && (
+                    <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                      <span className="text-[10px] text-white">
+                        {wishlist.wishlist?.data?.length || 0}
+                      </span>
+                    </div>
+                  )}
+                </Link>
                 <Link href={"/user/cart"} className="relative h-6 w-6">
                   <ShoppingCart
                     className={`h-6 w-6 ${
@@ -110,165 +125,150 @@ function Header() {
                     </div>
                   )}
                 </Link>
-                {/* Profile Image */}
-                {user?.user && (
-                  <div className="relative h-6 w-6 cursor-pointer">
-                    <Image
-                      src={
-                        user.user?.cover?.url ||
-                        "/images/avatar-placeholder.png"
-                      }
-                      alt="User Profile"
-                      fill
-                      className="rounded-full object-cover"
-                    />
-                  </div>
-                )}
               </div>
+              {/* Profile Image */}
+              {user?.user && (
+                <div className="relative h-6 w-6 cursor-pointer">
+                  <Image
+                    src={
+                      user.user?.cover?.url || "/images/avatar-placeholder.png"
+                    }
+                    alt="User Profile"
+                    fill
+                    className="rounded-full object-cover"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
         {/* Animated Mobile Menu */}
         <AnimatePresence>
           {isOpen && (
-            <motion.div
-              initial={{ x: "-100%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "-100%", opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="fixed top-0 left-0 z-100 flex h-screen w-4/6 flex-col border-l border-gray-200 bg-white shadow-lg md:hidden"
-            >
-              <div className="flex pb-1 pl-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-gray-700 hover:bg-gray-100"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <X className="h-6 w-6" />
-                </Button>
-              </div>
-
-              {mobile.slice(1).map((data) => {
-                const Icon = data.icon;
-                const isActive = path === data.href;
-
-                return (
-                  <nav
-                    key={data.name}
-                    className="flex flex-col space-y-4 px-6 font-medium text-gray-700"
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsOpen(false)}
+                className="fixed inset-0 z-40 h-screen bg-black/40 backdrop-blur-sm"
+              />
+              <motion.div
+                initial={{ x: "-100%", opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: "-100%", opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="fixed top-0 left-0 z-100 flex h-screen w-4/6 flex-col border-l border-gray-200 bg-white shadow-lg md:hidden"
+              >
+                <div className="flex pb-1 pl-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-700 hover:bg-gray-100"
+                    onClick={() => setIsOpen(false)}
                   >
-                    <motion.a
-                      initial={{ x: 50, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                      href={data.href}
-                      className={`group mb-1 flex items-center space-x-3 py-2 transition-colors duration-200 hover:text-green-600 ${
-                        isActive
-                          ? "rounded-lg border-l-2 border-[#4F912F] bg-gray-100 pl-2 text-[#4F912F]"
-                          : "rounded-lg bg-gray-100 pl-2"
-                      }`}
-                      onClick={() => setIsOpen(false)}
+                    <X className="h-6 w-6" />
+                  </Button>
+                </div>
+
+                {mobile.slice(1).map((data) => {
+                  const Icon = data.icon;
+                  const isActive = path === data.href;
+
+                  return (
+                    <nav
+                      key={data.name}
+                      className="flex flex-col space-y-4 px-6 font-medium text-gray-700"
                     >
-                      {Icon && (
-                        <Icon
-                          className={`h-5 w-5 transition-colors duration-200 group-hover:text-green-600 ${
-                            isActive ? "text-[#4F912F]" : "text-gray-500"
-                          }`}
+                      <motion.a
+                        initial={{ x: 50, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                        href={data.href}
+                        className={`group mb-1 flex items-center space-x-3 py-2 transition-colors duration-200 hover:text-green-600 ${
+                          isActive
+                            ? "rounded-lg border-l-2 border-[#4F912F] bg-gray-100 pl-2 text-[#4F912F]"
+                            : "rounded-lg bg-gray-100 pl-2"
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {Icon && (
+                          <Icon
+                            className={`h-5 w-5 transition-colors duration-200 group-hover:text-green-600 ${
+                              isActive ? "text-[#4F912F]" : "text-gray-500"
+                            }`}
+                          />
+                        )}
+
+                        <TextStyle
+                          textContent={data.name}
+                          textStyle="text-14"
                         />
-                      )}
-
-                      <TextStyle textContent={data.name} textStyle="text-14" />
-                    </motion.a>
-                  </nav>
-                );
-              })}
-              <div className="absolute bottom-5 mt-auto w-full border-t border-gray-200 p-4">
-                <Link
-                  href="/"
-                  className={`mb-1 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 hover:text-[#4F912F] ${
-                    path === "/" ? "bg-[#E8F5E9]" : "bg-gray-100"
-                  }`}
+                      </motion.a>
+                    </nav>
+                  );
+                })}
+                <div
+                  onClick={() => setIsOpen(false)}
+                  className="absolute bottom-5 mt-auto w-full border-t border-gray-200 p-4"
                 >
-                  <div className="flex items-center gap-3">
-                    <HousePlus
-                      className={`h-5 w-5 ${
-                        path === "/" ? "text-[#4F912F]" : "text-gray-700"
-                      }`}
-                    />
-                    <span
-                      className={`text-sm font-medium ${
-                        path === "/" ? "text-[#4F912F]" : "text-gray-700"
-                      }`}
-                    >
-                      Home
-                    </span>
-                  </div>
-                </Link>
-
-                {user.user && (
                   <Link
-                    href="/user/dashboard/userInfo"
-                    className={`flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
-                      path === "/user/dashboard/userInfo"
-                        ? "bg-[#E8F5E9]"
-                        : "bg-gray-100"
+                    href="/"
+                    className={`mb-1 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 hover:text-[#4F912F] ${
+                      path === "/" ? "bg-[#E8F5E9]" : "bg-gray-100"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <UserRound
+                      <HousePlus
                         className={`h-5 w-5 ${
-                          path === "/user/dashboard/userInfo"
-                            ? "text-[#4F912F]"
-                            : "text-gray-700"
+                          path === "/" ? "text-[#4F912F]" : "text-gray-700"
                         }`}
                       />
                       <span
                         className={`text-sm font-medium ${
-                          path === "/user/dashboard/userInfo"
-                            ? "text-[#4F912F]"
-                            : "text-gray-700"
+                          path === "/" ? "text-[#4F912F]" : "text-gray-700"
                         }`}
                       >
-                        User
+                        Home
                       </span>
                     </div>
                   </Link>
-                )}
 
-                {user?.user ? (
-                  <button
-                    onClick={() => logout()}
-                    className={`mt-5 flex w-full items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
-                      path === "/user/dashboard/wishlist"
-                        ? "bg-[#E8F5E9]"
-                        : "bg-gray-100"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <LogInIcon
-                        className={`h-5 w-5 ${
-                          path === "/user/dashboard/wishlist"
-                            ? "text-[#4F912F]"
-                            : "text-gray-700"
-                        }`}
-                      />
-                      <span
-                        className={`text-sm font-medium ${
-                          path === "/user/dashboard/wishlist"
-                            ? "text-[#4F912F]"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        Log Out
-                      </span>
-                    </div>
-                  </button>
-                ) : (
-                  <>
+                  {user.user && (
                     <Link
-                      href="/auth-user/login"
-                      className={`mt-5 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                      href="/user/dashboard/userInfo"
+                      className={`flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                        path === "/user/dashboard/userInfo"
+                          ? "bg-[#E8F5E9]"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <UserRound
+                          className={`h-5 w-5 ${
+                            path === "/user/dashboard/userInfo"
+                              ? "text-[#4F912F]"
+                              : "text-gray-700"
+                          }`}
+                        />
+                        <span
+                          className={`text-sm font-medium ${
+                            path === "/user/dashboard/userInfo"
+                              ? "text-[#4F912F]"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          User
+                        </span>
+                      </div>
+                    </Link>
+                  )}
+
+                  {user?.user ? (
+                    <button
+                      onClick={() => logout()}
+                      className={`mt-5 flex w-full items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
                         path === "/user/dashboard/wishlist"
                           ? "bg-[#E8F5E9]"
                           : "bg-gray-100"
@@ -289,46 +289,76 @@ function Header() {
                               : "text-gray-700"
                           }`}
                         >
-                          Sign In
+                          Log Out
                         </span>
                       </div>
-                    </Link>
+                    </button>
+                  ) : (
+                    <>
+                      <Link
+                        href="/auth-user/login"
+                        className={`mt-5 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                          path === "/user/dashboard/wishlist"
+                            ? "bg-[#E8F5E9]"
+                            : "bg-gray-100"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <LogInIcon
+                            className={`h-5 w-5 ${
+                              path === "/user/dashboard/wishlist"
+                                ? "text-[#4F912F]"
+                                : "text-gray-700"
+                            }`}
+                          />
+                          <span
+                            className={`text-sm font-medium ${
+                              path === "/user/dashboard/wishlist"
+                                ? "text-[#4F912F]"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            Sign In
+                          </span>
+                        </div>
+                      </Link>
 
-                    <Link
-                      href="/auth-user/register"
-                      className={`mt-1 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
-                        path === "/user/dashboard/wishlist"
-                          ? "bg-[#E8F5E9]"
-                          : "bg-gray-100"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <FileStack
-                          className={`h-5 w-5 ${
-                            path === "/user/dashboard/wishlist"
-                              ? "text-[#4F912F]"
-                              : "text-gray-700"
-                          }`}
-                        />
-                        <span
-                          className={`text-sm font-medium ${
-                            path === "/user/dashboard/wishlist"
-                              ? "text-[#4F912F]"
-                              : "text-gray-700"
-                          }`}
-                        >
-                          Register
-                        </span>
-                      </div>
-                    </Link>
-                  </>
-                )}
-              </div>
-            </motion.div>
+                      <Link
+                        href="/auth-user/register"
+                        className={`mt-1 flex items-center justify-between rounded-lg px-4 py-3 hover:bg-gray-200 ${
+                          path === "/user/dashboard/wishlist"
+                            ? "bg-[#E8F5E9]"
+                            : "bg-gray-100"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <FileStack
+                            className={`h-5 w-5 ${
+                              path === "/user/dashboard/wishlist"
+                                ? "text-[#4F912F]"
+                                : "text-gray-700"
+                            }`}
+                          />
+                          <span
+                            className={`text-sm font-medium ${
+                              path === "/user/dashboard/wishlist"
+                                ? "text-[#4F912F]"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            Register
+                          </span>
+                        </div>
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
 
-        <SearchFieldComp inputDivStyle="md:hidden block fixed z-50 top-12.5 w-full shadow-md" />
+        <SearchFieldComp inputDivStyle="md:hidden block fixed  top-12.5 w-full shadow-md" />
       </div>
 
       {/* DESTOP VIEW */}

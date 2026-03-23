@@ -1,20 +1,14 @@
 import Banner from "@/components/common/banner";
 import Footer from "@/components/common/footer";
 import Header from "@/components/common/header";
-import SignUpNav from "@/components/common/signUpNav";
-
 
 function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className=" min-h-screen  bg-[#EAEAEA] px-2 flex flex-col">
+    <div className="flex min-h-screen flex-col bg-[#EAEAEA]">
       <Header />
       <Banner />
-      <div className="flex flex-col justify-center items-center flex-1  mx-auto  space-y-2 bg-white my-4 rounded-lg px-4
-      md:px-6 lg:px-8
-      ">
-        <div className="rounded-md">
-          {children}
-        </div>
+      <div className="mx-auto mt-10 flex flex-1 flex-col items-center justify-center space-y-2 rounded-lg bg-white px-4 md:my-4 md:px-6 lg:px-8">
+        <div className="rounded-md">{children}</div>
       </div>
       <Footer />
     </div>

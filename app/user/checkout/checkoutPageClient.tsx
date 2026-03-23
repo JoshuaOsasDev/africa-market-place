@@ -26,6 +26,7 @@ import {
 import { deleteCart } from "@/redux/slices/product";
 import { Product } from "@/types/product";
 import { DeliveryAddressSelector } from "@/components/checkout/deliveryAddressSelector";
+import Loader from "@/components/common/loader";
 
 export function CheckoutPageClient() {
   const dispatch = useAppDispatch();
@@ -44,7 +45,7 @@ export function CheckoutPageClient() {
   const { cartItems, updateQuantity } = useCart();
   const { mutate: removeFromCartAPI } = useRemoveFromCart();
 
-  const { mutate: createOrder } = useCreateOrder();
+  const { mutate: createOrder, isPending } = useCreateOrder();
   const { deliveries } = useAllDelivery();
   // console.log(deliveries, "delivery");
   const delivery = deliveries?.addresses || [];
@@ -131,7 +132,7 @@ export function CheckoutPageClient() {
         discount,
         total,
         paymentMethod: "Stripe",
-        currency: "EUR",
+        currency: "gbp",
         conversionRate: 1200,
         totalItems: cart.length,
       };
@@ -174,6 +175,7 @@ export function CheckoutPageClient() {
     }
   }, [deliveries]);
 
+  if (isPending) return <Loader />;
   if (cart.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB] px-4">
@@ -231,7 +233,7 @@ export function CheckoutPageClient() {
               onQuantityChange={handleQuantityChange}
               onRemove={handleRemove}
               onPlaceOrder={handlePlaceOrder}
-              loading={loading}
+              loading={isPending}
             />
           </div>
         </div>

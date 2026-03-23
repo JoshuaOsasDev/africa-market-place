@@ -13,6 +13,7 @@ import {
 import { formatDate } from "@/lib/utils";
 import { UsersOrder } from "@/types/order";
 import Image from "next/image";
+import { RaiseTicketModal } from "./raiseTicketModal";
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 const STATUS_STYLES: Record<string, string> = {
@@ -104,6 +105,8 @@ function OrderSummaryModal({
   order: UsersOrder;
   onClose: () => void;
 }) {
+  const [showTicketModal, setShowTicketModal] = useState(false);
+
   //   console.log(order, "active order");
   return (
     <>
@@ -144,13 +147,16 @@ function OrderSummaryModal({
             {order.items?.map((item, i) => (
               <div key={i} className="flex flex-col items-center gap-1">
                 <div className="relative flex h-14 w-14 items-center justify-center rounded-xl border border-[#E8F0E8] bg-[#F8FBF8] text-2xl">
-                  {/* <Image
-                    src={item.image ?? ""}
-                    alt={item.name}
-                    fill
-                    className="object-contain"
-                  /> */}
-                  <Package size={20} color="#2E7D32" />
+                  {item.image ? (
+                    <Image
+                      src={item.image ?? ""}
+                      alt={item.name}
+                      fill
+                      className="rounded-lg object-cover"
+                    />
+                  ) : (
+                    <Package size={20} color="#2E7D32" />
+                  )}
                 </div>
                 <span className="max-w-16 text-center text-[11px] leading-tight text-[#888]">
                   {item.name ?? `Item ${i + 1}`}
@@ -191,9 +197,15 @@ function OrderSummaryModal({
               </span>
             </Row>
             <div className="h-px bg-[#EFEFEF]" />
+
             <Row label="Subtotal:">
               <span className="font-bold text-[#1A1A1A]">
                 {order.subTotal ?? order.total}
+              </span>
+            </Row>
+            <Row label="Payment Status:">
+              <span className="font-bold text-[#1A1A1A]">
+                {order.paymentStatus}
               </span>
             </Row>
             <div className="mt-1 flex items-center gap-2 rounded-xl bg-[#F0F7F0] px-3 py-2.5">
@@ -222,18 +234,27 @@ function OrderSummaryModal({
           </Section>
 
           {/* CTA */}
-          <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2E7D32] py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[#1B5E20] active:scale-[0.98]">
+          <button
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2E7D32] py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[#1B5E20] active:scale-[0.98]"
+            onClick={() => setShowTicketModal(true)}
+          >
             <RotateCcw size={16} />
-            Order Again
+            Raise A Ticket
           </button>
         </div>
       </div>
 
-      {/* Keyframe animations — add to your globals.css instead if preferred */}
       <style>{`
         @keyframes fadeIn  { from { opacity: 0 }               to { opacity: 1 } }
         @keyframes slideIn { from { transform: translateX(100%) } to { transform: translateX(0) } }
       `}</style>
+
+      {showTicketModal && (
+        <RaiseTicketModal
+          order={order}
+          onClose={() => setShowTicketModal(false)}
+        />
+      )}
     </>
   );
 }

@@ -40,7 +40,7 @@ export default function WishListComp() {
 
   if (wishlistData?.length === 0 || !wishlistData) {
     return (
-      <div className="mt-10 flex flex-col items-center justify-center gap-5 md:mt-0">
+      <div className="mt-15 flex flex-col items-center justify-center gap-5 md:mt-0">
         <NoOrder
           show={false}
           showFormNoOrder={false}
@@ -54,7 +54,7 @@ export default function WishListComp() {
 
   const visibleItems = wishlistData?.slice(startIndex, endIndex);
   return (
-    <div className="mt-10 flex flex-col gap-5 md:mt-0">
+    <div className="mt-15 flex flex-col gap-5 md:mt-0">
       <h2 className="text-3xl font-semibold">Wishlist</h2>
 
       {/* GRID */}

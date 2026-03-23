@@ -1,9 +1,10 @@
 "use client";
 import { getUserOrderId } from "@/services/apiServices/userDashboard";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, JSX } from "react";
 
-type PaymentStatusType = "succeeded" | "pending" | "failed";
+type PaymentStatusType = "successful" | "pending" | "failed";
 
 // Icons
 const CheckIcon = () => (
@@ -96,7 +97,7 @@ const CONFIG: Record<
     ctaLabel: string;
   }
 > = {
-  succeeded: {
+  successful: {
     icon: <CheckIcon />,
     badge: "Confirmed",
     heading: "Payment Successful!",
@@ -174,6 +175,8 @@ function StepTracker({ stepDone }: { stepDone: any }) {
 export default function PaymentStatus({ orderId }: { orderId: string }) {
   const [order, setOrder] = useState<any>(null);
   const [show, setShow] = useState(false);
+  const status = order?.data?.paymentStatus as PaymentStatusType;
+  const router = useRouter();
 
   useEffect(() => {
     async function fecthOrder() {
@@ -197,9 +200,22 @@ export default function PaymentStatus({ orderId }: { orderId: string }) {
     return () => clearTimeout(t);
   }, [orderId]);
 
-  console.log(order, "order");
+  // useEffect(() => {
+  //   if (status === "successful") {
+  //     const preventBack = () => {
+  //       window.history.go(1);
+  //     };
 
-  const status = order?.data?.paymentStatus as PaymentStatusType;
+  //     window.history.pushState(null, "", window.location.href);
+  //     window.addEventListener("popstate", preventBack);
+
+  //     return () => {
+  //       window.removeEventListener("popstate", preventBack);
+  //     };
+  //   }
+  // }, [status]);
+  //console.log(order, "order");
+
   const cfg = CONFIG[status];
   const rows = [
     { label: "Order ID", value: order?.data?.orderNo },

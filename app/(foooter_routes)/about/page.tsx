@@ -9,15 +9,14 @@ import {
   Handshake,
   Heart,
   Sprout,
-  Play,
   Users,
   TrendingUp,
   Award,
 } from "lucide-react";
 import Image from "next/image";
-import aboutFarmer1 from "../../lib/public/images/abot_africa_3.jpg";
-import aboutFarmer2 from "../../lib/public/images/about_africa_2.jpg";
-import aboutFarmer3 from "../../lib/public/images/about_africa_4.jpg";
+import aboutFarmer1 from "../../../lib/public/images/abot_africa_3.jpg";
+import aboutFarmer2 from "../../../lib/public/images/about_africa_2.jpg";
+import aboutFarmer3 from "../../../lib/public/images/about_africa_4.jpg";
 import Link from "next/link";
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
@@ -184,7 +183,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="mb-4 inline-block rounded-full border border-[#4F912F]/40 bg-[#4F912F]/10 px-4 py-1.5 text-xs font-semibold tracking-widest text-[#8BC34A] uppercase">
+            <span className="mt-20 mb-4 inline-block rounded-full border border-[#4F912F]/40 bg-[#4F912F]/10 px-4 py-1.5 text-xs font-semibold tracking-widest text-[#8BC34A] uppercase md:mt-0">
               Our Story
             </span>
             <h1

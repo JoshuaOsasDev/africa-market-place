@@ -2,7 +2,7 @@
 import SendOtpcomp from "@/components/pageComponents/auth/auth-user/sendOtpComp";
 import { useParams } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const params = useParams();
   // console.log("params:", params)
 
@@ -15,4 +15,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

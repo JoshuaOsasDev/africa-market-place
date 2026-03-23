@@ -178,7 +178,7 @@ export default function OrderTable({
             ),
           },
         ]}
-        itemsPerPage={5}
+        itemsPerPage={1}
         onSelectChange={(selectedIds) => console.log("Selected:", selectedIds)}
       />
       {activeOrder && (
