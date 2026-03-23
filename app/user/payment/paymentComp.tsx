@@ -3,6 +3,7 @@
 import { getUserOrderId } from "@/services/apiServices/userDashboard";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -31,7 +32,7 @@ function PaymentForm({ orderId }: { orderId: string }) {
   const [order, setOrder] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentIntent, setPaymentIntent] = useState(null);
-
+  const route = useRouter();
   // console.log(order?.data, "order");
 
   const orders = order?.data;
@@ -122,9 +123,6 @@ function PaymentForm({ orderId }: { orderId: string }) {
 
       //console.log("result", result);
 
-      if (result.paymentIntent) {
-      }
-
       if (result.error) {
         // Show error to your customer
 
@@ -134,7 +132,8 @@ function PaymentForm({ orderId }: { orderId: string }) {
       } else {
         if (result.paymentIntent.status === "succeeded") {
           setPaymentIntent(null);
-          toast.success("Payment succcessful");
+          route.replace(`/user/payment/payment-confirmation/${orderId}`);
+          //toast.success("Payment succcessful");
           // Payment succeeded]
           // console.log("payment result:", result);
           // console.log("Payment successful!");
@@ -154,7 +153,7 @@ function PaymentForm({ orderId }: { orderId: string }) {
   };
 
   return (
-    <div className="mx-auto my-10 max-w-md rounded-xl border border-gray-100 bg-white p-8 shadow-lg">
+    <div className="mx-6 my-10 max-w-sm rounded-xl border border-gray-100 bg-white p-3 shadow-lg sm:mx-auto md:mx-auto md:max-w-md md:p-8">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Checkout</h2>
         <p className="text-sm text-gray-500">
@@ -175,7 +174,7 @@ function PaymentForm({ orderId }: { orderId: string }) {
         <div className="flex items-center justify-between border-t border-gray-100 py-4">
           <span className="text-gray-600">Total Amount</span>
           <span className="text-xl font-bold text-gray-900">
-            £{orders?.total}
+            £{orders?.total?.toFixed(2)}
           </span>
         </div>
 

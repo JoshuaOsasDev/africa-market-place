@@ -22,7 +22,6 @@ import { MdCancel } from "react-icons/md";
 import { updateProfileApi } from "@/services/apiServices/userApi";
 import UKAddressAutocomplete from "@/components/common/googlAddressUserLocation";
 
-
 // Define TypeScript types for form values
 
 const UserInfoComp = () => {
@@ -111,7 +110,7 @@ const UserInfoComp = () => {
   };
 
   return (
-    <div className="mx-auto my-4 flex w-full flex-col rounded-md bg-white p-2 md:w-4/5 md:p-4 lg:w-3/5">
+    <div className="mx-auto mt-15 flex w-full flex-col rounded-md bg-white p-2 md:my-4 md:w-4/5 md:p-4 lg:w-3/5">
       <div className="flex flex-col gap-4">
         {file.secure_url ? (
           <div className="flex flex-col gap-2">

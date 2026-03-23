@@ -197,9 +197,15 @@ function OrderSummaryModal({
               </span>
             </Row>
             <div className="h-px bg-[#EFEFEF]" />
+
             <Row label="Subtotal:">
               <span className="font-bold text-[#1A1A1A]">
                 {order.subTotal ?? order.total}
+              </span>
+            </Row>
+            <Row label="Payment Status:">
+              <span className="font-bold text-[#1A1A1A]">
+                {order.paymentStatus}
               </span>
             </Row>
             <div className="mt-1 flex items-center gap-2 rounded-xl bg-[#F0F7F0] px-3 py-2.5">
