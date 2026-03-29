@@ -52,7 +52,7 @@ function CategoryComp() {
 
                 {/* Children Grid */}
                 {children.length > 0 ? (
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
                     {children.map((child) => (
                       <Link
                         href={`/user/categories/${child.slug}`}

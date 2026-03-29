@@ -1,7 +1,4 @@
-import {
-  getMockProduct,
-  getMockRelatedProducts,
-} from "@/lib/data/mockProducts";
+import { getMockProduct } from "@/lib/data/mockProducts";
 import { ProductDetailClient } from "./productDetailClient";
 import { Metadata } from "next";
 

@@ -59,6 +59,7 @@ function PaymentForm({ orderId }: { orderId: string }) {
     }
   };
 
+  //console.log(paymentIntent, "payment intent");
   useEffect(() => {
     const initPayment = async () => {
       try {

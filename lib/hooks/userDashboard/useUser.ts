@@ -19,13 +19,16 @@ import {
   getUserOrder,
   getUserProducts,
   getUserProductsBySlug,
+  getUserReviews,
   getUserWishlist,
   postDelivery,
   postUserOrder,
+  postUserReviews,
   PostUserWishlist,
   removeFromCart,
   updateDelivery,
 } from "@/services/apiServices/userDashboard";
+import { PostReview } from "@/types/appTypes";
 import { Product } from "@/types/product";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -396,4 +399,31 @@ export const useCreateOrder = () => {
   });
 
   return { mutate, isPending };
+};
+
+export const useReviews = (id: string) => {
+  const {
+    isLoading,
+    data: data,
+    error,
+  } = useQuery({
+    queryKey: ["reviews"],
+    queryFn: () => getUserReviews(id),
+  });
+
+  return { isLoading, data, error };
+};
+
+export const usePostReview = () => {
+  const queryClient = useQueryClient();
+  const { isPending, mutate, error } = useMutation({
+    mutationKey: ["post-user-reviews"],
+
+    mutationFn: (payload: PostReview) => postUserReviews(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reviews"] });
+    },
+  });
+
+  return { isPending, mutate, error };
 };

@@ -226,3 +226,30 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+/* globals.css */
+
+/* Raise Cloudinary widget above the Dialog */
+/* .cloudinary-widget,
+.cloudinary-overlay,
+iframe[src*="cloudinary"] {
+  z-index: 9999 !important;
+} */
+
+/* Disable Dialog overlay clicks when Cloudinary is open */
+body.cloudinary-open [data-radix-dialog-overlay] {
+  pointer-events: none !important;
+}
+
+/* Make Cloudinary widget appear above Dialog */
+/* .cloudinary-overlay,
+.cloudinary-widget,
+#cloudinary-widget {
+  z-index: 999999 !important;
+} */
+
+/* Also fix iframe (important) */
+/* iframe[src*="cloudinary"] {
+  z-index: 999999 !important;
+  position: relative !important;
+} */

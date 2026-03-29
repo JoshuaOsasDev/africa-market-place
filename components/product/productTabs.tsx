@@ -11,7 +11,7 @@ interface ProductTabsProps {
   description: string;
   features?: string[];
   additionalInfo?: React.ReactNode;
-  reviews?: Review[];
+  reviews?: string;
   className?: string;
 }
 
@@ -19,7 +19,8 @@ export function ProductTabs({
   description,
   features,
   additionalInfo,
-  reviews = [],
+  reviews = "",
+  isPaid,
   className,
 }: ProductTabsProps) {
   const tabs: Tab[] = [
@@ -69,7 +70,7 @@ export function ProductTabs({
     {
       id: "reviews",
       label: "Customer Feedback",
-      content: <CustomerReviews reviews={reviews} />,
+      content: <CustomerReviews isPaid={isPaid} reviews={reviews} />,
     },
   ];
 

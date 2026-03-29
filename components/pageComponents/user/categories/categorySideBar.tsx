@@ -23,7 +23,7 @@ export default function CategorySideBar() {
   };
 
   return (
-    <aside className="col-span-3 p-6">
+    <aside className="w-fit p-6 md:col-span-3 md:w-full">
       <h2 className="mb-6 text-2xl font-bold text-gray-500">Categories</h2>
       <nav className="space-y-2">
         {categoriesData?.category.map((category) => (
