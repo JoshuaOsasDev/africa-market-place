@@ -8,6 +8,7 @@ import { formatDate } from "@/lib/utils";
 import { UsersOrder } from "@/types/order";
 import { useState } from "react";
 import OrderSummaryModal from "./orderSummaryModal";
+import Image from "next/image";
 
 export default function OrderTable({
   orderParams,
@@ -66,7 +67,7 @@ export default function OrderTable({
       <ReusableTable
         order={orderParams}
         data={filteredOrders}
-        columnsStyle="44px .5fr 1fr .5fr .5fr .5fr .5fr .5fr"
+        columnsStyle="44px .5fr .7fr .5fr .5fr .5fr .5fr .5fr .4fr"
         columns={[
           {
             label: "Order Id",
@@ -80,22 +81,16 @@ export default function OrderTable({
             label: "Product",
             renderCell: (item) => (
               <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-[#F6F6F6] p-1">
-                  {/* <Image
-                  src={item?.items[0].imageUrl}
-                  alt={item.product}
-                  width={40}
-                  height={40}
-                /> */}
-
-                  <p className="p-4"></p>
-                </div>
                 <p className="flex flex-col">
                   {" "}
                   <span className="font-medium text-[#333843]">
-                    {item.product}
+                    {item.items[0].name}
                   </span>
-                  <span className="text-[#667085]">{`+${item.items.length} other products`}</span>
+                  <span className="text-[#667085]">
+                    {item.items.length === 1
+                      ? ""
+                      : `+${item.items.length - 1} other products`}
+                  </span>
                 </p>
               </div>
             ),
@@ -111,7 +106,9 @@ export default function OrderTable({
           {
             label: "Total",
             renderCell: (item) => (
-              <span className="font-medium text-[#667085]">{item.total}</span>
+              <span className="font-medium text-[#667085]">
+                {item.total?.toFixed(2)}
+              </span>
             ),
           },
           {
@@ -124,7 +121,30 @@ export default function OrderTable({
           },
 
           {
-            label: "Status",
+            label: "Pay Status",
+            renderCell: (item) => {
+              type PaymentStatus = "pending" | "successfull" | "failed";
+
+              const colors: Record<PaymentStatus, string> = {
+                pending: "bg-[#FFF9EA] text-[#FBC02D]",
+                successfull: "bg-[#E8F8FD] text-[#13B2E4]",
+                failed: "bg-[#FFE8E5] text-[#FF4733]",
+              };
+
+              const status = item.paymentStatus as PaymentStatus;
+              const colorClass =
+                colors[status] ?? "bg-green-100 text-green-700";
+
+              return (
+                <span className={`rounded-full px-3 py-1 ${colorClass}`}>
+                  {item.paymentStatus}
+                </span>
+              );
+            },
+          },
+
+          {
+            label: "Delivery Status",
             renderCell: (item) => {
               type OrderStatus = "pending" | "shipped" | "cancelled";
 

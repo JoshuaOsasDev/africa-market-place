@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 function page() {
   return (
     <div className="mt-10 py-2">
-      <AuthProgressBarUserAuth level={2} />
+      {/* <AuthProgressBarUserAuth level={2} /> */}
       <LoginComp />
     </div>
   );

@@ -46,7 +46,7 @@ function Page() {
   }, [categoryId, categoriesData, setSelectedCategory]);
 
   return (
-    <div className="grid min-h-screen grid-cols-[20rem_1fr]">
+    <div className="grid min-h-screen md:grid-cols-[20rem_1fr]">
       <aside className="h-full">
         <CategorySideBar />
       </aside>

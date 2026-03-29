@@ -166,8 +166,14 @@ const UserInfoComp = () => {
                     maxFileSize: 1 * 1024 * 1024, // max 5MB per file
                   }}
                 >
-                  {({ open }) => (
-                    <button type="button" onClick={() => open()}>
+                  {({ open, isLoading }) => (
+                    <button
+                      type="button"
+                      disabled={isLoading}
+                      onClick={() => {
+                        if (typeof open === "function") open(); // 👈 key fix
+                      }}
+                    >
                       <FiCamera className="text-white" />
                     </button>
                   )}

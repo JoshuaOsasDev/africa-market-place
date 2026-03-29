@@ -207,3 +207,9 @@ export interface FAQGroup {
   group: string;
   items: FAQItem[];
 }
+
+export type PostReview = {
+  pid: string;
+  rating: number;
+  review: string;
+};

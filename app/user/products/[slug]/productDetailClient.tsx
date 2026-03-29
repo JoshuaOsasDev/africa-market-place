@@ -43,6 +43,8 @@ export function ProductDetailClient({
   const product: Product = userProductsSlug?.data;
   const relatedProducts = product?.relatedProducts;
 
+  //console.log(product, "product slug");
+
   if (isLoading) return <UserProductLoader />;
 
   const handleToggleWishlist = () => {
@@ -126,9 +128,10 @@ export function ProductDetailClient({
         {/* Product Tabs Section with Reviews */}
         <div className="mb-16">
           <ProductTabs
+            isPaid={product?.isPurchased}
             description={product?.description}
             features={product?.isFeatures}
-            reviews={product?.reviews}
+            reviews={product?._id}
             additionalInfo={
               product?.additionalInfo && (
                 <div className="text-base text-[#6F6F6F]">

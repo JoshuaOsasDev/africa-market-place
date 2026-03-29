@@ -65,6 +65,7 @@ export function ProductInfo({
   //   }
   // };
 
+  //console.log(rating, "product rating");
   return (
     <div className={cn("flex flex-col gap-4", className)}>
       <div className="flex flex-row items-center gap-4">

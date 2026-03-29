@@ -4,6 +4,7 @@ import { StarRating } from "@/components/common/starRating";
 import { CountryFlag } from "@/components/common/countryFlag";
 import { Review } from "@/types/review";
 import { cn } from "@/lib/utils";
+import { capitalize } from "@/lib/hooks/useOutsideClick";
 
 interface ReviewCardProps {
   review: Review;
@@ -11,6 +12,7 @@ interface ReviewCardProps {
 }
 
 export function ReviewCard({ review, className }: ReviewCardProps) {
+  console.log(review, "Reviews");
   return (
     <div
       className={cn(
@@ -20,11 +22,11 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
     >
       <div className="flex items-start gap-3">
         <div className="shrink-0">
-          {review.userAvatar ? (
+          {review?.user ? (
             <div className="relative h-10 w-10 overflow-hidden rounded-full bg-[#E5E7EB]">
               <Image
-                src={review.userAvatar}
-                alt={review.userName}
+                src={review.user?.cover.url}
+                alt={review.user?.firstName}
                 fill
                 className="object-cover"
               />
@@ -50,11 +52,11 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex flex-wrap items-center gap-2">
             <h4 className="text-sm font-semibold text-[#111827] lg:text-base">
-              {review.userName}
+              {`${capitalize(review?.user?.firstName)} ${capitalize(review?.user?.lastName)}`}
             </h4>
-            {review.countryFlag && (
+            {/* {review.countryFlag && (
               <CountryFlag countryCode={review.countryFlag} size="sm" />
-            )}
+            )} */}
           </div>
 
           <div className="mb-2">
@@ -62,10 +64,18 @@ export function ReviewCard({ review, className }: ReviewCardProps) {
           </div>
 
           <p className="mb-2 text-sm leading-relaxed text-[#6F6F6F] lg:text-base">
-            {review.comment}
+            {review.review}
           </p>
 
-          <p className="text-xs text-[#9CA3AF] lg:text-sm">{review.date}</p>
+          <p className="text-xs text-[#9CA3AF] lg:text-sm">
+            {new Date(review.createdAt).toLocaleString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
         </div>
       </div>
     </div>

@@ -129,6 +129,7 @@ export type Product = {
   reviews: Review[];
   rating?: number;
   isFeatures: string[];
+  isPurchased?: boolean;
 
   // Variants (only when type === "variable")
   variants: ProductVariant[];

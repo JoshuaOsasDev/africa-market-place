@@ -9,7 +9,7 @@ function layout({ children }: { children: React.ReactNode }) {
       <Header />
       <Banner />
       <CategoryProvider>
-        <div className="">{children}</div>
+        <div className="mt-3 md:mt-0">{children}</div>
       </CategoryProvider>
       <Footer />
     </div>

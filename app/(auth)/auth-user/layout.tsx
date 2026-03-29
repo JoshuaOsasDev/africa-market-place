@@ -5,12 +5,12 @@ import Header from "@/components/common/header";
 function layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-[#EAEAEA]">
-      <Header />
-      <Banner />
-      <div className="mx-auto mt-10 flex flex-1 flex-col items-center justify-center space-y-2 rounded-lg bg-white px-4 md:my-4 md:px-6 lg:px-8">
+      {/* <Header />
+      <Banner /> */}
+      <div className="mx-auto my-10 flex flex-1 flex-col items-center justify-center space-y-2 rounded-lg bg-white px-4 md:my-4 md:px-6 lg:px-8">
         <div className="rounded-md">{children}</div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

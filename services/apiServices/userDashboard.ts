@@ -1,5 +1,6 @@
 import { Product } from "@/types/product";
 import http from "./http";
+import { PostReview } from "@/types/appTypes";
 
 //get User Product
 export const getUserProducts = async () => {
@@ -102,5 +103,15 @@ export const postDelivery = async (payload: any) => {
 
 export const deleteDelivery = async (id: string) => {
   const { data } = await http.delete(`/delivery/${id}`);
+  return data;
+};
+
+export const getUserReviews = async (id: string) => {
+  const { data } = await http.get(`/reviews/${id}`);
+  return data;
+};
+
+export const postUserReviews = async (payload: PostReview) => {
+  const { data } = await http.post(`/reviews`, payload);
   return data;
 };
