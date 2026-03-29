@@ -2,15 +2,13 @@
 import React, { useState } from "react";
 import { ReviewCard } from "@/components/product/reviewCard";
 import { Review } from "@/types/review";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useReviews } from "@/lib/hooks/userDashboard/useUser";
-import WriteReviewModal from "../common/writeReviewModal";
 
 interface CustomerReviewsProps {
   reviews: string;
   className?: string;
-  isPaid: boolean;
+  isPaid: boolean | undefined;
 }
 
 export function CustomerReviews({

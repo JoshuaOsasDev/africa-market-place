@@ -6,6 +6,7 @@ type Users = {
   lastName: string;
 };
 export interface Review {
+  id?: string;
   _id: string;
   user: Users;
   userAvatar?: string;

@@ -13,6 +13,7 @@ interface ProductTabsProps {
   additionalInfo?: React.ReactNode;
   reviews?: string;
   className?: string;
+  isPaid: boolean | undefined;
 }
 
 export function ProductTabs({

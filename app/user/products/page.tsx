@@ -1,27 +1,36 @@
-"use client";
+import ProductCardExample from "@/components/product/productCardExample";
+import { getUserProducts } from "@/services/apiServices/userDashboard";
+import { Metadata } from "next";
 
-import Loader from "@/components/common/loader";
-import NoProducts from "@/components/common/noProducts";
-import ProductCard from "@/components/common/productCardComp";
-import { useUserProducts } from "@/lib/hooks/userDashboard/useUser";
-import { Product } from "@/types/product";
+export async function generateMetadata(): Promise<Metadata> {
+  const res = await getUserProducts();
 
-export default function ProductCardExample() {
-  const { userProducts, isLoading } = useUserProducts();
+  if (!res || !res.data || res.data.length === 0) {
+    return {
+      title: "Products - Africa Marketplace",
+      description: "Browse products on Africa Marketplace",
+    };
+  }
 
-  const product: Product[] = userProducts?.data;
+  // Use first product as preview (optional)
+  const firstProduct = res.data[0];
 
-  if (isLoading) return <Loader />;
-  if (!product || product.length === 0) return <NoProducts />;
+  return {
+    title: "Products - Africa Marketplace",
+    description: firstProduct?.description?.substring(0, 160),
+    openGraph: {
+      title: "Products - Africa Marketplace",
+      description: firstProduct?.description?.substring(0, 160),
+      images: [firstProduct?.images?.[0]],
+      type: "website",
+    },
+  };
+}
+
+export default function Page() {
   return (
-    <div className="min-h-screen bg-[#F8F9FA] py-8">
-      <div className="mx-auto max-w-7xl md:px-4">
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-2 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-          {product?.map((product) => (
-            <ProductCard product={product} key={product._id} />
-          ))}
-        </div>
-      </div>
+    <div>
+      <ProductCardExample />
     </div>
   );
 }

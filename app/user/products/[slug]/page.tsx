@@ -1,4 +1,4 @@
-import { getMockProduct } from "@/lib/data/mockProducts";
+import { getUserProductsBySlug } from "@/services/apiServices/userDashboard";
 import { ProductDetailClient } from "./productDetailClient";
 import { Metadata } from "next";
 
@@ -12,7 +12,8 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const product = getMockProduct(resolvedParams.slug);
+
+  const product = await getUserProductsBySlug(resolvedParams.slug);
 
   if (!product) {
     return {
@@ -21,23 +22,19 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${product.name} - Africa Marketplace`,
-    description: product.description.substring(0, 160),
+    title: `${product?.data?.name} - Africa Marketplace`,
+    description: product?.data?.description?.substring(0, 160),
     openGraph: {
-      title: product.name,
-      description: product.description.substring(0, 160),
-      images: [product.images[0]],
+      title: product?.data?.name,
+      description: product?.data?.description?.substring(0, 160),
+      images: [product?.data?.images?.[0]],
       type: "website",
     },
   };
 }
-
 export default async function ProductPage({ params }: ProductPageProps) {
   const resolvedParams = await params;
 
-  //  Fetching Mock Data
-
-  //const product = getMockProduct(resolvedParams.slug);
 
   return (
     <div>
