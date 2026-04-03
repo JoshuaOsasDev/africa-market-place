@@ -6,6 +6,7 @@ import ReactQueryProvider from "@/provider/reactQueryProvider";
 import ReduxProvider from "@/provider/reduxProvider";
 import ToastProvider from "@/provider/toastProvider";
 import StripProvider from "@/provider/stripPaymentProvider";
+import PusherSubscription from "@/components/pusher/pusherSubscription";
 
 export const nunito = Nunito({
   subsets: ["latin"],
@@ -38,7 +39,10 @@ export default function RootLayout({
               clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
             >
               <ToastProvider>
-                <StripProvider>{children}</StripProvider>
+                <StripProvider>
+                  <PusherSubscription />
+                  {children}
+                </StripProvider>
               </ToastProvider>
             </GoogleOAuthProvider>
           </ReactQueryProvider>

@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { userAuthType } from "@/types/authTypes";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -9,6 +10,7 @@ const initialState: userAuthType = {
   count: 0,
   isInitialized: false,
   loading: false,
+  token: null,
 };
 
 // slice
@@ -18,12 +20,24 @@ const slice = createSlice({
 
   reducers: {
     signInAction(state, action) {
-      state.user = action.payload;
+      const { user, token } = action.payload;
+      state.user = user;
+      state.token = token;
       state.isAuthenticated = true;
+
+      // 1. Save to Cookies so Middleware can see it
+      // 'lax' is fine for localhost, but 'none' + 'secure' is needed for cross-domain
+      Cookies.set("token", token, { expires: 7 });
+      Cookies.set("user_role", user.role, { expires: 7 });
     },
     setLogoutAction(state) {
       state.user = null;
+      state.token = null;
       state.isAuthenticated = false;
+
+      // 2. Remove Cookies on logout
+      Cookies.remove("token");
+      //Cookies.remove("user_role");
     },
 
     setCountAction(state) {

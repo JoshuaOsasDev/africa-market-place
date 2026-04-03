@@ -30,7 +30,8 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "tailwind.config.js",
-    "components/pageComponents/admin/productReview"
+    "components/pageComponents/admin/productReview",
+    "components/pusher/pusherSubscription.tsx"
   ],
   "exclude": ["node_modules"]
 }

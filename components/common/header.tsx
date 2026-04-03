@@ -565,18 +565,20 @@ function Header() {
               <div className="group hidden flex-col space-y-1 pt-2 lg:flex">
                 <Link
                   className="cursor-pointer text-lg font-medium hover:text-blue-500"
-                  href={"/tracking"}
+                  href={"/user/dashboard/tracking"}
                 >
                   <TextStyle
                     textContent={"Order Tracking"}
                     textStyle={`hover:text-[#4F912F] ${
-                      path === "/tracking" ? "text-[#4F912F]" : "text-[#6F6F6F]"
+                      path === "/user/dashboard/tracking"
+                        ? "text-[#4F912F]"
+                        : "text-[#6F6F6F]"
                     }`}
                   />
                 </Link>
                 <div
                   className={`h-0.5 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full ${
-                    path === "/tracking" ? "w-full" : "w-0"
+                    path === "/user/dashboard/tracking" ? "w-full" : "w-0"
                   }`}
                 ></div>
               </div>
