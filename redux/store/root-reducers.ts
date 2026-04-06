@@ -12,6 +12,7 @@ import SettingsReducer from "../slices/settings";
 import CategoriesReducer from "../slices/categories";
 import BrandsReducer from "../slices/brands";
 import { showFormReducer } from "../slices/showFormSlice";
+import { pusherReducer } from "../slices/pusherState";
 
 const rootPersistConfig = {
   key: "root",
@@ -64,5 +65,6 @@ const reducer = combineReducers({
   categories: persistReducer(categoriesPersistConfig, CategoriesReducer),
   brands: BrandsReducer,
   showFormReducer: showFormReducer,
+  pusherReducer: pusherReducer,
 });
 export { rootPersistConfig, reducer };

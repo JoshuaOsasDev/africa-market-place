@@ -22,8 +22,8 @@ export default function ProductHoverCard({
   const hasDiscount = salePrice && price > salePrice;
   const displayPrice = hasDiscount ? salePrice : price;
 
-  console.log(price, "price");
-  console.log(salePrice, "sales");
+  //console.log(price, "price");
+  //console.log(salePrice, "sales");
   const discountPercent = hasDiscount
     ? Math.round(((price - salePrice) / price) * 100)
     : "No Discount";

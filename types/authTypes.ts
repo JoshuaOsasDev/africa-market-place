@@ -45,6 +45,7 @@ export type userType = {
   city: string;
   address: string;
   poatalCode: string;
+  _id?: string;
 };
 
 export type userAuthType = {
@@ -53,4 +54,5 @@ export type userAuthType = {
   count: number;
   isInitialized: boolean;
   loading: boolean;
+  token: string | null;
 };

@@ -90,25 +90,27 @@ function Header() {
           <div className="">
             <div className="group relative flex items-center space-x-2.5">
               <div className="flex items-center space-x-2">
-                <Link
-                  href={"/user/dashboard/wishlist"}
-                  className="relative h-6 w-6"
-                >
-                  <Heart
-                    className={`h-6 w-6 ${
-                      path === "/user/dashboard/wishlist"
-                        ? "text-[#4F912F]"
-                        : "text-[#6F6F6F]"
-                    }`}
-                  />
-                  {wishlist.wishlist?.data?.length > 0 && (
-                    <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
-                      <span className="text-[10px] text-white">
-                        {wishlist.wishlist?.data?.length || 0}
-                      </span>
-                    </div>
-                  )}
-                </Link>
+                {user?.user && (
+                  <Link
+                    href={"/user/dashboard/wishlist"}
+                    className="relative h-6 w-6"
+                  >
+                    <Heart
+                      className={`h-6 w-6 ${
+                        path === "/user/dashboard/wishlist"
+                          ? "text-[#4F912F]"
+                          : "text-[#6F6F6F]"
+                      }`}
+                    />
+                    {wishlist.wishlist?.data?.length > 0 && (
+                      <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                        <span className="text-[10px] text-white">
+                          {wishlist.wishlist?.data?.length || 0}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+                )}
                 <Link href={"/user/cart"} className="relative h-6 w-6">
                   <ShoppingCart
                     className={`h-6 w-6 ${
@@ -127,7 +129,7 @@ function Header() {
                 </Link>
               </div>
               {/* Profile Image */}
-              {user?.user && (
+              {user.user?.cover?.url ? (
                 <div className="relative h-6 w-6 cursor-pointer">
                   <Image
                     src={
@@ -138,6 +140,12 @@ function Header() {
                     className="rounded-full object-cover"
                   />
                 </div>
+              ) : user.user ? (
+                <UserRound className="h-6 w-6 cursor-pointer" />
+              ) : (
+                <Link href={"/auth-user/login"}>
+                  <UserRound className="h-6 w-6 cursor-pointer text-[#6F6F6F]" />
+                </Link>
               )}
             </div>
           </div>
@@ -384,25 +392,27 @@ function Header() {
             </div>
             <div className="flex flex-row items-center space-x-2">
               <div className="ml-2 flex flex-row items-center space-x-3">
-                <Link
-                  href={"/user/dashboard/wishlist"}
-                  className="relative h-6 w-6"
-                >
-                  <Heart
-                    className={`h-6 w-6 ${
-                      path === "/user/dashboard/wishlist"
-                        ? "text-[#4F912F]"
-                        : "text-[#6F6F6F]"
-                    }`}
-                  />
-                  {wishlist.wishlist?.data?.length > 0 && (
-                    <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
-                      <span className="text-[10px] text-white">
-                        {wishlist.wishlist?.data?.length || 0}
-                      </span>
-                    </div>
-                  )}
-                </Link>
+                {user.user && (
+                  <Link
+                    href={"/user/dashboard/wishlist"}
+                    className="relative h-6 w-6"
+                  >
+                    <Heart
+                      className={`h-6 w-6 ${
+                        path === "/user/dashboard/wishlist"
+                          ? "text-[#4F912F]"
+                          : "text-[#6F6F6F]"
+                      }`}
+                    />
+                    {wishlist.wishlist?.data?.length > 0 && (
+                      <div className="absolute -right-2 bottom-3 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-[#FF0000] p-1">
+                        <span className="text-[10px] text-white">
+                          {wishlist.wishlist?.data?.length || 0}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+                )}
                 <div className="relative h-6 w-6">
                   <Link href={"/user/cart"}>
                     <ShoppingCart
@@ -427,16 +437,21 @@ function Header() {
             {user?.user ? (
               <div className="group relative ml-2 flex items-center">
                 {/* Profile Image */}
-                <div className="relative h-10 w-10 cursor-pointer">
-                  <Image
-                    src={
-                      user.user?.cover?.url || "/images/avatar-placeholder.png"
-                    }
-                    alt="User Profile"
-                    fill
-                    className="rounded-full object-cover"
-                  />
-                </div>
+                {user.user?.cover?.url ? (
+                  <div className="relative h-10 w-10 cursor-pointer">
+                    <Image
+                      src={
+                        user.user?.cover?.url ||
+                        "/images/avatar-placeholder.png"
+                      }
+                      alt="User Profile"
+                      fill
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <UserRound className="h-10 w-10 cursor-pointer" />
+                )}
 
                 {/* Dropdown */}
                 <div className="invisible absolute top-12 right-0 z-50 w-64 rounded-xl border border-gray-200 bg-white p-4 opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:opacity-100">
@@ -565,18 +580,20 @@ function Header() {
               <div className="group hidden flex-col space-y-1 pt-2 lg:flex">
                 <Link
                   className="cursor-pointer text-lg font-medium hover:text-blue-500"
-                  href={"/tracking"}
+                  href={"/user/dashboard/tracking"}
                 >
                   <TextStyle
                     textContent={"Order Tracking"}
                     textStyle={`hover:text-[#4F912F] ${
-                      path === "/tracking" ? "text-[#4F912F]" : "text-[#6F6F6F]"
+                      path === "/user/dashboard/tracking"
+                        ? "text-[#4F912F]"
+                        : "text-[#6F6F6F]"
                     }`}
                   />
                 </Link>
                 <div
                   className={`h-0.5 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full ${
-                    path === "/tracking" ? "w-full" : "w-0"
+                    path === "/user/dashboard/tracking" ? "w-full" : "w-0"
                   }`}
                 ></div>
               </div>

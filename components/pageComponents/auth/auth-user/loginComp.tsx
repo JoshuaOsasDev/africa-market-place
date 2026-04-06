@@ -124,7 +124,8 @@ const LoginComp = () => {
         ...data,
         rememberMe: isChecked,
       });
-      dispatch(signInAction(result.user));
+      dispatch(signInAction(result));
+      //dispatch(signInAction(result.token));
       dispatch(setWishlistAction(result.user.wishlist));
 
       if (!result.user.isVerified) {
@@ -136,6 +137,7 @@ const LoginComp = () => {
       const isAdmin = result.user?.role?.includes("admin");
       const isVendor = result.user?.role?.includes("vendor");
 
+      console.log(result, "log in details");
       const goto = redirect
         ? redirect
         : isAdmin

@@ -72,6 +72,7 @@ export const getUserOrderId = async (id: string) => {
 export const postUserOrder = async (payload: any) => {
   const { data } = await http.post("/orders", payload);
   console.log(data, "data");
+
   return data;
 };
 
