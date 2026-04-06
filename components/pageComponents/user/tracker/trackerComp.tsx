@@ -80,7 +80,7 @@ export default function TrackerComp() {
   const s = statuses[status];
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8 font-sans">
+    <div className="mx-auto mt-12 w-full max-w-4xl px-4 py-2 font-sans md:mt-0">
       {/* Top bar */}
       <div className="mb-4 flex items-center justify-between">
         <p className="text-[11px] font-medium tracking-widest text-gray-400 uppercase">

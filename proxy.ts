@@ -22,6 +22,21 @@ export function proxy(request: NextRequest) {
 
   const role = user?.role;
 
+  //middleware to prevent user and admin/vendor from accessing each other's dashboards details page and checkout page
+  if (pathname.startsWith("/user/dashboard")) {
+    if (!user) {
+      return NextResponse.redirect(new URL("/auth-user/login", request.url));
+    }
+
+    if (role !== "user") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
+  if (!user && pathname.startsWith("/user/checkout")) {
+    return NextResponse.redirect(new URL("/auth-user/login", request.url));
+  }
+
   //sconsole.log("USER:", user);
 
   //  Admin/Vendor should NOT access home

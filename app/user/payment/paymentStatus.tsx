@@ -1,4 +1,6 @@
 "use client";
+import { setPusherState } from "@/redux/slices/pusherState";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { getUserOrderId } from "@/services/apiServices/userDashboard";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -176,7 +178,12 @@ export default function PaymentStatus({ orderId }: { orderId: string }) {
   const [order, setOrder] = useState<any>(null);
   const [show, setShow] = useState(false);
   const status = order?.data?.paymentStatus as PaymentStatusType;
+  const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const realTimePaymentStatus = useAppSelector(
+    (state) => state.pusherReducer.paymetStatus,
+  );
 
   useEffect(() => {
     async function fecthOrder() {
@@ -199,6 +206,35 @@ export default function PaymentStatus({ orderId }: { orderId: string }) {
     const t = setTimeout(() => setShow(true), 100);
     return () => clearTimeout(t);
   }, [orderId]);
+
+  useEffect(() => {
+    if (!realTimePaymentStatus || !orderId) return;
+
+    async function refetchOrder() {
+      try {
+        const res = await getUserOrderId(orderId);
+        if (!res) throw new Error("Order not found");
+
+        setOrder(res);
+
+        //  Reset trigger
+        dispatch(
+          setPusherState({
+            pusher: {
+              connected: true,
+              channel: null,
+              event: null,
+              data: null,
+            },
+          }),
+        );
+      } catch (error) {
+        console.log(error, "Realtime refetch error");
+      }
+    }
+
+    refetchOrder();
+  }, [realTimePaymentStatus, orderId, dispatch]);
 
   // useEffect(() => {
   //   if (status === "successful") {
