@@ -1,82 +1,22 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+// This middleware runs on every request that matches the `matcher` rules below
+import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const url = request.nextUrl;
+  // console.log("CODE RAN 1");
+  const user = false; // example auth check
 
-  const token = request.cookies.get("token")?.value;
-
-  const isAuthPage = pathname.startsWith("/auth-user/login");
-
-  let user: { role: "user" | "admin" | "vendor" } | null = null;
-
-  // ✅ Decode token
-  try {
-    if (token) {
-      const payload = token.split(".")[1];
-      user = JSON.parse(atob(payload));
-    }
-  } catch (err) {
-    console.log("Invalid token", err);
-  }
-
-  const role = user?.role;
-
-  //middleware to prevent user and admin/vendor from accessing each other's dashboards details page and checkout page
-  if (pathname.startsWith("/user/dashboard")) {
-    if (!user) {
-      return NextResponse.redirect(new URL("/auth-user/login", request.url));
-    }
-
-    if (role !== "user") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
-  if (!user && pathname.startsWith("/user/checkout")) {
+  if (url.pathname === "/admin/dashboard" && user) {
+    // console.log("CODE RAN 2");
     return NextResponse.redirect(new URL("/auth-user/login", request.url));
-  }
-
-  //sconsole.log("USER:", user);
-
-  //  Admin/Vendor should NOT access home
-  if (pathname === "/") {
-    if (role === "admin") {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
-    if (role === "vendor") {
-      return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
-    }
-  }
-
-  //  Normal users cannot access admin/vendor dashboards
-  if (role === "user") {
-    if (pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-    if (pathname.startsWith("/vendor")) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
-  //  Admin cannot access vendor routes (optional)
-  if (role === "admin" && pathname.startsWith("/vendor")) {
-    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-  }
-
-  //  Vendor cannot access admin routes (optional)
-  if (role === "vendor" && pathname.startsWith("/admin")) {
-    return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
-  }
-
-  //  Logged in user shouldn't go back to login
-  if (user && isAuthPage) {
-    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
 }
 
+// Configuration for the middleware
 export const config = {
-  matcher: ["/((?!_next|api|favicon.ico).*)"],
+  // This defines the routes where the middleware should run.
+  // Only requests to these paths will trigger the middleware.
+  /*     matcher: ["/admin/dashboard", "/payment"], */
 };
