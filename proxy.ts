@@ -10,7 +10,7 @@ export function proxy(request: NextRequest) {
 
   let user: { role: "user" | "admin" | "vendor" } | null = null;
 
-  // ✅ Decode token
+  // ✅ Decode token safely
   if (token) {
     try {
       const base64Url = token.split(".")[1];
@@ -23,55 +23,89 @@ export function proxy(request: NextRequest) {
 
   const role = user?.role;
 
-  //console.log(role, "USER ROLE IN PROXY");
-  //middleware to prevent user and admin/vendor from accessing each other's dashboards details page and checkout page
-  if (pathname.startsWith("/user/dashboard")) {
-    if (!user) {
-      return NextResponse.redirect(new URL("/auth-user/login", request.url));
-    }
+  // ✅ CENTRALIZED ROUTE CONFIG (NEW 🔥)
+  const protectedRoutes = ["/user/dashboard", "/user/checkout"];
 
+  const adminRoutes = ["/admin"];
+  const vendorRoutes = ["/vendor"];
+
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
+
+  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
+
+  const isVendorRoute = vendorRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
+
+  // ============================================
+  //  1. BLOCK UNAUTHENTICATED USERS (NAV PROTECTION)
+  // ============================================
+  if (!user && isProtectedRoute) {
+    return NextResponse.redirect(new URL("/auth-user/login", request.url));
+  }
+
+  // ============================================
+  //  2. ROLE-BASED ACCESS CONTROL
+  // ============================================
+
+  // User routes
+  if (pathname.startsWith("/user/dashboard")) {
     if (role !== "user") {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
-  if (!user && pathname.startsWith("/user/checkout")) {
-    return NextResponse.redirect(new URL("/auth-user/login", request.url));
+  // Admin routes
+  if (isAdminRoute && role !== "admin") {
+    if (!user) {
+      return NextResponse.redirect(new URL("/auth-user/login", request.url));
+    }
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  //sconsole.log("USER:", user);
+  // Vendor routes
+  if (isVendorRoute && role !== "vendor") {
+    if (!user) {
+      return NextResponse.redirect(new URL("/auth-user/login", request.url));
+    }
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
-  //  Admin/Vendor should NOT access home
+  // ============================================
+  // 🔄 3. REDIRECT BASED ON ROLE (HOME PAGE CONTROL)
+  // ============================================
   if (pathname === "/") {
     if (role === "admin") {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
+
     if (role === "vendor") {
       return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
     }
   }
 
-  //  Normal users cannot access admin/vendor dashboards
+  // ============================================
+  //  4. PREVENT CROSS-ROLE ACCESS
+  // ============================================
   if (role === "user") {
-    if (pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-    if (pathname.startsWith("/vendor")) {
+    if (isAdminRoute || isVendorRoute) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
-  //  Admin cannot access vendor routes (optional)
-  if (role === "admin" && pathname.startsWith("/vendor")) {
+  if (role === "admin" && isVendorRoute) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
 
-  //  Vendor cannot access admin routes (optional)
-  if (role === "vendor" && pathname.startsWith("/admin")) {
+  if (role === "vendor" && isAdminRoute) {
     return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
   }
 
-  //  Logged in user shouldn't go back to login
+  // ============================================
+  // 5. BLOCK LOGGED-IN USERS FROM LOGIN PAGE
+  // ============================================
   if (user && isAuthPage) {
     return NextResponse.redirect(new URL("/", request.url));
   }
@@ -80,5 +114,11 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|api|favicon.ico).*)"],
+  matcher: [
+    "/",
+    "/auth-user/login",
+    "/user/:path*",
+    "/admin/:path*",
+    "/vendor/:path*",
+  ],
 };
