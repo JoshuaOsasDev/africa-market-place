@@ -35,6 +35,7 @@ function Carousel() {
   // console.log(sliderImage, "image slider");
   const slider = sliderImage?.data;
 
+  console.log(slider, "slider");
   if (isLoading) {
     return <SliderSkeleton />;
   }

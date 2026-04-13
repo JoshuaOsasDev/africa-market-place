@@ -48,9 +48,10 @@ export function ProductDetailClient({
   if (isLoading) return <UserProductLoader />;
 
   const handleToggleWishlist = () => {
+    //console.log(product._id, "wishlistId");
     if (!product?.slug) return;
 
-    postWishlist(product._id);
+    //postWishlist(product._id);
 
     setWishlistedProducts((prev = []) => {
       const exists = prev.some((item: any) => item.slug === product.slug);

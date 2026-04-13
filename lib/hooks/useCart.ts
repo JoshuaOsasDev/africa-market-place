@@ -18,6 +18,7 @@ export function useCart(product?: Product) {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.product.checkout.cart);
 
+  //console.log(cartItems, "cart items in useCart");
   const {
     mutate: addToCartAPI,
     isPending: isAdding,
@@ -164,12 +165,28 @@ export function useCart(product?: Product) {
     [cartItems, dispatch, removeFromCartAPI],
   );
 
+  //is product in cart with a paramenter
+
+  const isProductInCart = useCallback(
+    (productId: string) => {
+      if (!productId || !cartItems || !Array.isArray(cartItems)) return false;
+
+      return cartItems.some((item: any) => {
+        if (typeof item.pid === "string") return item.pid === productId;
+        if (typeof item.pid === "object" && item.pid !== null)
+          return item.pid._id === productId;
+        return item._id === productId;
+      });
+    },
+    [cartItems],
+  );
   return {
     // State
     cartItems,
     isInCart,
     cartCount,
     cartTotal,
+    isProductInCart,
 
     // Loading states
     isAdding: isAddingThisProduct,

@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { notFound, useRouter } from "next/navigation";
+import coverOne from "../../../../lib/public/images/cover_login.jpg";
 import { AxiosError } from "axios";
-import { Mail } from "lucide-react";
+import { KeyRound, Mail } from "lucide-react";
 import TextStyle from "@/components/common/textStyle";
 import { verifyEmailSchema } from "@/lib/utility/yupvalidation";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -15,6 +16,7 @@ import {
   sendVerificationOtp,
 } from "@/services/apiServices/authApi";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 const SendOtpcomp = ({ url }: { url: string }) => {
   /* naviagtion */
@@ -81,64 +83,89 @@ const SendOtpcomp = ({ url }: { url: string }) => {
     }
   };
 
+  const isForgetPassword = newUrl === "forgetPassword";
   return (
-    <div className="">
-      <div className="flex flex-col md:space-x-15">
-        <TextStyle
-          textContent={` ${newUrl === "verifyEmail" ? "Email Verification" : "Forget Password"}`}
-          textStyle="font-medium text-[20px] leading-[120%] tracking-[-0.02em] align-middle pt-5 pb-1"
-        />
+    <div className="flex min-h-[420px] w-full">
+      {/* ── LEFT PANEL ── */}
+      <div className="relative hidden w-[360px] shrink-0 overflow-hidden lg:block">
+        <Image src={coverOne} alt="login cover" fill className="object-cover" />
+        {/* subtle dark overlay for depth */}
+        <div className="absolute inset-0 bg-[#111f12]/40" />
+      </div>
 
-        <div className="w-full">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="xs:w-[350px] mt-4 flex flex-col space-y-2"
-          >
-            <div className="flex w-full flex-col space-y-1">
-              <label className="font-['Inter'] text-sm leading-[18px] font-medium text-slate-700">
-                <TextStyle
-                  textContent="Email"
-                  textStyle="text-[16px] text-[##667185] text-bold"
-                />
-              </label>
-              <div className="group flex h-[39px] flex-row items-center overflow-hidden rounded-lg border border-[#F4F4F4F4] px-2.5 shadow transition-colors focus-within:border-green-600">
-                {newUrl === "verifyEmail" ? (
-                  <input
-                    {...register("email")}
-                    value={appState.user?.email || ""}
-                    placeholder="user@gmail.com"
-                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
-                  />
-                ) : (
-                  <input
-                    {...register("email")}
-                    placeholder="user@gmail.com"
-                    className="h-full flex-1 items-center justify-start py-2.5 font-['Inter'] text-sm leading-[18px] font-medium text-slate-700 focus:border-transparent focus:outline-none"
-                  />
-                )}
-                <Mail className="h-4 w-4 transition-colors group-focus-within:text-green-600" />
-              </div>
-              <p className="font-['Inter'] text-sm leading-[18px] font-medium text-red-700">
-                {errors.email?.message}
-              </p>
-            </div>
-
-            {/* submit button starts */}
-            <button
-              disabled={appState.loading}
-              className={`mt-4 inline-flex h-[39px] w-full cursor-pointer items-center justify-center rounded-[27px] bg-[#2E7D32] p-2.5`}
-            >
-              <span className="text-sm leading-[18.90px] font-semibold text-white">
-                {appState.loading ? "Please wait.." : "Reset"}
-              </span>
-            </button>
-          </form>
+      {/* ── RIGHT PANEL ── */}
+      <div className="flex flex-1 flex-col justify-center px-8 py-10 md:px-12">
+        {/* Icon badge */}
+        <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-[#2E7D32]/10">
+          <KeyRound className="h-5 w-5 text-[#2E7D32]" strokeWidth={1.8} />
         </div>
 
-        <TextStyle
-          textContent="Click reset and check your E-mail for an OTP code"
-          textStyle="text-[#FBC642] my-[20px] md:text-[16px] text-[14px] text-center"
-        />
+        {/* Heading */}
+        <h1 className="text-[22px] leading-snug font-semibold tracking-[-0.02em] text-[#1A1A1A]">
+          {newUrl === "verifyEmail"
+            ? "Email Verification"
+            : "Lost your password?"}
+        </h1>
+
+        {/* Sub-copy — only shown for forget password */}
+        {isForgetPassword && (
+          <p className="mt-2 max-w-[320px] text-[13.5px] leading-[1.6] text-[#667185]">
+            Supply us with the email address you registered with and we'll send
+            you a link to reset your password.
+          </p>
+        )}
+
+        {/* Divider */}
+        <div className="my-5 h-px w-full bg-[#F0F0F0]" />
+
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex w-full max-w-[360px] flex-col space-y-4"
+        >
+          <div className="flex flex-col space-y-1.5">
+            <label className="text-[13px] font-medium text-[#344054]">
+              Email address
+            </label>
+
+            <div className="group flex h-[42px] items-center overflow-hidden rounded-lg border border-[#E4E7EC] bg-white px-3 shadow-sm transition-all focus-within:border-[#2E7D32] focus-within:ring-2 focus-within:ring-[#2E7D32]/10">
+              {newUrl === "verifyEmail" ? (
+                <input
+                  {...register("email")}
+                  value={appState.user?.email || ""}
+                  placeholder="you@example.com"
+                  className="h-full flex-1 bg-transparent text-[13.5px] font-medium text-[#1A1A1A] placeholder:text-[#98A2B3] focus:outline-none"
+                />
+              ) : (
+                <input
+                  {...register("email")}
+                  placeholder="you@example.com"
+                  className="h-full flex-1 bg-transparent text-[13.5px] font-medium text-[#1A1A1A] placeholder:text-[#98A2B3] focus:outline-none"
+                />
+              )}
+              <Mail className="h-4 w-4 shrink-0 text-[#98A2B3] transition-colors group-focus-within:text-[#2E7D32]" />
+            </div>
+
+            {errors.email?.message && (
+              <p className="text-[12px] font-medium text-red-600">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
+
+          {/* Submit */}
+          <button
+            disabled={appState.loading}
+            className="mt-1 inline-flex h-[42px] w-full cursor-pointer items-center justify-center rounded-full bg-[#2E7D32] text-[13.5px] font-semibold text-white shadow-sm transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {appState.loading ? "Please wait…" : "Send Reset Link"}
+          </button>
+        </form>
+
+        {/* Hint text */}
+        <p className="mt-5 text-[12.5px] text-[#98A2B3]">
+          Check your inbox (and spam folder) after submitting.
+        </p>
       </div>
     </div>
   );

@@ -26,6 +26,7 @@ export function CartButton({
   const isProcessing = isAdding || isRemoving;
 
   const handleCartAction = () => {
+    //console.log(product, "cart product");
     if (!product) return;
 
     if (isInCart) {
