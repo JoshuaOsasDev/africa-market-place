@@ -63,7 +63,7 @@ export const ResetComp = ({ token }: { token: string }) => {
         newPassword: data.password,
       });
 
-     // toast.success("Password updated successfully");
+      // toast.success("Password updated successfully");
       toast.success(result.message);
       router.push("/auth-user/login");
     } catch (err) {

@@ -10,7 +10,7 @@ export default function ProductCardExample() {
   const { userProducts, isLoading } = useUserProducts();
 
   const product: Product[] = userProducts?.data;
-
+  //console.log(product, "product");
   if (isLoading) return <Loader />;
   if (!product || product.length === 0) return <NoProducts />;
   return (

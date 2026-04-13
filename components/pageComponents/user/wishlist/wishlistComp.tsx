@@ -22,19 +22,24 @@ export interface WishlistSliceState {
 import Modal from "@/components/common/modal";
 import Pagination from "@/components/common/pagination";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, Trash } from "lucide-react";
+import { ShoppingCart, Trash } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import DeleteProductModal from "@/components/pageComponents/vendor/product/deleteProductModal";
-import { useAppSelector } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import NoOrder from "@/components/pageComponents/vendor/order/noOrder";
+import { setWishlistAction } from "@/redux/slices/wishlist";
+import { PostUserWishlist } from "@/services/apiServices/userDashboard";
+import { useCart } from "@/lib/hooks/useCart";
 
 export default function WishListComp() {
-  const itemsPerPage = 12; // 4 columns × 3 rows
+  const itemsPerPage = 12;
   const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useAppDispatch();
   const wishlistData = useAppSelector((state) => state.wishlist.wishlist.data);
-  // console.log(wishlistData, "wishlist");
-  // Calculate visible items
+  const { isProductInCart, addToCart, removeFromCart, isAdding, isRemoving } =
+    useCart();
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
@@ -53,50 +58,89 @@ export default function WishListComp() {
   }
 
   const visibleItems = wishlistData?.slice(startIndex, endIndex);
+
+  const handleRemoveFromWishlist = (itemId: string) => {
+    if (!itemId) return;
+    PostUserWishlist(itemId);
+    const updatedWishlist = wishlistData.filter((item) => item._id !== itemId);
+    dispatch(setWishlistAction({ data: updatedWishlist }));
+  };
+
+  const handleCartAction = (
+    e: React.MouseEvent,
+    product: any,
+    quantity: number,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!product) return;
+    if (isProductInCart(product?._id)) {
+      removeFromCart(product);
+    } else {
+      addToCart(product, quantity);
+    }
+  };
+
   return (
-    <div className="mt-15 flex flex-col gap-5 md:mt-0">
-      <h2 className="text-3xl font-semibold">Wishlist</h2>
+    <div className="mt-10 flex flex-col gap-6 px-4 py-6 md:mt-0 md:px-0 md:py-0">
+      <h2 className="text-2xl font-semibold tracking-tight">Wishlist</h2>
 
       {/* GRID */}
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {visibleItems?.map((item: WishlistItem) => (
           <div
             key={item._id}
-            className="flex w-full flex-col justify-center gap-5 rounded-[12px] bg-white px-4 py-6 md:w-[260px] md:gap-2.5 md:p-3"
+            className="flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md"
           >
-            <div className="flex items-center">
-              <div className="relative h-15 w-15 rounded-xl bg-[#F6F6F6]">
+            {/* Product Info Row */}
+            <div className="flex items-start gap-3">
+              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl bg-[#F6F6F6]">
                 <Image
                   src={item?.images[0].url}
                   fill
                   alt={item.name}
-                  className="rounded-xl object-cover"
+                  className="object-cover"
                 />
               </div>
 
-              <div className="ml-2 flex flex-col gap-2">
-                <div>
-                  <span className="font-medium">{item.name}</span>{" "}
-                  <span className="rounded-sm bg-[#2E7D321A] px-1 py-0.5 text-[12px] text-[#2E7D32]">
-                    {item.status || ""}
+              <div className="flex min-w-0 flex-col gap-1">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="truncate text-sm leading-snug font-medium text-gray-900">
+                    {item.name}
                   </span>
-                  <p className="flex items-center space-x-2.5">
-                    <span className="text-[20px] font-semibold">
-                      £{item.price}
+                  {item.status && (
+                    <span className="shrink-0 rounded-md bg-green-50 px-1.5 py-0.5 text-[11px] font-medium text-green-700">
+                      {item.status}
                     </span>
-                    <span className="text-[16px] text-[#7D7D7D] line-through">
-                      £{item?.salePrice}
+                  )}
+                </div>
+
+                <div className="flex items-baseline gap-2">
+                  <span className="text-lg font-semibold text-gray-900">
+                    £{item.price}
+                  </span>
+                  {item.salePrice && (
+                    <span className="text-sm text-gray-400 line-through">
+                      £{item.salePrice}
                     </span>
-                  </p>
+                  )}
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-between gap-2 pr-3">
+            {/* Divider */}
+            <div className="h-px w-full bg-gray-100" />
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-between gap-2">
               <Modal>
                 <Modal.Open opens={`delete-wishlist-${item._id}`}>
-                  <Button className="rounded-[27px] bg-transparent px-3 py-2 font-medium text-[#FF7566]">
-                    <Trash />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-red-400 hover:bg-red-50 hover:text-red-500"
+                  >
+                    <Trash className="h-4 w-4" />
                     <span>Remove</span>
                   </Button>
                 </Modal.Open>
@@ -105,16 +149,29 @@ export default function WishListComp() {
                   className="max-w-md"
                 >
                   <DeleteProductModal
-                    onConfirm={() => console.log("DELETE:")}
+                    onConfirm={() => handleRemoveFromWishlist(item._id)}
                     text="order"
                     productName={item.name}
                   />
                 </Modal.Window>
               </Modal>
 
-              <Button className="w-fit items-center rounded-[27px] bg-transparent px-3 py-2 font-medium text-[#2E7D32]">
-                <ShoppingBag />
-                <span>Add to cart</span>
+              <Button
+                onClick={(e) => handleCartAction(e, item, 1)}
+                size="sm"
+                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
+                  isProductInCart(item?._id)
+                    ? "bg-green-700 text-white hover:bg-green-800"
+                    : "bg-green-50 text-green-700 hover:bg-green-100"
+                }`}
+              >
+                <ShoppingCart className="h-4 w-4" />
+                <span className="hidden sm:inline">
+                  {isProductInCart(item?._id) ? "In cart" : "Add to cart"}
+                </span>
+                <span className="sm:hidden">
+                  {isProductInCart(item?._id) ? "In cart" : "Add"}
+                </span>
               </Button>
             </div>
           </div>

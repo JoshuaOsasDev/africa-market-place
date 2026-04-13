@@ -31,11 +31,13 @@ export const signIn = async (payload: userLoginType) => {
 };
 
 export const forgetPasswordApi = async (payload: userForgetPasswordType) => {
+  //console.log("reset password payload2:", payload);
   const { data } = await http.post("/auth/forget-password", payload);
   return data;
 };
 
 export const resetPassword = async (payload: userResetPasswordType) => {
+  //console.log("reset password payload:", payload);
   const { data } = await http.post("/auth/reset-password", payload);
   return data;
 };

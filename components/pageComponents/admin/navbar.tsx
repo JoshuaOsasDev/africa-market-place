@@ -4,8 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, ChevronDown, ChevronRight } from "lucide-react";
+import { useSignOut } from "@/lib/hooks/userDashboard/useUser";
 
 const Navbar = () => {
+  const { mutate: logout, isPending: isLoggingOut } = useSignOut();
+  const path = usePathname();
   const pathname = usePathname();
 
   const routes: { prefix: string; title: string }[] = [
@@ -110,7 +113,7 @@ const Navbar = () => {
             </button>
             <Bell fill="#2E7D32" className="text-[#2E7D32]" />
 
-            <div className="relative h-8 w-8">
+            <div onClick={() => logout()} className="relative h-8 w-8">
               <Image
                 fill
                 src={"/admin-dashboard-image/admin-profile-image.jpg"}

@@ -16,7 +16,7 @@ const OrderPage = () => {
 
   if (isLoading) return <Loader />;
 
-  // console.log("Vendor Orders:", vendorOrders);
+  console.log("Vendor Orders:", vendorOrders);
 
   //For Order not defined
   if (!isLoading && vendorOrders?.data?.length === 0)

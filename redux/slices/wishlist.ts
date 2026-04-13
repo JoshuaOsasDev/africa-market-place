@@ -1,5 +1,6 @@
 import { WishlistSliceState } from "@/components/pageComponents/user/wishlist/wishlistComp";
 import { createSlice } from "@reduxjs/toolkit";
+import { filter } from "lodash";
 
 const initialState: WishlistSliceState = {
   wishlist: {
@@ -14,6 +15,7 @@ const slice = createSlice({
     setWishlistAction(state, action) {
       state.wishlist = action.payload;
     },
+
     resetWishlistAction(state) {
       state.wishlist.data = [];
     },

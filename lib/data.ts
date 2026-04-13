@@ -91,8 +91,8 @@ export const navListArray = [
   },
 
   {
-    name: "Messages",
-    url: "/user/dashboard/messages",
+    name: "Help Line",
+    url: "/user/dashboard/help",
   },
 ];
 

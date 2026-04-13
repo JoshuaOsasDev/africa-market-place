@@ -6,7 +6,7 @@ import {
 } from "@/redux/slices/product";
 import { setLogoutAction } from "@/redux/slices/user";
 import { resetWishlistAction } from "@/redux/slices/wishlist";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { signOut } from "@/services/apiServices/authApi";
 import {
   addToCart,
@@ -92,6 +92,7 @@ export const useGetUserWishlist = () => {
 
 //signout hook
 export const useSignOut = () => {
+  const user = useAppSelector((state) => state.user);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
@@ -103,8 +104,12 @@ export const useSignOut = () => {
       // 🔥 Clear ALL client auth state
       dispatch(setLogoutAction()); // Redux update → UI re-renders
       // dispatch(setCategories([])); // Clear categories on logout
-      dispatch(resetCart()); // Clear cart on logout
-      dispatch(resetWishlistAction()); // Clear wishlist on logout
+
+      if (user?.user?.role === "user") {
+        dispatch(resetCart()); // Clear cart on logout
+        dispatch(resetWishlistAction()); // Clear wishlist on logout for users
+      }
+
       queryClient.clear(); // Clear cached user data
       router.replace("/auth-user/login");
     },
@@ -126,7 +131,7 @@ export const useAddToCart = () => {
 
     onSuccess: (_, variables) => {
       const { pid, quantity } = variables;
-
+      console.log(pid, quantity, "Pid quan");
       dispatch(
         addCart({
           product: pid,

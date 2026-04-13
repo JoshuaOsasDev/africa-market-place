@@ -20,7 +20,7 @@ export default function SetShowForm() {
     useVendorProducts();
 
   const { mutate: deleteProduct, isPending } = useDeleteVendorProduct();
-  //console.log(vendorProducts?.products.data, "vendor products data");
+  console.log(vendorProducts?.products.data, "vendor products data");
   if (isLoading) {
     return <Loader />;
   }

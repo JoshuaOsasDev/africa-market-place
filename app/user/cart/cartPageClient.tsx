@@ -53,8 +53,8 @@ export function CartPageClient() {
     alert(`Coupon "${code}" applied!`);
   };
 
-  // console.log(cartItems, "cart items");
-  if (cart?.length === 0) {
+  //console.log(cart, "cart items");
+  if (!cart || cart?.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB] px-4">
         <div className="text-center">

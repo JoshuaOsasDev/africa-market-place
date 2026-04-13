@@ -33,6 +33,7 @@ export function ProductCard(product: any) {
     e.stopPropagation();
     if (!data?.slug) return;
 
+    //console.log(data._id, "wishlistId");
     postWishlist(data._id);
 
     // dispatch(setWishlistAction([...wishlistedProducts, product.slug]));

@@ -163,7 +163,7 @@ const LoginComp = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex w-full">
       {/* ── LEFT PANEL ── */}
       <div className="relative hidden w-120 flex-col justify-between overflow-hidden bg-[#111f12] p-10 lg:flex">
         <Image

@@ -23,7 +23,7 @@ export function proxy(request: NextRequest) {
 
   const role = user?.role;
 
-  console.log(role, "USER ROLE IN PROXY");
+  //console.log(role, "USER ROLE IN PROXY");
   //middleware to prevent user and admin/vendor from accessing each other's dashboards details page and checkout page
   if (pathname.startsWith("/user/dashboard")) {
     if (!user) {
