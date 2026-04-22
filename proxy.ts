@@ -10,7 +10,7 @@ export function proxy(request: NextRequest) {
 
   let user: { role: "user" | "admin" | "vendor" } | null = null;
 
-  // ✅ Decode token safely
+  //  Decode token safely
   if (token) {
     try {
       const base64Url = token.split(".")[1];
@@ -23,7 +23,7 @@ export function proxy(request: NextRequest) {
 
   const role = user?.role;
 
-  // ✅ CENTRALIZED ROUTE CONFIG (NEW 🔥)
+  //  CENTRALIZED ROUTE CONFIG (NEW 🔥)
   const protectedRoutes = ["/user/dashboard", "/user/checkout"];
 
   const adminRoutes = ["/admin"];

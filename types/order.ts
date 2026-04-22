@@ -1,4 +1,5 @@
 export interface OrderItem {
+  pid?: string;
   id: string;
   name: string;
   image: string;
@@ -56,6 +57,7 @@ export type UsersOrder = {
     zip: string;
     address: string;
     city: string;
+    county: string;
 
     // add more if backend sends more fields
   };

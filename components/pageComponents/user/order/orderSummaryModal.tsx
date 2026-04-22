@@ -9,11 +9,14 @@ import {
   MapPin,
   RotateCcw,
   Package,
+  Rotate3DIcon,
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { UsersOrder } from "@/types/order";
 import Image from "next/image";
 import { RaiseTicketModal } from "./raiseTicketModal";
+import { ViewTicketModal } from "@/components/common/viewTicketModalProps";
+import { useTicket } from "@/lib/hooks/userDashboard/useUser";
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 const STATUS_STYLES: Record<string, string> = {
@@ -106,8 +109,11 @@ function OrderSummaryModal({
   onClose: () => void;
 }) {
   const [showTicketModal, setShowTicketModal] = useState(false);
+  const [showViewTicketModal, setShowViewTicketModal] = useState(false);
 
-  //   console.log(order, "active order");
+  const { data: ticket, isLoading } = useTicket(order._id);
+  const hasTicket = !!ticket?.data;
+  //console.log(order, "active order");
   return (
     <>
       {/* Backdrop */}
@@ -228,19 +234,31 @@ function OrderSummaryModal({
             <LabelField label="Country" value={order?.user?.country ?? "—"} />
             <LabelField label="Town / City" value={order?.user?.city ?? "—"} />
             <div className="grid grid-cols-2 gap-3">
-              <LabelField label="State" value={order.user?.state ?? "—"} />
+              <LabelField label="County" value={order.user?.county ?? "—"} />
               <LabelField label="Zip Code" value={order.user?.zip ?? "—"} />
             </div>
           </Section>
 
           {/* CTA */}
-          <button
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2E7D32] py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[#1B5E20] active:scale-[0.98]"
-            onClick={() => setShowTicketModal(true)}
-          >
-            <RotateCcw size={16} />
-            Raise A Ticket
-          </button>
+          <div className="flex space-x-2.5">
+            {hasTicket && (
+              <button
+                className="bg-white] flex w-full items-center justify-center gap-2 rounded-xl border border-[#2E7D32] py-3.5 text-[15px] font-bold text-[#2E7D32] transition-colors hover:bg-[#1B5E20] hover:text-white active:scale-[0.98]"
+                onClick={() => setShowViewTicketModal(true)}
+              >
+                <RotateCcw size={16} />
+                View A Ticket
+              </button>
+            )}
+            <button
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2E7D32] py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[#1B5E20] active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-900"
+              onClick={() => setShowTicketModal(true)}
+              disabled={hasTicket}
+            >
+              <Rotate3DIcon size={16} />
+              {hasTicket ? "Raised A Ticket" : "Raise A Ticket"}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -253,6 +271,13 @@ function OrderSummaryModal({
         <RaiseTicketModal
           order={order}
           onClose={() => setShowTicketModal(false)}
+        />
+      )}
+
+      {showViewTicketModal && (
+        <ViewTicketModal
+          ticket={ticket}
+          onClose={() => setShowViewTicketModal(false)}
         />
       )}
     </>

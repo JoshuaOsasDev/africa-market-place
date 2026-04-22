@@ -1,12 +1,11 @@
-import AuthProgressBarUserAuth from "@/components/common/authProgressBarUserAuth";
 import LoginComp from "@/components/pageComponents/auth/auth-user/loginComp";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "User Login",
-  description: "A multivendor ecommerce website",
+  description: "Africa Market Place, multi vendor ecommerce website",
 };
-function page() {
+function Page() {
   return (
     <div className="mt-10 py-2 md:mt-0">
       {/* <AuthProgressBarUserAuth level={2} /> */}
@@ -15,4 +14,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

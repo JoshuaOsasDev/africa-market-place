@@ -16,14 +16,14 @@ interface ShippingAddressFormProps {
   errors?: Partial<Record<keyof ShippingAddress, string>>;
 }
 
-const countryOptions = [
-  { value: "NG", label: "Nigeria" },
-  { value: "GH", label: "Ghana" },
-  { value: "KE", label: "Kenya" },
-  { value: "ZA", label: "South Africa" },
-  { value: "US", label: "United States" },
-  { value: "GB", label: "United Kingdom" },
-];
+// const countryOptions = [
+//   { value: "NG", label: "Nigeria" },
+//   { value: "GH", label: "Ghana" },
+//   { value: "KE", label: "Kenya" },
+//   { value: "ZA", label: "South Africa" },
+//   { value: "US", label: "United States" },
+//   { value: "GB", label: "United Kingdom" },
+// ];
 
 export function ShippingAddressForm({
   values,
@@ -39,25 +39,26 @@ export function ShippingAddressForm({
       onChange({ ...values, [field]: e.target.value });
     };
 
-  // console.log(values.id, "shipping id");
+  //console.log(values, "shipping id");
   return (
     <SectionCard title="Shipping Address">
       <div className="space-y-4">
         <FormInput
           label="Street Address"
+          disabled
           required
           placeholder="Street address"
-          value={values.address}
+          value={values.address || ""}
           onChange={handleChange("address")}
           error={errors.address}
         />
 
-        <FormSelect
+        <FormInput
           label="Country"
+          disabled
           required
           placeholder="Country"
-          options={countryOptions}
-          value={values.country}
+          value={values.country || ""}
           onChange={handleChange("country")}
           error={errors.country}
         />
@@ -66,7 +67,8 @@ export function ShippingAddressForm({
           label="Town / City"
           required
           placeholder="Town / City"
-          value={values.city}
+          disabled
+          value={values.city || ""}
           onChange={handleChange("city")}
           error={errors.city}
         />
@@ -75,34 +77,63 @@ export function ShippingAddressForm({
           <FormInput
             label="Phone number"
             placeholder="phoneNumber"
-            value={values.phoneNumber}
+            value={values.phoneNumber || ""}
             onChange={handleChange("phoneNumber")}
             error={errors.phoneNumber}
           />
           <FormInput
             label="Email"
-            placeholder="Zip Code"
-            value={values.email}
+            placeholder="email"
+            //disabled={!!values.id}
+            value={values.email || ""}
             onChange={handleChange("email")}
             error={errors.email}
+          />
+
+          <FormInput
+            label="postCode"
+            placeholder="Post Code"
+            value={values.postCode || ""}
+            disabled
+            required
+            onChange={handleChange("postCode")}
+            error={errors.postCode}
+          />
+
+          <FormInput
+            label="houseNumber"
+            placeholder="House Number"
+            value={values.houseNumber || ""}
+            required
+            onChange={handleChange("houseNumber")}
+            error={errors.houseNumber}
+          />
+          <FormInput
+            label="County"
+            placeholder="county"
+            value={values.county || ""}
+            required
+            disabled
+            onChange={handleChange("houseNumber")}
+            error={errors.county}
           />
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <FormInput
-            label="State"
-            placeholder="State"
-            value={values.state}
-            onChange={handleChange("state")}
-            error={errors.state}
-          />
-          <FormInput
-            label="Zip Code"
-            placeholder="Zip Code"
-            value={values.zip}
-            onChange={handleChange("zip")}
-            error={errors.zip}
-          />
+          {/* <FormInput
+            label="houseNumber"
+            placeholder="House Number"
+            value={values.houseNumber}
+            onChange={handleChange("houseNumber")}
+            error={errors.houseNumber}
+          /> */}
+          {/* <FormInput
+            label="postCode"
+            placeholder="Post Code"
+            value={values.postCode}
+            onChange={handleChange("postCode")}
+            error={errors.postCode}
+          /> */}
         </div>
 
         <div className="pt-4">
@@ -119,7 +150,7 @@ export function ShippingAddressForm({
             onClick={() => onSubmit()}
             className="w-fit rounded-full bg-[#2E7D32] px-2 py-1 text-sm font-semibold text-white transition-colors hover:bg-[#246628] md:px-5 md:py-3"
           >
-            {values.address ? "Update Address" : "Save Address"}
+            {values.id ? "Update Address" : "Save Address"}
           </button>
         </div>
       </div>

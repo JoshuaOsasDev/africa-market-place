@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 import { CheckoutOrderItem } from "@/components/checkout/checkoutOrderItem";
-import {
-  CheckoutSummary,
-  CheckoutOrderItem as OrderItemType,
-} from "@/types/checkout";
+
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { CartItem } from "@/types/cart";
@@ -33,8 +30,11 @@ export function CheckoutOrderSummary({
   const discount = useAppSelector((state) => state.product.checkout.discount);
   const shipping = useAppSelector((state) => state.product.checkout.shipping);
 
-  const shippingDisplay = shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`;
+  const shippingDisplay =
+    shipping === 0 ? "No Fee yet" : `£${shipping.toFixed(2)}`;
 
+  const discountDisplay =
+    discount === 0 ? "No Discount" : `£${discount.toFixed(2)}`;
   return (
     <div
       className={cn(
@@ -47,7 +47,7 @@ export function CheckoutOrderSummary({
       </h2>
 
       <div className="mb-4 space-y-0">
-        {summary.map((item) => (
+        {summary?.map((item) => (
           <CheckoutOrderItem
             key={item.pid}
             item={item}
@@ -79,21 +79,26 @@ export function CheckoutOrderSummary({
         <div className="flex items-center justify-between">
           <span className="font-medium text-[#111827]">Subtotal</span>
           <span className="font-medium text-[#111827]">
-            ${subtotal.toFixed(2)}
+            £{subtotal.toFixed(2)}
           </span>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <span className="font-medium text-[#111827]">Discount</span>
+          <span className="font-medium text-[#111827]">{discountDisplay}</span>
         </div>
 
         <div className="flex items-center justify-between border-t border-[#E5E7EB] pt-3">
           <span className="text-lg font-bold text-[#111827]">Total</span>
           <span className="text-xl font-bold text-[#111827]">
-            ${total.toFixed(2)}
+            £{total.toFixed(2)}
           </span>
         </div>
       </div>
 
       <button
         onClick={onPlaceOrder}
-        disabled={loading || summary.length === 0}
+        disabled={loading || summary?.length === 0}
         className="mt-6 w-full rounded-full bg-[#2E7D32] py-3 font-semibold text-white transition-colors hover:bg-[#246628] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? "Processing..." : "Place Order"}

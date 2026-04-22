@@ -54,6 +54,7 @@ const LoginComp = () => {
     mutationFn: signIn,
     onSuccess: () => {
       // invalidate wishlist and all categories after successful login
+
       queryClient.invalidateQueries({ queryKey: ["user-wishlist"] });
       queryClient.invalidateQueries({ queryKey: ["get-all-categories"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
@@ -82,12 +83,13 @@ const LoginComp = () => {
         dispatch(signInAction(result.data.user));
         dispatch(setWishlistAction(result.data.user.wishlist));
 
-        // console.log(result.data, "login details");
         toast.success("Login successfull");
 
         dispatch(setLoaderAction(false));
+
         const isAdmin = result.data.user?.role?.includes("admin");
         const isVendor = result.data.user?.role?.includes("vendor");
+
         const goto = redirect
           ? redirect
           : isAdmin
@@ -131,13 +133,13 @@ const LoginComp = () => {
       if (!result.user.isVerified) {
         toast.error("Email not verified");
 
-        router.push("/auth-user/sendOtp/login");
+        router.push("/auth-user/verifyOtp");
         return;
       }
       const isAdmin = result.user?.role?.includes("admin");
       const isVendor = result.user?.role?.includes("vendor");
-
-      console.log(result, "log in details");
+      const shop = result.user?.shop;
+      console.log(isVendor, shop, "Shop");
       const goto = redirect
         ? redirect
         : isAdmin
@@ -145,8 +147,8 @@ const LoginComp = () => {
           : isVendor
             ? "/vendor/dashboard"
             : "/";
-
-      router.push(goto);
+      if (shop === null && isVendor) router.push("/vendor/shop");
+      else router.push(goto);
 
       toast.success("Logged in successfully!");
     } catch (err) {

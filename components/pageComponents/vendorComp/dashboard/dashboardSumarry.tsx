@@ -14,7 +14,7 @@ export default function DashboardSummary(dashboardData: any) {
     0,
   );
 
-  const revenue = analytics?.dailyEarning;
+  const revenue = analytics?.monthlyEarningsByVendor;
 
   const balance = revenue - totalSales;
   // console.log(analytics, "admin");
@@ -92,7 +92,7 @@ export default function DashboardSummary(dashboardData: any) {
               </h3>
               <div className="mt-1 flex items-center gap-2">
                 <span className="text-2xl font-medium text-[#333843]">
-                  {`$${stat.amount}`}
+                  {`£${stat.amount}`}
                 </span>
                 <span
                   className={`rounded-full px-1.5 py-0.5 text-xs font-semibold ${

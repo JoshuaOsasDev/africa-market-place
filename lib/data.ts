@@ -89,11 +89,6 @@ export const navListArray = [
     name: "Notifications",
     url: "/user/dashboard/notifications",
   },
-
-  {
-    name: "Help Line",
-    url: "/user/dashboard/help",
-  },
 ];
 
 export const socialData = [

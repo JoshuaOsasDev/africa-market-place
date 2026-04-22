@@ -117,6 +117,11 @@ export type ImageUploadState = {
   _id?: string;
 };
 
+export type Proof = {
+  url: string;
+  _id?: string;
+};
+
 // Form Errors Type
 export type ShopFormErrors = {
   name?: string;
@@ -137,8 +142,8 @@ export type ShopFormErrors = {
   };
   logo?: string;
   identityVerification?: {
-    proofOfAddress?: string;
-    governmentId?: string;
+    proofOfAddress?: Proof;
+    governmentId?: Proof;
   };
 };
 

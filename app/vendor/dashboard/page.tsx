@@ -12,6 +12,7 @@ const DashboardPage = () => {
     useVendorDashboardAnalytics();
 
   const dashboardData = dashboardVendorAnalytics?.data;
+  //console.log(dashboardVendorAnalytics, "dashboard data ");
   if (isLoading) {
     return <Loader />;
   }

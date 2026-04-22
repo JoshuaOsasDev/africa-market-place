@@ -39,6 +39,7 @@ export const addProductFormSchema2 = yup.object({
 export const signUpSchema = yup.object({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
+  role: yup.string().required("Role is required"),
   phone: yup.string().required("Phone number is required"),
   email: yup
     .string()
@@ -64,10 +65,14 @@ export const userProfileSchema = yup.object({
     .email("Invalid email address")
     .required("Email is required"),
   address: yup.string().required("Address is required"),
+  houseNumber: yup.string().required("House number is required"),
   city: yup.string().required("City is required"),
   postCode: yup.string().required("Post code is required"),
+  country: yup.string().required("Country is required"),
   role: yup.string().required("Role is required"),
 });
+
+export type UserProfileFormData = yup.InferType<typeof userProfileSchema>;
 
 export const editProfileSchema = yup.object({
   firstName: yup.string().required("First name is required"),

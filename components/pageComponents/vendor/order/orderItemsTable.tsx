@@ -7,7 +7,13 @@ import { formatDate } from "@/lib/utils";
 import { Order } from "@/types/appTypes";
 import Link from "next/link";
 
-export default function OrderItemsTable({ orders }: { orders: Order[] }) {
+export default function OrderItemsTable({
+  orders,
+  totalPages,
+}: {
+  orders: Order[];
+  totalPages: number;
+}) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   // Status badge styles
@@ -140,7 +146,7 @@ export default function OrderItemsTable({ orders }: { orders: Order[] }) {
           },
         ]}
         columnsStyle="60px 1fr .5fr .6fr.7fr .5fr .5fr .5fr .5fr"
-        itemsPerPage={5}
+        totalPages={totalPages}
         onSelectChange={(selectedIds) =>
           setSelectedIds(selectedIds as string[])
         }

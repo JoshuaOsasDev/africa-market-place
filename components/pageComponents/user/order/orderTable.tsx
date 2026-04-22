@@ -1,23 +1,24 @@
 "use client";
 import Modal from "@/components/common/modal";
 import ReusableTable from "@/components/common/reusableTable";
-import { Eye, Pen, Trash } from "lucide-react";
+import { Eye, Trash } from "lucide-react";
 import DeleteProductModal from "@/components/pageComponents/vendor/product/deleteProductModal";
 import SkeletonTable from "@/components/common/skeletonTable";
 import { formatDate } from "@/lib/utils";
 import { UsersOrder } from "@/types/order";
 import { useState } from "react";
 import OrderSummaryModal from "./orderSummaryModal";
-import Image from "next/image";
 
 export default function OrderTable({
   orderParams,
   userOders,
   isLoading,
+  totalPages,
 }: {
   orderParams: string | string[] | undefined;
   userOders: UsersOrder[];
   isLoading: boolean;
+  totalPages: number;
 }) {
   const [activeOrder, setActiveOrder] = useState(null);
   let filteredOrders = userOders || [];
@@ -198,7 +199,7 @@ export default function OrderTable({
             ),
           },
         ]}
-        itemsPerPage={1}
+        totalPages={totalPages}
         onSelectChange={(selectedIds) => console.log("Selected:", selectedIds)}
       />
       {activeOrder && (

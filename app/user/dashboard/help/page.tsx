@@ -246,7 +246,7 @@ export default function JumiaHelpCenter() {
 
         <div className="mx-auto max-w-7xl px-4 pt-8 pb-0">
           <p className="mb-1 text-sm text-white">Help Center</p>
-          <h1 className="mb-6 text-2xl font-bold text-gray-900">
+          <h1 className="mb-6 text-2xl font-bold text-white">
             Hi, how can we help you?
           </h1>
 

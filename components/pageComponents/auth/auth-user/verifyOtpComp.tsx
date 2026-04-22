@@ -34,7 +34,7 @@ const VerifyOtpComp = () => {
 
   useEffect(() => {
     if (!appState?.email) {
-      router.push("/auth-user/sendOpt");
+      router.push("/auth-user/login");
       return;
     }
     if (otp.length === 5) {

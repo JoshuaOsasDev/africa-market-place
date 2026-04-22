@@ -42,7 +42,7 @@ export function CheckoutOrderItem({
         <div className="mb-2 flex items-start justify-between gap-2">
           <h4 className="text-sm font-medium text-[#111827]">{item.name}</h4>
           <span className="text-sm font-semibold whitespace-nowrap text-[#111827]">
-            ${(item.salePrice * item.quantity).toFixed(2)}
+            £{(item.salePrice * item.quantity).toFixed(2)}
           </span>
         </div>
 
