@@ -162,10 +162,22 @@ const DashboardNavbar = () => {
                     Home
                   </Link>
 
-                  {/* <Link
-                    href="/user/change-password"
+                  <Link
+                    href="/vendor/dashboard/userInfo"
                     className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 ${
                       path === "/user/change-password"
+                        ? "bg-[#E8F5E9] text-[#4F912F]"
+                        : "text-gray-700"
+                    }`}
+                  >
+                    <User size={16} />
+                    Profile
+                  </Link>
+
+                  {/* <Link
+                    href="/user/dashboard/passwordSetting"
+                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 ${
+                      path === "/auth-user/resetPassword"
                         ? "bg-[#E8F5E9] text-[#4F912F]"
                         : "text-gray-700"
                     }`}

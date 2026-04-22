@@ -22,13 +22,31 @@ import {
   useAllDelivery,
   useRemoveFromCart,
   useCreateOrder,
+  useCourier,
 } from "@/lib/hooks/userDashboard/useUser";
-import { deleteCart } from "@/redux/slices/product";
+import { deleteCart, setShippingFee } from "@/redux/slices/product";
 import { Product } from "@/types/product";
 import { DeliveryAddressSelector } from "@/components/checkout/deliveryAddressSelector";
 import Loader from "@/components/common/loader";
+import { postUserOrder } from "@/services/apiServices/userDashboard";
+import {
+  CourierSelector,
+  CourierType,
+} from "@/components/checkout/courierSelector";
 
 export function CheckoutPageClient() {
+  const [courier, setCourier] = useState<CourierType>("evri");
+
+  const { data: carrierResponse } = useCourier(10);
+  const carrierData = carrierResponse?.data;
+
+  const handleCourierSelect = (id: CourierType) => {
+    setCourier(id);
+    const selectedPrice = carrierData?.[id]?.price || 0;
+
+    dispatch(setShippingFee(selectedPrice));
+  };
+  // console.log(carrierResponse, "Courir");
   const dispatch = useAppDispatch();
   const cart: CartItem[] = useAppSelector(
     (state) => state.product.checkout.cart,
@@ -45,6 +63,7 @@ export function CheckoutPageClient() {
   const { cartItems, updateQuantity } = useCart();
   const { mutate: removeFromCartAPI } = useRemoveFromCart();
 
+  // console.log(cartItems, "items");
   const { mutate: createOrder, isPending } = useCreateOrder();
   const { deliveries } = useAllDelivery();
   // console.log(deliveries, "delivery");
@@ -61,11 +80,11 @@ export function CheckoutPageClient() {
 
   const [shipping, setShipping] = useState<ShippingAddress>({
     id: delivery._id,
-    address: delivery.address,
+    address: `${delivery.houseNumber} ${delivery.address}`,
     country: delivery.country,
     city: delivery.city,
-    state: delivery.state,
-    zip: delivery.zip,
+    county: delivery.county,
+    zip: delivery.postCode,
     email: delivery.email,
     phoneNumber: delivery.phoneNumber,
   });
@@ -106,17 +125,18 @@ export function CheckoutPageClient() {
     try {
       const data = {
         user: {
+          ...shipping,
           firstName: contact.firstName,
           lastName: contact.lastName,
           phone: contact.phoneNumber,
           address: shipping.address,
           city: shipping.city,
-          state: shipping.state,
+          state: shipping.county,
           country: shipping.country,
-          zip: shipping.zip,
-          email: contact.emailAddress, // backend uses user.email
+          // zip: shipping.zip,
+          email: contact.emailAddress,
         },
-        items: cart.map((item: CartItem) => ({
+        items: cart?.map((item: CartItem) => ({
           pid: item.pid,
           name: item.name,
           salePrice: item.salePrice,
@@ -134,20 +154,20 @@ export function CheckoutPageClient() {
         paymentMethod: "Stripe",
         currency: "gbp",
         conversionRate: 1200,
-        totalItems: cart.length,
+        totalItems: cart?.length,
       };
 
-      // createOrder(data);
       createOrder(data);
+      // postUserOrder(data);
 
-      console.log("Order placed:", {
-        contact,
-        shipping,
-        useDifferentBilling,
-        paymentMethod,
-        cardDetails: paymentMethod === "stripe" ? "stripe" : null,
-        cart,
-      });
+      // console.log("Order placed:", {
+      //   contact,
+      //   shipping,
+      //   useDifferentBilling,
+      //   paymentMethod,
+      //   cardDetails: paymentMethod === "stripe" ? "stripe" : null,
+      //   cart,
+      // });
 
       // router.push("/user/payment");
     } catch (error) {
@@ -167,8 +187,8 @@ export function CheckoutPageClient() {
         address: firstAddress.address,
         country: firstAddress.country,
         city: firstAddress.city,
-        state: firstAddress.state,
-        zip: firstAddress.zip,
+        county: firstAddress.county,
+        zip: firstAddress.postCode,
         phoneNumber: firstAddress.phoneNumber,
         email: firstAddress.email,
       });
@@ -176,7 +196,7 @@ export function CheckoutPageClient() {
   }, [deliveries]);
 
   if (isPending) return <Loader />;
-  if (cart.length === 0) {
+  if (cart?.length === 0) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB] px-4">
         <div className="text-center">
@@ -196,6 +216,7 @@ export function CheckoutPageClient() {
     );
   }
 
+  // console.log(shipping, "ship");
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -210,7 +231,6 @@ export function CheckoutPageClient() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
           <div className="space-y-6">
             <ContactInformationForm values={contact} onChange={setContact} />
-
             <DeliveryAddressSelector
               deliveries={delivery}
               shipping={shipping}
@@ -218,7 +238,13 @@ export function CheckoutPageClient() {
               useDifferentBilling={useDifferentBilling}
               setUseDifferentBilling={setUseDifferentBilling}
             />
-
+            {carrierData && delivery.length > 0 && (
+              <CourierSelector
+                data={carrierData}
+                selectedCourier={courier}
+                onSelect={handleCourierSelect}
+              />
+            )}
             <PaymentMethodForm
               paymentMethod={paymentMethod}
               onPaymentMethodChange={setPaymentMethod}

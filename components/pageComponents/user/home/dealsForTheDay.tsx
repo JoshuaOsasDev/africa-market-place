@@ -11,7 +11,8 @@ import { DealsTodayProps } from "@/types/appTypes";
 import { Product } from "@/types/product";
 
 export default function DealsForTheDay() {
-  const { userProducts: deals } = useUserProducts();
+  const filter = "";
+  const { userProducts: deals } = useUserProducts(filter);
 
   const filteredDeals =
     deals?.data?.filter((d: Product) => d.isDeal === true) || [];

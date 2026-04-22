@@ -7,16 +7,21 @@ import ProductHeading from "@/components/pageComponents/vendor/product/productHe
 import SearchAndFilterProduct from "@/components/pageComponents/vendor/product/searchAndFilterProduct";
 import OrderItemsTable from "@/components/pageComponents/vendor/order/orderItemsTable";
 import CreateShop from "@/components/pageComponents/vendor/order/createShop";
+import { useSearchParams } from "next/navigation";
 
 const OrderPage = () => {
   const show = useAppSelector((state) => state.showFormReducer.show);
   const type = useAppSelector((state) => state.showFormReducer.type);
 
-  const { isLoading, vendorOrders, vendorOrdersError } = useVendorOrders();
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const params = { page: page, limit: 10 };
+  const { isLoading, vendorOrders, vendorOrdersError } =
+    useVendorOrders(params);
 
   if (isLoading) return <Loader />;
 
-  console.log("Vendor Orders:", vendorOrders);
+  // console.log("Vendor Orders:", vendorOrders);
 
   //For Order not defined
   if (!isLoading && vendorOrders?.data?.length === 0)
@@ -53,7 +58,7 @@ const OrderPage = () => {
           <SearchAndFilterProduct />
           <OrderItemsTable
             orders={vendorOrders?.data}
-            // ITEMS_PER_PAGE={5}
+            totalPages={vendorOrders?.total}
           />
         </>
       )}

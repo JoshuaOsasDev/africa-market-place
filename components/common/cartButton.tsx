@@ -36,7 +36,6 @@ export function CartButton({
     }
   };
 
-  //hover:bg-[#2E7D32] hover:text-white border-[#2E7D32]
   const dynamicClasses = useMemo(() => {
     return isInCart
       ? "border-red-500 bg-red-50 text-red-600 hover:bg-red-100"

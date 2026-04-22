@@ -27,14 +27,9 @@ const links = [
     icon: Bell,
   },
   {
-    name: "Messages",
-    href: "/user/dashboard/messages",
+    name: "Help Line",
+    href: "/user/dashboard/help",
     icon: MessageSquare,
-  },
-  {
-    name: "Payment Settings",
-    href: "/user/dashboard/payment-settings",
-    icon: ChartSpline,
   },
 ];
 

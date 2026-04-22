@@ -3,7 +3,10 @@ import { getUserProducts } from "@/services/apiServices/userDashboard";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const res = await getUserProducts();
+  const filter = {
+    page: 1,
+  };
+  const res = await getUserProducts(filter);
 
   if (!res || !res.data || res.data.length === 0) {
     return {

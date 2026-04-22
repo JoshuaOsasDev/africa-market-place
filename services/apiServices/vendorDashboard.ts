@@ -1,15 +1,17 @@
+import axios from "axios";
 import { Product } from "@/types/product";
 import http from "./http";
 import { CreateShopPayload, Shop, ShopFormInput } from "@/types/shop";
+import { number } from "yup";
 
 export const getVendorDashboardAnalytics = async () => {
   const { data } = await http.get(`/vendor/dashboard-analytics`);
   return data;
 };
 
-export const getVendorProducts = async () => {
+export const getVendorProducts = async (params = { page: 1, limit: 10 }) => {
   const [products, shop] = await Promise.all([
-    http.get("/vendor/products"),
+    http.get(`/vendor/products?page=${params.page}&limit=${params.limit}`),
     http.get("/vendor/shop"),
   ]);
   return {
@@ -59,8 +61,10 @@ export const deleteVendorProduct = async (slug: string) => {
 };
 
 //VENDOR ORDER
-export const getVendorOrders = async () => {
-  const { data } = await http.get(`/vendor/orders`);
+export const getVendorOrders = async (params = { page: 1, limit: 10 }) => {
+  const { data } = await http.get(
+    `/vendor/orders?page=${params.page}&limit=${params.limit}`,
+  );
   return data;
 };
 
@@ -70,10 +74,27 @@ export const getvendorOrderSlug = async (slug: string) => {
   return data;
 };
 
-export const createVendorShop = async (FormData: CreateShopPayload) => {
-  const { data } = await http.post(`/vendor/shops`, FormData);
-  // console.log(data, "order slug");
-  return data;
+export const createVendorShop = async (formData: CreateShopPayload) => {
+  try {
+    const { data } = await http.post(`/vendor/shops`, formData);
+    return data;
+  } catch (error: any) {
+    // Axios error handling
+    if (axios.isAxiosError(error)) {
+      // Server responded with error (4xx, 5xx)
+      if (error.response) {
+        throw new Error(error.response.data?.message);
+      }
+
+      // Request made but no response (network issue)
+      if (error.request) {
+        throw new Error("Network error. Please check your connection.");
+      }
+    }
+
+    // Unknown error
+    throw new Error(error.message || "Unexpected error occurred");
+  }
 };
 
 //Vendor Shop
@@ -97,3 +118,12 @@ export async function getVendorProductByIdServer(productId: string) {
   //console.log(res, "metadat");
   return res.json();
 }
+
+//VENDOR PAYMENT
+
+export const getVendorPayment = async (params = { page: 1, limit: 10 }) => {
+  const { data } = await http.get(
+    `/vendor/payments?page=${params.page}&limit=${params.limit}`,
+  );
+  return data;
+};

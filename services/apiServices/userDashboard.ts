@@ -3,8 +3,9 @@ import http from "./http";
 import { PostReview } from "@/types/appTypes";
 
 //get User Product
-export const getUserProducts = async () => {
-  const { data } = await http.get("/products");
+export const getUserProducts = async (params: any) => {
+  // Pass the params object to axios/http
+  const { data } = await http.get("/products", { params });
   return data;
 };
 
@@ -60,8 +61,10 @@ export const clearUserCart = async () => {
 
 // Users Orders
 
-export const getUserOrder = async () => {
-  const { data } = await http.get("/user/orders");
+export const getUserOrder = async (params = { page: 1, limit: 10 }) => {
+  const { data } = await http.get(
+    `/user/orders?page=${params.page}&limit=${params.limit}`,
+  );
   return data;
 };
 
@@ -114,5 +117,24 @@ export const getUserReviews = async (id: string) => {
 
 export const postUserReviews = async (payload: PostReview) => {
   const { data } = await http.post(`/reviews`, payload);
+  return data;
+};
+
+//post ticket
+
+export const postTicket = async (payload: any) => {
+  const { data } = await http.post("/user/createTicket", payload);
+
+  return data;
+};
+
+export const getTicket = async (id: string) => {
+  const { data } = await http.get(`/user/ticket/${id}`);
+  console.log(data, "ticket");
+  return data;
+};
+
+export const getCourier = async (weight: number) => {
+  const { data } = await http.get(`/delivery/carrier/${weight}`);
   return data;
 };

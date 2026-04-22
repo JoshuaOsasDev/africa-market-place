@@ -1,3 +1,4 @@
+import page from "@/app/(auth)/auth-vendor/resetPassword/page";
 import {
   addCart,
   deleteCart,
@@ -14,7 +15,9 @@ import {
   createImageSlider,
   deleteDelivery,
   getAllDelivery,
+  getCourier,
   getSlider,
+  getTicket,
   getUserCart,
   getUserOrder,
   getUserProducts,
@@ -22,6 +25,7 @@ import {
   getUserReviews,
   getUserWishlist,
   postDelivery,
+  postTicket,
   postUserOrder,
   postUserReviews,
   PostUserWishlist,
@@ -36,14 +40,15 @@ import { useRouter } from "next/navigation";
 
 import toast from "react-hot-toast";
 
-export const useUserProducts = () => {
+export const useUserProducts = (filters: any) => {
   const {
     isLoading,
     data: userProducts,
     error,
   } = useQuery({
-    queryKey: ["user-products"],
-    queryFn: getUserProducts,
+    queryKey: ["user-products", filters],
+    queryFn: () => getUserProducts(filters),
+    placeholderData: (previousData) => previousData, // Smooth transition during loading
     throwOnError: true,
   });
 
@@ -201,14 +206,14 @@ export const useGetCart = () => {
 };
 
 //User Order
-export const useUserOder = () => {
+export const useUserOder = (params = { page: 1, limit: 10 }) => {
   const {
     isLoading,
     data: userOders,
     error,
   } = useQuery({
-    queryKey: ["user-oders"],
-    queryFn: getUserOrder,
+    queryKey: ["user-oders", params],
+    queryFn: () => getUserOrder(params),
   });
 
   return { isLoading, userOders, error };
@@ -309,7 +314,7 @@ export const useUpdateDelivery = () => {
         icon: "✔",
         position: "top-center",
         style: {
-          color: "#16a34a", // green
+          color: "#16a34a",
           fontWeight: "500",
         },
       });
@@ -431,4 +436,58 @@ export const usePostReview = () => {
   });
 
   return { isPending, mutate, error };
+};
+
+export const useCreateTicket = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (payload: any) => postTicket(payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["ticket"],
+      });
+
+      toast.success("Ticket Posted Successfully", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+  });
+
+  return { mutate, isPending };
+};
+
+export const useTicket = (id: string) => {
+  const {
+    isLoading,
+    data: data,
+    error,
+  } = useQuery({
+    queryKey: ["ticket", id],
+    queryFn: () => getTicket(id),
+    enabled: !!id,
+  });
+
+  return { isLoading, data, error };
+};
+
+export const useCourier = (weight: number) => {
+  const {
+    isLoading,
+    data: data,
+    error,
+  } = useQuery({
+    queryKey: ["courier", weight],
+    queryFn: () => getCourier(weight),
+    enabled: !!weight,
+  });
+
+  return { isLoading, data, error };
 };

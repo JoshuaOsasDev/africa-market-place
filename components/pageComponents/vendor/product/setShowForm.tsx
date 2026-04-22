@@ -11,13 +11,19 @@ import {
   useVendorProducts,
 } from "@/lib/hooks/vendorDashboard/useVendor";
 import NoOrder from "../order/noOrder";
+import { useSearchParams } from "next/navigation";
 
 export default function SetShowForm() {
   const show = useAppSelector((state) => state.showFormReducer.show);
   const type = useAppSelector((state) => state.showFormReducer.type);
 
+  //pagination
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const limit = 10;
+  const params = { page: page, limit: limit };
   const { isLoading, vendorProducts, vendorProductsError } =
-    useVendorProducts();
+    useVendorProducts(params);
 
   const { mutate: deleteProduct, isPending } = useDeleteVendorProduct();
   console.log(vendorProducts?.products.data, "vendor products data");
@@ -56,9 +62,8 @@ export default function SetShowForm() {
           <SearchAndFilterProduct />
           <ProductTableReactTable
             products={vendorProducts?.products.data}
-            ITEMS_PER_PAGE={5}
+            totalPages={vendorProducts?.products?.total}
             isPending={isPending}
-            onDelete={(slug) => deleteProduct(slug)}
           />
         </>
       )}

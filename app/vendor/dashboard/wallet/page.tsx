@@ -1,97 +1,68 @@
 "use client";
+
 import Modal from "@/components/common/modal";
 import PayoutHistoryTable from "@/components/pageComponents/vendor/wallet/payoutHistoryTable";
 import WithdrawModal from "@/components/pageComponents/vendor/wallet/withdrawModal";
 import { Button } from "@/components/ui/button";
+import { useVendorPayment } from "@/lib/hooks/vendorDashboard/useVendor";
 import { Plus, Wallet } from "lucide-react";
-// Mock data for testing
 
 export type Payout = {
   _id: string;
   account: string;
   transactionId: string;
   amount: number;
-  status: "Successful" | "Declined" | "Pending";
+  status: "successful" | "declined" | "pending";
   date: string;
   currency?: string;
 };
 
-export const mockPayouts: Payout[] = [
-  {
-    _id: "1",
-    account: "21053624234",
-    transactionId: "46575fgdpsknam",
-    amount: 45000,
-    status: "Successful",
-    date: "2023-01-15",
-    currency: "₦",
-  },
-  {
-    _id: "2",
-    account: "21053624234",
-    transactionId: "46575fgdpsknam",
-    amount: 45000,
-    status: "Successful",
-    date: "2023-01-14",
-    currency: "₦",
-  },
-  {
-    _id: "3",
-    account: "21053624234",
-    transactionId: "46575fgdpsknam",
-    amount: 45000,
-    status: "Successful",
-    date: "2023-01-13",
-    currency: "₦",
-  },
-  {
-    _id: "4",
-    account: "21053624234",
-    transactionId: "46575fgdpsknam",
-    amount: 45000,
-    status: "Successful",
-    date: "2023-01-12",
-    currency: "₦",
-  },
-  {
-    _id: "5",
-    account: "21053624234",
-    transactionId: "46575fgdpsknam",
-    amount: 45000,
-    status: "Successful",
-    date: "2023-01-11",
-    currency: "₦",
-  },
-  {
-    _id: "6",
-    account: "21053624234",
-    transactionId: "46575fgdpsknam",
-    amount: 45000,
-    status: "Declined",
-    date: "2023-01-10",
-    currency: "₦",
-  },
-  {
-    _id: "7",
-    account: "21053624234",
-    transactionId: "46575fgdpsknam",
-    amount: 45000,
-    status: "Pending",
-    date: "2023-01-09",
-    currency: "₦",
-  },
-  {
-    _id: "8",
-    account: "21053624234",
-    transactionId: "46575fgdpsknam",
-    amount: 45000,
-    status: "Declined",
-    date: "2023-01-08",
-    currency: "₦",
-  },
-];
+/*  Transform backend Payment → UI Payout */
+const transformPaymentsToPayouts = (payments: any[]): Payout[] => {
+  return payments.map((payment) => {
+    let status: Payout["status"];
 
-const page = () => {
+    if (payment.status === "paid") {
+      status = "successful";
+    } else if (payment.status === "failed") {
+      status = "declined";
+    } else {
+      status = "pending";
+    }
+
+    return {
+      _id: payment._id,
+      account: payment.shop || "N/A",
+      transactionId: payment._id,
+      amount: payment.totalIncome || payment.total || 0,
+      status,
+      date: payment.createdAt,
+      currency: "£",
+    };
+  });
+};
+
+const Page = () => {
+  const { vendorPayment, isLoading } = useVendorPayment();
+
+  /*  Extract & transform data safely */
+  const payouts = transformPaymentsToPayouts(vendorPayment?.data || []);
+
+  /*  Optional: calculate balances */
+  const totalIncome = payouts.reduce((acc, curr) => acc + curr.amount, 0);
+
+  const pendingBalance = payouts
+    .filter((p) => p.status === "pending")
+    .reduce((acc, curr) => acc + curr.amount, 0);
+
+  const holdBalance = payouts
+    .filter((p) => p.status === "declined")
+    .reduce((acc, curr) => acc + curr.amount, 0);
+
+  if (isLoading) {
+    return <p className="p-4">Loading payments...</p>;
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <Button className="ml-auto hidden items-center justify-center rounded-[12px] bg-[#2E7D32] px-4 py-5.5 hover:bg-[#2E7D32]/80 lg:flex">
@@ -114,7 +85,9 @@ const page = () => {
                 <p className="text-sm text-[#8B8D97]">Withdrawable Balance</p>
 
                 <div className="flex items-center justify-between">
-                  <p className="text-lg font-semibold">₦150,000.00</p>
+                  <p className="text-lg font-semibold">
+                    £{totalIncome.toLocaleString()}
+                  </p>
 
                   <Modal>
                     <Modal.Open opens="withdraw">
@@ -141,7 +114,9 @@ const page = () => {
 
               <div className="flex flex-col gap-1">
                 <p className="text-sm text-[#8B8D97]">Pending Balance</p>
-                <p className="text-lg font-semibold">₦150,000.00</p>
+                <p className="text-lg font-semibold">
+                  £{pendingBalance.toLocaleString()}
+                </p>
               </div>
             </div>
           </div>
@@ -155,16 +130,18 @@ const page = () => {
 
               <div className="flex flex-col gap-1">
                 <p className="text-sm text-[#8B8D97]">Balance on Hold</p>
-                <p className="text-lg font-semibold">₦150,000.00</p>
+                <p className="text-lg font-semibold">
+                  £{holdBalance.toLocaleString()}
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        <PayoutHistoryTable payouts={mockPayouts} />
+        <PayoutHistoryTable payouts={payouts} />
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

@@ -32,9 +32,7 @@ const productSlice = createSlice({
       state.checkout.cart = cart;
       state.checkout.subtotal = subtotal;
       state.checkout.total =
-        subtotal -
-        state.checkout.discount +
-        (parseInt(state.checkout.shipping) || 0);
+        subtotal - state.checkout.discount + (state.checkout.shipping || 0);
     },
 
     // CHECKOUT
@@ -251,6 +249,10 @@ const productSlice = createSlice({
     },
     setShippingFee(state, action) {
       state.checkout.shipping = action.payload;
+      state.checkout.total =
+        state.checkout.subtotal -
+        state.checkout.discount +
+        (state.checkout.shipping || 0);
     },
     applyDiscount(state, action) {
       const discount = action.payload;

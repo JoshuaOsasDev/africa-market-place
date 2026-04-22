@@ -507,9 +507,9 @@ function Header() {
                   </Link>
 
                   <Link
-                    href="/user/change-password"
+                    href="/user/dashboard/passwordSetting"
                     className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100 ${
-                      path === "/user/change-password"
+                      path === "/user/dashboard/passwordSetting"
                         ? "bg-[#E8F5E9] text-[#4F912F]"
                         : "text-gray-700"
                     }`}
@@ -550,53 +550,59 @@ function Header() {
           {/* top left section ends */}
           <div className="flex flex-row items-center lg:justify-between">
             <div className="flex flex-row items-center space-x-4 lg:space-x-8">
-              {navListArray.map((item, i) => {
-                const isActive = path === item.url;
+              {user?.user ? (
+                navListArray.map((item, i) => {
+                  const isActive = path === item.url;
 
-                return (
-                  <div className="group flex flex-col space-y-2 pt-3" key={i}>
-                    <Link
-                      className="cursor-pointer text-lg font-medium hover:text-blue-500"
-                      key={item.url}
-                      href={item.url}
-                    >
-                      <TextStyle
-                        textContent={item.name}
-                        textStyle={`hover:text-[#4F912F] ${
-                          isActive ? "text-[#4F912F]" : "text-[#6F6F6F]"
+                  return (
+                    <div className="group flex flex-col space-y-2 pt-3" key={i}>
+                      <Link
+                        className="cursor-pointer text-lg font-medium hover:text-blue-500"
+                        key={item.url}
+                        href={item.url}
+                      >
+                        <TextStyle
+                          textContent={item.name}
+                          textStyle={`hover:text-[#4F912F] ${
+                            isActive ? "text-[#4F912F]" : "text-[#6F6F6F]"
+                          }`}
+                        />
+                      </Link>
+                      <div
+                        className={`h-0.5 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full ${
+                          isActive ? "w-full" : "w-0"
                         }`}
-                      />
-                    </Link>
-                    <div
-                      className={`h-0.5 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full ${
-                        isActive ? "w-full" : "w-0"
-                      }`}
-                    ></div>
-                  </div>
-                );
-              })}
+                      ></div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="h-3"></div>
+              )}
             </div>
             <div className="flex items-center justify-center space-x-4 lg:flex-1">
-              <div className="group hidden flex-col space-y-1 pt-2 lg:flex">
-                <Link
-                  className="cursor-pointer text-lg font-medium hover:text-blue-500"
-                  href={"/user/dashboard/tracking"}
-                >
-                  <TextStyle
-                    textContent={"Order Tracking"}
-                    textStyle={`hover:text-[#4F912F] ${
-                      path === "/user/dashboard/tracking"
-                        ? "text-[#4F912F]"
-                        : "text-[#6F6F6F]"
+              {user?.user && (
+                <div className="group hidden flex-col space-y-1 pt-2 lg:flex">
+                  <Link
+                    className="cursor-pointer text-lg font-medium hover:text-blue-500"
+                    href={"/user/dashboard/tracking"}
+                  >
+                    <TextStyle
+                      textContent={"Order Tracking"}
+                      textStyle={`hover:text-[#4F912F] ${
+                        path === "/user/dashboard/tracking"
+                          ? "text-[#4F912F]"
+                          : "text-[#6F6F6F]"
+                      }`}
+                    />
+                  </Link>
+                  <div
+                    className={`h-0.5 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full ${
+                      path === "/user/dashboard/tracking" ? "w-full" : "w-0"
                     }`}
-                  />
-                </Link>
-                <div
-                  className={`h-0.5 bg-[#4F912F] transition-all duration-500 ease-in-out group-hover:block group-hover:w-full ${
-                    path === "/user/dashboard/tracking" ? "w-full" : "w-0"
-                  }`}
-                ></div>
-              </div>
+                  ></div>
+                </div>
+              )}
             </div>
           </div>
         </div>

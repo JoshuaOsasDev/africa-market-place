@@ -4,10 +4,9 @@ import { useParams } from "next/navigation";
 
 const Page = () => {
   const params = useParams();
-  // console.log("params:", params)
 
   const url = params.url as string;
-
+  console.log(url, "send otp url");
   return (
     <div>
       <SendOtpcomp url={url} />

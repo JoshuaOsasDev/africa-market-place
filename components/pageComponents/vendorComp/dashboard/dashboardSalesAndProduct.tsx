@@ -78,7 +78,11 @@ export default function DashboardSalesAndProduct({
           <FilterButton />
         </div>
         <div className="">
-          <ProductTableReactTable products={vendorProduct} ITEMS_PER_PAGE={3} />
+          <ProductTableReactTable
+            products={vendorProduct}
+            totalPages={vendorProduct.length - 4}
+            isPending={loadingVendorProduct}
+          />
         </div>
       </div>
     </div>

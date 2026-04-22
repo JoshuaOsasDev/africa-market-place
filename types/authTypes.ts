@@ -44,7 +44,9 @@ export type userType = {
   wishList: string[];
   city: string;
   address: string;
-  poatalCode: string;
+  postCode: string;
+  houseNumber: string;
+  country?: string;
   _id?: string;
 };
 

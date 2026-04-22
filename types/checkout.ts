@@ -10,10 +10,12 @@ export interface ShippingAddress {
   address: string;
   country: string;
   city: string;
-  state: string;
-  zip: string;
+  county: string;
+  postCode?: string;
   email: string;
   phoneNumber: number;
+  houseNumber?: string;
+  zip?: string;
 }
 
 export interface BillingAddress extends ShippingAddress {

@@ -9,7 +9,8 @@ import { Product } from "@/types/product";
 
 function BestSellingProducts() {
   //get product hook
-  const { isLoading, userProducts } = useUserProducts();
+  const filter = "";
+  const { isLoading, userProducts } = useUserProducts(filter);
 
   const product = userProducts?.data;
 

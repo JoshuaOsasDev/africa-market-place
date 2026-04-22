@@ -7,6 +7,7 @@ import {
   getVendorDashboardAnalytics,
   getVendorOrders,
   getvendorOrderSlug,
+  getVendorPayment,
   getVendorProductById,
   getVendorProducts,
   getVendorShop,
@@ -15,6 +16,9 @@ import {
 import { Product } from "@/types/product";
 import toast from "react-hot-toast";
 import { CreateShopPayload } from "@/types/shop";
+import { number } from "yup";
+import { useRouter } from "next/navigation";
+import { param } from "framer-motion/client";
 export const useVendorDashboardAnalytics = () => {
   const {
     isLoading,
@@ -29,14 +33,14 @@ export const useVendorDashboardAnalytics = () => {
 };
 
 // Hook to fetch vendor products
-export const useVendorProducts = () => {
+export const useVendorProducts = (params = { page: 1, limit: 10 }) => {
   const {
     isLoading,
     data: vendorProducts,
     error: vendorProductsError,
   } = useQuery({
-    queryKey: ["vendor-products"],
-    queryFn: getVendorProducts,
+    queryKey: ["vendor-products", params],
+    queryFn: () => getVendorProducts(params),
   });
 
   return { isLoading, vendorProducts, vendorProductsError };
@@ -161,14 +165,14 @@ export const useDeleteVendorProduct = () => {
 
 // Hook to fetch vendor orders
 
-export const useVendorOrders = () => {
+export const useVendorOrders = (params = { page: 1, limit: 10 }) => {
   const {
     isLoading,
     data: vendorOrders,
     error: vendorOrdersError,
   } = useQuery({
-    queryKey: ["vendor-orders"],
-    queryFn: getVendorOrders,
+    queryKey: ["vendor-orders", params],
+    queryFn: () => getVendorOrders(params),
   });
   return { isLoading, vendorOrders, vendorOrdersError };
 };
@@ -185,6 +189,7 @@ export const useVEndorOrderSlug = (slug: string) => {
 //create Shop
 
 export const useVendorCreateShop = () => {
+  const route = useRouter();
   const queryClient = useQueryClient();
   const { mutate, isPending, isSuccess, error } = useMutation({
     mutationKey: ["create-vendor-shop"],
@@ -196,6 +201,8 @@ export const useVendorCreateShop = () => {
       // queryClient.invalidateQueries({
       //   queryKey: ["vendor-products"],
       // });
+
+      route.push("/vendor/dashboard");
 
       toast.success("Shop Created Sucessfuly", {
         duration: 4000,
@@ -256,3 +263,16 @@ export const useVendorShop = () => {
 //   });
 //   return { vendorSubCategory, error };
 // };
+
+export const useVendorPayment = (params = { page: 1, limit: 10 }) => {
+  const {
+    isLoading,
+    data: vendorPayment,
+    error: vendorPaymentError,
+  } = useQuery({
+    queryKey: ["vendor-payment", params],
+    queryFn: () => getVendorPayment(params),
+  });
+
+  return { isLoading, vendorPayment, vendorPaymentError };
+};

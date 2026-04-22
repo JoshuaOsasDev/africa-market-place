@@ -1,5 +1,6 @@
 "use client";
 
+import { PaymentErrorModal } from "@/components/common/paymentErrorModal";
 import { getUserOrderId } from "@/services/apiServices/userDashboard";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios, { AxiosError } from "axios";
@@ -32,10 +33,17 @@ function PaymentForm({ orderId }: { orderId: string }) {
   const [order, setOrder] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentIntent, setPaymentIntent] = useState(null);
+  // Modal state
+  const [paymentError, setPaymentError] = useState<{
+    message: string;
+    email: string;
+  } | null>(null);
+
   const route = useRouter();
   // console.log(order?.data, "order");
 
   const orders = order?.data;
+
   const createPaymentIntent = async (orderData: any) => {
     try {
       const { data } = await axios.post(
@@ -125,10 +133,11 @@ function PaymentForm({ orderId }: { orderId: string }) {
       //console.log("result", result);
 
       if (result.error) {
-        // Show error to your customer
+        setPaymentError({
+          message: result.error.message ?? "An unknown payment error occurred.",
+          email: orders?.user?.email,
+        });
 
-        console.error(result.error.message);
-        alert(result.error.message);
         console.log(result.error, "ERROR-2");
       } else {
         if (result.paymentIntent.status === "succeeded") {
@@ -154,48 +163,57 @@ function PaymentForm({ orderId }: { orderId: string }) {
   };
 
   return (
-    <div className="mx-6 my-10 max-w-sm rounded-xl border border-gray-100 bg-white p-3 shadow-lg sm:mx-auto md:mx-auto md:max-w-md md:p-8">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Checkout</h2>
-        <p className="text-sm text-gray-500">
-          Complete your purchase by providing your payment details.
-        </p>
-      </div>
+    <>
+      <div className="mx-6 my-10 max-w-sm rounded-xl border border-gray-100 bg-white p-3 shadow-lg sm:mx-auto md:mx-auto md:max-w-md md:p-8">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">Checkout</h2>
+          <p className="text-sm text-gray-500">
+            Complete your purchase by providing your payment details.
+          </p>
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">
-            Card Details
-          </label>
-          <div className="rounded-lg border border-gray-300 bg-gray-50 p-4 transition-all focus-within:ring-2 focus-within:ring-blue-500">
-            <CardElement options={CARD_ELEMENT_OPTIONS} />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">
+              Card Details
+            </label>
+            <div className="rounded-lg border border-gray-300 bg-gray-50 p-4 transition-all focus-within:ring-2 focus-within:ring-blue-500">
+              <CardElement options={CARD_ELEMENT_OPTIONS} />
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center justify-between border-t border-gray-100 py-4">
-          <span className="text-gray-600">Total Amount</span>
-          <span className="text-xl font-bold text-gray-900">
-            £{orders?.total?.toFixed(2)}
-          </span>
-        </div>
+          <div className="flex items-center justify-between border-t border-gray-100 py-4">
+            <span className="text-gray-600">Total Amount</span>
+            <span className="text-xl font-bold text-gray-900">
+              £{orders?.total?.toFixed(2)}
+            </span>
+          </div>
 
-        <button
-          type="submit"
-          disabled={!stripe || isProcessing}
-          className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-blue-700 disabled:bg-gray-400"
-        >
-          {isProcessing ? (
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-          ) : (
-            "Pay Securely"
-          )}
-        </button>
+          <button
+            type="submit"
+            disabled={!stripe || isProcessing}
+            className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-blue-700 disabled:bg-gray-400"
+          >
+            {isProcessing ? (
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+            ) : (
+              "Pay Securely"
+            )}
+          </button>
 
-        <p className="mt-4 text-center text-xs text-gray-400">
-          🔒 Secure payment powered by Stripe
-        </p>
-      </form>
-    </div>
+          <p className="mt-4 text-center text-xs text-gray-400">
+            🔒 Secure payment powered by Stripe
+          </p>
+        </form>
+        {paymentError && (
+          <PaymentErrorModal
+            error={paymentError.message}
+            email={orders?.user?.email}
+            onClose={() => setPaymentError(null)}
+          />
+        )}
+      </div>
+    </>
   );
 }
 

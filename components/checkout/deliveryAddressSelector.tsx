@@ -8,20 +8,23 @@ import {
   useCreateDelivery,
   useDeleteDelivery,
   useUpdateDelivery,
-  // useDeleteDelivery
 } from "@/lib/hooks/userDashboard/useUser";
 import { Plus, Trash2, CheckCircle2, Circle } from "lucide-react";
 import { Button } from "../ui/button";
+import UKAddressAutocomplete, {
+  AddressResult,
+} from "../common/googlAddressUserLocation";
 
 interface DeliveryAddress {
   _id: string;
   address: string;
   country: string;
   city: string;
-  state: string;
-  zip: string;
+  county: string;
+  postCode: string;
   phoneNumber: number;
   email: string;
+  houseNumber: string;
 }
 
 interface DeliveryAddressSelectorProps {
@@ -41,55 +44,81 @@ export function DeliveryAddressSelector({
 }: DeliveryAddressSelectorProps) {
   const [showForm, setShowForm] = useState(false);
 
-  const { mutate: createDelivery } = useCreateDelivery();
-  const { mutate: updateDelivery } = useUpdateDelivery();
-  const { mutate: deleteDelivery } = useDeleteDelivery(); // ← hook for deletion
+  const { mutate: createDelivery, isPending: isCreating } = useCreateDelivery();
+  const { mutate: updateDelivery, isPending: isUpdating } = useUpdateDelivery();
+  const { mutate: deleteDelivery, isPending: isDeleting } = useDeleteDelivery();
 
+  // Select saved delivery address
   const handleSelect = (d: DeliveryAddress) => {
     setShipping({
       id: d._id,
       address: d.address,
       country: d.country,
       city: d.city,
-      state: d.state,
-      zip: d.zip,
+      county: d.county,
+      postCode: d.postCode,
       email: d.email,
       phoneNumber: d.phoneNumber,
+      houseNumber: d.houseNumber,
     });
 
     setShowForm(true);
   };
 
+  // Delete saved address
   const handleDelete = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // prevent triggering handleSelect
+    e.stopPropagation();
     deleteDelivery(id);
 
-    // If the deleted address was selected, clear the selection
     if (shipping.id === id) {
       setShipping({
         id: "",
         address: "",
         country: "",
         city: "",
-        state: "",
-        zip: "",
+        county: "",
+        postCode: "",
         email: "",
         phoneNumber: 0,
+        houseNumber: "",
       });
     }
   };
 
+  // Save new/update address
   const handleSubmit = () => {
     if (shipping.id) {
       updateDelivery({ id: shipping.id, payload: shipping });
     } else {
       createDelivery(shipping);
     }
+
     setShowForm(false);
   };
 
-  const selectedAddress = deliveries.find((d) => d._id === shipping.id);
+  // Handle Google autocomplete selection
+  const handleAddressSelect = (data: AddressResult) => {
+    setShipping({
+      ...shipping,
+      phoneNumber: shipping.phoneNumber,
+      email: shipping.email,
+      address: `${data.address}`.trim(),
+      city: data.city,
+      postCode: data.postcode,
+      country: data.country,
+      houseNumber: data.houseNumber,
+      county: data.county,
+    });
+  };
 
+  if (isCreating || isDeleting || isUpdating) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 py-10">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2E7D32] border-t-transparent"></div>
+        <p className="text-sm text-[#6F6F6F]">Loading addresses...</p>
+      </div>
+    );
+  }
   return (
     <div className="rounded-lg border border-[#E5E7EB] bg-white p-6">
       {/* Header */}
@@ -113,12 +142,14 @@ export function DeliveryAddressSelector({
                 address: "",
                 country: "",
                 city: "",
-                state: "",
-                zip: "",
+                county: "",
+                postCode: "",
                 email: "",
                 phoneNumber: 0,
+                houseNumber: "",
               });
-              setShowForm((prev) => !prev);
+
+              setShowForm(true);
             }}
           >
             {showForm ? (
@@ -133,7 +164,7 @@ export function DeliveryAddressSelector({
         )}
       </div>
 
-      {/* Address Cards — radio-style selection */}
+      {/* Saved Address Cards */}
       <div className="space-y-3">
         {deliveries.length === 0 && (
           <p className="text-sm text-[#6F6F6F]">
@@ -155,7 +186,6 @@ export function DeliveryAddressSelector({
                   : "border-[#E5E7EB] bg-white",
               )}
             >
-              {/* Radio indicator */}
               <div className="flex items-start gap-3">
                 <div className="mt-0.5 shrink-0 text-[#2E7D32]">
                   {isSelected ? (
@@ -165,17 +195,15 @@ export function DeliveryAddressSelector({
                   )}
                 </div>
 
-                {/* Address details */}
                 <div className="flex-1 text-sm text-[#374151]">
-                  <p className="font-medium">{d.address}</p>
+                  <p className="font-medium">{`${d.houseNumber} ${d.address}`}</p>
                   <p className="text-[#6F6F6F]">
-                    {d.city}, {d.state}, {d.country} — {d.zip}
+                    {d.city}, {d.county}, {d.country} — {d.postCode}
                   </p>
                   <p className="text-[#6F6F6F]">{d.phoneNumber}</p>
                   {d.email && <p className="text-[#6F6F6F]">{d.email}</p>}
                 </div>
 
-                {/* Delete button */}
                 <button
                   onClick={(e) => handleDelete(d._id, e)}
                   className="shrink-0 rounded p-1 text-[#9CA3AF] transition-colors hover:bg-red-50 hover:text-red-500"
@@ -184,23 +212,24 @@ export function DeliveryAddressSelector({
                   <Trash2 size={16} />
                 </button>
               </div>
-
-              {/* {isSelected && (
-                <span className="absolute top-3 right-3 rounded-full bg-[#2E7D32] px-2 py-0.5 text-xs font-medium text-white">
-                  Selected for delivery
-                </span>
-              )} */}
             </div>
           );
         })}
       </div>
 
-      {/* Add new address form */}
+      {/* Address Form */}
       {showForm && (
         <div className="mt-4 rounded-lg border border-dashed border-[#2E7D32] p-4">
           <h3 className="mb-3 text-sm font-semibold text-[#111827]">
             {shipping.id ? "Edit Address" : "New Address"}
           </h3>
+
+          {/* Google UK Address Autocomplete */}
+          <div className="mb-4">
+            <UKAddressAutocomplete onSelect={handleAddressSelect} />
+          </div>
+
+          {/* Shipping Form */}
           <ShippingAddressForm
             onSubmit={handleSubmit}
             values={shipping}
