@@ -18,7 +18,7 @@ export default function ExportProduct({
   const show = useAppSelector((state) => state.showFormReducer.show);
   const type = useAppSelector((state) => state.showFormReducer.type);
 
-  console.log(show, type, "redux");
+  // console.log(show, type, "redux");
   // console.log(showForm, "show");
   const openForm = () => {
     dispatch(
@@ -90,7 +90,7 @@ export default function ExportProduct({
           <span>
             <Plus />
           </span>
-          <span className="">Add {name} </span>
+          <span className=""> {name} </span>
         </Button>
       </div>
     </div>

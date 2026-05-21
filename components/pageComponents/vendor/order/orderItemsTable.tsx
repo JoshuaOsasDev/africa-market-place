@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import { Order } from "@/types/appTypes";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function OrderItemsTable({
   orders,
@@ -42,13 +43,13 @@ export default function OrderItemsTable({
             label: "Product",
             renderCell: (item) => (
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F6F6F6]">
+                <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-[#F6F6F6]">
                   {item.items[0]?.image && (
-                    <img
+                    <Image
                       className="object-cover text-lg"
                       src={item.items[0]?.image || ""}
                       alt="order image"
-                      // fill
+                      fill
                     />
                   )}
                 </div>
@@ -56,9 +57,11 @@ export default function OrderItemsTable({
                   <span className="text-sm font-medium text-[#333843]">
                     {item.items[0].name}
                   </span>
-                  <span className="text-xs text-[#667085]">
-                    +{item.items.length} Other Products
-                  </span>
+                  {item.items.length > 1 && (
+                    <span className="text-xs text-[#667085]">
+                      +{item.items.length - 1} Other Products
+                    </span>
+                  )}
                 </div>
               </div>
             ),
@@ -93,7 +96,9 @@ export default function OrderItemsTable({
           {
             label: "Total",
             renderCell: (item) => (
-              <span className="font-semibold text-[#333843]">{item.total}</span>
+              <span className="font-semibold text-[#333843]">
+                £{item.total.toFixed(2)}
+              </span>
             ),
           },
           {

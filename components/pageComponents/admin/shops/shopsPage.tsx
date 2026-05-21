@@ -4,13 +4,11 @@ import { useAdminShops } from "@/lib/hooks/adminDashboardApi/useAdmin";
 import { useTableFilters } from "@/lib/hooks/useTableFilters";
 import { ProductReview } from "@/types/product";
 import { ChevronDown, FolderKanban, UserRoundPen } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function ShopsPage(page: { page: number }) {
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const [debouncedSearch, setDebouncedSearch] = useState("");
-  // const [status, setStatus] = useState("");
-  // const limit = 10;
+export default function ShopsPage() {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
 
   const { limit, search, debouncedSearch, status, setSearch, setStatus } =
     useTableFilters();

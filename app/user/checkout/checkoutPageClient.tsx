@@ -69,6 +69,7 @@ export function CheckoutPageClient() {
   // console.log(deliveries, "delivery");
   const delivery = deliveries?.addresses || [];
 
+  //console.log(delivery, "delivery");
   const [loading, setLoading] = useState(false);
 
   const [contact, setContact] = useState<ContactInformation>({
@@ -89,6 +90,7 @@ export function CheckoutPageClient() {
     phoneNumber: delivery.phoneNumber,
   });
 
+  //console.log(shipping.address, delivery, "ship");
   const [useDifferentBilling, setUseDifferentBilling] = useState(false);
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("stripe");
@@ -155,11 +157,30 @@ export function CheckoutPageClient() {
         currency: "gbp",
         conversionRate: 1200,
         totalItems: cart?.length,
+        parcel: {
+          name: `${contact.firstName} ${contact.lastName}`,
+          telephone: contact.phoneNumber,
+          email: contact.emailAddress,
+          city: shipping.city,
+          country: shipping.country,
+          county: shipping.county,
+          postal_code: shipping.zip,
+          address: shipping.address,
+          house_number: shipping.address.split(" ")[0],
+          order_number: "ORD-" + Date.now(),
+          shipment: { id: 27227 },
+          currency: "GB",
+          weight: 1,
+          shipping_method:
+            courier === "evri" ? "home_delivery" : "locker_collection",
+          request_label: true,
+        },
       };
 
-      createOrder(data);
-      // postUserOrder(data);
-
+      console.log(data);
+      //createOrder(data);
+      //postUserOrder(data);
+      //console.log(data, "checkout data");
       // console.log("Order placed:", {
       //   contact,
       //   shipping,
@@ -184,7 +205,7 @@ export function CheckoutPageClient() {
 
       setShipping({
         id: firstAddress._id,
-        address: firstAddress.address,
+        address: `${firstAddress.houseNumber} ${firstAddress.address}`,
         country: firstAddress.country,
         city: firstAddress.city,
         county: firstAddress.county,

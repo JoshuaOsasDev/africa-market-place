@@ -13,7 +13,8 @@ import BackButton from "@/components/common/backButton";
 import DailyLayout from "@/components/common/vendorDailyLayout";
 import { toast, ToastContainer } from "react-toastify";
 import { loginSchema } from "@/lib/utility/yupvalidation";
-
+const logo =
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
 const LoginComp = () => {
   const router = useRouter();
 
@@ -56,7 +57,7 @@ const LoginComp = () => {
           <div className="relative hidden h-[50px] w-[100px] md:block">
             <Link href="/">
               <Image
-                src="/images/logo.png"
+                src={logo}
                 alt="africa market place logo"
                 fill
                 className="object-contain object-center"

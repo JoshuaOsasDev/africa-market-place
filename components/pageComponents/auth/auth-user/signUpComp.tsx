@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 
 import covertwo from "../../../../lib/public/images/abot_africa_3.jpg";
-import logo from "../../../../lib/public/images/africa1_logo.png";
+//import logo from "../../../../lib/public/images/africa1_logo.png";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AxiosError } from "axios";
 import { signUpSchema } from "@/lib/utility/yupvalidation";
@@ -19,77 +19,100 @@ import { setLoaderAction, signInAction } from "@/redux/slices/user";
 import { setWishlistAction } from "@/redux/slices/wishlist";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
+import { userSignupType } from "@/types/authTypes";
+import Error from "next/error";
 
-// Define TypeScript types for form values
+// Fallback high-res desktop banner asset hosted via Cloudinary
+const logo =
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
 
+/**
+ * SignUpComp Component
+ * Manages the registration pipeline for new accounts using standard credentials or Google OAuth.
+ * Seamlessly interfaces with React Hook Form, Yup validation, Redux global status handles, and TanStack Query mutations.
+ */
 const SignUpComp = () => {
-  /* naviagtion */
+  /* navigation */
   const router = useRouter();
-  /* use dispatch */
-  // const dispatch = useAppDispatch()
 
+  // Intercepts URL search parameters to capture redirection targets (e.g., returning users to a previous checkout path)
   const searchParam = useSearchParams();
   const redirect = searchParam.get("redirect");
 
+  // Visibility toggle flags for input masking protection
   const [hidePassword, setHidePassword] = useState(false);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
 
-  /* yup validation and react hook form */
-
-  const formOptions = { resolver: yupResolver(signUpSchema) };
-
+  /* yup validation and react hook form configuration */
+  const formOptions = {
+    resolver: yupResolver(signUpSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      role: "user",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+    },
+  };
+  // Explicitly guards submission triggers against un-accepted corporate compliance/privacy checkboxes
   const [isChecked, setIsChecked] = useState(false);
 
-  /* check the box */
+  /* check the box toggle logic */
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
   };
 
+  // Sync global loader flags to manage component-wide disabled states during active execution contexts
   const appLoader = useAppSelector((state) => state.user.loading);
 
-  const [form, setForm] = useState<{
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    password: string;
-  }>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
+  // const [form, setForm] = useState<{
+  //   firstName: string;
+  //   lastName: string;
+  //   email: string;
+  //   phone: string;
+  //   password: string;
+  //   confirmPassword: string;
+  // }>({
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   phone: "",
+  //   password: "",
+  //   confirmPassword: "",
+  // });
 
+  // React Hook Form orchestration leveraging schema rules
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(formOptions);
+  } = useForm<userSignupType>(formOptions);
 
   const dispatch = useAppDispatch();
 
+  // TanStack Query asynchronous state runner to manage server entity creation cycles
   const { mutateAsync } = useMutation({
     mutationFn: signUp,
   });
 
-  const onSubmit = async (data: {
-    email: string;
-    password: string;
-    phone: string;
-    firstName: string;
-    lastName: string;
-  }) => {
+  /**
+   * Standard Registration Submission Pipeline
+   * Transmits validated fields, captures responding identities, caches default arrays, and enforces OTP verification.
+   */
+  const onSubmit = async (data: userSignupType) => {
     try {
       dispatch(setLoaderAction(true));
 
-      const result = await mutateAsync({
-        ...data,
-      });
-      dispatch(signInAction(result.user));
+      console.log(data);
+      const result = await mutateAsync({ ...data });
+      console.log(result, "resukts");
+      // Hydrate state management systems with unverified credentials placeholder details
+      dispatch(signInAction(result));
       dispatch(setWishlistAction(result.user.wishlist));
 
+      // Guard condition redirecting incomplete profiles directly into the verification channel
       if (!result.user.isVerified) {
         toast.error(`Verification email has been sent to ${result.user.email}`);
         router.push("/auth-user/verifyOtp");
@@ -97,11 +120,14 @@ const SignUpComp = () => {
       }
       toast.success("user created successfully");
     } catch (err) {
+      console.log("signup error:", err);
+
       if (err instanceof AxiosError) {
         toast.error(
           err.response?.data?.message || "Sign in failed, please try again.",
         );
       } else {
+        console.error("Unexpected error during signup:", err);
         toast.error("Unknown error");
       }
     } finally {
@@ -109,10 +135,13 @@ const SignUpComp = () => {
     }
   };
 
+  /**
+   * Google OAuth Federated Identification Strategy
+   * Trades external authorization credentials to settle authentications locally and evaluates system role priorities.
+   */
   const loginWithGoogleFunc = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        // tokenResponse.access_token
         dispatch(setLoaderAction(true));
         const result = await googleAuth(tokenResponse);
 
@@ -121,8 +150,11 @@ const SignUpComp = () => {
         toast.success("Login successfull");
 
         dispatch(setLoaderAction(false));
+
+        // Identity authorization roles extraction mapping
         const isAdmin = result.data.user?.role?.includes("admin");
         const isVendor = result.data.user?.role?.includes("vendor");
+
         const goto = redirect
           ? redirect
           : isAdmin
@@ -154,6 +186,7 @@ const SignUpComp = () => {
   return (
     <div className="flex min-h-screen w-full py-5">
       {/* ── LEFT PANEL ── */}
+      {/* Desktop Graphic presentation panel; responsive hide triggers at low viewports */}
       <div className="relative hidden w-120 flex-col justify-between overflow-hidden bg-[#111f12] p-10 lg:flex">
         <Image
           src={covertwo}
@@ -164,12 +197,13 @@ const SignUpComp = () => {
       </div>
 
       {/* ── RIGHT PANEL ── */}
+      {/* Core transactional element holding onboarding input boxes and registration actions */}
       <div className="flex flex-1 items-center justify-center px-6 py-10">
         <div className="w-full max-w-80">
-          {/* Mobile brand */}
+          {/* Mobile brand - Only visible on small viewports when the main desktop banner breaks away */}
           <Link
-            href={"#"}
-            className="relative mb-8 flex h-10 w-10 items-center gap-2 lg:hidden"
+            href={"/"}
+            className="relative mb-8 flex h-12 w-12 items-center gap-2 lg:hidden"
           >
             <Image src={logo} alt="logo" fill className="object-contain" />
           </Link>
@@ -181,7 +215,7 @@ const SignUpComp = () => {
             Enter your details to get started for free.
           </p>
 
-          {/* Google */}
+          {/* Federated Authorization Action Trigger */}
           <button
             type="button"
             disabled={appLoader}
@@ -204,7 +238,7 @@ const SignUpComp = () => {
             )}
           </button>
 
-          {/* Divider */}
+          {/* Split Separator Element */}
           <div className="mb-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-[#e8ede8]" />
             <span className="text-[11px] tracking-widest text-[#a0b0a0] uppercase">
@@ -213,12 +247,12 @@ const SignUpComp = () => {
             <div className="h-px flex-1 bg-[#e8ede8]" />
           </div>
 
-          {/* Form */}
+          {/* Traditional Payload Entry Form Elements */}
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
-            {/* First Name */}
+            {/* First Name Section */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-medium text-[#374837]">
                 First Name
@@ -238,7 +272,7 @@ const SignUpComp = () => {
               )}
             </div>
 
-            {/* Last Name */}
+            {/* Last Name Section */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-medium text-[#374837]">
                 Last Name
@@ -258,7 +292,7 @@ const SignUpComp = () => {
               )}
             </div>
 
-            {/* Email */}
+            {/* Email Address Section */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-medium text-[#374837]">
                 Email address
@@ -285,7 +319,7 @@ const SignUpComp = () => {
               )}
             </div>
 
-            {/* Phone */}
+            {/* Phone Number Section */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-medium text-[#374837]">
                 Phone
@@ -303,7 +337,7 @@ const SignUpComp = () => {
               )}
             </div>
 
-            {/* Password */}
+            {/* Initial Password Section */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-medium text-[#374837]">
                 Password
@@ -334,7 +368,7 @@ const SignUpComp = () => {
               )}
             </div>
 
-            {/* Confirm Password */}
+            {/* Password Match Confirmation Section */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-medium text-[#374837]">
                 Confirm Password
@@ -365,7 +399,7 @@ const SignUpComp = () => {
               )}
             </div>
 
-            {/* Terms and Conditions */}
+            {/* Compliance Matrix Agreement Elements */}
             <label className="flex cursor-pointer items-start gap-2 text-[13px] text-[#5a6b5a]">
               <input
                 type="checkbox"
@@ -389,7 +423,7 @@ const SignUpComp = () => {
               </span>
             </label>
 
-            {/* Submit */}
+            {/* Registration Submission Pipeline Trigger */}
             <button
               type="submit"
               disabled={!isChecked || appLoader}
@@ -399,7 +433,7 @@ const SignUpComp = () => {
             </button>
           </form>
 
-          {/* Footer */}
+          {/* Alternative Account Sign-In Navigation Elements */}
           <p className="mt-6 text-center text-[13.5px] text-[#7a8b7a]">
             Already have an account?{" "}
             <Link

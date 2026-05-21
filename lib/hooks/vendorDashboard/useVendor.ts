@@ -4,6 +4,7 @@ import {
   createVendorProduct,
   createVendorShop,
   deleteVendorProduct,
+  getVendorCustormersOrders,
   getVendorDashboardAnalytics,
   getVendorOrders,
   getvendorOrderSlug,
@@ -12,6 +13,7 @@ import {
   getVendorProducts,
   getVendorShop,
   updateVendorProduct,
+  updateVendorShop,
 } from "@/services/apiServices/vendorDashboard";
 import { Product } from "@/types/product";
 import toast from "react-hot-toast";
@@ -177,7 +179,7 @@ export const useVendorOrders = (params = { page: 1, limit: 10 }) => {
   return { isLoading, vendorOrders, vendorOrdersError };
 };
 
-export const useVEndorOrderSlug = (slug: string) => {
+export const useVendorOrderSlug = (slug: string) => {
   const { isLoading, data, error } = useQuery({
     queryKey: ["vendor-order-slug"],
     queryFn: () => getvendorOrderSlug(slug),
@@ -252,6 +254,59 @@ export const useVendorShop = () => {
   return { isLoading, vendorShop, vendorShopError };
 };
 
+export const useVendorUpdateShop = (slug: string | undefined) => {
+  const route = useRouter();
+  const queryClient = useQueryClient();
+  const { mutate, isPending, isSuccess, error } = useMutation({
+    mutationKey: ["update-vendor-shop"],
+    mutationFn: (FormData: CreateShopPayload) =>
+      updateVendorShop(FormData, slug),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["vendor-product"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["vendor-products"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["vendor-shop"],
+      });
+
+      route.push("/vendor/dashboard/seller");
+
+      toast.success("Shop Updated Sucessfuly", {
+        duration: 4000,
+        icon: "✔",
+        position: "top-center",
+        style: {
+          color: "#16a34a", // green
+          fontWeight: "500",
+        },
+      });
+    },
+
+    onError: (error: any) => {
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to update product";
+
+      //   // Error toast
+      toast.error(message, {
+        duration: 4000,
+        icon: "✗",
+        position: "top-center",
+        style: {
+          background: "#fee2e2",
+          color: "#b91c1c",
+          border: "1px solid #fecaca",
+        },
+      });
+    },
+  });
+
+  return { mutate, isPending, error, isSuccess };
+};
 // export const useVendorSubCategory = (slug: string) => {
 //   const {
 //     data: vendorSubCategory,
@@ -275,4 +330,17 @@ export const useVendorPayment = (params = { page: 1, limit: 10 }) => {
   });
 
   return { isLoading, vendorPayment, vendorPaymentError };
+};
+
+export const useVendorCustormerOrder = (params = { page: 1, limit: 10 }) => {
+  const {
+    isLoading,
+    data: vendorOrder,
+    error: vendorOrderError,
+  } = useQuery({
+    queryKey: ["vendor-custormer-order", params],
+    queryFn: () => getVendorCustormersOrders(params),
+  });
+
+  return { isLoading, vendorOrder, vendorOrderError };
 };

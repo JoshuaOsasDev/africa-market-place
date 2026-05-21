@@ -11,13 +11,17 @@ import {
   UserPlus,
   UserRoundCheck,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function UsersPage(page: { page: number }) {
+export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [role, setRole] = useState("");
   const limit = 10;
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
   const { useradminData, isLoading, error } = useAdminUsers(
     page,
     limit,
@@ -36,7 +40,10 @@ export default function UsersPage(page: { page: number }) {
     };
   }, [searchQuery]);
   //console.log(searchQuery, "admin data");
+  const totalCount = useradminData?.totalCounts;
+  const totalPages = totalCount || Math.max(1, Math.ceil(totalCount / limit));
 
+  // console.log(useradminData, "admin user data");
   if (isLoading) return <Loader />;
   return (
     <div>
@@ -48,7 +55,7 @@ export default function UsersPage(page: { page: number }) {
           </div>
           <div className="flex flex-col">
             <h3 className="text-[#8B8D97]">Total Users</h3>
-            <p className="text-xl font-medium">{useradminData?.data?.length}</p>
+            <p className="text-xl font-medium">{useradminData.totalCounts}</p>
           </div>
         </div>
         {/* USERS TODAY */}
@@ -162,7 +169,12 @@ export default function UsersPage(page: { page: number }) {
           </div>
         </div>
 
-        <UserTable data={useradminData?.data} user="user" page={page} />
+        <UserTable
+          totalPages={totalPages}
+          data={useradminData?.data}
+          user="user"
+          page={page}
+        />
       </div>
     </div>
   );

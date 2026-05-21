@@ -4,8 +4,12 @@ import { useAdminProducts } from "@/lib/hooks/adminDashboardApi/useAdmin";
 import { useTableFilters } from "@/lib/hooks/useTableFilters";
 import { ProductReview } from "@/types/product";
 import { ChevronDown, FolderKanban, UserRoundPen } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
-export default function ProductReviewPage(page: { page: number }) {
+export default function ProductReviewPage() {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+
   const { limit, debouncedSearch, setStatus, status } = useTableFilters();
   const { adminProducts, isLoading: isLoadingAdmin } = useAdminProducts(
     page,
@@ -14,8 +18,9 @@ export default function ProductReviewPage(page: { page: number }) {
     status,
   );
 
+  //console.log(adminProducts, "admin pro");
   //Pending product
-  const total = adminProducts?.count;
+  const total = adminProducts?.total;
   const pendingNum: number = adminProducts?.data?.filter(
     (data: ProductReview) => {
       return data.status === "pending";
@@ -32,7 +37,7 @@ export default function ProductReviewPage(page: { page: number }) {
           </div>
           <div className="flex flex-col">
             <h3 className="text-[#8B8D97]">All Product</h3>
-            <p className="text-xl font-medium">{adminProducts?.data?.length}</p>
+            <p className="text-xl font-medium">{total}</p>
           </div>
         </div>
         {/* SHIPPING TODAY */}

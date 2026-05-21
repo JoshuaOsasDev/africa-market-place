@@ -7,7 +7,7 @@ import Link from "next/link";
 import { toast } from "react-hot-toast";
 
 import coverOne from "../../../../lib/public/images/cover_login.jpg";
-import logo from "../../../../lib/public/images/africa1_logo.png";
+//import logo from "../../../../lib/public/images/africa1_logo.png";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { loginSchema } from "@/lib/utility/yupvalidation";
@@ -21,8 +21,17 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setLoaderAction, signInAction } from "@/redux/slices/user";
 import { setWishlistAction } from "@/redux/slices/wishlist";
 
+// Fallback high-res desktop banner asset hosted via Cloudinary
+const logo =
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
+
+/**
+ * LoginComp Component
+ * Handles traditional email/password login as well as Google OAuth identity flows.
+ * Manages user session hydration into Redux and conditional onboarding/dashboard redirects.
+ */
 const LoginComp = () => {
-  /* naviagtion */
+  /* navigation */
   const router = useRouter();
 
   /* use dispatch */
@@ -31,10 +40,10 @@ const LoginComp = () => {
   /* get the app state */
   const appLoader = useAppSelector((state) => state.user.loading);
 
+  // Toggles password input visibility between 'text' and 'password'
   const [hidePassword, setHidePassword] = useState(false);
 
   /* yup validation and react hook form */
-
   const formOptions = { resolver: yupResolver(loginSchema) };
 
   const [form, setForm] = useState<{
@@ -45,16 +54,21 @@ const LoginComp = () => {
     password: "",
   });
 
+  // Intercepts URL search parameters to locate potential downstream redirection paths (e.g., ?redirect=/checkout)
   const searchParam = useSearchParams();
   const redirect = searchParam.get("redirect");
 
   const [isChecked, setIsChecked] = useState(false);
   const queryClient = useQueryClient();
+
+  /**
+   * Traditional Credentials Sign-In Mutation
+   * Invalidates cached user data pools upon successful server confirmation to force state sync.
+   */
   const { mutateAsync } = useMutation({
     mutationFn: signIn,
     onSuccess: () => {
       // invalidate wishlist and all categories after successful login
-
       queryClient.invalidateQueries({ queryKey: ["user-wishlist"] });
       queryClient.invalidateQueries({ queryKey: ["get-all-categories"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
@@ -66,6 +80,7 @@ const LoginComp = () => {
     setIsChecked(!isChecked);
   };
 
+  // React Hook Form initialization bound to the configuration schema rules
   const {
     control,
     register,
@@ -73,6 +88,10 @@ const LoginComp = () => {
     formState: { errors },
   } = useForm(formOptions);
 
+  /**
+   * Google OAuth Third-Party Authentication Handler
+   * Exchanges client identity tokens for localized backend JWT credentials.
+   */
   const loginWithGoogleFunc = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -80,6 +99,7 @@ const LoginComp = () => {
         dispatch(setLoaderAction(true));
         const result = await googleAuth(tokenResponse);
 
+        // Hydrate backend profile data directly into the application state trees
         dispatch(signInAction(result.data.user));
         dispatch(setWishlistAction(result.data.user.wishlist));
 
@@ -87,6 +107,7 @@ const LoginComp = () => {
 
         dispatch(setLoaderAction(false));
 
+        // Evaluate access scopes for dynamic route steering
         const isAdmin = result.data.user?.role?.includes("admin");
         const isVendor = result.data.user?.role?.includes("vendor");
 
@@ -118,28 +139,36 @@ const LoginComp = () => {
     },
   });
 
+  /**
+   * Standard Credentials Form Submission Handler
+   * Submits verified inputs, manages OTP verification status checks, and handles structural role routing.
+   */
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
       dispatch(setLoaderAction(true));
 
       const result = await mutateAsync({
         ...data,
-        rememberMe: isChecked,
+        rememberMe: isChecked, // Binds authorization expiration window adjustments
       });
       dispatch(signInAction(result));
       //dispatch(signInAction(result.token));
       dispatch(setWishlistAction(result.user.wishlist));
 
+      // Guard condition forcing unverified profiles into the OTP confirmation workflow
       if (!result.user.isVerified) {
         toast.error("Email not verified");
 
         router.push("/auth-user/verifyOtp");
         return;
       }
+
+      // Structural Role Assessment
       const isAdmin = result.user?.role?.includes("admin");
       const isVendor = result.user?.role?.includes("vendor");
       const shop = result.user?.shop;
-      console.log(isVendor, shop, "Shop");
+      // console.log(isVendor, shop, "Shop");
+
       const goto = redirect
         ? redirect
         : isAdmin
@@ -147,6 +176,8 @@ const LoginComp = () => {
           : isVendor
             ? "/vendor/dashboard"
             : "/";
+
+      // Edge case: Redirect missing-shop vendor profiles down the shop setup tunnel instead of the main panel
       if (shop === null && isVendor) router.push("/vendor/shop");
       else router.push(goto);
 
@@ -167,6 +198,7 @@ const LoginComp = () => {
   return (
     <div className="flex w-full">
       {/* ── LEFT PANEL ── */}
+      {/* Structural Desktop Graphic Wrapper; hidden on lower viewport breakpoints */}
       <div className="relative hidden w-120 flex-col justify-between overflow-hidden bg-[#111f12] p-10 lg:flex">
         <Image
           src={coverOne}
@@ -177,12 +209,13 @@ const LoginComp = () => {
       </div>
 
       {/* ── RIGHT PANEL ── */}
+      {/* Core interactive control pane housing brand anchors and forms */}
       <div className="flex flex-1 items-center justify-center px-6">
         <div className="w-full max-w-100">
-          {/* Mobile brand */}
+          {/* Mobile brand - Only visible on small viewports when the desktop graphic panel breaks away */}
           <Link
             href={"/"}
-            className="relative mb-8 flex h-10 w-10 items-center gap-2 lg:hidden"
+            className="relative mb-8 flex h-12 w-12 items-center gap-2 lg:hidden"
           >
             <Image src={logo} alt="logo" fill className="object-contain" />
           </Link>
@@ -194,7 +227,7 @@ const LoginComp = () => {
             Enter your credentials to access your account.
           </p>
 
-          {/* Google */}
+          {/* Google Federated Identity Action Mechanism */}
           <button
             type="button"
             disabled={appLoader}
@@ -217,7 +250,7 @@ const LoginComp = () => {
             )}
           </button>
 
-          {/* Divider */}
+          {/* Semantic Input Method Divider Element */}
           <div className="mb-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-[#e8ede8]" />
             <span className="text-[11px] tracking-widest text-[#a0b0a0] uppercase">
@@ -226,12 +259,12 @@ const LoginComp = () => {
             <div className="h-px flex-1 bg-[#e8ede8]" />
           </div>
 
-          {/* Form */}
+          {/* Core Credentials Input Framework Form */}
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
-            {/* Email */}
+            {/* Email Address Form Slice */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-medium text-[#374837]">
                 Email address
@@ -258,7 +291,7 @@ const LoginComp = () => {
               )}
             </div>
 
-            {/* Password */}
+            {/* Password Verification Form Slice */}
             <div className="flex flex-col gap-1.5">
               <label className="text-[13px] font-medium text-[#374837]">
                 Password
@@ -289,7 +322,7 @@ const LoginComp = () => {
               )}
             </div>
 
-            {/* Remember + Forgot */}
+            {/* Remember Device Configuration + Recovery Action Entrypoints */}
             <div className="flex items-center justify-between">
               <label className="flex cursor-pointer items-center gap-2 text-[13px] text-[#5a6b5a]">
                 <input
@@ -308,7 +341,7 @@ const LoginComp = () => {
               </Link>
             </div>
 
-            {/* Submit */}
+            {/* Programmatic Call To Action Pipeline Submission Trigger */}
             <button
               type="submit"
               disabled={appLoader}
@@ -318,7 +351,7 @@ const LoginComp = () => {
             </button>
           </form>
 
-          {/* Footer */}
+          {/* Alternative Account Registration Navigation Linkage */}
           <p className="mt-6 text-center text-[13.5px] text-[#7a8b7a]">
             Don&apos;t have an account?{" "}
             <Link

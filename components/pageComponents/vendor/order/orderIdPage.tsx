@@ -1,12 +1,14 @@
 "use client";
-import { useVEndorOrderSlug } from "@/lib/hooks/vendorDashboard/useVendor";
+import { useVendorOrderSlug } from "@/lib/hooks/vendorDashboard/useVendor";
 import ProductDetailsButton from "@/components/pageComponents/vendor/product/productDetailsButton";
 import ProductLinkNav from "@/components/pageComponents/vendor/product/productLinkNav";
 import OrderManagementUI from "./orderDetails";
+import Loader from "@/components/common/loader";
 export default function OrderIdPage(ordersId: { ordersId: string }) {
-  const { data: order } = useVEndorOrderSlug(ordersId.ordersId);
+  const { data: order, isLoading } = useVendorOrderSlug(ordersId.ordersId);
 
   // console.log(order, "order details");
+  if (isLoading) return <Loader />;
   return (
     <div>
       <div className="hidden items-end justify-between md:flex">

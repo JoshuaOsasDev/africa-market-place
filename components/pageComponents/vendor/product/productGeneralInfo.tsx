@@ -101,7 +101,7 @@ const productSchema = yup.object().shape({
     then: (schema) =>
       schema.required("Stock quantity is required for simple products").min(0),
   }),
-  width: yup.string(),
+  weight: yup.string().required("Status is required"),
   shop: yup.string().required("Add shop"),
   length: yup.string(),
   height: yup.string(),
@@ -214,7 +214,7 @@ export default function CompleteProductForm({
       price: 0,
       salePrice: 0,
       stockQuantity: 0,
-      width: "",
+      weight: "",
       length: "",
       height: "",
       variants: [],
@@ -835,14 +835,19 @@ export default function CompleteProductForm({
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <label className="mb-2 block text-sm font-medium text-gray-700">
-                        Width
+                        Weight (kg)
                       </label>
                       <input
                         type="text"
-                        {...register("width")}
-                        placeholder="cm"
+                        {...register("weight")}
+                        placeholder="kg"
                         className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 outline-none focus:border-transparent focus:ring-2 focus:ring-green-500"
                       />
+                      {errors.weight && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.weight.message}
+                        </p>
+                      )}
                     </div>
 
                     <div>

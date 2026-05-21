@@ -70,7 +70,7 @@ export function MobileOrderSummary({
         <div className="flex items-center justify-between">
           <span className="font-medium text-[#111827]">Shipping</span>
           <span className="text-[#111827]">
-            {shipping === 0 ? "Free" : `$${shipping}`}
+            {shipping === 0 ? "Free" : `£${shipping?.toFixed(2)}`}
           </span>
         </div>
 
@@ -78,19 +78,21 @@ export function MobileOrderSummary({
           <div className="flex items-center justify-between">
             <span className="text-sm text-[#6F6F6F]">Discount:</span>
             <span className="font-medium text-[#2E7D32]">
-              -${discount?.toFixed(2)}
+              -£{discount?.toFixed(2)}
             </span>
           </div>
         )}
 
         <div className="flex items-center justify-between">
           <span className="font-medium text-[#111827]">Subtotal</span>
-          <span className="text-[#111827]">${subtotal}</span>
+          <span className="text-[#111827]">£{subtotal?.toFixed(2)}</span>
         </div>
 
         <div className="flex items-center justify-between border-t border-[#E5E7EB] pt-3">
           <span className="text-lg font-bold text-[#111827]">Total</span>
-          <span className="text-xl font-bold text-[#111827]">${total}</span>
+          <span className="text-xl font-bold text-[#111827]">
+            £{total?.toFixed(2)}
+          </span>
         </div>
       </div>
 

@@ -44,7 +44,7 @@ export function CartItemCard({
         <div className="flex items-start justify-between gap-2">
           <h3 className="text-sm font-medium text-[#111827]">{item.name}</h3>
           <span className="text-sm font-semibold whitespace-nowrap text-[#111827]">
-            ${(item.salePrice * item.quantity).toFixed(2)}
+            £{(item.salePrice * item.quantity).toFixed(2)}
           </span>
         </div>
 

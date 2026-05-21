@@ -1,7 +1,15 @@
 import {
+  CategoryPayload,
+  ChildCategoryPayload,
+  SubCategoryPayload,
+} from "@/components/pageComponents/admin/pageSetup/categoriesSetup";
+import {
   approveAdminProduct,
   approveAdminShop,
   createAdminCurrency,
+  createCategory,
+  createChildCategory,
+  createSubCategory,
   getAdminCurrency,
   getAdminCurrencyById,
   getAdminDashboardAnalytics,
@@ -11,6 +19,8 @@ import {
   getAdminShops,
   getAdminUser,
   getAllCategories,
+  getAllCategoriesAdmin,
+  getAllSubCategoriesAdmin,
 } from "@/services/apiServices/adminDashboardApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -76,7 +86,7 @@ export const useCreateAdminCurrency = () => {
 
 //Hook to fetch admin users
 export const useAdminUsers = (
-  page: { page: number },
+  page: number,
   limit: number,
   search: string,
   role: string,
@@ -124,7 +134,7 @@ export const useAllCategories = () => {
 //Hook to fecth admin product
 
 export const useAdminProducts = (
-  page: { page: number },
+  page: number,
   limit: number,
   search: string,
   status: string,
@@ -169,7 +179,7 @@ export const useAdminProductApproval = () => {
 };
 
 export const useAdminShops = (
-  page: { page: number },
+  page: number,
   limit: number,
   search: string,
   status: string,
@@ -224,5 +234,77 @@ export const useAdminShopApproval = () => {
     },
   });
 
+  return { isPending, mutate, error };
+};
+
+//Set category hook
+export const useCreateCategory = () => {
+  const queryClient = useQueryClient();
+  const { isPending, mutate, error } = useMutation({
+    mutationKey: ["create-category"],
+    mutationFn: (categoryData: CategoryPayload) => createCategory(categoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["get-all-categories, get-all-categories-admin"],
+      });
+      toast.success("Category Created Successfully");
+    },
+  });
+  return { isPending, mutate, error };
+};
+
+export const useGetCategories = () => {
+  const {
+    isLoading,
+    data: allCategoriesAdmin,
+    error,
+  } = useQuery({
+    queryKey: ["get-all-categories-admin"],
+    queryFn: getAllCategoriesAdmin,
+  });
+  return { isLoading, allCategoriesAdmin, error };
+};
+
+export const useGetSubCategories = () => {
+  const {
+    isLoading,
+    data: allSubCategoriesAdmin,
+    error,
+  } = useQuery({
+    queryKey: ["get-all-sub-categories-admin"],
+    queryFn: getAllSubCategoriesAdmin,
+  });
+  return { isLoading, allSubCategoriesAdmin, error };
+};
+
+export const useCreateSubCategory = () => {
+  const queryClient = useQueryClient();
+  const { isPending, mutate, error } = useMutation({
+    mutationKey: ["create-sub-category"],
+    mutationFn: (subCategoryData: SubCategoryPayload) =>
+      createSubCategory(subCategoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["get-all-sub-categories-admin"],
+      });
+      toast.success("SubCategory Created Successfully");
+    },
+  });
+  return { isPending, mutate, error };
+};
+
+export const useCreateChildCategory = () => {
+  const queryClient = useQueryClient();
+  const { isPending, mutate, error } = useMutation({
+    mutationKey: ["create-child-category"],
+    mutationFn: (childCategoryData: ChildCategoryPayload) =>
+      createChildCategory(childCategoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["get-all-child-categories-admin"],
+      });
+      toast.success("ChildCategory Created Successfully");
+    },
+  });
   return { isPending, mutate, error };
 };

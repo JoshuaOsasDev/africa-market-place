@@ -1,5 +1,9 @@
-import { Search } from "lucide-react";
 import http from "./http";
+import {
+  CategoryPayload,
+  ChildCategoryPayload,
+  SubCategoryPayload,
+} from "@/components/pageComponents/admin/pageSetup/categoriesSetup";
 
 // Admin Settings APIs
 export const getAdminSettings = async () => {
@@ -30,11 +34,12 @@ export const createAdminCurrency = async (currencyData: {
 
 // Admin Users APIs
 export const getAdminUser = async (
-  page: { page: number },
+  page: number,
   limit: number,
   search: string = "",
   role: string = "",
 ) => {
+  //console.log(page, "user page");
   const { data } = await http.get(
     `/admin/users?page=${page}&limit=${limit}&search=${search}&role=${role}`,
   );
@@ -58,7 +63,7 @@ export const getAllCategories = async () => {
 //get admin product
 
 export const getAdminProduct = async (
-  page: { page: number },
+  page: number,
   limit: number = 10,
   search: string = "",
   status: string = "",
@@ -77,7 +82,7 @@ export const approveAdminProduct = async (slug: string, details: string) => {
 };
 
 export const getAdminShops = async (
-  page: { page: number },
+  page: number,
   limit: number = 10,
   search: string = "",
   status: string = "",
@@ -97,5 +102,36 @@ export const approveAdminShop = async (slug: string, details: string) => {
   const { data } = await http.put(`/admin/shops/status/${slug}`, {
     status: details,
   });
+  return data;
+};
+
+//Set category api
+export const createCategory = async (categoryData: CategoryPayload) => {
+  const { data } = await http.post(`/admin/categories`, categoryData);
+  return data;
+};
+
+export const getAllCategoriesAdmin = async () => {
+  const { data } = await http.get(`/admin/all-categories`);
+  return data;
+};
+export const getAllSubCategoriesAdmin = async () => {
+  const { data } = await http.get(`/admin/sub-categories/all`);
+  return data;
+};
+export const createSubCategory = async (
+  subCategoryData: SubCategoryPayload,
+) => {
+  const { data } = await http.post(`/admin/sub-categories`, subCategoryData);
+  return data;
+};
+
+export const createChildCategory = async (
+  childCategoryData: ChildCategoryPayload,
+) => {
+  const { data } = await http.post(
+    `/admin/child-categories`,
+    childCategoryData,
+  );
   return data;
 };

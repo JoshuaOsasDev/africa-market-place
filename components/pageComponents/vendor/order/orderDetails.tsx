@@ -17,6 +17,7 @@ import {
   Map,
 } from "lucide-react";
 import ReusableTable from "@/components/common/reusableTable";
+import Image from "next/image";
 
 const OrderManagementUI = (order: any) => {
   const selectedOrder = order.order;
@@ -62,7 +63,7 @@ const OrderManagementUI = (order: any) => {
       status: "Processing",
       desc: "Your order is being processed.",
       date: "",
-      active: selectedOrder?.status !== "pending",
+      active: selectedOrder?.status === "pending",
     },
     {
       status: "Packed",
@@ -138,11 +139,7 @@ const OrderManagementUI = (order: any) => {
                 </div>
 
                 <p className="text-sm font-medium text-[#757575]">
-                  {/* {formatCurrency({
-                    selectedOrder?.shipping,
-                    selectedOrder?.currency
-                  }
-                  )} */}
+                  {selectedOrder?.courierName || "No Courier"}
                 </p>
               </div>
             </div>
@@ -283,67 +280,67 @@ const OrderManagementUI = (order: any) => {
         </div>
 
         <div className="mt-5 grid gap-6 md:grid-cols-3">
-          <div className="col-span-2 rounded-lg border">
-            <h2 className="px-6 pt-4.5">Order List</h2>
-            {selectedOrder?.items && (
-              <ReusableTable
-                order={"order"}
-                data={selectedOrder?.items}
-                columns={[
-                  {
-                    label: "Product",
-                    renderCell: (item) => (
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F6F6F6]">
-                          {item?.image && (
-                            <img
-                              className="object-cover text-lg"
-                              src={item?.image || ""}
-                              alt="order image"
-                              // fill
-                            />
-                          )}
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-medium text-[#333843]">
-                            {item?.name}
-                          </span>
-                          <span className="text-xs text-[#667085]">
-                            +{item.length} Other Products
-                          </span>
-                        </div>
-                      </div>
-                    ),
-                  },
+          <div className="h-fit rounded-lg bg-white p-6 shadow-sm md:col-span-2">
+            <h2 className="mb-4 text-lg font-semibold">Order Items</h2>
 
-                  {
-                    label: "SKU",
-                    renderCell: (item) => (
-                      <span className="font-semibold text-[#2E7D32]">
-                        {item.sku}
-                      </span>
-                    ),
-                  },
-                  {
-                    label: "QTY",
-                    renderCell: (item) => (
-                      <span className="font-semibold">{item?.totalItems}</span>
-                    ),
-                  },
-                  {
-                    label: "Total",
-                    renderCell: (item) => (
-                      <span className="font-semibold">{item?.total}</span>
-                    ),
-                  },
-                ]}
-                columnsStyle="60px .3fr .2fr .2fr .3fr"
-                itemsPerPage={5}
-                // onSelectChange={(selectedIds) =>
-                //   setSelectedIds(selectedIds as string[])
-                // }
-              ></ReusableTable>
-            )}
+            <div className="space-y-4">
+              {selectedOrder?.items?.map((item: any, index: number) => (
+                <div
+                  key={item.id || index}
+                  className="flex items-center justify-between rounded-xl border border-[#E0E2E7] p-4 transition hover:shadow-sm"
+                >
+                  {/* LEFT: Product Info */}
+                  <div className="flex items-center gap-4">
+                    <div className="relative h-16 w-16 overflow-hidden rounded-lg bg-[#F6F6F6]">
+                      {item?.image && (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="h-full w-full object-cover"
+                        />
+                      )}
+                    </div>
+
+                    <div className="flex flex-col">
+                      <p className="text-sm font-semibold text-[#1A1C21]">
+                        {item?.name}
+                      </p>
+
+                      <p className="text-xs text-[#667085]">SKU: {item?.sku}</p>
+
+                      {item?.variant && (
+                        <p className="text-xs text-[#667085]">
+                          Variant: {item.variant}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* CENTER: Quantity */}
+                  <div className="hidden flex-col items-center md:flex">
+                    <p className="text-xs text-[#667085]">Qty</p>
+                    <p className="font-semibold">{item?.quantity}</p>
+                  </div>
+
+                  {/* CENTER: Price */}
+                  <div className="hidden flex-col items-center md:flex">
+                    <p className="text-xs text-[#667085]">Price</p>
+                    <p className="font-semibold">
+                      £{item?.salePrice?.toFixed(2)}
+                    </p>
+                  </div>
+
+                  {/* RIGHT: Total */}
+                  <div className="text-right">
+                    <p className="text-xs text-[#667085]">Total</p>
+                    <p className="text-sm font-bold text-[#2E7D32]">
+                      £{item?.total?.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-1">

@@ -38,6 +38,7 @@ export default function ProductCard({
   const salePrice = product?.salePrice ?? 0;
   const stockQuantity = product?.stockQuantity ?? 0;
 
+  // console.log(stockQuantity, "stock");
   //  Discount logic
   const hasDiscount = salePrice && salePrice < price;
   const displayPrice = hasDiscount ? salePrice : price;
@@ -92,7 +93,7 @@ export default function ProductCard({
 
   return (
     <div
-      className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-[#F0F0F0] bg-white transition-all duration-300 hover:border-[#E0E0E0] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] ${className}`}
+      className={`group relative flex flex-col overflow-hidden rounded-xl border border-[#F0F0F0] bg-white transition-all duration-300 hover:border-[#E0E0E0] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] ${isOutOfStock ? "pointer-events-none opacity-80" : "cursor-pointer"} ${className}`}
     >
       <Link href={`/user/products/${slug}`}>
         {/* Favorite Heart */}
@@ -115,15 +116,6 @@ export default function ProductCard({
           <div className="absolute top-3 left-3 z-10 rounded-full bg-[#E74C3C] px-2.5 py-1 shadow-sm">
             <span className="text-[11px] font-bold text-white">
               -{discountPercent}%
-            </span>
-          </div>
-        )}
-
-        {/* Out of Stock Overlay */}
-        {isOutOfStock && (
-          <div className="absolute bottom-3 left-3 z-10 rounded-full bg-gray-900/90 px-3 py-1 backdrop-blur-sm">
-            <span className="text-[11px] font-semibold text-white">
-              Out of Stock
             </span>
           </div>
         )}
@@ -185,6 +177,15 @@ export default function ProductCard({
           </button>
         </div>
       </Link>
+
+      {/* Dark Overlay when Out of Stock */}
+      {isOutOfStock && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/90">
+          <span className="rounded-2xl bg-white px-4 py-2 text-sm font-semibold text-black">
+            Out of Stock
+          </span>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,12 @@
 "use client";
 import React from "react";
-import { Truck, CheckCircle2, Package, TruckIcon } from "lucide-react";
+import {
+  Truck,
+  CheckCircle2,
+  Package,
+  TruckIcon,
+  CircleAlert,
+} from "lucide-react";
 
 export type CourierType = "inpost" | "evri";
 
@@ -32,13 +38,16 @@ export function CourierSelector({
     evri: {
       icon: <TruckIcon className="text-[#2E7D32]" size={24} />,
       label: "Home Delivery",
+      warning: <CircleAlert className="h-6 w-6 cursor-help text-red-500" />,
     },
     inpost: {
       icon: <Package className="text-[#2E7D32]" size={24} />,
       label: "Locker Collection",
+      warning: <CircleAlert className="h-6 w-6 cursor-help text-red-500" />,
     },
   };
 
+  //console.log(data, "Courier Data");
   const options = (Object.keys(data) as CourierType[]).map((key) => ({
     id: key,
     ...data[key],
@@ -74,11 +83,28 @@ export function CourierSelector({
                 >
                   {option.icon}
                 </div>
-                {isSelected && (
-                  <CheckCircle2
-                    className="h-6 w-6 text-[#2E7D32]"
-                    fill="currentColor"
-                  />
+                {option.warning && (
+                  <div className="group relative">
+                    {/* The Icon */}
+                    <CircleAlert
+                      className="h-6 w-6 cursor-help text-red-500"
+                      //fill="currentColor"
+                    />
+
+                    {/* The Tooltip Box */}
+                    <div className="absolute right-0 bottom-full z-20 mb-2 hidden w-48 flex-col items-start rounded-lg bg-gray-900 p-3 text-xs text-white shadow-xl group-hover:flex">
+                      <p className="mb-1 font-bold tracking-wider text-[#4ADE80] uppercase">
+                        {option.label}
+                      </p>
+                      <div className="space-y-1 opacity-90">
+                        <p>Carrier: {option.carrier}</p>
+                        <p>Service: {option.service}</p>
+                        <p>Delivery: {option.deliveryTime}</p>
+                      </div>
+                      {/* Small Arrow */}
+                      <div className="absolute top-full right-2 -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
+                  </div>
                 )}
               </div>
 

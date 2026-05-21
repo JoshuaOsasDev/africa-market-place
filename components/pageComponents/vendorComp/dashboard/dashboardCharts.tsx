@@ -67,7 +67,7 @@ export default function DashboardCharts({
   }));
 
   // Calculate sales progress (example: percentage of monthly target)
-  const monthlyTarget = 50000; // Set your target
+  const monthlyTarget = 1000; // Set your target
   const salesProgress: any = Math.min(
     (monthlyEarningsByVendor / monthlyTarget) * 100,
     100,

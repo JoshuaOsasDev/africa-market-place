@@ -103,6 +103,40 @@ export const getVendorShop = async () => {
   return data;
 };
 
+export const updateVendorShop = async (
+  formData: CreateShopPayload,
+  slug: string | undefined,
+) => {
+  try {
+    const { data } = await http.put(`/vendor/shops/${slug}`, {
+      ...formData,
+      financialDetails: {
+        paymentMethod: "paypal",
+        paypal: {
+          email: "joshuaebighosele@gmail.com",
+        },
+      },
+    });
+    return data;
+  } catch (error: any) {
+    // Axios error handling
+    if (axios.isAxiosError(error)) {
+      // Server responded with error (4xx, 5xx)
+      if (error.response) {
+        throw new Error(error.response.data?.message);
+      }
+
+      // Request made but no response (network issue)
+      if (error.request) {
+        throw new Error("Network error. Please check your connection.");
+      }
+    }
+
+    // Unknown error
+    throw new Error(error.message || "Unexpected error occurred");
+  }
+};
+
 // lib/server/getVendorProductById.ts
 export async function getVendorProductByIdServer(productId: string) {
   const res = await fetch(
@@ -124,6 +158,16 @@ export async function getVendorProductByIdServer(productId: string) {
 export const getVendorPayment = async (params = { page: 1, limit: 10 }) => {
   const { data } = await http.get(
     `/vendor/payments?page=${params.page}&limit=${params.limit}`,
+  );
+  return data;
+};
+
+//VENDOR CUSTORMERS
+export const getVendorCustormersOrders = async (
+  params = { page: 1, limit: 10 },
+) => {
+  const { data } = await http.get(
+    `/vendor/shop/orders=${params.page}&limit=${params.limit}`,
   );
   return data;
 };

@@ -9,27 +9,41 @@ import ordersPageIcon from "../../lib/public/vendor/dashboard-images/orders-page
 
 import sellerPageIcon from "../../lib/public/admin/dashboard_images_and_icons/sellers-page-icon.svg";
 
-import { ChevronDown } from "lucide-react";
+import {
+  Bell,
+  ChevronDown,
+  CreditCard,
+  LayoutDashboard,
+  ShoppingBag,
+  ShoppingCartIcon,
+  StoreIcon,
+  User,
+  UserRound,
+} from "lucide-react";
 
 const links = [
-  { name: "Dashboard", href: "/vendor/dashboard", icon: dashboardPageIcon },
+  { name: "Dashboard", href: "/vendor/dashboard", icon: <LayoutDashboard /> },
   {
     name: "Product",
     href: "/vendor/dashboard/product",
-    icon: productPageIcon,
-    iconChevron: <ChevronDown />,
+    icon: <ShoppingCartIcon />,
   },
-  { name: "Orders", href: "/vendor/dashboard/orders", icon: ordersPageIcon },
+  { name: "Orders", href: "/vendor/dashboard/orders", icon: <ShoppingBag /> },
   {
     name: "Customers",
     href: "/vendor/dashboard/customers",
-    icon: sellerPageIcon,
+    icon: <UserRound />,
   },
-  { name: "Seller", href: "/vendor/dashboard/seller", icon: sellerPageIcon },
+  { name: "Shop", href: "/vendor/dashboard/seller", icon: <StoreIcon /> },
   {
     name: "Wallets",
     href: "/vendor/dashboard/wallet",
-    icon: sellerPageIcon,
+    icon: <CreditCard />,
+  },
+  {
+    name: "Notifications",
+    href: "/vendor/dashboard/notifications",
+    icon: <Bell />,
   },
 ];
 
@@ -52,7 +66,7 @@ export default function NavLinks() {
             )}
           >
             <div className="mr-20 flex items-center justify-between gap-2">
-              <Image
+              {/* <Image
                 src={link.icon}
                 alt="nav-icons"
                 style={{
@@ -61,14 +75,15 @@ export default function NavLinks() {
                       ? "invert(41%) sepia(35%) saturate(904%) hue-rotate(73deg) brightness(89%) contrast(86%)"
                       : "invert(53%) sepia(13%) saturate(582%) hue-rotate(186deg) brightness(93%) contrast(86%)",
                 }}
-              />
+              /> */}
+              {link.icon}
               <p className="hidden md:block">{link.name}</p>
             </div>
-            {link.iconChevron && (
+            {/* {link.iconChevron && (
               <span className="width-[12.83px] hidden h-[7.52px] md:block">
                 {link.iconChevron}
               </span>
-            )}
+            )} */}
           </Link>
         );
       })}

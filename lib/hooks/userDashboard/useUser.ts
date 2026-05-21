@@ -35,6 +35,7 @@ import {
 import { PostReview } from "@/types/appTypes";
 import { Product } from "@/types/product";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { error } from "console";
 
 import { useRouter } from "next/navigation";
 
@@ -136,7 +137,7 @@ export const useAddToCart = () => {
 
     onSuccess: (_, variables) => {
       const { pid, quantity } = variables;
-      console.log(pid, quantity, "Pid quan");
+      //console.log(pid, quantity, "Pid quan");
       dispatch(
         addCart({
           product: pid,
@@ -405,6 +406,9 @@ export const useCreateOrder = () => {
       });
 
       router.push(`/user/payment/${orderId}`);
+    },
+    onError: async (error) => {
+      toast.error(error.message);
     },
   });
 

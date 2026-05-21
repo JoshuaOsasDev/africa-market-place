@@ -18,19 +18,19 @@ function Topcategories() {
   };
 
   return (
-    <div className="my-2 flex flex-col space-y-4 px-2">
-      {/* top section starts */}
-      <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-baseline space-x-2">
-          <TextStyle
-            textContent={"Top Categories"}
-            textStyle="text-[#000000] font-bold text-2xl sm:text-3xl"
-          />
-          <TextStyle
-            textContent={"New products with updated stocks."}
-            textStyle="text-[#9CA3AF] text-[13px] hidden sm:block "
-          />
+    <div className="my-4 flex flex-col space-y-6 px-2">
+      {/* HEADER */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+            Categories
+          </h2>
+          <p className="hidden text-sm text-gray-500 sm:block">
+            Discover our most popular categories, carefully curated to help you
+            find the best products quickly and easily.
+          </p>
         </div>
+
         <Link
           href={"/user/categories"}
           className={buttonVariants({
@@ -38,27 +38,36 @@ function Topcategories() {
             size: "lg",
           })}
         >
-          <TextStyle textContent="See all" />
-          <MoveRight className="text-[10px] text-[#6F6F6F] lg:text-[12px]" />
+          See all
+          <MoveRight className="ml-1 text-gray-500" />
         </Link>
       </div>
-      {/* bottom section starts */}
-      <div className="no-scrollbar flex flex-row items-center space-x-3 overflow-x-scroll">
+
+      {/* CATEGORY LIST */}
+      <div className="no-scrollbar flex items-center space-x-6 overflow-x-auto py-2">
         {CategoryOptions.map((data: Category) => (
           <div
             key={data._id}
             onClick={() => handleCategoryClick(data._id)}
-            className="flex cursor-pointer flex-col items-center space-y-2 border-0 bg-[#FCFCFCFC] px-2 py-4 transition-colors hover:bg-gray-100"
+            className="group flex min-w-[150px] cursor-pointer flex-col items-center text-center transition-transform duration-500"
           >
-            <div className="relative h-[86.7px] w-[130px]">
-              <Image
-                src={data?.cover?.url}
-                fill
-                alt={data.name}
-                className="rounded-lg object-cover"
-              />
+            {/* CIRCLE IMAGE */}
+            <div className="relative flex h-[150px] w-[150px] items-center justify-center rounded-full border-2 border-gray-200 bg-white p-3 shadow-sm transition hover:scale-105 hover:border-[#2E7D32] hover:shadow-md md:h-[200px] md:w-[200px]">
+              {/* IMAGE WRAPPER */}
+              <div className="relative h-full w-full overflow-hidden rounded-full">
+                <Image
+                  src={data?.cover?.url}
+                  alt={data.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
-            <TextStyle textContent={data.name} textStyle="text-center" />
+
+            {/* TITLE */}
+            <p className="mt-3 text-sm font-semibold text-gray-800">
+              {data.name}
+            </p>
           </div>
         ))}
       </div>

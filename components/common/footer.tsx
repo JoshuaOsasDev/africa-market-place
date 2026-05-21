@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import logo from "../../lib/public/images/africa1_logo.png";
+//import logo from "../../lib/public/images/africa1_logo.png";
 import { Facebook, Instagram, Twitter, Mail } from "lucide-react";
 
 import TextStyle from "./textStyle";
@@ -9,7 +9,8 @@ import { socialData, socialData2, socialData3, socialData4 } from "@/lib/data";
 import { useAppSelector } from "@/redux/store";
 import { useState } from "react";
 import { CookieModal } from "./cookieModal";
-
+const logo =
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
 function Footer() {
   const user = useAppSelector((state) => state.user);
   const [cookieModalOpen, setCookieModalOpen] = useState(false);

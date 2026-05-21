@@ -72,11 +72,30 @@ export const getUserOrderId = async (id: string) => {
   const { data } = await http.get(`/orders/${id}`);
   return data;
 };
-export const postUserOrder = async (payload: any) => {
-  const { data } = await http.post("/orders", payload);
-  console.log(data, "data");
+import { AxiosError } from "axios";
 
-  return data;
+export const postUserOrder = async (payload: any) => {
+  try {
+    const { data } = await http.post("/orders", payload);
+    // console.log(data, "data");
+    return data;
+  } catch (error) {
+    const err = error as AxiosError;
+
+    if (err.response) {
+      // Server responded with a status other than 2xx
+      console.error("Response error:", err.response.data);
+      throw err.response.data;
+    } else if (err.request) {
+      // Request was made but no response received
+      console.error("No response:", err.request);
+      throw new Error("No response from server");
+    } else {
+      // Something else happened
+      console.error("Error:", err.message);
+      throw new Error(err.message);
+    }
+  }
 };
 
 export const getSlider = async () => {

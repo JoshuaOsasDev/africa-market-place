@@ -52,7 +52,7 @@ export function DeliveryAddressSelector({
   const handleSelect = (d: DeliveryAddress) => {
     setShipping({
       id: d._id,
-      address: d.address,
+      address: `${d.houseNumber} ${d.address}`.trim(),
       country: d.country,
       city: d.city,
       county: d.county,
@@ -102,7 +102,7 @@ export function DeliveryAddressSelector({
       ...shipping,
       phoneNumber: shipping.phoneNumber,
       email: shipping.email,
-      address: `${data.address}`.trim(),
+      address: `${data.houseNumber} ${data.address}`.trim(),
       city: data.city,
       postCode: data.postcode,
       country: data.country,

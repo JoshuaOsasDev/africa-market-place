@@ -16,7 +16,7 @@ export default function SearchAndFilterProduct() {
 
   // ---------- SEARCH ----------
   const handleSearchChange = (value: string) => {
-    //console.log(value, "value");
+    console.log(value, "value");
 
     const params = new URLSearchParams(searchParams.toString());
     params.set("search", value);
