@@ -31,7 +31,11 @@ export default function SetShowForm() {
     return <Loader />;
   }
 
-  if (!isLoading && vendorProducts?.products.data?.length <= 0)
+  if (
+    !isLoading &&
+    vendorProducts?.products.data?.length <= 0 &&
+    show === false
+  )
     return (
       <NoOrder
         show={true}
