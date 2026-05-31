@@ -20,7 +20,7 @@ interface ProductDetailClientProps {
   resolvedParams: { slug: string };
 }
 
-export function ProductDetailClient({
+export default function ProductDetailClient({
   resolvedParams,
 }: ProductDetailClientProps) {
   /**
