@@ -25,6 +25,10 @@ export function ProductCard(product: any) {
     ? Math.round(((data?.price - data?.salePrice) / data?.price) * 100)
     : (product?.discount ?? "");
 
+  const stockQuantity = data?.stockQuantity ?? 0;
+
+  const isOutOfStock = stockQuantity === 0;
+
   //WishList function
 
   const { isPending, mutate: postWishlist } = useUserWishlist();
@@ -52,7 +56,7 @@ export function ProductCard(product: any) {
   );
 
   return (
-    <div className="group relative w-85 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-lg sm:w-70 md:w-62.5">
+    <div className="group relative w-55 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-lg sm:w-70 md:w-62.5">
       {/* Discount Badge */}
       {hasDiscount && (
         <span className="absolute top-1 left-2 z-10 rounded-full bg-red-500 px-2 py-1 text-xs font-semibold text-white">
@@ -127,6 +131,15 @@ export function ProductCard(product: any) {
           className="flex w-full items-center justify-center gap-2 rounded-xl border py-2 text-sm font-medium transition"
         />
       </div>
+
+      {/* Dark Overlay when Out of Stock */}
+      {isOutOfStock && (
+        <div className="absolute inset-0 z-20 flex items-center justify-start">
+          <span className="rounded-r-2xl bg-white px-4 py-2 text-sm font-semibold text-black">
+            Out of Stock
+          </span>
+        </div>
+      )}
     </div>
   );
 }

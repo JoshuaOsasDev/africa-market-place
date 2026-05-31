@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import NavLinks from "./navLinks";
-import { Headphones, Settings } from "lucide-react";
+import { Headphones, Settings, User, UserRound } from "lucide-react";
 
 const SideBar = () => {
   return (
@@ -22,11 +22,11 @@ const SideBar = () => {
         <div className="hidden h-auto w-full grow rounded-md md:block"></div>
         <div className="hidden md:block">
           <Link
-            href={""}
+            href={"/vendor/dashboard/userInfo"}
             className="flex w-full grow items-center justify-center gap-2 p-3 text-[12px] font-semibold text-[#667085] hover:bg-[#EAF2EA] hover:text-[#2E7D32] md:flex-none md:justify-start md:p-2 md:px-3"
           >
-            <Headphones />
-            <div className="hidden md:block">Support</div>
+            <UserRound height={20} width={20} />
+            <div className="hidden md:block">Profile</div>
           </Link>
 
           <Link

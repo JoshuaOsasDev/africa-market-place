@@ -176,6 +176,8 @@ function StepTracker({ stepDone }: { stepDone: any }) {
 
 export default function PaymentStatus({ orderId }: { orderId: string }) {
   const [order, setOrder] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [show, setShow] = useState(false);
   const status = order?.data?.paymentStatus as PaymentStatusType;
   const dispatch = useAppDispatch();
@@ -188,17 +190,33 @@ export default function PaymentStatus({ orderId }: { orderId: string }) {
   useEffect(() => {
     async function fecthOrder() {
       try {
-        if (!orderId) return;
+        if (!orderId) {
+          setError("Invalid order reference.");
+          return;
+        }
+
+        setLoading(true);
+        setError(null);
 
         // 1. Fetch order
         const res = await getUserOrderId(orderId);
-
+        if (!res || !res.data) {
+          setError(
+            "We couldn't find this order. It may have been removed or never existed.",
+          );
+          return;
+        }
         const orderData = res;
         if (!orderData) throw new Error("Order not found");
 
         setOrder(orderData);
       } catch (error) {
+        setError(
+          "Something went wrong while fetching your payment. Please try again.",
+        );
         console.log(error, "Error 1");
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -269,8 +287,30 @@ export default function PaymentStatus({ orderId }: { orderId: string }) {
     },
   ];
 
-  if (!order?.data) {
-    return <div className="mt-10 text-center">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="mt-10 text-center text-gray-500">
+        Fetching your order details...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-10 flex flex-col items-center text-center">
+        <div className="mb-3 text-lg font-semibold text-red-600">
+          Unable to load payment
+        </div>
+        <p className="mb-4 text-sm text-gray-500">{error}</p>
+
+        <button
+          onClick={() => router.push("/user/dashboard/orders")}
+          className="rounded-lg bg-[#2E7D32] px-4 py-2 text-white"
+        >
+          Go back home
+        </button>
+      </div>
+    );
   }
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#E1E2E4] px-4">

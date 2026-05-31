@@ -1,34 +1,35 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import searchIcon from "../../lib/public//vendor/dashboard-images/search-icon.svg";
 
 import Link from "next/link";
 import {
   Bell,
-  Heart,
   HomeIcon,
-  KeyRound,
   LogOut,
   Mail,
-  MailIcon,
   Menu,
-  Search,
+  ShoppingBag,
   User,
   UserRound,
   X,
 } from "lucide-react";
 import { useAppSelector } from "@/redux/store";
 
-import logo from "../../lib/public/images/africa1_logo.png";
+//import logo from "../../lib/public/images/africa1_logo.png";
 import TextStyle from "./textStyle";
 import { useSignOut } from "@/lib/hooks/userDashboard/useUser";
 
 import { usePathname } from "next/navigation";
+import { useVendorOrders } from "@/lib/hooks/vendorDashboard/useVendor";
 
+const logo =  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png"
 const DashboardNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useAppSelector((state) => state.user);
+  const { vendorOrders } = useVendorOrders();
+  const vendorOrdersCount = vendorOrders?.total || 0;
+
   const { mutate: logout, isPending: isLoggingOut } = useSignOut();
   const path = usePathname();
 
@@ -36,7 +37,7 @@ const DashboardNavbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  console.log(user.user, "user from dashboard navbar");
+  //console.log(user.user, "user from dashboard navbar");
   const handleMobileLinkClick = () => {
     setIsMenuOpen(false);
   };
@@ -87,19 +88,29 @@ const DashboardNavbar = () => {
             </div>
           </div>
         </div>
-        <div className="hidden h-[52px] w-[435px] gap-2.5 rounded-[26px] bg-[#F6F6F6] px-4 py-3.5 md:flex">
+        {/* <div className="hidden h-[52px] w-[435px] gap-2.5 rounded-[26px] bg-[#F6F6F6] px-4 py-3.5 md:flex">
           <Image src={searchIcon} width={24} alt="search-icon" />
           <input
             type="text"
             placeholder="Search"
             className="w-full placeholder-[#BABABA] outline-none"
           />
-        </div>
+        </div> */}
 
         <div className="hidden gap-4 md:flex md:items-center">
           <div className="flex items-center gap-2">
             <Bell className="h-10 w-10 rounded-[20px] bg-[#F6F6F6] p-2 text-gray-500" />
-            <MailIcon className="text-gray-500" />
+            <Link
+              href={"/vendor/dashboard/orders"}
+              className="relative inline-flex cursor-pointer items-center justify-center"
+            >
+              <ShoppingBag className="text-gray-500" />
+
+              {/* Notification Dot / Badge */}
+              <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 pt-1 text-[10px] font-bold text-white shadow-sm">
+                {vendorOrdersCount > 99 ? "99+" : vendorOrdersCount}
+              </div>
+            </Link>
           </div>
           <div className="flex flex-1 flex-row space-x-5">
             {user?.user ? (
@@ -223,14 +234,14 @@ const DashboardNavbar = () => {
         <div className="absolute top-20 right-0 left-0 z-50 border-b border-[#F0F1F3] bg-white shadow-lg md:hidden">
           <div className="flex flex-col space-y-4 p-6">
             {/* Search Bar (Mobile) */}
-            <div className="flex h-13 items-center gap-2.5 rounded-[26px] bg-[#F6F6F6] px-4 py-3.5">
+            {/* <div className="flex h-13 items-center gap-2.5 rounded-[26px] bg-[#F6F6F6] px-4 py-3.5">
               <Search className="h-6 w-6 text-[#BABABA]" />
               <input
                 type="text"
                 placeholder="Search"
                 className="w-full bg-transparent placeholder-[#BABABA] outline-none"
               />
-            </div>
+            </div> */}
 
             {/* Profile Section */}
             <div className="flex items-center gap-3 border-t border-gray-100 pt-4">

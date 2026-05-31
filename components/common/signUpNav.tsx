@@ -15,6 +15,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import TextStyle from "./textStyle";
 import Link from "next/link";
 
+const logo =
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
 export default function SignUpNav() {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -26,7 +28,7 @@ export default function SignUpNav() {
             <div className="relative h-[50px] w-[100px]">
               <Link href="/">
                 <Image
-                  src="/images/logo.png"
+                  src={logo}
                   alt="africa market place logo"
                   fill
                   className="object-contain object-center"

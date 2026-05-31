@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 
 import covertwo from "../../../../lib/public/images/abot_africa_3.jpg";
-import logo from "../../../../lib/public/images/africa1_logo.png";
+//import logo from "../../../../lib/public/images/africa1_logo.png";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AxiosError } from "axios";
 import { signUpSchema } from "@/lib/utility/yupvalidation";
@@ -19,6 +19,9 @@ import { setLoaderAction, signInAction } from "@/redux/slices/user";
 import { setWishlistAction } from "@/redux/slices/wishlist";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
+
+const logo =
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
 
 // Define TypeScript types for form values
 
@@ -88,6 +91,7 @@ const SignUpComp = () => {
     firstName: string;
     lastName: string;
     role: string;
+    confirmPassword: string;
   }) => {
     try {
       dispatch(setLoaderAction(true));

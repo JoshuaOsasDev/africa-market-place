@@ -2,64 +2,24 @@
 
 import { useState } from "react";
 
-type Status = "pending" | "transit" | "delivered";
+// Types based on your Parcel JSON
+interface ParcelData {
+  parcel: {
+    tracking_number: string;
+    order_number: string;
+    address: string;
+    city: string;
+    postal_code: string;
+    date_created: string;
+    date_updated: string;
+    tracking_url: string;
+    shipment: { name: string };
+    carrier: { code: string };
+    status: { id: number; message: string };
+  };
+}
 
-const statuses: Record<
-  Status,
-  {
-    badge: string;
-    badgeStyle: string;
-    steps: ("done" | "active" | null)[];
-    lines: ("done" | "upcoming")[];
-    sublabels: string[];
-    timeline: { title: string; time: string }[];
-  }
-> = {
-  pending: {
-    badge: "Pending",
-    badgeStyle: "bg-amber-100 text-amber-900",
-    steps: ["active", null, null],
-    lines: ["upcoming", "upcoming"],
-    sublabels: ["2 Apr", "–", "–"],
-    timeline: [
-      { title: "Order confirmed", time: "02 Apr 2026, 09:14" },
-      { title: "Preparing for dispatch", time: "02 Apr 2026, 10:30" },
-    ],
-  },
-  transit: {
-    badge: "In transit",
-    badgeStyle: "bg-blue-100 text-blue-900",
-    steps: ["done", "active", null],
-    lines: ["done", "upcoming"],
-    sublabels: ["2 Apr", "3 Apr", "–"],
-    timeline: [
-      {
-        title: "Arrived at delivery hub – Heathrow",
-        time: "03 Apr 2026, 06:45",
-      },
-      { title: "Departed sorting facility", time: "03 Apr 2026, 02:10" },
-      { title: "Dispatched from sender", time: "02 Apr 2026, 16:55" },
-      { title: "Order confirmed", time: "02 Apr 2026, 09:14" },
-    ],
-  },
-  delivered: {
-    badge: "Delivered",
-    badgeStyle: "bg-green-100 text-green-900",
-    steps: ["done", "done", "active"],
-    lines: ["done", "done"],
-    sublabels: ["2 Apr", "3 Apr", "9 Apr"],
-    timeline: [
-      { title: "Successfully delivered", time: "09 Apr 2026, 11:22" },
-      { title: "Out for delivery", time: "09 Apr 2026, 07:05" },
-      { title: "Cleared customs – Abuja", time: "08 Apr 2026, 14:33" },
-      {
-        title: "In transit – international flight",
-        time: "05 Apr 2026, 22:00",
-      },
-      { title: "Departed Heathrow", time: "04 Apr 2026, 18:15" },
-    ],
-  },
-};
+type Status = "pending" | "transit" | "delivered";
 
 const stepLabels = ["Order placed", "In transit", "Delivered"];
 
@@ -75,26 +35,83 @@ const CheckIcon = () => (
   </svg>
 );
 
-export default function TrackerComp() {
-  const [status, setStatus] = useState<Status>("pending");
+export default function TrackerComp({ data }: { data: ParcelData }) {
+  const { parcel } = data;
+  const statuses: Record<
+    Status,
+    {
+      badge: string;
+      badgeStyle: string;
+      steps: ("done" | "active" | null)[];
+      lines: ("done" | "upcoming")[];
+      sublabels: string[];
+      timeline: { title: string; time: string }[];
+    }
+  > = {
+    pending: {
+      badge: "Pending",
+      badgeStyle: "bg-amber-100 text-amber-900",
+      steps: ["active", null, null],
+      lines: ["upcoming", "upcoming"],
+      sublabels: ["2 Apr", "–", "–"],
+      timeline: [
+        { title: "Preparing for dispatch", time: `${parcel.date_updated}` },
+        { title: "Order confirmed", time: `${parcel.date_created}` },
+      ],
+    },
+    transit: {
+      badge: "In transit",
+      badgeStyle: "bg-blue-100 text-blue-900",
+      steps: ["done", "active", null],
+      lines: ["done", "upcoming"],
+      sublabels: ["2 Apr", "3 Apr", "–"],
+      timeline: [
+        {
+          title: "Arrived at delivery hub – Heathrow",
+          time: "03 Apr 2026, 06:45",
+        },
+        { title: "Departed sorting facility", time: "03 Apr 2026, 02:10" },
+        { title: "Dispatched from sender", time: "02 Apr 2026, 16:55" },
+        { title: "Order confirmed", time: "02 Apr 2026, 09:14" },
+      ],
+    },
+    delivered: {
+      badge: "Delivered",
+      badgeStyle: "bg-green-100 text-green-900",
+      steps: ["done", "done", "active"],
+      lines: ["done", "done"],
+      sublabels: ["2 Apr", "3 Apr", "9 Apr"],
+      timeline: [
+        { title: "Successfully delivered", time: "09 Apr 2026, 11:22" },
+        { title: "Out for delivery", time: "09 Apr 2026, 07:05" },
+        { title: "Cleared customs – Abuja", time: "08 Apr 2026, 14:33" },
+        {
+          title: "In transit – international flight",
+          time: "05 Apr 2026, 22:00",
+        },
+        { title: "Departed Heathrow", time: "04 Apr 2026, 18:15" },
+      ],
+    },
+  };
+
+  // Logic to determine internal status from parcel status ID
+  // (Assuming 1000 is ready/pending)
+  const [status] = useState<Status>(
+    parcel.status.id === 1000 ? "pending" : "transit",
+  );
+
   const s = statuses[status];
 
   return (
-    <div className="mx-auto mt-12 w-full max-w-4xl px-4 py-2 font-sans md:mt-0">
+    <div className="mt-12 w-full px-4 py-2 font-sans md:mt-0">
       {/* Top bar */}
       <div className="mb-4 flex items-center justify-between">
-        <p className="text-[11px] font-medium tracking-widest text-gray-400 uppercase">
-          Order tracker
+        <p className="text-lg font-medium text-gray-700 uppercase">
+          Live Shipment Status
         </p>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value as Status)}
-          className="cursor-pointer rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-800 focus:outline-none"
-        >
-          <option value="pending">Pending</option>
-          <option value="transit">In transit</option>
-          <option value="delivered">Delivered</option>
-        </select>
+        <div className="rounded bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-600">
+          {parcel.status.message}
+        </div>
       </div>
 
       {/* Order card */}
@@ -102,12 +119,14 @@ export default function TrackerComp() {
         <div className="mb-4 flex items-start justify-between">
           <div>
             <p className="text-xs text-gray-400">
-              Order{" "}
-              <span className="font-mono font-medium text-gray-800">
-                RM 4821 7734 9B
+              Tracking Number{" "}
+              <span className="font-mono font-medium text-gray-800 uppercase">
+                {parcel.tracking_number}
               </span>
             </p>
-            <p className="mt-1 text-[15px] font-medium">Standard Delivery</p>
+            <p className="mt-1 text-[15px] font-medium">
+              {parcel.shipment.name}
+            </p>
           </div>
           <span
             className={`rounded-full px-3 py-1 text-xs font-medium ${s.badgeStyle}`}
@@ -116,37 +135,48 @@ export default function TrackerComp() {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            ["Dispatched from", "London, UK"],
-            ["Destination", "Abuja, NG"],
-            ["Estimated delivery", "7–10 Apr 2026"],
-            ["Last updated", "02 Apr 2026"],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <p className="mb-0.5 text-xs text-gray-400">{label}</p>
-              <p className="text-sm font-medium text-gray-800">{value}</p>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <p className="mb-0.5 text-xs text-gray-400">Destination</p>
+            <p className="text-sm font-medium text-gray-800">
+              {parcel.address}, {parcel.city}
+            </p>
+            <p className="text-xs text-gray-500 uppercase">
+              {parcel.postal_code}
+            </p>
+          </div>
+          <div>
+            <p className="mb-0.5 text-xs text-gray-400">Order Reference</p>
+            <p className="text-sm font-medium text-gray-800">
+              {parcel.order_number}
+            </p>
+          </div>
+          <div>
+            <p className="mb-0.5 text-xs text-gray-400">Date Created</p>
+            <p className="text-sm font-medium text-gray-800">
+              {parcel.date_created}
+            </p>
+          </div>
+          <div>
+            <p className="mb-0.5 text-xs text-gray-400">Carrier</p>
+            <p className="text-sm font-medium text-gray-800 uppercase">
+              {parcel.carrier.code.replace("_", " ")}
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Stepper */}
-      <div className="mb-6 flex items-start">
-        {s.steps.map((stepState, i) => (
+      <div className="mb-10 flex items-start">
+        {s.steps.map((stepState: any, i: number) => (
           <div key={i} className="relative flex flex-1 flex-col items-center">
-            {/* Connector line */}
             {i < 2 && (
               <div
-                className={`absolute top-4 left-1/2 z-0 h-0.5 w-full transition-colors duration-300 ${
-                  s.lines[i] === "done" ? "bg-emerald-500" : "bg-gray-200"
-                }`}
+                className={`absolute top-4 left-1/2 z-0 h-0.5 w-full ${s.lines[i] === "done" ? "bg-emerald-500" : "bg-gray-200"}`}
               />
             )}
-
-            {/* Icon */}
             <div
-              className={`z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+              className={`z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 ${
                 stepState === "done"
                   ? "border-emerald-700 bg-emerald-700"
                   : stepState === "active"
@@ -156,28 +186,22 @@ export default function TrackerComp() {
             >
               {stepState === "done" ? (
                 <CheckIcon />
-              ) : stepState === "active" ? (
-                <div className="h-2 w-2 rounded-full bg-white" />
               ) : (
-                <div className="h-2 w-2 rounded-full bg-gray-400" />
+                <div
+                  className={`h-2 w-2 rounded-full ${stepState === "active" ? "bg-white" : "bg-gray-400"}`}
+                />
               )}
             </div>
-
-            {/* Label */}
             <p
-              className={`mt-2 text-center text-xs font-medium ${
-                stepState === "active" ? "text-emerald-700" : "text-gray-400"
-              }`}
+              className={`mt-2 text-center text-xs font-medium ${stepState === "active" ? "text-emerald-700" : "text-gray-400"}`}
             >
               {stepLabels[i]}
-            </p>
-            <p className="mt-0.5 text-center text-[11px] text-gray-400">
-              {s.sublabels[i]}
             </p>
           </div>
         ))}
       </div>
 
+      {/* Activity Timeline */}
       {/* Timeline */}
       <div className="mb-6 border-t border-gray-100 pt-4">
         <p className="mb-3 text-[11px] font-medium tracking-widest text-gray-400 uppercase">
@@ -202,27 +226,24 @@ export default function TrackerComp() {
           ))}
         </div>
       </div>
-
-      {/* Royal Mail link */}
+      {/* External Carrier Link */}
       <div>
         <p className="mb-2 text-[11px] font-medium tracking-widest text-gray-400 uppercase">
-          Track on Royal Mail
+          Carrier Portal
         </p>
         <a
-          href="https://www.royalmail.com/track-your-item#/tracking-results/RM482177349B"
+          href={parcel.tracking_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 no-underline transition-colors duration-150 hover:bg-gray-100"
+          className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 no-underline transition-colors hover:bg-gray-100"
         >
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#E8001D]">
-            <span className="text-[9px] leading-none font-bold text-white">
-              RM
-            </span>
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-black text-[8px] font-bold text-white">
+            IN
           </div>
           <span className="text-sm font-medium text-gray-800">
-            Track on Royal Mail website
+            View detailed tracking on InPost website
           </span>
-          <span className="ml-auto text-base text-gray-400">↗</span>
+          <span className="ml-auto text-gray-400">↗</span>
         </a>
       </div>
     </div>

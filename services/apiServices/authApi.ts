@@ -7,15 +7,38 @@ import {
   userVerifyOtpType,
 } from "@/types/authTypes";
 import http from "./http";
+import { AxiosError } from "axios";
 
 export const signUp = async (payload: userSignupType) => {
-  const { data } = await http.post(`/auth/sign-up`, payload);
-  return data;
-};
+  try {
+    const { data } = await http.post(`/auth/sign-up`, payload);
 
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        error.response?.data?.message || "Signup failed. Please try again.",
+      );
+    }
+
+    throw new Error("An unexpected error occurred");
+  }
+};
 export const verifyOTP = async (payload: userVerifyOtpType) => {
-  const { data } = await http.post(`/auth/verify-otp`, payload);
-  return data;
+  try {
+    const { data } = await http.post(`/auth/verify-otp`, payload);
+
+    return data;
+  } catch (error) {
+    console.error("OTP verification error:", error);
+    if (error instanceof AxiosError) {
+      throw new Error(
+        error.response?.data?.message || "Signup failed. Please try again.",
+      );
+    }
+
+    throw new Error("An unexpected error occurred");
+  }
 };
 
 export const sendVerificationOtp = async (

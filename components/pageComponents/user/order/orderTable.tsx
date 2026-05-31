@@ -68,7 +68,7 @@ export default function OrderTable({
       <ReusableTable
         order={orderParams}
         data={filteredOrders}
-        columnsStyle="44px .5fr .7fr .5fr .5fr .5fr .5fr .5fr .4fr"
+        columnsStyle=" .5fr .7fr .5fr .5fr .5fr .5fr .5fr .4fr"
         columns={[
           {
             label: "Order Id",

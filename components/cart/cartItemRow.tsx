@@ -43,7 +43,7 @@ export function CartItemRow({
       </div>
 
       <div className="text-sm text-[#111827]">
-        ${item?.salePrice?.toFixed(2)}
+        £{item?.salePrice?.toFixed(2)}
       </div>
 
       <div className="flex justify-center">
@@ -57,7 +57,7 @@ export function CartItemRow({
       </div>
 
       <div className="text-sm font-semibold text-[#111827]">
-        ${subtotal?.toFixed(2)}
+        £{subtotal?.toFixed(2)}
       </div>
 
       <button

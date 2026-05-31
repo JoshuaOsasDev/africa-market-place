@@ -31,7 +31,7 @@ export default function OrderUserPage({
   const totalPages =
     totalCount || Math.max(1, Math.ceil(totalCount / params.limit));
 
-  console.log(totalCount, "count of total");
+  //console.log(totalCount, "count of total");
   const tabCounts = {
     all: totalCount,
     pending: orders.filter((o) => o.status?.toLowerCase() === "pending").length,

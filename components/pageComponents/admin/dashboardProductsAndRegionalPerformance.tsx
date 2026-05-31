@@ -4,45 +4,6 @@ export default function ProductsAndRegionalPerformance(products: any) {
   // Top Products Data
 
   const topProducts = products.products;
-  // console.log(topProducts, "bestSellingP");
-  // const topProducts = [
-  //   {
-  //     id: 1,
-  //     name: "Green Beans",
-  //     sales: 2568,
-  //     amount: "₦45,007",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Salad Greens",
-  //     sales: 1850,
-  //     amount: "₦43,104",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Cocoa Yam",
-  //     sales: 1500,
-  //     amount: "₦2,933",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Maize",
-  //     sales: 1200,
-  //     amount: "₦6,012",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Red Pepper",
-  //     sales: 2968,
-  //     amount: "₦10,378",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Tomatoes",
-  //     sales: 2368,
-  //     amount: "₦9,815",
-  //   },
-  // ];
 
   // Regional Performance Data
   const regionalData = [

@@ -16,10 +16,12 @@ export default function UserTable({
   user,
   data,
   page,
+  totalPages,
 }: {
   user: string | string[] | undefined;
   data: any[];
-  page: { page: number };
+  page: number;
+  totalPages: number;
 }) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const router = useRouter();
@@ -55,6 +57,7 @@ export default function UserTable({
   return (
     <div className="mt-5">
       <ReusableTable
+        totalPages={totalPages}
         order={user}
         data={data}
         columns={[

@@ -12,6 +12,7 @@ export default function DashboardSalesAndProduct({
   vendorProduct: Product[];
   loadingVendorProduct: boolean;
 }) {
+  console.log(vendorProduct, "vendor product");
   return (
     <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[23rem_1fr_1fr]">
       <div className="w-full rounded-xl border border-[#E0E2E7] bg-white p-6 md:h-[432px] md:w-[360px]">
@@ -70,7 +71,7 @@ export default function DashboardSalesAndProduct({
           ))}
         </div>
       </div>
-      <div className="w-full rounded-xl border border-[#E0E2E7] bg-white md:h-[432px] lg:col-span-2">
+      <div className="no-scrollbar w-full overflow-scroll rounded-xl border border-[#E0E2E7] bg-white md:h-[432px] lg:col-span-2">
         <div className="flex items-center justify-between px-6 py-4.5">
           <h4 className="text-xl font-medium text-[#333843]">
             Top Selling Product
@@ -78,11 +79,67 @@ export default function DashboardSalesAndProduct({
           <FilterButton />
         </div>
         <div className="">
-          <ProductTableReactTable
+          {/* <ProductTableReactTable
             products={vendorProduct}
-            totalPages={vendorProduct.length - 4}
+            totalPages={vendorProduct?.length - 4}
             isPending={loadingVendorProduct}
-          />
+          /> */}
+          <div className="h-fit space-y-2 px-2 pb-2">
+            {vendorProduct?.map((item: any, index: number) => (
+              <div
+                key={item.id || index}
+                className="flex items-center justify-between rounded-xl border border-[#E0E2E7] p-4 transition hover:shadow-sm"
+              >
+                {/* LEFT: Product Info */}
+                <div className="flex items-center gap-3">
+                  <div className="relative h-10 w-10 overflow-hidden rounded-lg bg-[#F6F6F6]">
+                    {item.images && (
+                      <Image
+                        src={item.images[0].url}
+                        alt={item.name}
+                        fill
+                        className="h-full w-full object-cover"
+                      />
+                    )}
+                  </div>
+
+                  <div className="flex flex-col">
+                    <p className="text-sm font-semibold text-[#1A1C21]">
+                      {item?.name}
+                    </p>
+
+                    <p className="text-xs text-[#667085]">SKU: {item?.sku}</p>
+                    {/* 
+                    {item?.variant && (
+                      <p className="text-xs text-[#667085]">
+                        Variant: {item.variant}
+                      </p>
+                    )} */}
+                  </div>
+                </div>
+
+                {/* CENTER: Quantity */}
+                <div className="hidden flex-col items-center md:flex">
+                  <p className="text-xs text-[#667085]">Qty</p>
+                  <p className="font-semibold">{item?.stockQuantity}</p>
+                </div>
+
+                {/* CENTER: Price */}
+                <div className="hidden flex-col items-center md:flex">
+                  <p className="text-xs text-[#667085]">Price</p>
+                  <p className="font-semibold">£{item?.price?.toFixed(2)}</p>
+                </div>
+
+                {/* RIGHT: Total */}
+                <div className="text-right">
+                  <p className="text-xs text-[#667085]">Status</p>
+                  <p className="text-sm font-bold text-[#2E7D32]">
+                    {item?.status}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

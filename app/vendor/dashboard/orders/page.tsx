@@ -8,6 +8,7 @@ import SearchAndFilterProduct from "@/components/pageComponents/vendor/product/s
 import OrderItemsTable from "@/components/pageComponents/vendor/order/orderItemsTable";
 import CreateShop from "@/components/pageComponents/vendor/order/createShop";
 import { useSearchParams } from "next/navigation";
+import ProductLinkNav from "@/components/pageComponents/vendor/product/productLinkNav";
 
 const OrderPage = () => {
   const show = useAppSelector((state) => state.showFormReducer.show);
@@ -30,38 +31,23 @@ const OrderPage = () => {
         type="Order"
         show={true}
         showFormNoOrder={show && type === "Order"}
-        productForm={<CreateShop type="Order" />}
+        productForm={<CreateShop />}
       />
     );
 
-  //For Shop not defined
-  // if (!isLoading && !vendorOrders?.data?.shop)
-  //   return (
-  //     <NoOrder
-  //       show={true}
-  //       type="Shop"
-  //       showFormNoOrder={show && type === "Shop"}
-  //       productForm={<CreateShop type="Shop" />}
-  //     />
-  //   );
-
   return (
     <>
-      {show && type === "Order" ? (
-        <>
-          <ProductHeading type="Order" showid={true} name="Orders" id="" />
-          <CreateShop type="order" />
-        </>
-      ) : (
-        <>
-          <ProductHeading type="Order" showid={true} name="Orders" id="" />
-          <SearchAndFilterProduct />
-          <OrderItemsTable
-            orders={vendorOrders?.data}
-            totalPages={vendorOrders?.total}
-          />
-        </>
-      )}
+      <div className="flex flex-col gap-2">
+        <h1 className="hidden text-2xl leading-8 font-medium tracking-[0.5%] text-[#333843] md:block">
+          Orders
+        </h1>
+        <ProductLinkNav name={"Orders"} id={""} />
+      </div>
+      <SearchAndFilterProduct />
+      <OrderItemsTable
+        orders={vendorOrders?.data}
+        totalPages={vendorOrders?.total}
+      />
     </>
   );
 };

@@ -6,6 +6,7 @@ import React from "react";
 
 const SellerPage = () => {
   const { vendorShop, isLoading, vendorShopError } = useVendorShop();
+  //console.log(vendorShop, "vendorShop");
   if (isLoading) return <SkeletonTable />;
   return <DisplayShop shop={vendorShop?.data} />;
 };

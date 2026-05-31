@@ -74,14 +74,16 @@ export default function ProductReviewDetailsPage({
               label: "Product",
               renderCell: (item) => (
                 <div className="flex space-x-2.5">
-                  <div className="relative h-10 w-10 font-medium text-[#333843]">
-                    <Image
-                      src={item.image.url}
-                      alt={item.name}
-                      fill
-                      className="rounded-full object-cover"
-                    />
-                  </div>
+                  {item.image.url && (
+                    <div className="relative h-10 w-10 font-medium text-[#333843]">
+                      <Image
+                        src={item.image.url}
+                        alt={item.name}
+                        fill
+                        className="rounded-full object-cover"
+                      />
+                    </div>
+                  )}
                   <div className="flex items-center gap-1">
                     <span className="text-[13px] text-[#667085]">
                       {item.name}

@@ -36,20 +36,22 @@ export function CartSummary({ className }: CartSummaryProps) {
         <div className="flex items-center justify-between">
           <span className="text-sm text-[#6F6F6F]">Subtotal:</span>
           <span className="font-medium text-[#111827]">
-            ${subtotal?.toFixed(2)}
+            £{subtotal?.toFixed(2)}
           </span>
         </div>
 
         <div className="flex items-center justify-between">
           <span className="text-sm text-[#6F6F6F]">Shipping:</span>
-          <span className="font-medium text-[#111827]">{shipping}</span>
+          <span className="font-medium text-[#111827]">
+            £{shipping?.toFixed(2)}
+          </span>
         </div>
 
         {discount > 0 && (
           <div className="flex items-center justify-between">
             <span className="text-sm text-[#6F6F6F]">Discount:</span>
             <span className="font-medium text-[#2E7D32]">
-              -${discount?.toFixed(2)}
+              -£{discount?.toFixed(2)}
             </span>
           </div>
         )}
@@ -57,7 +59,7 @@ export function CartSummary({ className }: CartSummaryProps) {
         <div className="flex items-center justify-between border-t border-[#E5E7EB] pt-3">
           <span className="font-semibold text-[#111827]">Total:</span>
           <span className="text-lg font-bold text-[#111827]">
-            ${total?.toFixed(2)}
+            £{total?.toFixed(2)}
           </span>
         </div>
       </div>

@@ -8,8 +8,6 @@ export default async function Page({
   const resolvedParams = await params;
   const slug = resolvedParams.category;
 
-  // console.log("Slug value:", slug); // This will log: "operating-systems-ai-ml"
-
   return (
     <div>
       <ProductCategory category={slug} />

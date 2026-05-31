@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import logo from "../../lib/public/images/africa1_logo.png";
+//import logo from "../../lib/public/images/africa1_logo.png";
 import { navListArray, navMobileData } from "@/lib/data";
 import SearchFieldComp from "@/components/common/search";
 import TextStyle from "@/components/common/textStyle";
@@ -29,6 +29,8 @@ import { usePathname } from "next/navigation";
 import { useSignOut } from "@/lib/hooks/userDashboard/useUser";
 import { NavItem } from "@/types/appTypes";
 
+const logo =
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
 function Header() {
   const wishlist = useAppSelector((state) => state.wishlist);
   const user = useAppSelector((state) => state.user);

@@ -19,7 +19,7 @@ type ReusableTableProps = {
   order: string | string[] | undefined;
   data: any[];
   totalPages?: number;
-  totalCount?: number; // ✅ ADDED: accept totalCount so "Showing X-Y from Z" reflects real total, not just current page slice
+  totalCount?: number;
   columnsStyle?: string;
   columns: Column[];
   itemsPerPage?: number;
@@ -91,9 +91,9 @@ export default function ReusableTable({
   const tableData = useMemo(
     () => ({
       nodes: Array.isArray(data)
-        ? data.map((item) => ({
+        ? data.map((item, index) => ({
             ...item,
-            id: item.id || item._id,
+            id: item.id || item._id || `row-${index}`,
           }))
         : [],
     }),
@@ -139,28 +139,28 @@ export default function ReusableTable({
   });
 
   const tableColumns = [
-    {
-      label: (
-        <div className="flex items-center justify-center">
-          <HeaderCheckbox
-            checked={select.state.all}
-            onChange={() => select.fns.onToggleAll({})}
-            isIndeterminate={!select.state.all && !select.state.none}
-          />
-        </div>
-      ),
-      renderCell: (item: any) => (
-        <div className="flex items-center justify-center">
-          <input
-            className="h-5 w-5 rounded-md border-2 border-[#858D9D]"
-            type="checkbox"
-            checked={select.state.ids.includes(item.id)}
-            onChange={() => select.fns.onToggleById(item.id)}
-          />
-        </div>
-      ),
-      pinLeft: true,
-    },
+    // {
+    //   label: (
+    //     <div className="flex items-center justify-center">
+    //       <HeaderCheckbox
+    //         checked={select.state.all}
+    //         onChange={() => select.fns.onToggleAll({})}
+    //         isIndeterminate={!select.state.all && !select.state.none}
+    //       />
+    //     </div>
+    //   ),
+    //   renderCell: (item: any) => (
+    //     <div className="flex items-center justify-center">
+    //       <input
+    //         className="h-5 w-5 rounded-md border-2 border-[#858D9D]"
+    //         type="checkbox"
+    //         checked={select.state.ids.includes(item.id)}
+    //         onChange={() => select.fns.onToggleById(item.id)}
+    //       />
+    //     </div>
+    //   ),
+    //   pinLeft: true,
+    // },
     ...columns,
   ];
 

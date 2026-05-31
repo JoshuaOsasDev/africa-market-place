@@ -5,6 +5,7 @@ export default async function page({
 }: {
   searchParams: Promise<{ page: string }>;
 }) {
-  const page = (await Number(searchParams)) || 1;
-  return <ProductReviewPage page={page} />;
+  // const page = await Number(searchParams);
+
+  return <ProductReviewPage />;
 }

@@ -36,8 +36,8 @@ export default function SetShowForm() {
       <NoOrder
         show={true}
         type={"product"}
-        showFormNoOrder={show && type === "product"}
-        productForm={<ProductGeneralInfo type="product" />}
+        showFormNoOrder={show && type === "Product"}
+        productForm={<ProductGeneralInfo type="Product" />}
       />
     );
 
@@ -48,16 +48,21 @@ export default function SetShowForm() {
     <>
       {show && type === "product" ? (
         <>
-          <ProductHeading showid={true} type="product" name="Product" id="" />
+          <ProductHeading
+            showid={true}
+            type="Product"
+            name="Add Product"
+            id=""
+          />
           <ProductGeneralInfo type="product" shop={vendorProducts?.shop.data} />
         </>
       ) : (
         <>
           <ProductHeading
-            name="Product"
+            name="Add Product"
             id="productId"
             showid={true}
-            type="product"
+            type="Product"
           />
           <SearchAndFilterProduct />
           <ProductTableReactTable

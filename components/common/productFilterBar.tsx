@@ -1,4 +1,5 @@
 // ProductFilterBar.tsx
+import { useAppSelector } from "@/redux/store";
 import {
   ChevronDown,
   SlidersHorizontal,
@@ -18,6 +19,9 @@ export default function ProductFilterBar({
   const startEntry = (page - 1) * limit + 1;
   const endEntry = Math.min(page * limit, totalCount);
 
+  const categories = useAppSelector((state) => state.categories);
+  const CategoryOptions = categories.categories?.category || [];
+  console.log(categories, CategoryOptions, "categories");
   return (
     <div className="mb-5 flex flex-col gap-4 rounded-2xl bg-white p-2 lg:flex-row lg:items-center lg:justify-between">
       {/* Filters */}
@@ -28,9 +32,14 @@ export default function ProductFilterBar({
           onChange={(e) => onFilterChange("category", e.target.value)}
           className="h-10 rounded-lg border border-gray-100 bg-white px-4 text-sm font-medium outline-none"
         >
+          {/* All Categories option */}
           <option value="">All Categories</option>
-          <option value="electronics">Electronics</option>
-          <option value="fashion">Fashion</option>
+
+          {CategoryOptions.map((cat: any) => (
+            <option key={cat._id || cat.name} value={cat.name.toLowerCase()}>
+              {cat.name}
+            </option>
+          ))}
         </select>
 
         {/* Price Range Example */}

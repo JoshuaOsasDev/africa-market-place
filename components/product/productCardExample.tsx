@@ -46,7 +46,7 @@ export default function ProductCardExample() {
   if (!product || product.length === 0) return <NoProducts />;
   return (
     <div className="min-h-screen bg-[#F8F9FA]">
-      <div className="mx-auto max-w-7xl pt-5 md:px-4">
+      <div className="mx-auto max-w-7xl py-5 md:px-4">
         <ProductFilterBar
           currentFilters={filters}
           onFilterChange={handleFilterChange}

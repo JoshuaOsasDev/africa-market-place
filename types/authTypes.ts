@@ -9,7 +9,10 @@ export type userSignupType = {
   firstName: string;
   lastName: string;
   phone: string;
+  role: string;
+  confirmPassword: string;
 };
+
 export type userSendOtpType = {
   email: string;
 };

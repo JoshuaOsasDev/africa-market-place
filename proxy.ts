@@ -8,7 +8,7 @@ export function proxy(request: NextRequest) {
 
   const isAuthPage = pathname.startsWith("/auth-user/login");
 
-  let user: { role: "user" | "admin" | "vendor" } | null = null;
+  let user: { role: "user" | "admin" | "vendor" | "super-admin" } | null = null;
 
   //  Decode token safely
   if (token) {
@@ -23,10 +23,10 @@ export function proxy(request: NextRequest) {
 
   const role = user?.role;
 
-  //  CENTRALIZED ROUTE CONFIG (NEW 🔥)
+  //  CENTRALIZED ROUTE CONFIG
   const protectedRoutes = ["/user/dashboard", "/user/checkout"];
 
-  const adminRoutes = ["/admin"];
+  const adminRoutes = ["/admin", "/super-admin"];
   const vendorRoutes = ["/vendor"];
 
   const isProtectedRoute = protectedRoutes.some((route) =>
@@ -58,7 +58,7 @@ export function proxy(request: NextRequest) {
   }
 
   // Admin routes
-  if (isAdminRoute && role !== "admin") {
+  if (isAdminRoute && role !== "admin" && role !== "super-admin") {
     if (!user) {
       return NextResponse.redirect(new URL("/auth-user/login", request.url));
     }
@@ -80,7 +80,9 @@ export function proxy(request: NextRequest) {
     if (role === "admin") {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
-
+    if (role === "super-admin") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
     if (role === "vendor") {
       return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
     }
