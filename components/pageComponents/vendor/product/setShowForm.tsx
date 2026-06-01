@@ -48,9 +48,10 @@ export default function SetShowForm() {
   if (vendorProductsError) {
     return <div className="m-auto text-red-400">Error loading products</div>;
   }
+  console.log(show, type, "Show type");
   return (
     <>
-      {show && type === "product" ? (
+      {show && type === "Product" ? (
         <>
           <ProductHeading
             showid={true}
@@ -58,7 +59,7 @@ export default function SetShowForm() {
             name="Add Product"
             id=""
           />
-          <ProductGeneralInfo type="product" shop={vendorProducts?.shop.data} />
+          <ProductGeneralInfo type="Product" shop={vendorProducts?.shop.data} />
         </>
       ) : (
         <>
