@@ -112,12 +112,12 @@ export function ProductCard(product: any) {
           {/* Price */}
           <div className="flex items-center gap-2">
             <span className="text-base font-bold text-gray-900 md:text-lg">
-              ${displayPrice}
+              £{displayPrice}
             </span>
 
             {hasDiscount && (
               <span className="text-sm text-gray-400 line-through">
-                ${data?.price}
+                £{data?.price}
               </span>
             )}
           </div>

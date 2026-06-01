@@ -9,6 +9,10 @@ import { cn } from "@/lib/utils";
 
 interface ProductTabsProps {
   description: string;
+  height?: string;
+  length?: string;
+  weight?: string;
+  type?: string;
   features?: string[];
   additionalInfo?: React.ReactNode;
   reviews?: string;
@@ -18,6 +22,10 @@ interface ProductTabsProps {
 
 export function ProductTabs({
   description,
+  height,
+  length,
+  weight,
+  type,
   features,
   additionalInfo,
   reviews = "",
@@ -43,25 +51,19 @@ export function ProductTabs({
                 <td className="w-1/3 py-3 pr-4 font-medium text-[#111827]">
                   Weight
                 </td>
-                <td className="py-3 text-[#6F6F6F]">1 kg</td>
+                <td className="py-3 text-[#6F6F6F]">{weight} kg</td>
               </tr>
               <tr className="border-b border-[#E5E7EB]">
-                <td className="py-3 pr-4 font-medium text-[#111827]">
-                  Dimensions
-                </td>
-                <td className="py-3 text-[#6F6F6F]">15 × 10 × 8 cm</td>
+                <td className="py-3 pr-4 font-medium text-[#111827]">Type</td>
+                <td className="py-3 text-[#6F6F6F]">{type}</td>
               </tr>
               <tr className="border-b border-[#E5E7EB]">
-                <td className="py-3 pr-4 font-medium text-[#111827]">Origin</td>
-                <td className="py-3 text-[#6F6F6F]">Nigeria</td>
+                <td className="py-3 pr-4 font-medium text-[#111827]">Height</td>
+                <td className="py-3 text-[#6F6F6F]">{height} cm</td>
               </tr>
-              <tr>
-                <td className="py-3 pr-4 font-medium text-[#111827]">
-                  Storage
-                </td>
-                <td className="py-3 text-[#6F6F6F]">
-                  Keep refrigerated at 2-4°C
-                </td>
+              <tr className="border-b border-[#E5E7EB]">
+                <td className="py-3 pr-4 font-medium text-[#111827]">Length</td>
+                <td className="py-3 text-[#6F6F6F]">{length} cm</td>
               </tr>
             </tbody>
           </table>

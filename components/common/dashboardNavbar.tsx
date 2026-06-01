@@ -23,7 +23,8 @@ import { useSignOut } from "@/lib/hooks/userDashboard/useUser";
 import { usePathname } from "next/navigation";
 import { useVendorOrders } from "@/lib/hooks/vendorDashboard/useVendor";
 
-const logo =  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png"
+const logo =
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
 const DashboardNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useAppSelector((state) => state.user);
@@ -231,8 +232,8 @@ const DashboardNavbar = () => {
 
       {/* MOBILE MENU */}
       {isMenuOpen && (
-        <div className="absolute top-20 right-0 left-0 z-50 border-b border-[#F0F1F3] bg-white shadow-lg md:hidden">
-          <div className="flex flex-col space-y-4 p-6">
+        <div className="absolute top-15 right-0 left-0 z-50 border-b border-[#F0F1F3] bg-white shadow-lg md:hidden">
+          <div className="fixed flex w-full flex-col space-y-4 bg-white p-6">
             {/* Search Bar (Mobile) */}
             {/* <div className="flex h-13 items-center gap-2.5 rounded-[26px] bg-[#F6F6F6] px-4 py-3.5">
               <Search className="h-6 w-6 text-[#BABABA]" />
@@ -307,11 +308,35 @@ const DashboardNavbar = () => {
               >
                 Orders
               </Link>
+
               <Link
-                href="/vendor/dashboard/settings"
+                href="/vendor/dashboard/seller"
+                onClick={handleMobileLinkClick}
                 className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
-                Settings
+                Shop
+              </Link>
+
+              <Link
+                href="/vendor/dashboard/customers"
+                onClick={handleMobileLinkClick}
+                className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              >
+                Customers
+              </Link>
+              <Link
+                href="/vendor/dashboard/wallet"
+                onClick={handleMobileLinkClick}
+                className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              >
+                Wallet
+              </Link>
+              <Link
+                href="/vendor/dashboard/notifications"
+                onClick={handleMobileLinkClick}
+                className="rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              >
+                Notifications
               </Link>
               <button
                 onClick={() => logout()}

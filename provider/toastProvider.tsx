@@ -20,6 +20,7 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
   const { userCart } = useGetCart();
   const dispatch = useAppDispatch();
 
+  //console.log(userCart, "user cart");
   const shouldFetch =
     user?.user?.role === "user" || user?.user?.role === "vendor";
   const { allCategories } = useAllCategories();

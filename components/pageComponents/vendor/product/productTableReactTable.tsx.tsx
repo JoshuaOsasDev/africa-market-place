@@ -34,7 +34,7 @@ export default function ProductTableReactTable({
         order="product"
         data={products}
         totalPages={totalPages}
-        columnsStyle="44px 2.5fr 1fr 1fr 1fr 1.3fr 1.3fr 1.1fr"
+        columnsStyle="2fr 1.3fr 1fr 1fr 1fr 1.3fr 1fr 1.1fr"
         columns={[
           {
             label: (
@@ -125,6 +125,23 @@ export default function ProductTableReactTable({
                 }`}
               >
                 {item.status}
+              </span>
+            ),
+          },
+          {
+            label: (
+              <div className="flex items-center gap-2">
+                <h3 className="pr-3 text-[#333843]">Weight</h3>
+                <ChevronDown className="h-4 w-4 text-[#858D9D]" />
+              </div>
+            ),
+            renderCell: (item: Product) => (
+              <span
+                className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap ${
+                  statusStyles[item.status] || "bg-gray-100"
+                }`}
+              >
+                {item.weight ? `${item.weight} kg` : "N/A"}
               </span>
             ),
           },

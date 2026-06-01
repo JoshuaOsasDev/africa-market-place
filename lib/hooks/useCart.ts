@@ -18,7 +18,7 @@ export function useCart(product?: Product) {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.product.checkout.cart);
 
-  //console.log(cartItems, "cart items in useCart");
+  console.log(cartItems, "cart items in useCart");
   const {
     mutate: addToCartAPI,
     isPending: isAdding,
@@ -30,8 +30,11 @@ export function useCart(product?: Product) {
     variables: removingVariables,
   } = useRemoveFromCartAPI();
   // Extract productId to avoid optional chaining in dependency array
-  const productId = product?._id;
 
+  const productId = product?._id;
+  const productSlug = product?.slug;
+
+  console.log(productSlug, "productSlug in useCart");
   //Loading state for Adding and removing
   const isAddingThisProduct =
     isAdding && addingVariables?.pid?._id === productId;
@@ -44,15 +47,16 @@ export function useCart(product?: Product) {
   // Check if a specific product is in cart
 
   const isInCart = useMemo(() => {
-    if (!productId || !cartItems || !Array.isArray(cartItems)) return false;
+    if (!productSlug || !cartItems || !Array.isArray(cartItems)) return false;
 
     return cartItems.some((item: any) => {
-      if (typeof item.pid === "string") return item.pid === productId;
-      if (typeof item.pid === "object" && item.pid !== null)
-        return item.pid._id === productId;
-      return item._id === productId;
+      if (typeof item.slug === "string") return item.slug === productSlug;
+      if (typeof item === "object" && item !== null)
+        return item.pid.slug === productSlug;
+      console.log(item, productSlug);
+      return item.slug === productSlug;
     });
-  }, [cartItems, productId]);
+  }, [cartItems, productSlug]);
 
   // const isInCart = useMemo(() => {
   //   if (!productId || !cartItems || !Array.isArray(cartItems)) {
@@ -102,7 +106,7 @@ export function useCart(product?: Product) {
   const removeFromCart = useCallback(
     (productToRemove: Product) => {
       // Update Redux store
-      dispatch(deleteCart(productToRemove._id));
+      dispatch(deleteCart(productToRemove.slug));
 
       // Sync with backend
       removeFromCartAPI({ pid: productToRemove });

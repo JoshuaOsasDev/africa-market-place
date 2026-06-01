@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/common/badge";
 
 interface ProductPriceProps {
-  currentPrice: number;
+  currentPrice?: number;
   originalPrice?: number;
   currency?: string;
   className?: string;
@@ -13,13 +13,15 @@ interface ProductPriceProps {
 export function ProductPrice({
   currentPrice,
   originalPrice,
-  currency = "$",
+  currency = "£",
   className,
   showDiscount = true,
 }: ProductPriceProps) {
   const discountPercentage =
-    originalPrice && originalPrice > currentPrice
-      ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
+    originalPrice && originalPrice > (currentPrice || 0)
+      ? Math.round(
+          ((originalPrice - (currentPrice || 0)) / originalPrice) * 100,
+        )
       : 0;
 
   return (
@@ -30,7 +32,7 @@ export function ProductPrice({
         {currentPrice?.toFixed(2)}
       </span>
 
-      {originalPrice && originalPrice > currentPrice && (
+      {originalPrice && originalPrice > (currentPrice || 0) && (
         <span className="text-[18px] text-[#9CA3AF] line-through lg:text-[20px]">
           {currency}
           {originalPrice.toFixed(2)}
