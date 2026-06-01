@@ -104,14 +104,14 @@ const productSlice = createSlice({
       };
 
       const alreadyExists = state.checkout.cart?.some(
-        (item: CartItem) => item.pid === normalizedItem.pid,
+        (item: CartItem) => item.slug === normalizedItem.slug,
       );
 
       if (!alreadyExists) {
         state.checkout.cart?.push(normalizedItem);
       } else {
         state.checkout.cart = state.checkout.cart?.map((item: CartItem) =>
-          item.pid === normalizedItem.pid
+          item.slug === normalizedItem.slug
             ? { ...item, quantity: normalizedItem.quantity }
             : item,
         );
@@ -143,7 +143,7 @@ const productSlice = createSlice({
       const productId = action.payload;
       const updateCart = filter(
         state.checkout.cart,
-        (item) => item.pid !== productId,
+        (item) => item.slug !== productId,
       );
 
       state.checkout.cart = updateCart;

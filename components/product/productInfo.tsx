@@ -12,7 +12,7 @@ import { Product } from "@/types/product";
 
 interface ProductInfoProps {
   name: string;
-  price: number;
+  price?: number;
   originalPrice?: number;
   inStock?: boolean;
   rating: number;

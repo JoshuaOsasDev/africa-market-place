@@ -28,6 +28,7 @@ function BestSellingProducts() {
 
   const product = userProducts?.data;
 
+  console.log(product, "best selling products");
   // Initialize carousel state
   useEffect(() => {
     if (!api) return;

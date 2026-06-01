@@ -36,6 +36,9 @@ export type Product = {
   createdAt: Date;
   slug: string;
   stockQuantity: number;
+  weight: number;
+  height: number;
+  length: number;
 };
 
 export type ModalContextType = {
