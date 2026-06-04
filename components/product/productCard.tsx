@@ -56,7 +56,7 @@ export function ProductCard(product: any) {
   );
 
   return (
-    <div className="group relative w-55 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-lg sm:w-70 md:w-62.5">
+    <div className="group relative w-full rounded-2xl border border-gray-200 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-lg sm:w-70 sm:w-full md:w-62.5">
       {/* Discount Badge */}
       {hasDiscount && (
         <span className="absolute top-1 left-2 z-10 rounded-full bg-red-500 px-2 py-1 text-xs font-semibold text-white">

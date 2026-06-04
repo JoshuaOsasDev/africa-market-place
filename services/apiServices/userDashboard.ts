@@ -103,10 +103,31 @@ export const getSlider = async () => {
   return data;
 };
 
-export const createImageSlider = async (payload: any) => {
-  const { data } = await http.post(`/settings/slider/create`, payload);
+import axios from "axios";
 
-  return data;
+export const createImageSlider = async (payload: any) => {
+  // console.log(payload, "payload");
+  try {
+    const { data } = await http.post(`/settings/slider/create`, payload);
+
+    return data;
+  } catch (error) {
+    // Check if the error was thrown by Axios
+    if (axios.isAxiosError(error)) {
+      // The server responded with a status code outside the 2xx range
+      const serverMessage =
+        error.response?.data?.message || error.response?.data?.error;
+      const errorMessage =
+        serverMessage || `Server responded with status ${error}`;
+
+      console.error("Axios API Error:", errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    // Handle generic/network connection errors
+    console.error("Unexpected Error:", error);
+    throw new Error("A network error occurred. Please try again.");
+  }
 };
 
 export const getAllDelivery = async () => {

@@ -27,6 +27,7 @@ const HomepageSliderSettings = () => {
   const page = 1;
   const { adminProducts } = useAdminProducts(page, limit, search, status);
   const product = adminProducts?.data;
+
   //console.log(product, "user product");
   const { mutate: createSlider, isPending: onLoad } = useCreateSlider();
   // Generic change handler for text inputs
@@ -54,7 +55,7 @@ const HomepageSliderSettings = () => {
         });
       },
     });
-    console.log("Submitting Slider Data:", sliderData);
+    //console.log("Submitting Slider Data:", sliderData);
   };
 
   return (

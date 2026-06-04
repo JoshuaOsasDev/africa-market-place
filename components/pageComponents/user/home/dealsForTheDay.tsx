@@ -17,6 +17,9 @@ export default function DealsForTheDay() {
   const filteredDeals =
     deals?.data?.filter((d: Product) => d.isDeal === true) || [];
 
+  if (filteredDeals.length === 0) {
+    return null; // Don't render the section if there are no deals
+  }
   return (
     <div className="my-3 flex flex-col gap-5 px-2">
       {/* top section starts */}
