@@ -44,7 +44,7 @@ function Topcategories() {
       </div>
 
       {/* CATEGORY LIST */}
-      <div className="no-scrollbar flex items-center space-x-6 overflow-x-auto">
+      <div className="no-scrollbar flex items-center space-x-2 overflow-x-auto">
         {CategoryOptions.map((data: Category) => (
           <div
             key={data._id}
