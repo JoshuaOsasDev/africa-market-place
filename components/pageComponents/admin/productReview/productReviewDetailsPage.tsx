@@ -74,7 +74,7 @@ export default function ProductReviewDetailsPage({
               label: "Product",
               renderCell: (item) => (
                 <div className="flex space-x-2.5">
-                  {item.image.url && (
+                  {item?.image?.url && (
                     <div className="relative h-10 w-10 font-medium text-[#333843]">
                       <Image
                         src={item.image.url}
