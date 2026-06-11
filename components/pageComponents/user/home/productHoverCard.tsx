@@ -19,23 +19,23 @@ export default function ProductHoverCard({
   const [isHovered, setIsHovered] = useState(false);
 
   //  Discount logic
-  const hasDiscount = salePrice && price > salePrice;
-  const displayPrice = hasDiscount ? salePrice : price;
+  const hasDiscount = salePrice && salePrice > price;
+  const displayPrice = hasDiscount ? price : salePrice;
 
-  //console.log(price, "price");
-  //console.log(salePrice, "sales");
+  console.log(price, "price");
+  console.log(salePrice, "sales");
   const discountPercent = hasDiscount
-    ? Math.round(((price - salePrice) / price) * 100)
+    ? `${Math.ceil(((price - salePrice) / price) * 100)}%`
     : "No Discount";
 
   return (
     <div
-      className="relative w-full overflow-hidden rounded-xl bg-white shadow-md"
+      className="relative w-full overflow-hidden rounded-xl bg-white shadow-sm"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product Image Section */}
-      <div className="relative h-50 w-full bg-white md:h-75">
+      <div className="relative h-70 w-full bg-white md:h-75">
         <Image
           src={images?.[0]?.url ?? ""}
           alt={name}
@@ -57,7 +57,7 @@ export default function ProductHoverCard({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="absolute bottom-0 left-0 flex h-50 w-full flex-col justify-end bg-[#F6F6F6FC]/90 px-2 py-1 md:h-75 md:p-5"
+            className="absolute bottom-0 left-0 flex h-70 w-full flex-col justify-end bg-[#F6F6F6FC]/90 px-2 py-1 md:h-75 md:p-5"
           >
             <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
 
@@ -80,7 +80,9 @@ export default function ProductHoverCard({
             </div>
 
             {/* Description */}
-            <p className="mt-3 text-sm text-gray-600">{description}</p>
+            <p className="mt-3 text-sm text-gray-600">
+              {description.slice(0, 150)}...
+            </p>
 
             {/* Button */}
             <Link href={`user/products/${slug}`}>

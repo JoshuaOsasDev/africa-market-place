@@ -17,28 +17,32 @@ export default function DeleteProductModal({
   disabled,
   text,
 }: DeleteModalProps) {
-  console.log(disabled, "disabled");
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <div className="rounded-full bg-[#FFE8E5] px-6 py-5">
-        <Trash2 className="mx-auto mb-2 h-10 w-10 text-[#FF4733]" />
+    <div className="flex w-full max-w-lg flex-col items-center justify-center gap-4 px-4 py-2 text-center sm:px-6">
+      {/* Icon */}
+      <div className="rounded-full bg-[#FFE8E5] p-4 sm:p-5">
+        <Trash2 className="h-8 w-8 text-[#FF4733] sm:h-10 sm:w-10" />
       </div>
-      <h2 className="text-3xl font-bold">
-        Delete <span>{productName}</span>?
+
+      {/* Title */}
+      <h2 className="text-xl font-bold text-[#1A1A1A] sm:text-2xl md:text-3xl">
+        Delete <span className="break-words">{productName}</span>?
       </h2>
 
+      {/* Description */}
       {text && (
-        <p className="text-center text-lg text-[#757575]">
+        <p className="max-w-md text-sm leading-relaxed text-[#757575] sm:text-base">
           {`This action cannot be undone. Are you sure you want to delete this ${text}?`}
         </p>
       )}
 
-      <div className="flex justify-end gap-3">
+      {/* Actions */}
+      <div className="mt-2 flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
         <button
           onClick={onCloseModal}
-          className="rounded-[27px] bg-[#FFE8E5] px-8 py-4 font-medium text-[#FF4733] hover:bg-[#FFE8E5]/50"
+          className="w-full rounded-[27px] bg-[#FFE8E5] px-6 py-3 text-sm font-medium text-[#FF4733] transition-colors hover:bg-[#FFD7D1] sm:w-auto sm:px-8 sm:py-4"
         >
-          No! Go back
+          No, Go Back
         </button>
 
         <button
@@ -47,9 +51,9 @@ export default function DeleteProductModal({
             onConfirm();
             onCloseModal?.();
           }}
-          className="rounded-[27px] bg-[#FF4733] px-8 py-4 font-medium text-[#FFE8E5] hover:bg-[#FF4733]/70"
+          className="w-full rounded-[27px] bg-[#FF4733] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#E63D2A] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-8 sm:py-4"
         >
-          Yes! Delete
+          {disabled ? "Deleting..." : "Yes, Delete"}
         </button>
       </div>
     </div>

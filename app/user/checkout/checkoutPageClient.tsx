@@ -38,12 +38,12 @@ export function CheckoutPageClient() {
   const [courier, setCourier] = useState<CourierType>("evri");
 
   const { data: carrierResponse } = useCourier(10);
-  const carrierData = carrierResponse?.data;
+  const carrierData = carrierResponse;
 
   const handleCourierSelect = (id: CourierType) => {
     setCourier(id);
-    const selectedPrice = carrierData?.[id]?.price || 0;
-
+    const selectedPrice = carrierData?.data?.[id]?.price;
+    //console.log(selectedPrice, "selected price");
     dispatch(setShippingFee(selectedPrice));
   };
   // console.log(carrierResponse, "Courir");
@@ -103,7 +103,7 @@ export function CheckoutPageClient() {
 
   const removeP = (productToRemove: Product) => {
     // Update Redux store
-    dispatch(deleteCart(productToRemove.pid));
+    dispatch(deleteCart(productToRemove.slug));
 
     // Sync with backend
     removeFromCartAPI({ pid: productToRemove });
@@ -114,7 +114,9 @@ export function CheckoutPageClient() {
     updateQuantity(productId, quantity);
   };
   const handleRemove = (productId: string) => {
-    const product = cartItems?.find((item: CartItem) => item.pid === productId);
+    const product = cartItems?.find(
+      (item: CartItem) => item.slug === productId,
+    );
 
     if (product) {
       removeP(product);
@@ -178,7 +180,7 @@ export function CheckoutPageClient() {
       };
 
       console.log(data);
-      //createOrder(data);
+      createOrder(data);
       //postUserOrder(data);
       //console.log(data, "checkout data");
       // console.log("Order placed:", {
@@ -261,7 +263,7 @@ export function CheckoutPageClient() {
             />
             {carrierData && delivery.length > 0 && (
               <CourierSelector
-                data={carrierData}
+                data={carrierData?.data}
                 selectedCourier={courier}
                 onSelect={handleCourierSelect}
               />

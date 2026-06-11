@@ -64,13 +64,16 @@ export function CourierSelector({
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {options.map((option) => {
-          const isSelected = selectedCourier === option.id;
+        {options?.map((option) => {
+          const isSelected =
+            selectedCourier === (option.carrier.toLowerCase() as CourierType);
           return (
             <button
               key={option.id}
               type="button"
-              onClick={() => onSelect(option.id)}
+              onClick={() =>
+                onSelect(option.carrier.toLowerCase() as CourierType)
+              }
               className={`relative flex flex-col items-start gap-3 rounded-xl border-2 p-4 text-left transition-all ${
                 isSelected
                   ? "border-[#2E7D32] bg-[#F0F7F0]"
@@ -112,18 +115,18 @@ export function CourierSelector({
                 <div className="flex items-center gap-2">
                   <p className="font-bold text-gray-900">{option.carrier}</p>
                   <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-600 uppercase">
-                    {option.deliveryTime}
+                    {option?.deliveryTime}
                   </span>
                 </div>
                 <p className="mt-1 line-clamp-2 text-[11px] leading-tight text-gray-500">
-                  {`Total kg: ${option.service.slice(-7)}`}
+                  {`Total kg: ${option?.service?.slice(-7)}`}
                 </p>
               </div>
 
               <div className="mt-2">
                 <p className="text-lg font-bold text-[#2E7D32]">
-                  {option.currency === "GBP" ? "£" : option.currency}
-                  {option.price.toFixed(2)}
+                  {option?.currency === "GBP" ? "£" : option?.currency}
+                  {option?.price?.toFixed(2)}
                 </p>
               </div>
             </button>

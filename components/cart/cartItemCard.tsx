@@ -11,6 +11,7 @@ interface CartItemCardProps {
   item: CartItem;
   onQuantityChange: (id: string, quantity: number) => void;
   onRemove: (id: string) => void;
+  isRemoving: boolean;
   className?: string;
 }
 
@@ -18,6 +19,7 @@ export function CartItemCard({
   item,
   onQuantityChange,
   onRemove,
+  isRemoving,
   className,
 }: CartItemCardProps) {
   return (
@@ -58,8 +60,10 @@ export function CartItemCard({
           />
           <button
             onClick={() => onRemove(item.pid)}
-            className="p-1 text-[#9CA3AF] transition-colors hover:text-[#FF0000]"
+            className="p-1 text-[#9CA3AF] transition-colors hover:text-[#FF0000] disabled:cursor-not-allowed disabled:text-[#9CA3AF]"
             aria-label="Remove item"
+            //disabled={item.quantity === 0}
+            disabled={isRemoving}
           >
             <X size={18} />
           </button>

@@ -59,6 +59,7 @@ export default function WishListComp() {
 
   const visibleItems = wishlistData?.slice(startIndex, endIndex);
 
+  console.log(visibleItems, "visible items");
   const handleRemoveFromWishlist = (itemId: string) => {
     if (!itemId) return;
     PostUserWishlist(itemId);
@@ -74,7 +75,7 @@ export default function WishListComp() {
     e.preventDefault();
     e.stopPropagation();
     if (!product) return;
-    if (isProductInCart(product?._id)) {
+    if (isProductInCart(product?.slug)) {
       removeFromCart(product);
     } else {
       addToCart(product, quantity);
@@ -160,17 +161,17 @@ export default function WishListComp() {
                 onClick={(e) => handleCartAction(e, item, 1)}
                 size="sm"
                 className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-150 ${
-                  isProductInCart(item?._id)
+                  isProductInCart(item?.slug)
                     ? "bg-green-700 text-white hover:bg-green-800"
                     : "bg-green-50 text-green-700 hover:bg-green-100"
                 }`}
               >
                 <ShoppingCart className="h-4 w-4" />
                 <span className="hidden sm:inline">
-                  {isProductInCart(item?._id) ? "In cart" : "Add to cart"}
+                  {isProductInCart(item?.slug) ? "In cart" : "Add to cart"}
                 </span>
                 <span className="sm:hidden">
-                  {isProductInCart(item?._id) ? "In cart" : "Add"}
+                  {isProductInCart(item?.slug) ? "In cart" : "Add"}
                 </span>
               </Button>
             </div>

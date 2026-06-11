@@ -17,21 +17,21 @@ function Footer() {
   return (
     <>
       <div className="mx-2 mb-4 grid grid-cols-1 gap-6 rounded-[20px] bg-[#1A1A1A] p-4 md:grid-cols-5">
-        <div className="col-span-2 flex flex-col space-y-4">
+        <div className="col-span-2 flex flex-col space-y-3">
           {/* logo */}
-          <div className="relative h-[50px] w-[100px] sm:h-[60px] sm:w-[182px] lg:h-[83px] lg:w-[292px]">
+          <div className="relative h-[50px] w-[100px]">
             <Link href={"/"}>
               <Image
                 src={logo}
                 alt="africa market place logo"
                 fill
-                className="object-contain"
+                className="rounded-full object-cover"
               />
             </Link>
           </div>
           {/*  logo ends */}
           <TextStyle
-            textContent="Lorem ipsum consequat neque sed erat id mauris non eu ac nunc sed enim "
+            textContent="Discover quality African products, support local vendors, and enjoy a seamless shopping experience with Africa Market Place."
             textStyle="text-white"
           />
           {/* social icons start */}

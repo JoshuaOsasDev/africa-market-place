@@ -36,7 +36,7 @@ export default function ProductFilterBar({
           <option value="">All Categories</option>
 
           {CategoryOptions.map((cat: any) => (
-            <option key={cat._id || cat.name} value={cat.name.toLowerCase()}>
+            <option key={cat._id || cat.name} value={cat.slug?.toLowerCase()}>
               {cat.name}
             </option>
           ))}
@@ -50,9 +50,9 @@ export default function ProductFilterBar({
           className="h-10 rounded-lg border border-gray-100 bg-white px-4 text-sm font-medium outline-none"
         >
           <option value="">Any Price</option>
-          <option value="0_50">$0 - $50</option>
-          <option value="50_200">$50 - $200</option>
-          <option value="200_100000000">$200+</option>
+          <option value="0_50">£0 - £50</option>
+          <option value="50_200">£50 - £200</option>
+          <option value="200_100000000">£200+</option>
         </select>
 
         {/* Featured Toggle */}

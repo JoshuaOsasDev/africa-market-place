@@ -31,7 +31,7 @@ export function CheckoutOrderSummary({
   const shipping = useAppSelector((state) => state.product.checkout.shipping);
 
   const shippingDisplay =
-    shipping === 0 ? "No Fee yet" : `£${shipping.toFixed(2)}`;
+    shipping === 0 ? "No Fee yet" : `£${shipping?.toFixed(2)}`;
 
   const discountDisplay =
     discount === 0 ? "No Discount" : `£${discount.toFixed(2)}`;
