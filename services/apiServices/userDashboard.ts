@@ -175,6 +175,22 @@ export const getTicket = async (id: string) => {
 };
 
 export const getCourier = async (weight: number) => {
-  const { data } = await http.get(`/delivery/carrier/${weight}`);
-  return data;
+  try {
+    const { data } = await http.get(`/delivery/carrier/${weight}`);
+    return data;
+  } catch (error) {
+    // 1. Check if the error came from the server response (Axios Error)
+    if (axios.isAxiosError(error)) {
+      const serverMessage = error.response?.data || error.response?.data?.error;
+      const errorMessage =
+        serverMessage || `Courier fetch failed with status: ${error}`;
+
+      console.error("API Error (Courier):", errorMessage);
+      throw new Error(errorMessage); // React Query will catch this throw
+    }
+
+    // 2. Handle unexpected runtime or browser/network errors
+    console.error("Unexpected Error (Courier):", error);
+    throw new Error("A network connectivity error occurred. Please try again.");
+  }
 };

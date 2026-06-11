@@ -35,7 +35,6 @@ import {
 import { PostReview } from "@/types/appTypes";
 import { Product } from "@/types/product";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { error } from "console";
 
 import { useRouter } from "next/navigation";
 
@@ -149,7 +148,7 @@ export const useAddToCart = () => {
       });
 
       toast.success("Prouct Added to Cart", {
-        duration: 4000,
+        duration: 1000,
         icon: "✔",
         position: "top-center",
         style: {
@@ -180,7 +179,7 @@ export const useRemoveFromCart = () => {
       });
 
       toast.success("Prouct removed from Cart", {
-        duration: 4000,
+        duration: 1000,
         icon: "✔",
         position: "top-center",
         style: {

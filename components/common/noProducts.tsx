@@ -3,10 +3,24 @@ import TextStyle from "@/components/common/textStyle";
 import Link from "next/link";
 import { MoveRight, ShoppingBag } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
+import ProductFilterBar from "./productFilterBar";
 
-export default function NoProducts() {
+export default function NoProducts({
+  currentFilters,
+  onFilterChange,
+  totalCount,
+  totalPages,
+  loading,
+}: any) {
   return (
     <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
+      <ProductFilterBar
+        currentFilters={currentFilters}
+        onFilterChange={onFilterChange}
+        totalCount={totalCount}
+        totalPages={totalPages}
+        loading={loading}
+      />
       {/* Icon */}
       <div className="relative mb-6">
         <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#EAF2EA]">
@@ -20,12 +34,12 @@ export default function NoProducts() {
 
       {/* Text */}
       <TextStyle
-        textContent="No Products Yet"
+        textContent="No product found"
         textStyle="text-[#000000] font-bold text-xl sm:text-2xl mb-2"
       />
       <p className="max-w-xs text-sm leading-relaxed text-[#6F6F6F] sm:text-base">
-        Vendor yet to add any products. Product will update onces vendor posts a
-        product.
+        No products are available at the moment, Please check back soon for the
+        latest products.
       </p>
 
       {/* Divider dots */}

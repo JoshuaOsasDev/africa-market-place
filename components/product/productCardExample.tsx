@@ -1,13 +1,12 @@
 "use client";
 
-import Loader from "@/components/common/loader";
 import NoProducts from "@/components/common/noProducts";
 import ProductCard from "@/components/common/productCardComp";
 import { useUserProducts } from "@/lib/hooks/userDashboard/useUser";
 import { Product } from "@/types/product";
 import ProductFilterBar from "../common/productFilterBar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { getUserProducts } from "@/services/apiServices/userDashboard";
+import ProductPageSkeleton from "../common/ProductPageSkeleton";
 
 export default function ProductCardExample() {
   const searchParams = useSearchParams();
@@ -42,8 +41,17 @@ export default function ProductCardExample() {
 
   const product: Product[] = userProducts?.data;
   //console.log(product, "product");
-  if (isLoading) return <Loader />;
-  if (!product || product.length === 0) return <NoProducts />;
+  if (isLoading) return <ProductPageSkeleton />;
+  if (!product || product.length === 0)
+    return (
+      <NoProducts
+        currentFilters={filters}
+        onFilterChange={handleFilterChange}
+        totalCount={userProducts?.total || 0}
+        totalPages={userProducts?.count || 1}
+        loading={isLoading}
+      />
+    );
   return (
     <div className="min-h-screen bg-[#F8F9FA]">
       <div className="mx-auto max-w-7xl py-5 md:px-4">

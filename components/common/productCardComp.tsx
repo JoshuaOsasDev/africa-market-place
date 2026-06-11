@@ -148,12 +148,12 @@ export default function ProductCard({
             {/* Price */}
             <div className="mb-3 flex items-end gap-2">
               <span className="text-sm font-bold md:text-xl">
-                €{displayPrice.toFixed(2)}
+                £{displayPrice.toFixed(2)}
               </span>
 
               {hasDiscount && (
                 <span className="text-[10px] text-[#BABABA] line-through md:text-[16px]">
-                  €{price.toFixed(2)}
+                  £{price.toFixed(2)}
                 </span>
               )}
             </div>

@@ -36,6 +36,7 @@ export function CartPageClient() {
 
   // console.log(cart, "carts");
 
+  // console.log(isRemoving, removingVariables, "main is removale");
   // Custom persistent layout context handler controlling item quantities locally
   const { cartItems, updateQuantity } = useCart();
 
@@ -46,10 +47,10 @@ export function CartPageClient() {
    */
   const removeP = (productToRemove: Product) => {
     // Stage 1: Dispatches instant cache evictions to provide latency-free client visual feedback
-    dispatch(deleteCart(productToRemove.pid));
+    removeFromCartAPI({ pid: productToRemove });
 
     // Stage 2: Persists mutations across the remote server infrastructure
-    removeFromCartAPI({ pid: productToRemove });
+    dispatch(deleteCart(productToRemove.slug));
   };
 
   /**
@@ -135,6 +136,9 @@ export function CartPageClient() {
                   item={item}
                   onQuantityChange={handleQuantityChange}
                   onRemove={handleRemove}
+                  isRemoving={
+                    isRemoving && removingVariables?.pid?.pid === item?.pid
+                  }
                 />
               ))}
             </div>
@@ -156,6 +160,8 @@ export function CartPageClient() {
             items={cart}
             onQuantityChange={handleQuantityChange}
             onRemove={handleRemove}
+            isRemoving={isRemoving}
+            removingVariables={removingVariables}
             onApplyCoupon={handleApplyCoupon}
           />
         </div>

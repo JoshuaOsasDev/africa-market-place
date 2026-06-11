@@ -28,14 +28,16 @@ export function CheckoutOrderItem({
         className,
       )}
     >
-      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-[#F9FAFB]">
-        <Image
-          src={item?.images[0]?.url ?? ""}
-          alt={item.name}
-          fill
-          className="object-contain p-1"
-        />
-      </div>
+      {item?.images && (
+        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-[#F9FAFB]">
+          <Image
+            src={item?.images[0]?.url ?? ""}
+            alt={item?.name}
+            fill
+            className="object-contain p-1"
+          />
+        </div>
+      )}
 
       {/* Product Info */}
       <div className="min-w-0 flex-1">
@@ -56,7 +58,7 @@ export function CheckoutOrderItem({
             className="origin-left scale-75"
           />
           <button
-            onClick={() => onRemove(item?.pid)}
+            onClick={() => onRemove(item?.slug)}
             className="p-1 text-[#FF0000] transition-colors hover:text-[#CC0000]"
             aria-label="Remove item"
           >

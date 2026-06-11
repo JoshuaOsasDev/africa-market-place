@@ -11,7 +11,9 @@ interface MobileOrderSummaryProps {
   items: CartItem[];
   onQuantityChange: (id: string, quantity: number) => void;
   onRemove: (id: string) => void;
+  isRemoving: boolean;
   onApplyCoupon: (code: string) => void;
+  removingVariables: any;
   className?: string;
 }
 
@@ -19,7 +21,9 @@ export function MobileOrderSummary({
   items,
   onQuantityChange,
   onRemove,
+  isRemoving,
   onApplyCoupon,
+  removingVariables,
   className,
 }: MobileOrderSummaryProps) {
   const [couponCode, setCouponCode] = useState("");
@@ -46,6 +50,7 @@ export function MobileOrderSummary({
             item={item}
             onQuantityChange={onQuantityChange}
             onRemove={onRemove}
+            isRemoving={isRemoving && removingVariables?.pid?.pid === item?.pid}
           />
         ))}
       </div>

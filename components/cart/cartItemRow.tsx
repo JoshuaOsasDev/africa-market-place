@@ -9,6 +9,7 @@ interface CartItemRowProps {
   item: CartItem;
   onQuantityChange: (id: string, quantity: number) => void;
   onRemove: (id: string) => void;
+  isRemoving: boolean;
   className?: string;
 }
 
@@ -16,10 +17,11 @@ export function CartItemRow({
   item,
   onQuantityChange,
   onRemove,
+  isRemoving,
   className,
 }: CartItemRowProps) {
   const subtotal = item?.salePrice || item?.price * item?.quantity;
-
+  console.log(isRemoving, "isRemoval from cart");
   return (
     <div
       className={cn(
@@ -62,8 +64,9 @@ export function CartItemRow({
 
       <button
         onClick={() => onRemove(item?.pid)}
-        className="p-1 text-[#9CA3AF] transition-colors hover:text-[#FF0000]"
+        className="p-1 transition-colors hover:text-[#FF0000] disabled:cursor-not-allowed disabled:text-[#9CA3AF]"
         aria-label="Remove item"
+        disabled={isRemoving}
       >
         <X size={18} />
       </button>
