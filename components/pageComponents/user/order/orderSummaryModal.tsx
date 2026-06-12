@@ -113,7 +113,7 @@ function OrderSummaryModal({
 
   const { data: ticket, isLoading } = useTicket(order._id);
   const hasTicket = !!ticket?.data;
-  //console.log(order, "active order");
+  console.log(order, "active order");
   return (
     <>
       {/* Backdrop */}

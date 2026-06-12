@@ -100,6 +100,7 @@ const productSlice = createSlice({
         slug: product.slug,
         quantity: quantity ?? 1,
         stockQuantity: product.stockQuantity,
+        images: product.images,
         // add any other CartItem fields you need
       };
 

@@ -45,6 +45,7 @@ function PaymentForm({ orderId }: { orderId: string }) {
   const orders = order?.data;
 
   const createPaymentIntent = async (orderData: any) => {
+    //console.log(orderData, "orders from backend");
     try {
       const { data } = await axios.post(
         "https://africarmarketplaceserver-9285e6ea6a8d.herokuapp.com/api/payment-intents",
@@ -75,7 +76,7 @@ function PaymentForm({ orderId }: { orderId: string }) {
 
         // 1. Fetch order
         const res = await getUserOrderId(orderId);
-        // console.log(res, "res");
+
         const orderData = res; //
         if (!orderData) throw new Error("Order not found");
 

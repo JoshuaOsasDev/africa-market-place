@@ -9,8 +9,9 @@ import { socialData, socialData2, socialData3, socialData4 } from "@/lib/data";
 import { useAppSelector } from "@/redux/store";
 import { useState } from "react";
 import { CookieModal } from "./cookieModal";
+
 const logo =
-  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1773526193/africa_market_place_desktop_banner_ww9s3x.png";
+  "https://res.cloudinary.com/dtxai4k4r/image/upload/v1781291048/WhatsApp_Image_2026-06-12_at_20.00.49_amxpv1.jpg";
 function Footer() {
   const user = useAppSelector((state) => state.user);
   const [cookieModalOpen, setCookieModalOpen] = useState(false);
@@ -19,13 +20,13 @@ function Footer() {
       <div className="mx-2 mb-4 grid grid-cols-1 gap-6 rounded-[20px] bg-[#1A1A1A] p-4 md:grid-cols-5">
         <div className="col-span-2 flex flex-col space-y-3">
           {/* logo */}
-          <div className="relative h-[50px] w-[100px]">
+          <div className="relative h-15 w-15">
             <Link href={"/"}>
               <Image
                 src={logo}
                 alt="africa market place logo"
                 fill
-                className="rounded-full object-cover"
+                className="rounded-full bg-white object-contain p-2"
               />
             </Link>
           </div>
