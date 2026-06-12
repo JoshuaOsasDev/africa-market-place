@@ -324,20 +324,20 @@ const LoginComp = () => {
 
             {/* Remember Device Configuration + Recovery Action Entrypoints */}
             <div className="flex items-center justify-between">
-              <label className="flex cursor-pointer items-center gap-2 text-[13px] text-[#5a6b5a]">
+              <label className="flex cursor-pointer items-center gap-0.5 text-[13px] text-[#5a6b5a] md:gap-2">
                 <input
                   type="checkbox"
                   checked={isChecked}
                   onChange={() => setIsChecked(!isChecked)}
                   className="h-3.5 w-3.5 rounded accent-[#2e7d32]"
                 />
-                Remember me for 30 days
+                <p className="text-[13px]">Remember me</p>
               </label>
               <Link
                 href="/auth-user/sendOtp/forgetPassword"
                 className="text-[13px] font-medium text-[#2e7d32] transition-opacity hover:opacity-70"
               >
-                Forgot password?
+                <p className=""> Forgot password?</p>
               </Link>
             </div>
 

@@ -21,7 +21,7 @@ export function CartItemRow({
   className,
 }: CartItemRowProps) {
   const subtotal = item?.salePrice || item?.price * item?.quantity;
-  console.log(isRemoving, "isRemoval from cart");
+  console.log(item, "item from cart");
   return (
     <div
       className={cn(
