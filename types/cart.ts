@@ -17,6 +17,7 @@ export interface CartItem {
   subtotal?: number;
   shop?: string;
   variantId?: string | undefined;
+  weight?: number; // weight of the item
   //cartQuantity: number; // quantity added to cart
 }
 

@@ -63,7 +63,14 @@ export function CheckoutPageClient() {
   const { cartItems, updateQuantity } = useCart();
   const { mutate: removeFromCartAPI } = useRemoveFromCart();
 
-  // console.log(cartItems, "items");
+  console.log(cartItems, "items");
+
+  const totalWeight = cartItems?.reduce(
+    (total: number, item: CartItem) => total + (item.weight || 0),
+    0,
+  );
+
+  //console.log(totalWeight, "weight");
   const { mutate: createOrder, isPending } = useCreateOrder();
   const { deliveries } = useAllDelivery();
   // console.log(deliveries, "delivery");
@@ -172,7 +179,7 @@ export function CheckoutPageClient() {
           order_number: "ORD-" + Date.now(),
           shipment: { id: 27227 },
           currency: "GB",
-          weight: 1,
+          weight: totalWeight,
           shipping_method:
             courier === "evri" ? "home_delivery" : "locker_collection",
           request_label: true,
