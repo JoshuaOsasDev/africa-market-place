@@ -98,9 +98,9 @@ const LoginComp = () => {
         // tokenResponse.access_token
         dispatch(setLoaderAction(true));
         const result = await googleAuth(tokenResponse);
-
+        //console.log(result, "user and token from google auth");
         // Hydrate backend profile data directly into the application state trees
-        dispatch(signInAction(result.data.user));
+        dispatch(signInAction(result.data));
         dispatch(setWishlistAction(result.data.user.wishlist));
 
         toast.success("Login successfull");
@@ -121,13 +121,14 @@ const LoginComp = () => {
 
         router.push(goto);
       } catch (err) {
-        if (err instanceof AxiosError) {
-          toast.error(
-            err?.response?.data?.message || "Sign in failed, please try again.",
-          );
-        } else {
-          toast.error("Unknown error");
-        }
+        console.log(err, "error");
+        // if (err instanceof AxiosError) {
+        //   toast.error(
+        //     err?.response?.data?.message || "Sign in failed, please try again.",
+        //   );
+        // } else {
+        //   toast.error("Unknown error");
+        // }
       } finally {
         dispatch(setLoaderAction(false));
       }

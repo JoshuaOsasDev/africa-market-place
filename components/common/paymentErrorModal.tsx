@@ -1,6 +1,7 @@
 "use client";
 
 import { X, AlertTriangle, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 interface PaymentErrorModalProps {
   error: string;
@@ -79,15 +80,12 @@ export function PaymentErrorModal({
           >
             Cancel
           </button>
-          {/* <button
-            onClick={() => {
-              onClose();
-              onRetry?.();
-            }}
-            className="flex-[2] rounded-lg bg-red-500 py-2.5 text-sm font-medium text-white hover:bg-red-600"
+          <Link
+            href="/"
+            className="flex-1 rounded-lg bg-green-600 py-2.5 text-center text-sm font-medium text-white hover:bg-green-700"
           >
-            Try again
-          </button> */}
+            Home
+          </Link>
         </div>
       </div>
     </div>

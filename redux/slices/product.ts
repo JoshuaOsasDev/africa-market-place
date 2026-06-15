@@ -101,6 +101,8 @@ const productSlice = createSlice({
         quantity: quantity ?? 1,
         stockQuantity: product.stockQuantity,
         images: product.images,
+        weight: product.weight,
+
         // add any other CartItem fields you need
       };
 
