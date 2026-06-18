@@ -9,6 +9,8 @@ import { CategoryType } from "@/types/product";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setShowForm } from "@/redux/slices/showFormSlice";
 import { useRouter } from "next/navigation";
+import { FiCamera } from "react-icons/fi";
+import { CldUploadWidget } from "next-cloudinary";
 
 type Shop = {
   _id: string;
@@ -144,6 +146,13 @@ export default function CompleteProductForm({
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const [file, setFile] = useState<
+    {
+      public_id: string;
+      secure_url: string;
+    }[]
+  >([]);
+
   //Redux category state
   const categories = useAppSelector((state) => state.categories);
   const categoryOptions = categories.categories?.category || [];
@@ -155,6 +164,10 @@ export default function CompleteProductForm({
 
   const dispatch = useAppDispatch();
   //const showForm = useAppSelector((state) => state.showFormReducer.showForm);
+
+  const restoreScroll = () => {
+    document.body.style.overflow = "";
+  };
 
   const closeForm = () => {
     dispatch(
@@ -306,8 +319,12 @@ export default function CompleteProductForm({
     }
   };
 
-  const handleRemoveImage = (id: string) => {
-    setProductImages((prev) => prev?.filter((img) => img._id !== id));
+  // const handleRemoveImage = (id: string) => {
+  //   setProductImages((prev) => prev?.filter((img) => img._id !== id));
+  // };
+
+  const handleRemoveUploadedImage = (publicId: string) => {
+    setFile((prev) => prev.filter((image) => image.public_id !== publicId));
   };
 
   const handleAddImageClick = () => {
@@ -485,36 +502,74 @@ export default function CompleteProductForm({
                 <p className="mb-4 text-sm text-gray-600">
                   Drag and drop images here, or click add images
                 </p>
-                <input
+                <CldUploadWidget
+                  uploadPreset="africamarketplace"
+                  onSuccess={(result: any) => {
+                    restoreScroll();
+
+                    setFile((prev) => [
+                      ...prev,
+                      {
+                        public_id: result.info.public_id,
+                        secure_url: result.info.secure_url,
+                      },
+                    ]);
+                  }}
+                  options={{
+                    showPoweredBy: false,
+                    multiple: true,
+                    clientAllowedFormats: ["png", "jpg", "jpeg", "webp"],
+                    folder: "products",
+                    maxFileSize: 2 * 1024 * 1024,
+                  }}
+                >
+                  {({ open }) => (
+                    <button
+                      type="button"
+                      onClick={() => open?.()}
+                      className="rounded-lg bg-green-600 px-4 py-2 text-white"
+                    >
+                      Upload Images
+                    </button>
+                  )}
+                </CldUploadWidget>
+
+                {/* <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   multiple
                   onChange={handleFileInputChange}
                   className="hidden"
-                />
-                <button
+                /> */}
+                {/* <button
                   type="button"
                   onClick={handleAddImageClick}
                   className="rounded-lg bg-green-600 px-6 py-2 text-sm font-medium text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:outline-none"
                 >
                   Add Images
-                </button>
+                </button> */}
               </div>
 
-              {productImages.length > 0 && (
+              {file.length > 0 && (
                 <div className="mt-6 grid grid-cols-3 gap-4">
-                  {productImages.map((img) => (
-                    <div key={img._id} className="group relative">
+                  {file.map((image) => (
+                    <div
+                      key={image.public_id}
+                      className="group relative overflow-hidden rounded-lg border border-gray-200"
+                    >
                       <img
-                        src={img.url}
+                        src={image.secure_url}
                         alt="Product"
-                        className="h-32 w-full rounded-lg border border-gray-200 object-cover"
+                        className="h-32 w-full object-cover"
                       />
+
                       <button
                         type="button"
-                        onClick={() => handleRemoveImage(img._id)}
-                        className="absolute top-2 right-2 rounded-full bg-red-500 p-1.5 text-white opacity-0 transition group-hover:opacity-100 hover:bg-red-600"
+                        onClick={() =>
+                          handleRemoveUploadedImage(image.public_id)
+                        }
+                        className="absolute top-2 right-2 rounded-full bg-red-500 p-1.5 text-white opacity-100 transition-opacity group-hover:opacity-100 hover:bg-red-600 md:opacity-0"
                       >
                         <X className="h-4 w-4" />
                       </button>

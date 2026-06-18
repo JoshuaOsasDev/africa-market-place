@@ -18,6 +18,7 @@ import {
 import { CartItem } from "@/types/cart";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useCart } from "@/lib/hooks/useCart";
+
 import {
   useAllDelivery,
   useRemoveFromCart,
@@ -28,7 +29,7 @@ import { deleteCart, setShippingFee } from "@/redux/slices/product";
 import { Product } from "@/types/product";
 import { DeliveryAddressSelector } from "@/components/checkout/deliveryAddressSelector";
 import Loader from "@/components/common/loader";
-import { postUserOrder } from "@/services/apiServices/userDashboard";
+//import { postUserOrder } from "@/services/apiServices/userDashboard";
 import {
   CourierSelector,
   CourierType,
@@ -36,9 +37,7 @@ import {
 
 export function CheckoutPageClient() {
   const [courier, setCourier] = useState<CourierType>("evri");
-
-  const { data: carrierResponse } = useCourier(10);
-  const carrierData = carrierResponse;
+  const router = useRouter();
 
   const handleCourierSelect = (id: CourierType) => {
     setCourier(id);
@@ -65,10 +64,21 @@ export function CheckoutPageClient() {
 
   console.log(cartItems, "items");
 
-  const totalWeight = cartItems?.reduce(
-    (total: number, item: CartItem) => total + (item.weight || 0),
+  const totalQuantity = cartItems?.reduce(
+    (total: number, item: CartItem) => total + item.quantity,
     0,
   );
+
+  const totalWeight = cartItems?.reduce(
+    (total: number, item: CartItem) =>
+      total + (item.weight || 0) * item.quantity,
+    0,
+  );
+
+  console.log(totalWeight, totalQuantity, "weight", "quantity");
+  const { data: carrierResponse, isLoading: loadingCarrier } =
+    useCourier(totalWeight);
+  const carrierData = carrierResponse;
 
   //console.log(totalWeight, "weight");
   const { mutate: createOrder, isPending } = useCreateOrder();
@@ -209,6 +219,9 @@ export function CheckoutPageClient() {
   };
 
   useEffect(() => {
+    if (!cartItems || cartItems.length === 0) {
+      router.push("/user/cart");
+    }
     if (deliveries?.addresses?.length) {
       const firstAddress = deliveries.addresses[0];
 
@@ -268,10 +281,11 @@ export function CheckoutPageClient() {
               useDifferentBilling={useDifferentBilling}
               setUseDifferentBilling={setUseDifferentBilling}
             />
-            {carrierData && delivery.length > 0 && (
+            {delivery.length > 0 && (
               <CourierSelector
                 data={carrierData?.data}
                 selectedCourier={courier}
+                isLoading={loadingCarrier}
                 onSelect={handleCourierSelect}
               />
             )}
@@ -286,6 +300,8 @@ export function CheckoutPageClient() {
           <div className="h-fit lg:sticky lg:top-8">
             <CheckoutOrderSummary
               summary={cart}
+              delivery={delivery}
+              courier={courier}
               onQuantityChange={handleQuantityChange}
               onRemove={handleRemove}
               onPlaceOrder={handlePlaceOrder}

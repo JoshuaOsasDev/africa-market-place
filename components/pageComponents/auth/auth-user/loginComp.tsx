@@ -216,9 +216,9 @@ const LoginComp = () => {
           {/* Mobile brand - Only visible on small viewports when the desktop graphic panel breaks away */}
           <Link
             href={"/"}
-            className="relative mb-8 flex h-12 w-12 items-center gap-2 lg:hidden"
+            className="relative mb-8 flex h-20 w-20 items-center gap-2 lg:hidden"
           >
-            <Image src={logo} alt="logo" fill className="object-contain" />
+            <Image src={logo} alt="logo" fill className="object-cover" />
           </Link>
 
           <h1 className="mb-1 font-serif text-[2rem] leading-tight text-[#111f12]">

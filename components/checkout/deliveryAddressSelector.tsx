@@ -15,7 +15,7 @@ import UKAddressAutocomplete, {
   AddressResult,
 } from "../common/googlAddressUserLocation";
 
-interface DeliveryAddress {
+export interface DeliveryAddress {
   _id: string;
   address: string;
   country: string;
