@@ -24,6 +24,7 @@ interface CourierSelectorProps {
     evri: CourierData;
     inpost: CourierData;
   };
+  isLoading: boolean;
   selectedCourier: CourierType;
   onSelect: (courier: CourierType) => void;
 }
@@ -31,6 +32,7 @@ interface CourierSelectorProps {
 export function CourierSelector({
   data,
   selectedCourier,
+  isLoading,
   onSelect,
 }: CourierSelectorProps) {
   // Map your API keys to display icons and human-readable titles
@@ -47,7 +49,26 @@ export function CourierSelector({
     },
   };
 
+  if (isLoading) {
+    return (
+      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="mb-6 flex items-center gap-2">
+          <Truck className="h-5 w-5 text-[#2E7D32]" />
+          <h2 className="text-lg font-bold text-gray-900">
+            Choose Delivery Courier
+          </h2>
+        </div>
+
+        <div className="flex items-center justify-center py-10">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-[#2E7D32]" />
+        </div>
+      </div>
+    );
+  }
+
   //console.log(data, "Courier Data");
+  if (!data) return null;
+
   const options = (Object.keys(data) as CourierType[]).map((key) => ({
     id: key,
     ...data[key],
@@ -119,7 +140,7 @@ export function CourierSelector({
                   </span>
                 </div>
                 <p className="mt-1 line-clamp-2 text-[11px] leading-tight text-gray-500">
-                  {`Total kg: ${option?.service?.slice(-7)}`}
+                  {`Total kg: ${option?.service}`}
                 </p>
               </div>
 

@@ -6,9 +6,12 @@ import { CheckoutOrderItem } from "@/components/checkout/checkoutOrderItem";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/redux/store";
 import { CartItem } from "@/types/cart";
+import { DeliveryAddress } from "./deliveryAddressSelector";
 
 interface CheckoutOrderSummaryProps {
   summary: CartItem[];
+  courier: string;
+  delivery: DeliveryAddress[];
   onQuantityChange: (id: string, quantity: number) => void;
   onRemove: (id: string) => void;
   onPlaceOrder: () => void;
@@ -19,6 +22,8 @@ interface CheckoutOrderSummaryProps {
 export function CheckoutOrderSummary({
   summary,
   onQuantityChange,
+  delivery,
+  courier,
   onRemove,
   onPlaceOrder,
   loading = false,
@@ -33,6 +38,7 @@ export function CheckoutOrderSummary({
   const shippingDisplay =
     shipping === 0 ? "No Fee yet" : `£${shipping?.toFixed(2)}`;
 
+  //console.log(delivery, courier, "inside summary");
   const discountDisplay =
     discount === 0 ? "No Discount" : `£${discount.toFixed(2)}`;
   return (
@@ -98,7 +104,9 @@ export function CheckoutOrderSummary({
 
       <button
         onClick={onPlaceOrder}
-        disabled={loading || summary?.length === 0}
+        disabled={
+          loading || summary?.length === 0 || delivery.length === 0 || !courier
+        }
         className="mt-6 w-full rounded-full bg-[#2E7D32] py-3 font-semibold text-white transition-colors hover:bg-[#246628] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? "Processing..." : "Place Order"}
