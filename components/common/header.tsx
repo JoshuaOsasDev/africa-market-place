@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //import logo from "../../lib/public/images/africa1_logo.png";
 import { navListArray, navMobileData } from "@/lib/data";
@@ -56,6 +56,19 @@ function Header() {
   const path = usePathname();
 
   const mobile: NavItem[] = navMobileData(path);
+
+  //to disable background scroll when handburger men u is opened
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
 
   return (
     <div className="md:pt-2">
@@ -162,7 +175,7 @@ function Header() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsOpen(false)}
-                className="fixed inset-0 z-40 h-screen bg-black/40 backdrop-blur-sm"
+                className="scroll- fixed inset-0 z-40 h-screen bg-black/40 backdrop-blur-sm"
               />
               <motion.div
                 initial={{ x: "-100%", opacity: 0 }}
