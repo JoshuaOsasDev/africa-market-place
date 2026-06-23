@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
@@ -11,13 +11,13 @@ import OtpComponent from "@/components/common/otpComponent";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setLoaderAction } from "@/redux/slices/user";
 import toast from "react-hot-toast";
-import { verifyOTP } from "@/services/apiServices/authApi";
+import { sendVerificationOtp, verifyOTP } from "@/services/apiServices/authApi";
 import OtpTimer from "./timer";
 
 /**
  * VerifyOtpComp Component
- * Manages the multi-factor or registration OTP (One-Time Password) confirmation layout.
- * Listens for state complete changes to auto-dispatch submission payloads to the backend API.
+ * Manages the multi-factor or registration OTP confirmation layout.
+ * Listens for state changes to auto-dispatch submission payloads.
  */
 const VerifyOtpComp = () => {
   /* navigation */
@@ -26,22 +26,90 @@ const VerifyOtpComp = () => {
   /* use dispatch */
   const dispatch = useAppDispatch();
 
-  // Extract the underlying authenticated profile from the global Redux store to identify target context
+  // Extract authenticated profile from Redux
   const appState = useAppSelector((state) => state.user.user);
-  console.log(appState);
 
-  // Track continuous multi-character string input matching the slot verification values
+  // Track character input matching slot verification values
   const [otp, setOtp] = useState("");
 
-  /* TanStack Query mutation pipeline for payload transport isolation */
+  // Prevent duplicate execution or running on landing if sent by register flow
+  const hasSentInitialOtp = useRef(false);
+
+  /* TanStack Query mutation pipeline */
   const { mutateAsync } = useMutation({
     mutationFn: verifyOTP,
   });
 
+  const { mutateAsync: sendOtp } = useMutation({
+    mutationFn: sendVerificationOtp,
+  });
+
+  //console.log(hasSentInitialOtp.current, "has fired ref");
   /**
-   * Side-Effect Orchestration Hook
-   * 1. Protects the view by redirecting unidentifiable web sessions lacking basic email variables.
-   * 2. Auto-triggers form completion submission routines the precise moment characters reach exactly 5 digits.
+   * Core OTP Validation Handler
+   * Wrapped in useCallback to prevent infinite loops in downstream dependency arrays.
+   */
+  const handleSubmit = useCallback(
+    async (data: { otp: string; email: string }) => {
+      try {
+        if (!appState?.email) {
+          router.push("/auth-user/sendOpt");
+          return;
+        }
+
+        // Initialize global visual loader
+        dispatch(setLoaderAction(true));
+
+        const result = await mutateAsync({ ...data });
+
+        toast.success(result.message || "Verification successful");
+        dispatch(setLoaderAction(false));
+
+        // Direct validated targets back to sign-in lane
+        router.push("/");
+      } catch (err) {
+        console.error("Error verifying OTP:", err);
+        if (err instanceof AxiosError) {
+          toast.error(
+            err.response?.data?.message ||
+              "Failed to verify code. Please retry.",
+          );
+        } else {
+          toast.error("Unknown error occurred");
+        }
+      } finally {
+        dispatch(setLoaderAction(false));
+      }
+    },
+    [appState?.email, router, mutateAsync, dispatch],
+  );
+
+  /**
+   * Side-Effect Hook for Initial OTP Trigger
+   * Skips execution if the backend already triggers an automated email during registration.
+   */
+  useEffect(() => {
+    const sendInitialOtp = async () => {
+      // Guard clauses: exit if no email exists, or if we want to skip running on registration landing
+      if (!appState?.email || hasSentInitialOtp.current) return;
+
+      try {
+        // Set reference flag immediately to block execution races
+        hasSentInitialOtp.current = true;
+
+        // REMARK: If your registration backend endpoint already sends the OTP automatically,
+        // you can completely comment out or remove the 'await sendOtp' call below.
+        await sendOtp({ email: appState.email });
+      } catch (error) {
+        console.error("Failed to send initial OTP:", error);
+      }
+    };
+
+    sendInitialOtp();
+  }, [appState?.email, sendOtp]);
+
+  /**
+   * Monitor Input Length for Auto-Submission
    */
   useEffect(() => {
     // Session Presence Guard Check
@@ -50,53 +118,14 @@ const VerifyOtpComp = () => {
       return;
     }
 
-    // Programmatic auto-submission when the character length parameter matches the structural backend target
+    // Programmatic auto-submission when digits match target length (5 characters)
     if (otp.length === 5) {
       handleSubmit({
         otp: otp.toString(),
-        email: appState?.email,
+        email: appState.email,
       });
     }
-  }, [otp]);
-
-  /**
-   * Core OTP Validation Handler
-   * Dispatches validation requirements to backend endpoints, triggers micro global status overlays, and manages routing targets.
-   */
-  const handleSubmit = async (data: { otp: string; email: string }) => {
-    try {
-      // Inline secondary validation guard block protecting execution context values
-      if (!appState?.email) {
-        router.push("/auth-user/sendOpt");
-        return;
-      }
-
-      // Initialize layout loaders across global visual structures
-      dispatch(setLoaderAction(true));
-
-      const result = await mutateAsync({
-        ...data,
-      });
-
-      toast.success(result.message);
-      dispatch(setLoaderAction(false));
-
-      // Direct validated targets clean back out onto the sign-in lane to re-authenticate session profiles
-      router.push("/auth-user/login");
-    } catch (err) {
-      // console.log("error", err);
-      if (err instanceof AxiosError) {
-        toast.error(
-          err.response?.data?.message || "Failed to send otp... Pls retry.",
-        );
-      } else {
-        toast.error("Unknown error");
-      }
-    } finally {
-      // Relinquish component layouts from global blocking operations across exceptions
-      dispatch(setLoaderAction(false));
-    }
-  };
+  }, [otp, appState?.email, router, handleSubmit]);
 
   return (
     <div className="my-4 flex flex-col">
@@ -113,7 +142,6 @@ const VerifyOtpComp = () => {
       </div>
 
       {/* ── CONTEXT INTERACTION WRAPPERS ── */}
-      {/* Identifies active structural contexts based on responding registration parameters */}
       <TextStyle
         textContent={`We just emailed ${appState?.email}`}
         textStyle="text-2xl sm:text-xl text-[#111827] text-bold text-center"
@@ -124,13 +152,11 @@ const VerifyOtpComp = () => {
       />
 
       {/* ── SEGMENTED CHAR INPUT INTERFACE ── */}
-      {/* Houses character parsing matrices mapping single values down to strings */}
       <div className="mx-auto my-6 flex w-full items-center justify-center">
         <OtpComponent otp={otp} setOtp={setOtp} />
       </div>
 
       {/* ── RE-SEND STRATEGY TIMERS ── */}
-      {/* Throttles client request generation frequencies via dynamic internal clock counts */}
       <div className="flex flex-row space-x-2">
         <OtpTimer />
       </div>

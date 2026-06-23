@@ -94,12 +94,13 @@ const SignUpComp = () => {
     confirmPassword: string;
   }) => {
     try {
+      console.log(data, "data for vendor sign up");
       dispatch(setLoaderAction(true));
 
       const result = await mutateAsync({
         ...data,
       });
-      dispatch(signInAction(result.user));
+      dispatch(signInAction(result));
       dispatch(setWishlistAction(result.user.wishlist));
 
       if (!result.user.isVerified) {
@@ -109,6 +110,7 @@ const SignUpComp = () => {
       }
       toast.success("user created successfully");
     } catch (err) {
+      console.log(err, "error from vendor sign up");
       if (err instanceof AxiosError) {
         toast.error(
           err.response?.data?.message || "Sign in failed, please try again.",

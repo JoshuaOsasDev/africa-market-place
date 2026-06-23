@@ -1,10 +1,13 @@
 import Link from "next/link";
 
 export default function Whatapp() {
+  const message = encodeURIComponent(
+    "Hello Africa Market Place 👋, I would like to make an enquiry about your services.",
+  );
   return (
-    <div className="fixed right-1 bottom-22 z-50 md:bottom-10">
+    <div className="fixed right-1 bottom-15 z-50 md:bottom-10">
       <Link
-        href="https://wa.me/2347085647182"
+        href={`https://wa.me/+447881168250?text=${message}`}
         target="_blank"
         className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-lg transition hover:scale-110"
       >
