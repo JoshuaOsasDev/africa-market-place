@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 import toast from "react-hot-toast";
 
@@ -7,6 +8,17 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const http = axios.create({
   baseURL: baseURL + `/api`,
   withCredentials: true,
+});
+
+http.interceptors.request.use((config) => {
+  const token = Cookies.get("token");
+  // const all = Cookies.get();
+  // console.log(token, all, config, "token from http bearer");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
 });
 
 // Response interceptor: catch 401

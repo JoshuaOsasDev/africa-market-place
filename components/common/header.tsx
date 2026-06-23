@@ -169,7 +169,7 @@ function Header() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: "-100%", opacity: 0 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="fixed top-0 left-0 z-100 flex h-screen w-4/6 flex-col border-l border-gray-200 bg-white shadow-lg md:hidden"
+                className="fixed top-0 bottom-0 left-0 z-100 flex h-full w-4/6 flex-col border-l border-gray-200 bg-white shadow-lg md:hidden"
               >
                 <div className="flex pb-1 pl-1">
                   <Button

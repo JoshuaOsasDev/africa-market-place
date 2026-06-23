@@ -12,6 +12,7 @@ import {
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 import Link from "next/link";
+import Whatapp from "@/components/common/whatapp";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -299,6 +300,11 @@ export default function ContactPage() {
       </section>
 
       <Footer />
+
+      {/* Floating WhatsApp Button */}
+      <div className="">
+        <Whatapp />
+      </div>
     </div>
   );
 }

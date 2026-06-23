@@ -8,8 +8,10 @@ export function proxy(request: NextRequest) {
 
   const isAuthPage = pathname.startsWith("/auth-user/login");
 
-  let user: { role: "user" | "admin" | "vendor" | "super-admin" } | null = null;
-
+  let user: {
+    role: "user" | "admin" | "vendor" | "super-admin";
+    is_verified: boolean;
+  } | null = null;
   //  Decode token safely
   if (token) {
     try {
@@ -21,6 +23,7 @@ export function proxy(request: NextRequest) {
     }
   }
 
+  //console.log(user, "users on proxy");
   const role = user?.role;
 
   //  CENTRALIZED ROUTE CONFIG

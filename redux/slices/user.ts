@@ -21,7 +21,7 @@ const slice = createSlice({
   reducers: {
     signInAction(state, action) {
       const { user, token } = action.payload;
-      //console.log(user, token, "user and token");
+      console.log(action.payload, "user and token");
       state.user = user;
       state.token = token;
       state.isAuthenticated = true;

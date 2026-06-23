@@ -38,7 +38,10 @@ export const addProductFormSchema2 = yup.object({
 // used
 export const signUpSchema = yup.object({
   firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required"),
+  lastName: yup
+    .string()
+    .min(2, "Last name must be at least 2 characters")
+    .required("Last name is required"),
   role: yup.string().required("Role is required"),
   phone: yup.string().required("Phone number is required"),
   email: yup

@@ -144,6 +144,7 @@ const LoginComp = () => {
    * Standard Credentials Form Submission Handler
    * Submits verified inputs, manages OTP verification status checks, and handles structural role routing.
    */
+
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
       dispatch(setLoaderAction(true));
@@ -152,6 +153,7 @@ const LoginComp = () => {
         ...data,
         rememberMe: isChecked, // Binds authorization expiration window adjustments
       });
+      console.log(result, "results");
       dispatch(signInAction(result));
       //dispatch(signInAction(result.token));
       dispatch(setWishlistAction(result.user.wishlist));
